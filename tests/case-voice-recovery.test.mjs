@@ -1,0 +1,26 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {readVoicePending,retainVoice,checkedVoiceReceipt,clearVoicePending} from '../src/case-voice-recovery.ts';
+import {conversationRecordingNotice} from '../src/recording-notice.ts';
+
+test('voice recovery keeps only context-bound metadata and requires the exact recording and receipt',async()=>{
+  const values=new Map(),storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
+  const session={clientContext:'d'.repeat(64),expiresAt:new Date(Date.now()+60000).toISOString()},scope={kind:'help',id:'assignment-14'},bytes=new Uint8Array(8044).fill(10),id=randomUUID();
+  const pending=await retainVoice(storage,session,scope,id,bytes);assert.deepEqual(readVoicePending(storage,session,scope),pending);assert.deepEqual(await retainVoice(storage,session,scope,id,bytes),pending);
+  assert.equal(JSON.stringify([...values]).includes('bytes'),false);assert.equal(readVoicePending(storage,{...session,clientContext:'e'.repeat(64)},scope),null);
+  assert.equal(readVoicePending(storage,session,{kind:'reply',id:scope.id}),null);
+  await assert.rejects(retainVoice(storage,session,scope,randomUUID(),bytes),/pending/);await assert.rejects(retainVoice(storage,session,scope,id,new Uint8Array(8044)),/pending/);
+  const receipt={id,caseId:id,assignmentId:scope.id,kind:'help',sha256:pending.hash,status:'received',createdAt:new Date().toISOString(),receivedAt:new Date().toISOString()};
+  assert.deepEqual(checkedVoiceReceipt(receipt,scope,pending),receipt);
+  for(const bad of [null,{}, {...receipt,sha256:'a'.repeat(64)}, {...receipt,assignmentId:'foreign'}, {...receipt,caseId:randomUUID()}, {...receipt,kind:'reply'}, {...receipt,status:'unknown'}, {...receipt,receivedAt:null}])assert.throws(()=>checkedVoiceReceipt(bad,scope,pending));
+  assert.throws(()=>clearVoicePending(storage,session,scope,randomUUID()),/changed/);clearVoicePending(storage,session,scope,id);assert.equal(readVoicePending(storage,session,scope),null);
+  await assert.rejects(retainVoice({...storage,setItem(){}},session,scope,id,bytes),/Nothing was sent/);
+  assert.throws(()=>readVoicePending(storage,{...session,expiresAt:'2000-01-01'},scope),/session/);
+});
+
+test('conversation recording notices disclose private storage and explicitly exclude AI processing',()=>{
+  for(const language of ['en','ar','ur']){const notice=conversationRecordingNotice(language);assert.equal(Object.keys(notice).length,5);for(const text of Object.values(notice))assert.ok(text.trim());}
+  assert.match(conversationRecordingNotice('en').processing,/not submitted as answers or sent to an AI provider/);
+  assert.doesNotMatch(conversationRecordingNotice('en').local,/save a copy/);
+});

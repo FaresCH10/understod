@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-10-04T14:43:17Z",
+  "backup": {
+    "directory": "data/backups/pre-language-freeze-2026-10-04",
+    "manifestId": "40327bce-0bc6-4c9e-84cb-ff06416b2f68"
+  },
+  "before": {
+    "publications": {
+      "count": 1,
+      "sha256": "874eef858781b0fbf7819261803b0576a1e18436625ca4e8be5d615236b1defe"
+    },
+    "attempts": {
+      "count": 26,
+      "sha256": "068bd2b0788338771ef489b84ba26d34b0ea9b54855c23978a9042cdf09d3900"
+    },
+    "submission_receipts": {
+      "count": 26,
+      "sha256": "b6c3c780ac05a4cfec29441a0f3d04324fc5f175c4f38fc0a00930847213ff1a"
+    },
+    "clarifications": {
+      "count": 4,
+      "sha256": "84189766ffbcaec111e4223d93afb038b385ac61d72e212840eb0847be3ca1bb"
+    },
+    "audit": {
+      "count": 15,
+      "sha256": "f127a7120c93d5c6f5a35c499ff23880e4d1644f7db9f0e3a71e2c9221a83f48"
+    },
+    "assignments": {
+      "count": 30,
+      "sha256": "b0eccdd12f67b45fb446954f4f1515f54c8fb54bfc0d8d8797190f7a4897e581"
+    }
+  },
+  "after": {
+    "publications": {
+      "count": 1,
+      "sha256": "874eef858781b0fbf7819261803b0576a1e18436625ca4e8be5d615236b1defe"
+    },
+    "attempts": {
+      "count": 26,
+      "sha256": "068bd2b0788338771ef489b84ba26d34b0ea9b54855c23978a9042cdf09d3900"
+    },
+    "submission_receipts": {
+      "count": 26,
+      "sha256": "b6c3c780ac05a4cfec29441a0f3d04324fc5f175c4f38fc0a00930847213ff1a"
+    },
+    "clarifications": {
+      "count": 4,
+      "sha256": "84189766ffbcaec111e4223d93afb038b385ac61d72e212840eb0847be3ca1bb"
+    },
+    "audit": {
+      "count": 15,
+      "sha256": "f127a7120c93d5c6f5a35c499ff23880e4d1644f7db9f0e3a71e2c9221a83f48"
+    },
+    "assignments": {
+      "count": 30,
+      "sha256": "b0eccdd12f67b45fb446954f4f1515f54c8fb54bfc0d8d8797190f7a4897e581"
+    }
+  },
+  "unchanged": true,
+  "languageGroups": {
+    "en": 12,
+    "ar": 10,
+    "ur": 8
+  },
+  "note": "Only new assignment language is excluded from the historical assignment hash. Legacy languages freeze current available preference, not proof of past language."
+}

@@ -1,0 +1,29 @@
+{
+  "checkpoint": "S34 organization request allowance and change/contact inbox",
+  "recordedAt": "2026-10-11T15:55:02Z",
+  "status": "verified_local_application_checkpoint",
+  "goalStatus": "active",
+  "productionReady": false,
+  "historicalUnauditedCompletionEstimate": 70,
+  "tests": {"passed": 14, "failed": 0, "skipped": 0, "durationMs": 11170.753, "exitCode": 0},
+  "build": {"passed": true, "modules": 2019, "main": "index-D5Hw08xs.js", "mainKB": 558.62, "mainGzipKB": 150.33, "planUsage": "PlanUsage-Dy7oWEFm.js", "shellFiles": 63, "hashFailures": 0, "existingWarnings": ["main chunk exceeds 500 KB", "worker-offline ineffective dynamic import"]},
+  "preservation": {"originalBusinessFingerprints": 8, "allMatched": true, "integrity": "ok", "foreignKeyViolations": 0, "originalDatabaseMigrated": false, "originalPreviewRestarted": false},
+  "browser": {
+    "syntheticBuiltCredentialFixture": true,
+    "viewportWidths": [1440, 320],
+    "mobileDocumentWidth": 305,
+    "verified": ["actual paused allowance with unknown costs", "confirmed quota/contact/plan submission", "site owner inbox", "accepted record persists after reload"],
+    "firstRequestFixture": {"usageReads": 2, "usagePosts": 2, "records": 2, "externalRequests": 0, "terminalExitCode": 0},
+    "finalStyledFixture": {"usageReads": 2, "usagePosts": 1, "records": 1, "externalRequests": 0, "terminalExitCode": 0},
+    "screenshots": ["artifacts/usage-allowance-desktop-2026-10-11.jpg", "artifacts/usage-allowance-mobile-2026-10-11.jpg", "artifacts/usage-requests-desktop-2026-10-11.jpg", "artifacts/usage-requests-mobile-final-2026-10-11.jpg", "artifacts/usage-requests-desktop-final-2026-10-11.jpg"],
+    "fullPageRequestScreenshotFailed": true,
+    "reticlePass": false,
+    "lostAcknowledgementBrowserPass": false,
+    "viewportReset": true,
+    "ownedTabsClosed": true
+  },
+  "intermediateFailures": ["Quota fixture initially omitted required input/provenance; fixed without weakening guards", "Leak test matched generic global explanatory text; now checks private values/fields and allowance projection", "Initial request build lacked shared declaration; added", "Recovery class parameter property unsupported by Node strip-only tests; made explicit property", "Validation test initially used assert.rejects around synchronous throw; corrected"],
+  "limits": ["Synthetic-only; real worker data remains prohibited on Gemini free tier", "Costs unknown and entitlements illustrative", "Site inbox only; no email/payment/provider/quota change", "Request resolution/delivery and broader request-message retention unfinished", "Native database/concurrency/cloud/full release/restore activation unproved"],
+  "nextMajorRequirement": "Broader S36/A16 briefing/activity content retention",
+  "checkpointPause": {"status": "completed", "requestedSeconds": 30, "actualSeconds": 30.022, "resumed": true}
+}

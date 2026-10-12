@@ -1,0 +1,45 @@
+{
+  "checkpoint": "activity-identity-retention",
+  "date": "2026-10-11",
+  "goalStatus": "active",
+  "productionReady": false,
+  "completionEstimate": {"percent":70,"basis":"Historical unaudited estimate; not a measured increase or readiness gate."},
+  "implementation": [
+    "Migration 077: default-disabled scoped confirmed revisioned policy and immutable exact receipts",
+    "Scheduled physical audit actor/item identifier redaction, exact elapsed policy guard and deferred completion truthfulness",
+    "Atomic completion audit and rollback; ordinary edits, deletion and restoration denied",
+    "Expired identity list, search, detail and CSV projections",
+    "Credential settings with scoped pending journal and receipt-only reload recovery",
+    "Real awaited worker stage and quarantined bounded restore sweep/count"
+  ],
+  "tests": [
+    {"command":"node --test tests/activity-retention.test.mjs tests/text-retention-recovery.test.mjs","passed":6,"failed":0,"skipped":0,"durationMs":6135.6889,"exitCode":0},
+    {"command":"node --test --test-concurrency=1 tests/activity-retention.test.mjs tests/restore-retention.test.mjs tests/audit.test.mjs tests/postgres-runtime.test.mjs tests/privacy-ledger.test.mjs tests/restore-privacy-retirements.test.mjs tests/retention.test.mjs tests/text-retention.test.mjs tests/case-retention.test.mjs","passed":51,"failed":0,"skipped":0,"durationMs":135765.0344,"exitCode":0},
+    {"command":"node --test --test-concurrency=1 tests/postgres-backup.test.mjs tests/postgres-domain.test.mjs tests/postgres-embedded.test.mjs tests/text-retention-recovery.test.mjs","passed":55,"failed":0,"skipped":0,"durationMs":107802.7066,"exitCode":0}
+  ],
+  "intermediateFailures": [
+    {"command":"node --test --test-concurrency=1 tests/postgres-backup.test.mjs tests/postgres-domain.test.mjs tests/postgres-embedded.test.mjs tests/text-retention-recovery.test.mjs","passed":54,"failed":1,"skipped":0,"durationMs":105741.0304,"exitCode":1,"reason":"Explicit embedded migration expectation stopped at 072; actual included 073 through 077. List updated explicitly, preserving all tenant/receipt/snapshot/audit assertions. Rerun required."}
+  ],
+  "browser": {
+    "environment":"Disposable in-memory PGlite, built credential API, loopback 3210, CUA IAB owned tab 7; no original database migration or restart",
+    "journeys":["Confirmed 7-day enable","Interrupted first acknowledgement gives blocked unknown outcome","Reload recovers immutable receipt without resending","Scheduled one-event physical identifier cleanup","320px confirmed disable preserves earlier redaction","Expired actor/item history and retained event detail"],
+    "fixtureExitCode":0,
+    "activityPosts":2,
+    "activityReceiptReads":2,
+    "requestRecords":2,
+    "policyRevision":2,
+    "policyDays":null,
+    "redactedEvent":{"id":"activity-expired","actorId":"","objectId":""},
+    "purgeRecords":1,
+    "externalRequests":0,
+    "mobile":{"viewport":320,"documentWidth":305,"policyWidth":267,"policyScrollWidth":267,"detailWidth":267,"detailScrollWidth":267},
+    "screenshots":["activity-retention-desktop-2026-10-11.jpg","activity-retention-mobile-2026-10-11.jpg","activity-identity-mobile-2026-10-11.jpg","activity-identity-desktop-2026-10-11.jpg"],
+    "cleanup":"Owned tab signed out/closed, viewport reset, fixture stopped with terminal evidence",
+    "reticleVerdict":null,
+    "reticleLimitation":"No connected session; change verification returned error, not pass. Known wiring gap previously reported. Yield recorded."
+  },
+  "build":{"exitCode":0,"modules":2019,"shellFiles":63,"hashFailures":0,"warnings":["Main chunk exceeds 500 kB","worker-offline is both statically and dynamically imported"]},
+  "preservation":{"eightOriginalSQLiteBusinessFingerprintsMatch":true,"integrity":"ok","foreignKeyViolations":0,"originalPreviewRestarted":false,"originalDatabaseMigrated":false},
+  "remaining":["Full briefing-content lifecycle retention and other operational-ledger lifecycles","Source-authoritative later activity policy and historical identity redaction reconciliation, including access evidence independent of erased audit identifiers","Native PostgreSQL concurrency and backup/restore","Cloud provisioning/deployment and authorized privacy-approved real-data AI option","Full reference, accessibility, device, security and release verification"],
+  "checkpointPause":{"seconds":30.0222,"resumed":true,"next":"Preserve mandatory access and restore-quarantine provenance independently of erased activity identifiers; then broader briefing-content retention."}
+}

@@ -1,0 +1,18 @@
+{
+  "checkpoint": "worker-entry-recovery-and-operator-tenant-access",
+  "dataClass": "synthetic",
+  "requirements": ["S19", "S40.2", "A05", "A06", "A09"],
+  "fullSuite": {"files": 156, "tests": 831, "passed": 827, "failed": 0, "skipped": 4, "durationMs": 272455.8425, "exitCode": 0, "externalDatabaseUrlsDisabled": true},
+  "relatedSuite": {"files": 8, "tests": 36, "passed": 36, "failed": 0, "skipped": 0, "durationMs": 16531.3296, "exitCode": 0},
+  "build": {"modules": 2028, "exitCode": 0, "shellHashes": 66, "shellHashFailures": 0, "existingWarnings": ["entry-chunk-over-500kb", "mixed-worker-offline-import"]},
+  "preservation": {"originalSQLiteTables": 8, "allFingerprintsMatch": true, "integrity": "ok", "foreignKeyViolations": 0, "originalPreviewRestarted": false, "originalDatabaseMigrated": false},
+  "operatorFixtures": [
+    {"reads": 12, "unchanged": true, "beforeHash": "ec414cfefcd7a2ee4004674700d4cbfb56e3011998b3077072be5e3361a4441c", "afterHash": "ec414cfefcd7a2ee4004674700d4cbfb56e3011998b3077072be5e3361a4441c", "exitCode": 0},
+    {"reads": 4, "unchanged": true, "beforeHash": "7b191be991d63c2a8de63a36a40f8d18fb4aa318e02f277b022356d2c3aeea2d", "afterHash": "7b191be991d63c2a8de63a36a40f8d18fb4aa318e02f277b022356d2c3aeea2d", "exitCode": 0},
+    {"reads": 4, "unchanged": true, "beforeHash": "093ab20e6fd8898d4c5ab6459f9054b58e96058507470df8402a6932914580f5", "afterHash": "093ab20e6fd8898d4c5ab6459f9054b58e96058507470df8402a6932914580f5", "exitCode": 0}
+  ],
+  "browser": {"viewports": [320, 1440], "workerEntryLanguages": ["ar", "ur"], "operatorWorkers": 129, "operatorPages": 7, "temporaryTabsClosed": true, "viewportReset": true},
+  "externalCalls": 0,
+  "reticle": {"verdict": "not-verified", "reason": "auto-review blocked possible external QA metadata disclosure; diagnostics remain local"},
+  "readiness": {"estimatePercent": 60, "estimateRange": [55, 65], "productionReady": false, "realDataAllowedOnFreeGemini": false, "nativeCloudDeviceAndAllReferenceGates": "unverified"}
+}

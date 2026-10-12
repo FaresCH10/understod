@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "understood-postgres-backup-checkpoint-v1",
+  "recordedAt": "2026-10-11T09:28:33Z",
+  "implementation": "encrypted-native-schema-archive-and-private-objects-with-isolated-quarantined-restore",
+  "verifiedScope": [
+    "encrypted-file-authentication-purpose-key-tamper-and-exclusive-write",
+    "native-child-command-timeout-bounds-private-passfile-and-secret-redaction",
+    "full-table-and-quoted-future-table-sequence-guard-definition-inventory",
+    "job-provider-worker-heartbeat-and-operation-lease-backup-gates",
+    "audit-atomic-session-grant-link-mail-tenant-and-provider-quarantine",
+    "six-private-object-family-coverage-and-retired-object-absence",
+    "physical-embedded-database-archive-and-private-object-round-trip",
+    "immutable-publication-assignment-guards-after-restore",
+    "object-readback-interruption-retains-quarantine-without-success-result"
+  ],
+  "testRun": {
+    "command": "node --test tests/postgres-backup.test.mjs tests/postgres-backup-native.test.mjs tests/private-storage.test.mjs tests/source-audio-storage.test.mjs tests/backup-restore.test.mjs tests/invitation-backup.test.mjs tests/storage-health.test.mjs",
+    "tests": 55,
+    "passed": 54,
+    "failed": 0,
+    "skipped": 1,
+    "durationMs": 46166.1896,
+    "skip": "Actual native pg_dump/pg_restore requires explicitly isolated source and empty target PostgreSQL databases plus installed native tools",
+    "initialSandboxRun": {"tests": 55, "passed": 52, "failed": 2, "skipped": 1, "failure": "Loopback fixture HTTP connect EACCES; authorized local-connectivity rerun passed"}
+  },
+  "build": {"passed": true, "shellHashesMatched": 63, "entryBytesReportedKB": 558.53, "existingWarningsRemain": true},
+  "previewPreservation": {"tablesMatched": 8, "integrity": "ok", "foreignKeyViolations": 0, "databaseWritten": false},
+  "sourceSha256": {
+    "server/postgres/backup.mjs": "712cc66612f3b2e1c96616453abf937ea5875fe00c33a9b27d1951f22299c96a",
+    "server/postgres/backup-native.mjs": "910f76736c7ef059aa90355ec6625a79aa3e14937a9cd57f95621c49a92b0329",
+    "server/backup-files.mjs": "896165c861e66197105e55ac181af2b8884306c12617fd28ea46790ee0cc614a",
+    "scripts/postgres-backup.mjs": "acf7c53da3d86b02bffe05144af10a8c981f5e9e31f9e08be1d5a84c1dc2654e",
+    "tests/postgres-backup.test.mjs": "e365a0be4471d734bcc2cd9b32aecc948a2e7becf7e9ca54f72248a89636cb2b",
+    "tests/postgres-backup-native.test.mjs": "d9aef275579d8a134943cb6b3fe7162fe1e6b76ee413788142466a55910cbf02",
+    "server/private-storage.mjs": "acc41940454271d2db90779c092df201ea862e57bf43bdbb5b843c451d09638f",
+    "tests/private-storage.test.mjs": "d48c6e618aeb2890d1e92f3d1cfbf85937323696cf69dfc77a21af479bc8c355",
+    "docs/POSTGRES_BACKUP.md": "75fa0f54e643603f0a0c35704220ddc0e1a5c48f2786a80039275cadb975542e"
+  },
+  "externalCalls": 0,
+  "nativePostgresRestoreVerified": false,
+  "neonVerified": false,
+  "r2Verified": false,
+  "postBackupPrivacyReconciliationComplete": false,
+  "restoreActivationAllowed": false,
+  "checkpointPauseMs": 30021.1,
+  "resumedAfterPause": true,
+  "productionReady": false,
+  "completionEstimate": "Approximately 70%, historical unaudited implementation estimate",
+  "nextMajorTask": "Executable restored-privacy reconciliation for elapsed policies and authoritative post-backup privacy requests"
+}

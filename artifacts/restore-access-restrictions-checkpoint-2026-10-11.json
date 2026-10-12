@@ -1,0 +1,82 @@
+{
+  "checkpoint": "restore-access-restrictions",
+  "at": "2026-10-11T14:14:33Z",
+  "state": "locally-verified-embedded-only",
+  "sourceHashes": {
+    "server/postgres/migrations/074_restore_access_restrictions.sql": "751beff42124915932bc4a16ce24b206699cb39839b7eab95c6f905b315df835",
+    "server/postgres/privacy-ledger.mjs": "5022ab5ca311efbaf2e266ebfb3b4f32402e0c60b444fb53beadbe5c9793a275",
+    "server/postgres/backup.mjs": "53d2742763a53de5048b2248be7d790f1f4b21d27ab6cbd8ccdd3a7b6b0ae311",
+    "server/postgres/restore-retention.mjs": "5a1d74d8bf53fa6c5334cb4ad7bdbe171278fad215724753be7ca8caaa8034c7",
+    "scripts/postgres-privacy.mjs": "d81c9878eb3d0ed1611f4f88e306806b4543fc2142a475704336cb1b79735c5a",
+    "tests/restore-access-restrictions.test.mjs": "28c8a281994debb465a1ee7911dd8c87c98f61c45d7c45bbb2f5174052475b71"
+  },
+  "verification": {
+    "command": "node --test tests/restore-access-restrictions.test.mjs tests/privacy-ledger.test.mjs tests/restore-privacy-retirements.test.mjs tests/postgres-backup.test.mjs tests/restore-retention.test.mjs",
+    "session": 50549,
+    "exitCode": 0,
+    "tests": 36,
+    "passed": 36,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 32420.8093,
+    "build": {
+      "command": "npm run build",
+      "exitCode": 0,
+      "entry": "index-DkvOjM_j.js",
+      "warnings": [
+        "chunk over 500kB",
+        "worker-offline ineffective dynamic import"
+      ]
+    },
+    "shell": {
+      "files": 63,
+      "failed": 0
+    },
+    "savedSQLite": {
+      "businessTables": 8,
+      "allFingerprintsMatched": true,
+      "integrity": "ok",
+      "foreignKeyViolations": 0
+    }
+  },
+  "recordedFailures": [
+    {
+      "tests": 6,
+      "passed": 0,
+      "failed": 6,
+      "cause": "Fixture omitted required attempts.reasons_json; database constraint preserved"
+    },
+    {
+      "session": 39154,
+      "passed": 0,
+      "failed": 6,
+      "cause": "Fixture supplied expectedLabel instead of public reactivation expectedCode"
+    },
+    {
+      "session": 50444,
+      "passed": 5,
+      "failed": 1,
+      "cause": "Fixture compared JavaScript Date with raw JSON timestamp; corrected to_jsonb comparison preserves original representation"
+    }
+  ],
+  "limits": [
+    "Disposable embedded database only; unsupported snapshot transport and encrypted archive metadata are fixtures",
+    "No native PostgreSQL/Neon/R2/concurrency/device/live-provider/production verdict",
+    "No original SQLite writes/migration/preview restart/cloud/mail/provider/real-data operation",
+    "Accepted-input staging lineage/final source cutoff/fresh credentials/activation remain incomplete"
+  ],
+  "activationAllowed": false,
+  "productionReady": false,
+  "checkpointPause": {
+    "status": "complete",
+    "requestedMs": 30000,
+    "elapsedMs": 30027.2,
+    "resumed": true
+  },
+  "completionEstimate": {
+    "percent": 70,
+    "audited": false,
+    "meaning": "Historical implementation estimate, not a readiness promotion"
+  },
+  "nextTask": "S16/A15 response-time and crew report filtering with matching export snapshots"
+}

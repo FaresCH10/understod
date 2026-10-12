@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-11",
+  "checkpoint": "accepted-input-restore",
+  "goalStatus": "active",
+  "checkpointPause": {"elapsedSeconds": 30.0345, "resumed": "complete source inventory and final cutoff contract inspection; full tables/sequences/definitions/object equality identified as next evidence"},
+  "ledgerFormat": "understood-postgres-privacy-ledger-v7",
+  "completionEstimate": {"percentage": 70, "basis": "historical unaudited estimate", "promoted": false},
+  "verification": {
+    "finalRegression": {"sessionId": 9487, "files": 7, "checks": 53, "passed": 53, "failed": 0, "skipped": 0, "durationMs": 61328.4183, "exitCode": 0},
+    "earlierRegression": {"sessionId": 92330, "checks": 53, "passed": 53, "failed": 0, "skipped": 0, "durationMs": 61320.1405, "exitCode": 0},
+    "focusedFinal": {"checks": 3, "passed": 3, "failed": 0, "skipped": 0, "durationMs": 4122.7798, "exitCode": 0},
+    "initialFailedRegression": {"sessionId": 26716, "checks": 30, "passed": 29, "failed": 1, "durationMs": 50740.9808, "exitCode": 1, "reason": "Test readback omitted required private-object hash/size. Corrected using actual ledger reference; integrity assertion unchanged."},
+    "productionBuild": {"exitCode": 0, "modules": 2019, "entry": "index-4retpApQ.js", "warnings": ["main chunk over 500 kB", "worker-offline mixed static/dynamic import"]},
+    "shellHashes": {"files": 63, "failed": 0},
+    "originalSQLite": {"businessFingerprints": 8, "matched": 8, "integrity": "ok", "foreignKeyViolations": 0},
+    "browser": {"attemptedThisCheckpoint": false, "passed": false, "reason": "Backend maintenance change; no frontend modification or new browser verdict."}
+  },
+  "implemented": [
+    "precise decimal original submission sequence, scoped kind/clock and corresponding typed/audio evidence validation",
+    "hash-only answer/result/transcript fields, never plaintext in exported projection",
+    "bidirectional fifteen-family input/version/audience/case comparison with explicit missing/unbound/later-acceptance gaps",
+    "all retained source private objects represented with exact identity/hash/size/format",
+    "source-ledger-required retention CLI refuses cleanup on input/conflict or retained-byte verification failures",
+    "encrypted backup/ledger/fingerprint-bound gap reports and aggregate-only standard output",
+    "fresh physical database capture/private bytes preserve original accepted answer, receipt order/time and audio without invented history"
+  ],
+  "externalOperations": {"providerCalls": 0, "mail": 0, "cloudProvisioning": 0, "deployment": 0, "realWorkerData": 0},
+  "ownedSessionsTerminal": true,
+  "originalPreviewChanged": false,
+  "remaining": ["final stopped-source cutoff and full business-state parity", "separately authorized activation", "native PostgreSQL/Neon/private-storage/concurrency verification", "complete reference/device/a11y/security/release gates", "prior expired worker history browser verification"],
+  "sourceCutoffEstablished": false,
+  "activationAllowed": false,
+  "authoritativeReconciliationComplete": false,
+  "productionReady": false
+}

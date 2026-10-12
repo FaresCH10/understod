@@ -1,0 +1,36 @@
+{
+  "checkpointUtc": "2026-10-11T19:50:00Z",
+  "scope": "081 original source briefing-expiry capture and v5 read-only restore content binding",
+  "goalStatus": "active",
+  "productionReady": false,
+  "activationAllowed": false,
+  "completionPercentage": {"value":70,"historicalUnauditedEstimate":true,"promoted":false},
+  "implemented": [
+    "Immutable atomic source eligibility/context, exact original policy and actual purge receipt",
+    "Eight content projection hash groups without duplicate private text",
+    "Original archive/version/response/case and actual generated-removal metadata",
+    "No retrospective capture/backfill; transaction-bound completion clock; unique original policy authority",
+    "V5 strict original-source provenance validation and rejection of old v1-v4 formats",
+    "Read-only expected source-erasure snapshot comparison bound by original target hash",
+    "Changed review and extra target receipt/copy conflicts remain fail-closed"
+  ],
+  "tests": {
+    "finalCommand":"node --test tests/briefing-expiry-upgrade.test.mjs tests/briefing-retention.test.mjs tests/privacy-ledger.test.mjs tests/restore-privacy-retirements.test.mjs tests/restore-access-restrictions.test.mjs tests/restore-retention.test.mjs tests/operational-audit-upgrade.test.mjs tests/postgres-embedded.test.mjs tests/postgres-backup.test.mjs tests/postgres-backup-native.test.mjs",
+    "sessionId":95138,"terminalExitCode":0,"checks":56,"passed":55,"failed":0,"skipped":1,"durationMs":55519.9156,
+    "skip":"Native pg_dump/pg_restore requires explicitly isolated source/empty-target databases and installed tools",
+    "earlierFocused":{"sessionId":40380,"terminalExitCode":0,"passed":21,"failed":0,"skipped":0,"durationMs":37112.7234},
+    "intermediateFailure":{"sessionId":43658,"terminalExitCode":1,"passed":23,"failed":1,"durationMs":40000.5492,
+      "cause":"Test Date.parse(Date object) dropped milliseconds in source capture/completion comparison",
+      "fix":"Compare database Date via getTime against parsed original JSON timestamp; SQL and final assertions retained"}
+  },
+  "build":{"terminalExitCode":0,"modules":2019,"entry":"index-bUoLyeB1.js","entryKilobytes":559.01,"entryGzipKilobytes":150.44,
+    "warnings":["Existing larger-than-500KB chunk","Existing mixed static/dynamic worker-offline import"],"shellHashes":63,"failedHashes":0},
+  "preservation":{"allEightOriginalBusinessFingerprintsMatched":true,"integrity":"ok","foreignKeyViolations":0,
+    "originalDatabaseMigrated":false,"originalPreviewRestarted":false},
+  "reticle":{"connectedSession":false,"verifiedPass":false,"reason":"No connected browser; backend/CLI-only checkpoint"},
+  "externalProviderCalls":0,"mailSent":false,"accountsProvisioned":false,"deployed":false,
+  "remainingMajorTask":"Atomic historical briefing redaction in quarantine with root provenance, fresh generated cleanup and expired admissions fenced",
+  "remainingReleaseGates":["Accepted-input lifecycle reconciliation","Final source cutoff and activation","Native PostgreSQL/cloud/concurrency","Full reference/device/accessibility/security/performance/fresh release verification"],
+  "checkpointPause":{"requestedMs":30000,"actualSeconds":30.0308,"resumed":true,
+    "resumedWork":"Inspected existing original case-retirement/root-proof/quarantine SQL and worker response/read paths for the next briefing replay transaction"}
+}

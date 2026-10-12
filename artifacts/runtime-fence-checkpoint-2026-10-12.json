@@ -1,0 +1,38 @@
+{
+  "localDate": "2026-10-12",
+  "checkpoint": "restricted-runtime-authority-and-source-acl-fence",
+  "goalStatus": "active",
+  "completionEstimate": {"percentage": 70, "basis": "historical unaudited estimate", "promoted": false},
+  "verification": {
+    "finalRegression": {"sessionId": 4552, "files": 11, "checks": 70, "passed": 70, "failed": 0, "skipped": 0, "durationMs": 65961.8784, "exitCode": 0},
+    "earlierRegression": {"sessionId": 51547, "files": 5, "checks": 23, "passed": 23, "failed": 0, "skipped": 0, "durationMs": 15933.585, "exitCode": 0},
+    "expandedFocused": {"sessionId": 64848, "checks": 10, "passed": 10, "failed": 0, "skipped": 0, "durationMs": 12166.2217, "exitCode": 0},
+    "productionBuild": {"exitCode": 0, "modules": 2019, "entry": "index-4retpApQ.js", "warnings": ["main chunk over 500 kB", "worker-offline mixed static/dynamic import"]},
+    "shellHashes": {"files": 63, "failed": 0},
+    "originalSQLite": {"businessFingerprints": 8, "matched": 8, "integrity": "ok", "foreignKeyViolations": 0},
+    "browser": {"attempted": false, "passed": false, "reason": "Backend ACL/CLI changes verified through disposable actual hosted HTTP routes, not a browser verdict."},
+    "nativePostgresExecuted": false
+  },
+  "implemented": [
+    "atomic maintenance configuration of existing dedicated unprivileged runtime login",
+    "explicit current application table allowlist with restore/import/bootstrap/migration journals read-only",
+    "no role memberships, ownership, elevated attributes, schema creation, TEMP, trigger control, truncation, maintenance or grant delegation",
+    "sequence advancement only for application-owned identities; no setval/UPDATE or unrelated future sequences",
+    "column privilege, security-definer and future default grant inspection",
+    "read-only hosted API/worker/check startup gate with actual restricted-role HTTP login/overview/logout",
+    "full-source locked shutdown/lease-gated multi-role persistent ACL revocation",
+    "post-commit real accepted-input and worker writes blocked without changing whole business inventory",
+    "before/after live fence verification optionally bound into encrypted authenticated backup/source observation"
+  ],
+  "failedEarlierChecks": ["fixture receipt omitted its required original clock", "embedded session authorization reset fixture assumption", "GRANT warning is not rejection; actual delegated privilege remains false", "read-only statement assertion matched SQL privilege literals", "sandbox-only disposable loopback EACCES"],
+  "previousCheckpointPauseSeconds": 30.0368,
+  "checkpointPauseSeconds": 30.0309,
+  "resumedInto": "exact target-state accounting; implemented atomic initial quarantine-state checkpoint",
+  "ownedSessionsTerminal": true,
+  "originalPreviewChanged": false,
+  "externalOperations": {"providerCalls": 0, "mail": 0, "cloudProvisioning": 0, "deployment": 0, "realWorkerData": 0},
+  "remaining": ["exact target business-state accounting after authorized quarantine and cleanup", "durable backup-bound final cutoff/release journal with full writer/storage authority", "native Neon Free/roles/TLS/concurrency/private-storage/backup-restore verification", "complete reference/device/a11y/security/release gates", "expired worker history browser verification"],
+  "sourceCutoffEstablished": false,
+  "activationAllowed": false,
+  "productionReady": false
+}

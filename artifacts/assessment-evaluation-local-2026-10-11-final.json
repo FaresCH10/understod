@@ -1,0 +1,2563 @@
+{
+  "schemaVersion": "assessment-evaluation-report-v1",
+  "datasetVersion": "synthetic-assessment-2026-10-10-v1",
+  "datasetHash": "5dfd9aa385c803fa9e2bb91014216be158f46060a02957563bf581033fbeb065",
+  "dataClass": "synthetic",
+  "labelProvenance": "Engineering-authored synthetic examples; not independent native-language QA",
+  "mode": "synthetic-local",
+  "provenance": {
+    "adapter": "synthetic-local-v1",
+    "dataClass": "synthetic",
+    "model": "none",
+    "promptVersion": "synthetic-shelf-v1",
+    "schemaVersion": "synthetic-shelf-v1"
+  },
+  "startedAt": "2026-10-11T04:05:09.159Z",
+  "finishedAt": "2026-10-11T04:05:09.163Z",
+  "pilotAcceptance": {
+    "status": "not_evaluated",
+    "toleranceAgreement": "awaiting_agreement",
+    "independentLanguageQa": "not_provided",
+    "realDataAllowed": false
+  },
+  "metrics": {
+    "total": 43,
+    "completed": 24,
+    "failed": 0,
+    "notRun": 19,
+    "outcomeDisagreements": 5,
+    "falseMatches": {
+      "count": 0,
+      "denominator": 16,
+      "rate": 0
+    },
+    "falseClarifications": {
+      "count": 0,
+      "denominator": 8,
+      "rate": 0
+    },
+    "falseUnassessable": {
+      "count": 3,
+      "denominator": 8,
+      "rate": 0.375
+    },
+    "unassessable": 5,
+    "unresolvedExpectedMatches": 0,
+    "confusion": {
+      "matched": {
+        "matched": 5,
+        "clarification": 0,
+        "unassessable": 3,
+        "unresolved": 0,
+        "not_run": 14
+      },
+      "clarification": {
+        "matched": 0,
+        "clarification": 12,
+        "unassessable": 0,
+        "unresolved": 0,
+        "not_run": 5
+      },
+      "unassessable": {
+        "matched": 0,
+        "clarification": 2,
+        "unassessable": 2,
+        "unresolved": 0,
+        "not_run": 0
+      }
+    }
+  },
+  "byLanguage": {
+    "ar": {
+      "total": 8,
+      "completed": 5,
+      "failed": 0,
+      "notRun": 3,
+      "outcomeDisagreements": 2,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 2,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 3,
+        "rate": 0
+      },
+      "falseUnassessable": {
+        "count": 2,
+        "denominator": 3,
+        "rate": 0.6666666666666666
+      },
+      "unassessable": 2,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 1,
+          "clarification": 0,
+          "unassessable": 2,
+          "unresolved": 0,
+          "not_run": 3
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 2,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "en": {
+      "total": 27,
+      "completed": 14,
+      "failed": 0,
+      "notRun": 13,
+      "outcomeDisagreements": 1,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 11,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 3,
+        "rate": 0
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 3,
+        "rate": 0
+      },
+      "unassessable": 2,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 3,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 8
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 8,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 5
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 2,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "fr": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 1,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "ur": {
+      "total": 7,
+      "completed": 4,
+      "failed": 0,
+      "notRun": 3,
+      "outcomeDisagreements": 1,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 2,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 2,
+        "rate": 0
+      },
+      "falseUnassessable": {
+        "count": 1,
+        "denominator": 2,
+        "rate": 0.5
+      },
+      "unassessable": 1,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 1,
+          "clarification": 0,
+          "unassessable": 1,
+          "unresolved": 0,
+          "not_run": 3
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 2,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    }
+  },
+  "byCategory": {
+    "ambiguity": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "contradiction": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "correct": {
+      "total": 3,
+      "completed": 3,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 3,
+        "rate": 0
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 3,
+        "rate": 0
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 3,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "dialect": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 1,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseUnassessable": {
+        "count": 1,
+        "denominator": 1,
+        "rate": 1
+      },
+      "unassessable": 1,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 1,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "injection": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 1,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 1,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "location": {
+      "total": 5,
+      "completed": 4,
+      "failed": 0,
+      "notRun": 1,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 4,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 4,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 1
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "malformed_output": {
+      "total": 6,
+      "completed": 0,
+      "failed": 0,
+      "notRun": 6,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 6
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "missing_fact": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "negation": {
+      "total": 2,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 1,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 1
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "noise": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 1,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "numbers": {
+      "total": 4,
+      "completed": 0,
+      "failed": 0,
+      "notRun": 4,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 3
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 1
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "paraphrase": {
+      "total": 4,
+      "completed": 4,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 2,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 4,
+        "rate": 0
+      },
+      "falseUnassessable": {
+        "count": 2,
+        "denominator": 4,
+        "rate": 0.5
+      },
+      "unassessable": 2,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 2,
+          "clarification": 0,
+          "unassessable": 2,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "provider_error": {
+      "total": 3,
+      "completed": 0,
+      "failed": 0,
+      "notRun": 3,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 3
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "question_alignment": {
+      "total": 2,
+      "completed": 0,
+      "failed": 0,
+      "notRun": 2,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 1
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 1
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "shelf_swap": {
+      "total": 3,
+      "completed": 3,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 3,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 3,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "silence": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 1,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 1,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "unrelated": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "unsupported_language": {
+      "total": 1,
+      "completed": 1,
+      "failed": 0,
+      "notRun": 0,
+      "outcomeDisagreements": 1,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 1,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    },
+    "version_change": {
+      "total": 2,
+      "completed": 0,
+      "failed": 0,
+      "notRun": 2,
+      "outcomeDisagreements": 0,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "falseUnassessable": {
+        "count": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "unassessable": 0,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 1
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 1
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 0,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    }
+  },
+  "semanticMetrics": {
+    "total": 34,
+    "completed": 24,
+    "failed": 0,
+    "notRun": 10,
+    "outcomeDisagreements": 5,
+    "falseMatches": {
+      "count": 0,
+      "denominator": 16,
+      "rate": 0
+    },
+    "falseClarifications": {
+      "count": 0,
+      "denominator": 8,
+      "rate": 0
+    },
+    "falseUnassessable": {
+      "count": 3,
+      "denominator": 8,
+      "rate": 0.375
+    },
+    "unassessable": 5,
+    "unresolvedExpectedMatches": 0,
+    "confusion": {
+      "matched": {
+        "matched": 5,
+        "clarification": 0,
+        "unassessable": 3,
+        "unresolved": 0,
+        "not_run": 5
+      },
+      "clarification": {
+        "matched": 0,
+        "clarification": 12,
+        "unassessable": 0,
+        "unresolved": 0,
+        "not_run": 5
+      },
+      "unassessable": {
+        "matched": 0,
+        "clarification": 2,
+        "unassessable": 2,
+        "unresolved": 0,
+        "not_run": 0
+      }
+    }
+  },
+  "faultMetrics": {
+    "total": 9,
+    "completed": 0,
+    "failed": 0,
+    "notRun": 9,
+    "outcomeDisagreements": 0,
+    "falseMatches": {
+      "count": 0,
+      "denominator": 0,
+      "rate": null
+    },
+    "falseClarifications": {
+      "count": 0,
+      "denominator": 0,
+      "rate": null
+    },
+    "falseUnassessable": {
+      "count": 0,
+      "denominator": 0,
+      "rate": null
+    },
+    "unassessable": 0,
+    "unresolvedExpectedMatches": 0,
+    "confusion": {
+      "matched": {
+        "matched": 0,
+        "clarification": 0,
+        "unassessable": 0,
+        "unresolved": 0,
+        "not_run": 9
+      },
+      "clarification": {
+        "matched": 0,
+        "clarification": 0,
+        "unassessable": 0,
+        "unresolved": 0,
+        "not_run": 0
+      },
+      "unassessable": {
+        "matched": 0,
+        "clarification": 0,
+        "unassessable": 0,
+        "unresolved": 0,
+        "not_run": 0
+      }
+    }
+  },
+  "byModel": {
+    "none": {
+      "total": 43,
+      "completed": 24,
+      "failed": 0,
+      "notRun": 19,
+      "outcomeDisagreements": 5,
+      "falseMatches": {
+        "count": 0,
+        "denominator": 16,
+        "rate": 0
+      },
+      "falseClarifications": {
+        "count": 0,
+        "denominator": 8,
+        "rate": 0
+      },
+      "falseUnassessable": {
+        "count": 3,
+        "denominator": 8,
+        "rate": 0.375
+      },
+      "unassessable": 5,
+      "unresolvedExpectedMatches": 0,
+      "confusion": {
+        "matched": {
+          "matched": 5,
+          "clarification": 0,
+          "unassessable": 3,
+          "unresolved": 0,
+          "not_run": 14
+        },
+        "clarification": {
+          "matched": 0,
+          "clarification": 12,
+          "unassessable": 0,
+          "unresolved": 0,
+          "not_run": 5
+        },
+        "unassessable": {
+          "matched": 0,
+          "clarification": 2,
+          "unassessable": 2,
+          "unresolved": 0,
+          "not_run": 0
+        }
+      }
+    }
+  },
+  "evidenceLimits": {
+    "providerTransport": "not_verified",
+    "semanticAccuracyClaim": false,
+    "hardwareAudio": "not_tested",
+    "faultSamples": "Mocked protocol faults; not observations of real provider error frequency"
+  },
+  "contractChecks": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0
+  },
+  "results": [
+    {
+      "id": "en-standard",
+      "language": "en",
+      "category": "correct",
+      "expected": "matched",
+      "status": "completed",
+      "actual": "matched",
+      "inputHash": "0856fe95943422af6d626dffce9578221d61098874cc4ed31495568306e1c237",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "asked_facts_present"
+      ],
+      "resultHash": "1842dcd7efaa43032cb39e5c026cb1635a4342deb7a555f4d74aa1d28b1d42fe",
+      "evidenceHash": "6ce3bddbe1259dd35c6b7185d19dd34ba3416879b526f4bf5d70ff172d13d4e4",
+      "evidenceCount": 2,
+      "contractPassed": null
+    },
+    {
+      "id": "en-concise",
+      "language": "en",
+      "category": "paraphrase",
+      "expected": "matched",
+      "status": "completed",
+      "actual": "matched",
+      "inputHash": "48e232907342ebeb015ad97e48f7a6d6a7f7a85e6e8b8d6313d740849f5fd8c2",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "asked_facts_present"
+      ],
+      "resultHash": "db8c01acb840aeb66b22611900dcbc3f3a8a77c73f8aaf0c0afb436cc78a9da8",
+      "evidenceHash": "b366f36803b6901c0cef475de610173de04dab75f9051b75b11d72a8b77c7574",
+      "evidenceCount": 2,
+      "contractPassed": null
+    },
+    {
+      "id": "en-paraphrase",
+      "language": "en",
+      "category": "paraphrase",
+      "expected": "matched",
+      "status": "completed",
+      "actual": "matched",
+      "inputHash": "62dc40ccf1f19550755a7bd4ac88ead8a3423d8a26a1ec9a0949b073f5d0caca",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "asked_facts_present"
+      ],
+      "resultHash": "861445532f3e80cf110396540a7734facf9ff6578547652fbadcbde7fec3ba55",
+      "evidenceHash": "6a6cf2e4875f2087e99c5b13e0adb42dcf351504ee6ecb07bbad9abe7453e3fe",
+      "evidenceCount": 2,
+      "contractPassed": null
+    },
+    {
+      "id": "en-missing",
+      "language": "en",
+      "category": "missing_fact",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "edc0351bc080743e762fd2ae6c9573610c0223866c0d9b4d19cdbbe50b88d45e",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "missing_asked_fact"
+      ],
+      "resultHash": "39edb452e7a4fd64667d92f93ed8aa57c6a2265c8314a78f6f6215a193d1d22a",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-swap",
+      "language": "en",
+      "category": "shelf_swap",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "03a89f9d6353b37a4f1b9fb5de4fc21df75e24d6e1c4c6db45b401f71551497e",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "contradictory_placement"
+      ],
+      "resultHash": "a9f4d6c770323bf6b28b3320536bcde6cde97c81c1476c808fe1ac333ca35d66",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-negated",
+      "language": "en",
+      "category": "negation",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "f9d33a3ea298f51eaf8d78fb1d549fde88f6a08b70149f31091acb30f461b2e3",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "uncertain_placement"
+      ],
+      "resultHash": "987ab55e99184fbc04e9b89fd0e449a269edb49ac2b4b18977f6063fec2888fa",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-under",
+      "language": "en",
+      "category": "location",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "67298ad59cf126de776ceec9e87c08a11abbd2265dffa6a9c98aa0c373166cab",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "uncertain_placement"
+      ],
+      "resultHash": "987ab55e99184fbc04e9b89fd0e449a269edb49ac2b4b18977f6063fec2888fa",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-near",
+      "language": "en",
+      "category": "location",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "8bcd19d6f8bbd0cd76ae839e413f607103156ddeadff6b5a45d69d4eb444bee1",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "uncertain_placement"
+      ],
+      "resultHash": "987ab55e99184fbc04e9b89fd0e449a269edb49ac2b4b18977f6063fec2888fa",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-other-color",
+      "language": "en",
+      "category": "contradiction",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "9f5421be9bd1fa1a40f65a2ad0582558c8a1e00e4d0665ec9f0c2dd2e8ab4e61",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "uncertain_placement"
+      ],
+      "resultHash": "987ab55e99184fbc04e9b89fd0e449a269edb49ac2b4b18977f6063fec2888fa",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-uncertain",
+      "language": "en",
+      "category": "ambiguity",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "f8de063912e2aa9bbbcfdc9caa7b08bb42016e1b786860809b03542863645ba0",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "uncertain_placement"
+      ],
+      "resultHash": "987ab55e99184fbc04e9b89fd0e449a269edb49ac2b4b18977f6063fec2888fa",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-unrelated",
+      "language": "en",
+      "category": "unrelated",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "a2488c940c3bc6f6e06160ccd5a2233cd5388dbd65aba97c1a033f01e7c86721",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "missing_asked_fact"
+      ],
+      "resultHash": "39edb452e7a4fd64667d92f93ed8aa57c6a2265c8314a78f6f6215a193d1d22a",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-injection",
+      "language": "en",
+      "category": "injection",
+      "expected": "unassessable",
+      "status": "completed",
+      "actual": "unassessable",
+      "inputHash": "15c9bed77f697eadd6ad310448fe07ba38cf63fe37298e7281b16b40125335ac",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "instruction_like_answer"
+      ],
+      "resultHash": "b14120d7832089d80e1f0fb5e8c6a62f2e71330f6017d4c7de01ac9c57f6cbe2",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-silence",
+      "language": "en",
+      "category": "silence",
+      "expected": "unassessable",
+      "status": "completed",
+      "actual": "unassessable",
+      "inputHash": "c077a24a397256ca958ed2a12b6305a81903e5c2aecc2881a8aedca7f353d75e",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "empty_answer"
+      ],
+      "resultHash": "1805816e071ca80c019d5462c991f894cf79c6e3adad9bac5c1b455c0268bb8e",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "ar-standard",
+      "language": "ar",
+      "category": "correct",
+      "expected": "matched",
+      "status": "completed",
+      "actual": "matched",
+      "inputHash": "9eef5301a89b2ef96f66a3a9903211599f6d64ffa3b61364ace75b5bbe51a5f0",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "asked_facts_present"
+      ],
+      "resultHash": "7358de1d7dedef067ad17779d1a90d0221cf6cf854fdc255b7adf978b61158da",
+      "evidenceHash": "879e454b839ac5709a55fcce4bfd2128673d38745aa3909a3a759fd54557bb0e",
+      "evidenceCount": 2,
+      "contractPassed": null
+    },
+    {
+      "id": "ar-swap",
+      "language": "ar",
+      "category": "shelf_swap",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "2dff4f2795a49d15a388d655dcc54e3845bf63a28ee586566b249ccae0858962",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "contradictory_placement"
+      ],
+      "resultHash": "a9f4d6c770323bf6b28b3320536bcde6cde97c81c1476c808fe1ac333ca35d66",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "ar-under",
+      "language": "ar",
+      "category": "location",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "6827b1de4e3600708c11423a8827e5c821f33c5a3f6b2f0ea05a04a6b625f621",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "uncertain_placement"
+      ],
+      "resultHash": "987ab55e99184fbc04e9b89fd0e449a269edb49ac2b4b18977f6063fec2888fa",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "ur-standard",
+      "language": "ur",
+      "category": "correct",
+      "expected": "matched",
+      "status": "completed",
+      "actual": "matched",
+      "inputHash": "5e1b9d913e181ad18370885a853eaa5b8a1e80be85aaf5ea6dfc667449d2d23f",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "asked_facts_present"
+      ],
+      "resultHash": "f17fbd5ec006256847bb7c0a1a25957964d0ffbb4c824c854fcc888ec9a24406",
+      "evidenceHash": "a4a81caaac492a700840f4c8d17292c5d3238d2ef6e594464616b1a5444153c2",
+      "evidenceCount": 2,
+      "contractPassed": null
+    },
+    {
+      "id": "ur-swap",
+      "language": "ur",
+      "category": "shelf_swap",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "2017039eb3838c6e2aeabeccca7bb13398c489e6ccb86f5a41bcff6db2cb5eab",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "contradictory_placement"
+      ],
+      "resultHash": "a9f4d6c770323bf6b28b3320536bcde6cde97c81c1476c808fe1ac333ca35d66",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "ur-under",
+      "language": "ur",
+      "category": "location",
+      "expected": "clarification",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "75b2bd9e65386e3152604b1f0a8af0a96fcd977821ca0966608095f385f284bf",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "uncertain_placement"
+      ],
+      "resultHash": "987ab55e99184fbc04e9b89fd0e449a269edb49ac2b4b18977f6063fec2888fa",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "ar-paraphrase",
+      "language": "ar",
+      "category": "paraphrase",
+      "expected": "matched",
+      "status": "completed",
+      "actual": "unassessable",
+      "inputHash": "34694ba21818761c455afb631df43252fd546ff068ac7939ea9b70242d991e98",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "unsupported_wording"
+      ],
+      "resultHash": "312fef97d39dfda7433c02ed5de9933353a3ba595e34527b04d37037ab91d45e",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "ar-dialect",
+      "language": "ar",
+      "category": "dialect",
+      "expected": "matched",
+      "status": "completed",
+      "actual": "unassessable",
+      "inputHash": "d060b14d884bdc7ff0a42b38dd969e253e390596218dcee033b0b38a55aa0e8c",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "unsupported_wording"
+      ],
+      "resultHash": "312fef97d39dfda7433c02ed5de9933353a3ba595e34527b04d37037ab91d45e",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "ur-paraphrase",
+      "language": "ur",
+      "category": "paraphrase",
+      "expected": "matched",
+      "status": "completed",
+      "actual": "unassessable",
+      "inputHash": "caab64b3e69b93391715d91ad3a0d436a1f740b5d651a90bf739f07001e3b9f2",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "unsupported_wording"
+      ],
+      "resultHash": "312fef97d39dfda7433c02ed5de9933353a3ba595e34527b04d37037ab91d45e",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "en-noise",
+      "language": "en",
+      "category": "noise",
+      "expected": "unassessable",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "0a0221e37f4b25e63111df4736815acb914e8a5c8db6481857d89bb15263328f",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "missing_asked_fact"
+      ],
+      "resultHash": "39edb452e7a4fd64667d92f93ed8aa57c6a2265c8314a78f6f6215a193d1d22a",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fr-unsupported",
+      "language": "fr",
+      "category": "unsupported_language",
+      "expected": "unassessable",
+      "status": "completed",
+      "actual": "clarification",
+      "inputHash": "0e3f22203e22a63cb11cd2a62f72d4681238809e4e538d9cfc040303047de20e",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": null,
+      "reasonCodes": [
+        "missing_asked_fact"
+      ],
+      "resultHash": "39edb452e7a4fd64667d92f93ed8aa57c6a2265c8314a78f6f6215a193d1d22a",
+      "evidenceHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "v4-new-arrangement",
+      "language": "en",
+      "category": "version_change",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "0abb2fcf981c4117581ccb3c06eef2282333afdadda51f57ccdf482c2f053215",
+      "datasetPublicationId": "eval-shelves-v4",
+      "publicationId": "eval-shelves-v4",
+      "version": 4,
+      "questionHash": "279a3516c82adc0d80767044a177ae1222c940c45679f70f5004e7493494d669",
+      "rubricHash": "67abc8fcdc76efa702c522485695f1a9574d34200d68c2c4aea9403961cd6649",
+      "sourceHash": "6384e8b8b49a9c142cd89bd536cb806f8e53f2c89b1bffbe17bd516e7a4fd4a7",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "v4-stale-arrangement",
+      "language": "en",
+      "category": "version_change",
+      "expected": "clarification",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "dde2410dd469345e6587e33ce0ed87000b5b4a4aec31b64ca5b5657759da3229",
+      "datasetPublicationId": "eval-shelves-v4",
+      "publicationId": "eval-shelves-v4",
+      "version": 4,
+      "questionHash": "279a3516c82adc0d80767044a177ae1222c940c45679f70f5004e7493494d669",
+      "rubricHash": "67abc8fcdc76efa702c522485695f1a9574d34200d68c2c4aea9403961cd6649",
+      "sourceHash": "6384e8b8b49a9c142cd89bd536cb806f8e53f2c89b1bffbe17bd516e7a4fd4a7",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "cartons-correct",
+      "language": "en",
+      "category": "numbers",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "97eaf32fe6813e515b4fb0af3b4971a4b72bba7b9a3f5eb7d3682cb565478e90",
+      "datasetPublicationId": "eval-cartons-v1",
+      "publicationId": "eval-cartons-v1",
+      "version": 1,
+      "questionHash": "bb4a66a7d2cb102fd6e91795b7ada28c43291955c5560e00e48704e6af9bc657",
+      "rubricHash": "80892f27d00db20b1a5e2fb659912d5b26acf8b1556c90f2d1e6f9cea710c3d3",
+      "sourceHash": "23e17a26f5d82474c5971088a94b78779fe5dea8f242e76bae07ead7ff0e0120",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "cartons-wrong-count",
+      "language": "en",
+      "category": "numbers",
+      "expected": "clarification",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "714c828206168d5391d47fce9d187bd9a242f47b8983a1bf4104fd6bfeb5a9c8",
+      "datasetPublicationId": "eval-cartons-v1",
+      "publicationId": "eval-cartons-v1",
+      "version": 1,
+      "questionHash": "bb4a66a7d2cb102fd6e91795b7ada28c43291955c5560e00e48704e6af9bc657",
+      "rubricHash": "80892f27d00db20b1a5e2fb659912d5b26acf8b1556c90f2d1e6f9cea710c3d3",
+      "sourceHash": "23e17a26f5d82474c5971088a94b78779fe5dea8f242e76bae07ead7ff0e0120",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "cartons-wrong-bay",
+      "language": "en",
+      "category": "location",
+      "expected": "clarification",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "e57d6147e6d3cf50e53bc15bb6002b36888396d0d229d7815b1550f12a40b306",
+      "datasetPublicationId": "eval-cartons-v1",
+      "publicationId": "eval-cartons-v1",
+      "version": 1,
+      "questionHash": "bb4a66a7d2cb102fd6e91795b7ada28c43291955c5560e00e48704e6af9bc657",
+      "rubricHash": "80892f27d00db20b1a5e2fb659912d5b26acf8b1556c90f2d1e6f9cea710c3d3",
+      "sourceHash": "23e17a26f5d82474c5971088a94b78779fe5dea8f242e76bae07ead7ff0e0120",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "cartons-ar",
+      "language": "ar",
+      "category": "numbers",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "77639ab76f83c9b3ac03c2270dccc3d31f66f40571a88b1a18761e0c149ef3d7",
+      "datasetPublicationId": "eval-cartons-v1",
+      "publicationId": "eval-cartons-v1",
+      "version": 1,
+      "questionHash": "bb4a66a7d2cb102fd6e91795b7ada28c43291955c5560e00e48704e6af9bc657",
+      "rubricHash": "80892f27d00db20b1a5e2fb659912d5b26acf8b1556c90f2d1e6f9cea710c3d3",
+      "sourceHash": "23e17a26f5d82474c5971088a94b78779fe5dea8f242e76bae07ead7ff0e0120",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "cartons-ur",
+      "language": "ur",
+      "category": "numbers",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "40549d95d08cbf5dc4082a1b47c7056c380fa2ecf8980838cca187319ae8c55d",
+      "datasetPublicationId": "eval-cartons-v1",
+      "publicationId": "eval-cartons-v1",
+      "version": 1,
+      "questionHash": "bb4a66a7d2cb102fd6e91795b7ada28c43291955c5560e00e48704e6af9bc657",
+      "rubricHash": "80892f27d00db20b1a5e2fb659912d5b26acf8b1556c90f2d1e6f9cea710c3d3",
+      "sourceHash": "23e17a26f5d82474c5971088a94b78779fe5dea8f242e76bae07ead7ff0e0120",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "cartons-negation",
+      "language": "en",
+      "category": "negation",
+      "expected": "clarification",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "5743d9a166885f32c6e4f6cdbabf8ff9579c51027f601bf4c907337d7c39d664",
+      "datasetPublicationId": "eval-cartons-v1",
+      "publicationId": "eval-cartons-v1",
+      "version": 1,
+      "questionHash": "bb4a66a7d2cb102fd6e91795b7ada28c43291955c5560e00e48704e6af9bc657",
+      "rubricHash": "80892f27d00db20b1a5e2fb659912d5b26acf8b1556c90f2d1e6f9cea710c3d3",
+      "sourceHash": "23e17a26f5d82474c5971088a94b78779fe5dea8f242e76bae07ead7ff0e0120",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "cartons-v2-missing",
+      "language": "en",
+      "category": "question_alignment",
+      "expected": "clarification",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "f1322516c671da1ade77a1ddd7ff04b00e7806bc8b8ce3951656b71f853d169b",
+      "datasetPublicationId": "eval-cartons-v2",
+      "publicationId": "eval-cartons-v2",
+      "version": 2,
+      "questionHash": "b82226e5b154531a3617edb419b1303988761b47eefbe890eeb40f71a7c6997d",
+      "rubricHash": "b0928988ddf6e2b54132d2ae7af041ee83cdd9e5ef5251346d2fc75a019c3dc6",
+      "sourceHash": "23e17a26f5d82474c5971088a94b78779fe5dea8f242e76bae07ead7ff0e0120",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "cartons-v2-correct",
+      "language": "en",
+      "category": "question_alignment",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "41c80bf382a416b4ad1a9e3fdf6c60f9b797d93e93d988d8c03c2bc1c1ea3e56",
+      "datasetPublicationId": "eval-cartons-v2",
+      "publicationId": "eval-cartons-v2",
+      "version": 2,
+      "questionHash": "b82226e5b154531a3617edb419b1303988761b47eefbe890eeb40f71a7c6997d",
+      "rubricHash": "b0928988ddf6e2b54132d2ae7af041ee83cdd9e5ef5251346d2fc75a019c3dc6",
+      "sourceHash": "23e17a26f5d82474c5971088a94b78779fe5dea8f242e76bae07ead7ff0e0120",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "unsupported_local_rubric",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-json",
+      "language": "en",
+      "category": "malformed_output",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "48e232907342ebeb015ad97e48f7a6d6a7f7a85e6e8b8d6313d740849f5fd8c2",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-empty",
+      "language": "en",
+      "category": "malformed_output",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "48e232907342ebeb015ad97e48f7a6d6a7f7a85e6e8b8d6313d740849f5fd8c2",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-refusal",
+      "language": "ar",
+      "category": "provider_error",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "9eef5301a89b2ef96f66a3a9903211599f6d64ffa3b61364ace75b5bbe51a5f0",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-http",
+      "language": "ur",
+      "category": "provider_error",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "5e1b9d913e181ad18370885a853eaa5b8a1e80be85aaf5ea6dfc667449d2d23f",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-timeout",
+      "language": "en",
+      "category": "provider_error",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "48e232907342ebeb015ad97e48f7a6d6a7f7a85e6e8b8d6313d740849f5fd8c2",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-missing-evidence",
+      "language": "en",
+      "category": "malformed_output",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "48e232907342ebeb015ad97e48f7a6d6a7f7a85e6e8b8d6313d740849f5fd8c2",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-invented-quote",
+      "language": "ar",
+      "category": "malformed_output",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "9eef5301a89b2ef96f66a3a9903211599f6d64ffa3b61364ace75b5bbe51a5f0",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-fact-index",
+      "language": "ur",
+      "category": "malformed_output",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "5e1b9d913e181ad18370885a853eaa5b8a1e80be85aaf5ea6dfc667449d2d23f",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    },
+    {
+      "id": "fault-reasons",
+      "language": "en",
+      "category": "malformed_output",
+      "expected": "matched",
+      "status": "not_run",
+      "actual": null,
+      "inputHash": "48e232907342ebeb015ad97e48f7a6d6a7f7a85e6e8b8d6313d740849f5fd8c2",
+      "datasetPublicationId": "eval-shelves-v3",
+      "publicationId": "eval-shelves-v3",
+      "version": 3,
+      "questionHash": "696cb55c730fa82d4367f4825b49586f873977aa49015e6d1dc37a75d726d6c4",
+      "rubricHash": "d3a565ea4e267d73df39bd5f0ad89a438107b90ea472ff00415f7839d02079a4",
+      "sourceHash": "2f09d85d878fa825a6eb79519a35847556d4251b39f1dbdbfd3f94be73f98adf",
+      "provenance": {
+        "adapter": "synthetic-local-v1",
+        "dataClass": "synthetic",
+        "model": "none",
+        "promptVersion": "synthetic-shelf-v1",
+        "schemaVersion": "synthetic-shelf-v1"
+      },
+      "diagnostic": "fault_not_applicable",
+      "reasonCodes": [],
+      "resultHash": null,
+      "evidenceHash": null,
+      "evidenceCount": 0,
+      "contractPassed": null
+    }
+  ]
+}

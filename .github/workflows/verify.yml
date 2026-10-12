@@ -1,0 +1,50 @@
+name: Verify Understood
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: understood_test
+          POSTGRES_USER: understood_ci
+          POSTGRES_PASSWORD: synthetic_ci_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U understood_ci -d understood_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      UNDERSTOOD_PG_TEST_URL: postgresql://understood_ci:synthetic_ci_only@127.0.0.1:5432/understood_test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.5.0
+          package-manager-cache: false
+      - name: Install Locked Dependencies
+        run: npm ci
+      - name: Tests Including Real PostgreSQL
+        run: npm test
+      - name: Versioned Synthetic Provider Contract Evaluation
+        run: npm run evaluate:contract
+      - name: Isolated Synthetic Backend Pipeline Rehearsal
+        run: npm run evaluate:rehearsal -- --output pipeline-rehearsal.json
+      - name: Typecheck And Build
+        run: npm run build

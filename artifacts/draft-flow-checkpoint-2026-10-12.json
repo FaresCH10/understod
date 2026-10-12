@@ -1,0 +1,12 @@
+{
+  "checkpoint": "connected-drafting-steps",
+  "timestamp": "2026-10-12 05:50:39 UTC",
+  "tests": {"files": 15, "passed": 70, "failed": 0, "skipped": 0, "durationMs": 15197.0923, "exitCode": 0},
+  "build": {"modules": 2024, "passed": true, "shellHashes": 66, "hashFailures": 0, "existingWarningsRemain": true},
+  "browser": {"widths": [320, 390, 768, 1440], "sourceSave": true, "preparation": "real synthetic worker", "languageInspection": true, "explicitPublication": true, "keyboardFocus": true, "editStepLock": true, "publicationReload": true, "narrowOverflowFixed": true, "reticleVerdict": false},
+  "fixtures": [{"session": 67183, "draftPosts": 1, "preparePosts": 1, "publishPosts": 1, "briefings": 1, "jobs": 1, "publications": 1, "assignments": 2, "attempts": 0, "externalCalls": 0, "exitCode": 0}, {"session": 62639, "draftPosts": 1, "preparePosts": 1, "publishPosts": 1, "briefings": 1, "jobs": 1, "publications": 1, "assignments": 2, "attempts": 0, "externalCalls": 0, "exitCode": 0}],
+  "originalData": {"businessFingerprintsMatched": 8, "integrity": "ok", "foreignKeyViolations": 0, "migrated": false, "previewRestarted": false},
+  "productionReady": false,
+  "completionEstimate": "70 percent historical and unaudited; not promoted",
+  "next": "Read-only uncertain worker-grant redemption recovery; then continue full specification and reference gaps"
+}

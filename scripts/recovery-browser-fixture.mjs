@@ -1,0 +1,20 @@
+import {spawn} from 'node:child_process';
+import {randomBytes} from 'node:crypto';
+import {openDatabase} from '../server/db.mjs';
+import {seed} from '../server/seed.mjs';
+import {provisionStaffCredential} from '../server/auth.mjs';
+import {createAppServer} from '../server/index.mjs';
+import {resolveMailConfig} from '../server/auth-mail.mjs';
+import {processOneRecovery} from '../server/account-recovery.mjs';
+const db=openDatabase(':memory:');seed(db);
+provisionStaffCredential(db,'maya','synthetic-recovery@example.test','Disposable fixture password only');
+const mailOptions={mode:process.env.UNDERSTOOD_QA_MAIL==='disabled' ? 'disabled' : 'resend',apiKey:'re_synthetic_only',from:'fixture@example.test',key:randomBytes(32).toString('hex'),publicOrigin:'http://127.0.0.1:3130',allowLocal:true};
+const mail=resolveMailConfig(mailOptions);
+const api=createAppServer(db,{tier:'local',aiMode:'synthetic',accessMode:'credential',publicOrigin:mailOptions.publicOrigin,mail:mailOptions});
+await new Promise(resolve=>api.listen(3131,'127.0.0.1',resolve));
+let ticking=false;
+const timer=setInterval(async()=>{if(ticking) return;ticking=true;try {while(await processOneRecovery(db,mail,{send:async()=>({providerId:'synthetic-only'})})) console.log('Synthetic mail job processed; no message sent.');}finally {ticking=false;}},500);
+const vite=spawn(process.execPath,['node_modules/vite/bin/vite.js'],{stdio:'inherit',env:{...process.env,UNDERSTOOD_WEB_PORT:'3130',UNDERSTOOD_API_PORT:'3131'}});
+function stop(){clearInterval(timer);vite.kill();api.close(()=>db.close());}
+process.once('SIGINT',stop);process.once('SIGTERM',stop);vite.on('error',()=>{stop();process.exitCode=1;});
+console.log('Memory-only recovery QA at http://127.0.0.1:3130/; every delivery is intercepted, no external email call.');

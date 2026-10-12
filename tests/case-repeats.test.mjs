@@ -1,0 +1,119 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {PGlite} from '@electric-sql/pglite';
+import {runMigrations} from '../server/postgres/migrate.mjs';
+import {submitAnswer} from '../server/postgres/domain.mjs';
+import {processOneAssessment} from '../server/postgres/assessment-worker.mjs';
+import {requestCaseRepeat,caseRepeatReceipt,listCaseRepeats} from '../server/postgres/case-repeats.mjs';
+import {getClarification,resolveClarification,requestHelp} from '../server/postgres/clarifications.mjs';
+import {workerBriefing,workerBriefings} from '../server/postgres/read-models.mjs';
+import {readPublicationReport} from '../server/postgres/reports.mjs';
+import {receiveRecording} from '../server/postgres/recordings.mjs';
+import {processOneRecording} from '../server/postgres/recording-worker.mjs';
+import {requestWorkerDeletion} from '../server/postgres/deletions.mjs';
+import {encodeWav} from '../src/audio.ts';
+
+const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
+const worker={principal_type:'worker',principal_id:'worker-14',org_id:'cedar',site_id:'beirut'};
+const missing={outcome:'clarification',reasons:['missing_asked_fact'],evidence:[]};
+const command=()=>({requestId:randomUUID(),dueAt:new Date(Date.now()+3600000).toISOString()});
+async function fixture() {
+  const db=new PGlite(),pool={async connect(){return {query:async(sql,args)=>args?.length?db.query(sql,args):(await db.exec(sql)).at(-1)??{rows:[]},release(){}};}};
+  await runMigrations(pool);
+  await db.exec(`INSERT INTO organizations VALUES('cedar','Synthetic');INSERT INTO sites VALUES('beirut','cedar','Synthetic','UTC');
+    INSERT INTO staff(id,org_id,site_id,name,role) VALUES('maya','cedar','beirut','Maya','owner'),('other','cedar','beirut','Other','supervisor'),('audit','cedar','beirut','Audit','auditor');
+    INSERT INTO workers(id,org_id,site_id,code,language) VALUES('worker-14','cedar','beirut','Worker 014','en'),('worker-2','cedar','beirut','Worker 002','en');
+    INSERT INTO briefings(id,org_id,site_id,title,source,state) VALUES('shelf','cedar','beirut','Synthetic','Synthetic','draft');
+    INSERT INTO publications(id,org_id,site_id,briefing_id,version,snapshot_json,state) VALUES('shelf-v3','cedar','beirut','shelf',3,
+      '{"title":"Synthetic","question":"Where do items go?","facts":["Finished: blue","Unfinished: yellow"],"rubric":{"askedFacts":["Finished: blue","Unfinished: yellow"]},"languages":{"en":{"title":"Synthetic","text":"Finished: blue. Unfinished: yellow.","question":"Where do items go?"}}}','published');
+    INSERT INTO assignments(id,org_id,site_id,publication_id,worker_id,language) VALUES('assignment-14','cedar','beirut','shelf-v3','worker-14','en');`);
+  const original=await submitAnswer(pool,worker,'assignment-14',randomUUID(),'Finished: blue');
+  await processOneAssessment(pool,{assess:async()=>missing});
+  const caseId=(await db.query('SELECT id FROM clarifications')).rows[0].id;
+  await db.exec("UPDATE assignments SET due_at=clock_timestamp()-interval '1 hour'");
+  return {db,pool,caseId,original,close:()=>db.close(),request:input=>requestCaseRepeat(pool,owner,caseId,input)};
+}
+test('repeat admits one new typed receipt after original deadline, preserves original evidence and reassesses without a duplicate case',async()=>{
+  const f=await fixture();try {
+    const before=(await f.db.query('SELECT * FROM attempts WHERE id=$1',[f.original.id])).rows[0],assignment=(await f.db.query('SELECT * FROM assignments')).rows;
+    await assert.rejects(submitAnswer(f.pool,worker,'assignment-14',randomUUID(),'Finished: blue. Unfinished: yellow.'),/deadline/);
+    const input=command(),receipt=await f.request(input);assert.equal(receipt.status,'pending');assert.deepEqual(await f.request(input),receipt);
+    assert.deepEqual(await caseRepeatReceipt(f.pool,owner,f.caseId,input.requestId),receipt);
+    await assert.rejects(f.request({...input,dueAt:new Date(Date.now()+7200000).toISOString()}),/conflict/);
+    await assert.rejects(f.request(command()),/already requested/);
+    await assert.rejects(caseRepeatReceipt(f.pool,{...owner,principal_id:'other',role:'supervisor'},f.caseId,input.requestId),/unavailable/);
+    for(const view of ['todo','followup']){const inbox=await workerBriefings(f.pool,worker,{}, {view});assert.equal(inbox.total,1);assert.equal(inbox.items[0].repeatRequest.id,input.requestId);}
+    const detail=await workerBriefing(f.pool,worker,'assignment-14');assert.equal(detail.repeatRequest.id,input.requestId);assert.equal(detail.outcome,'clarification');assert.equal(JSON.stringify(detail).includes('reasons_json'),false);
+    const id=randomUUID(),text='Finished: blue. Unfinished: yellow.',next=await submitAnswer(f.pool,worker,'assignment-14',id,text);assert.equal(next.assessmentStatus,'pending');
+    assert.equal((await f.request(input)).status,'submitted');assert.equal((await submitAnswer(f.pool,worker,'assignment-14',id,text)).duplicate,true);
+    assert.equal((await workerBriefings(f.pool,worker,{}, {view:'todo'})).total,0);
+    await assert.rejects(submitAnswer(f.pool,worker,'assignment-14',randomUUID(),text),/deadline/);
+    await processOneAssessment(f.pool,{assess:async()=>({outcome:'matched',reasons:['asked_facts_present'],evidence:[{factIndex:0,quote:'Finished: blue'},{factIndex:1,quote:'Unfinished: yellow'}]})});
+    const report=await readPublicationReport(f.pool,owner,{publicationId:'shelf-v3'});assert.equal(report.metrics.assigned,1);assert.equal(report.metrics.responses,1);assert.equal(report.metrics.matches,1);
+    assert.deepEqual((await f.db.query('SELECT * FROM attempts WHERE id=$1',[f.original.id])).rows[0],before);
+    assert.deepEqual((await f.db.query('SELECT * FROM assignments')).rows,assignment);
+    const caseDetail=await getClarification(f.pool,owner,f.caseId);assert.equal(caseDetail.outcome,'clarification');assert.equal(caseDetail.attempts.length,2);assert.equal(caseDetail.status,'open');
+    assert.equal((await f.db.query('SELECT count(*)::int n FROM clarifications')).rows[0].n,1);
+    await f.request(command());await submitAnswer(f.pool,worker,'assignment-14',randomUUID(),'Still unsure');await processOneAssessment(f.pool,{assess:async()=>missing});
+    assert.equal((await f.db.query('SELECT count(*)::int n FROM clarifications')).rows[0].n,1);assert.equal((await listCaseRepeats(f.pool,owner,f.caseId)).length,2);
+    await assert.rejects(f.db.exec("UPDATE case_repeats SET due_at=due_at+interval '1 hour'"),/immutable/);
+    await assert.rejects(f.db.exec("UPDATE case_repeats SET status='pending',submission_id=NULL,submitted_at=NULL"),/immutable/);
+    await assert.rejects(f.db.exec('DELETE FROM case_repeats'),/immutable/);
+  } finally {await f.close();}
+});
+test('repeat role, site, worker activation, publication, deadline and prior-answer fences are enforced',async()=>{
+  const f=await fixture();try {
+    for(const principal of [worker,{...owner,role:'auditor',principal_id:'audit'},{...owner,site_id:'foreign'}])await assert.rejects(requestCaseRepeat(f.pool,principal,f.caseId,command()),/Forbidden|unavailable/);
+    for(const dueAt of ['bad',new Date(Date.now()-1000).toISOString(),new Date(Date.now()+31*86400000).toISOString()])await assert.rejects(f.request({...command(),dueAt}),/Invalid repeat/);
+    await assert.rejects(f.request({...command(),extra:true}),/Invalid/);
+    await f.db.exec("UPDATE workers SET active=false WHERE id='worker-14'");await assert.rejects(f.request(command()),/unavailable/);
+    await f.db.exec("UPDATE workers SET active=true WHERE id='worker-14';UPDATE publications SET state='withdrawn'");await assert.rejects(f.request(command()),/unavailable/);
+  }finally{await f.close();}
+});
+test('case closure cancels effective admission and exact command recovery stays readable without reopening it',async()=>{
+  const f=await fixture();try {
+    const input=command();await f.request(input);await resolveClarification(f.pool,owner,f.caseId,{notes:'Synthetic human resolution'});
+    assert.equal((await f.request(input)).id,input.requestId);assert.equal((await workerBriefing(f.pool,worker,'assignment-14')).repeatRequest,undefined);
+    assert.equal((await workerBriefings(f.pool,worker,{}, {view:'followup'})).total,0);await assert.rejects(submitAnswer(f.pool,worker,'assignment-14',randomUUID(),'New answer'),/deadline/);
+    await assert.rejects(f.request(command()),/unavailable/);
+    const second=randomUUID();await requestHelp(f.pool,worker,'assignment-14',{requestId:second,text:'Synthetic new question'});
+    await requestCaseRepeat(f.pool,owner,second,command());assert.equal((await caseRepeatReceipt(f.pool,owner,f.caseId,input.requestId)).status,'cancelled');
+  }finally{await f.close();}
+});
+test('repeat receipt acceptance and audit fail atomically',async()=>{
+  const f=await fixture();try {
+    const input=command();await f.request(input);
+    await f.db.exec("CREATE FUNCTION deny_repeat_audit() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.action='answer.received' THEN RAISE EXCEPTION 'Synthetic audit failure'; END IF; RETURN NEW; END $$;CREATE TRIGGER deny_repeat_audit BEFORE INSERT ON audit FOR EACH ROW EXECUTE FUNCTION deny_repeat_audit()");
+    await assert.rejects(submitAnswer(f.pool,worker,'assignment-14',randomUUID(),'New answer'),/audit failure/);
+    assert.equal((await f.request(input)).status,'pending');assert.equal((await f.db.query('SELECT count(*)::int n FROM submission_receipts')).rows[0].n,1);
+  }finally{await f.close();}
+});
+test('recording consumes repeat only after private storage, rechecks closure and accepts exact retries without another receipt',async()=>{
+  const f=await fixture();try {
+    const input=command();await f.request(input);
+    const bytes=Buffer.from(encodeWav({duration:1,sampleRate:16000,numberOfChannels:1,getChannelData:()=>new Float32Array(16000).fill(0.2)})),objects=new Map();
+    const storage={async save(row,data){assert.equal((await f.request(input)).status,'pending');objects.set(row.id,Buffer.from(data));},async remove(row){objects.delete(row.id);}};
+    const id=randomUUID(),receipt=await receiveRecording(f.pool,worker,'assignment-14',id,bytes,storage);assert.equal(receipt.status,'received');assert.equal((await f.request(input)).status,'submitted');
+    assert.equal((await receiveRecording(f.pool,worker,'assignment-14',id,bytes,storage)).duplicate,true);
+    assert.equal(objects.size,1);assert.equal((await f.db.query('SELECT count(*)::int n FROM submission_receipts')).rows[0].n,2);
+    const original=(await f.db.query('SELECT * FROM attempts WHERE id=$1',[f.original.id])).rows[0];
+    storage.read=async row=>objects.get(row.id);
+    await processOneRecording(f.pool,{transcribe:async()=>({text:'Still unsure about yellow'}),assess:async()=>missing},storage);
+    assert.equal((await f.db.query('SELECT status FROM recordings WHERE id=$1',[receipt.id])).rows[0].status,'transcribed');
+    assert.equal((await f.db.query('SELECT count(*)::int n FROM clarifications')).rows[0].n,1);
+    assert.equal((await f.db.query('SELECT count(*)::int n FROM attempts')).rows[0].n,2);
+    assert.deepEqual((await f.db.query('SELECT * FROM attempts WHERE id=$1',[f.original.id])).rows[0],original);
+    const next=command();await f.request(next);storage.save=async(row,data)=>{objects.set(row.id,data);await resolveClarification(f.pool,owner,f.caseId,{notes:'Synthetic closure during upload'});};
+    await assert.rejects(receiveRecording(f.pool,worker,'assignment-14',randomUUID(),bytes,storage),/not received/);
+    assert.equal(objects.size,1);assert.equal((await f.db.query('SELECT count(*)::int n FROM submission_receipts')).rows[0].n,2);
+  }finally{await f.close();}
+});
+test('worker deletion immediately fences a pending repeat without erasing original receipt metadata',async()=>{
+  const f=await fixture();try {
+    const input=command();await f.request(input);
+    await requestWorkerDeletion(f.pool,owner,'worker-14',{requestId:randomUUID(),expectedCode:'Worker 014',reason:'worker_request',confirmed:true});
+    await assert.rejects(submitAnswer(f.pool,worker,'assignment-14',randomUUID(),'New answer'),/Forbidden/);
+    await assert.rejects(f.request(command()),/unavailable/);assert.equal((await f.db.query('SELECT count(*)::int n FROM submission_receipts')).rows[0].n,1);
+  }finally{await f.close();}
+});

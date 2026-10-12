@@ -1,0 +1,15 @@
+{
+  "checkpoint": "bounded-publication-history-and-exact-version-views",
+  "dataClass": "synthetic",
+  "requirements": ["S13", "S18", "A02", "A05", "A15", "A16"],
+  "fullSuite": {"files": 158, "tests": 844, "passed": 840, "failed": 0, "skipped": 4, "durationMs": 236080.4118, "exitCode": 0, "externalDatabaseUrlsDisabled": true, "beganBeforeFinalUiAndExpiryAssertionAdjustments": true},
+  "finalAffectedSuite": {"files": 4, "tests": 22, "passed": 22, "failed": 0, "skipped": 0, "durationMs": 13868.462, "exitCode": 0},
+  "build": {"modules": 2034, "exitCode": 0, "shellFiles": 69, "hashFailures": 0, "existingWarnings": ["entry-chunk-size", "mixed-worker-offline-import"]},
+  "preservation": {"originalSQLiteTables": 8, "allFingerprintsMatch": true, "integrity": "ok", "foreignKeyViolations": 0, "originalPreviewRestarted": false, "originalDatabaseMigrated": false},
+  "browser": {"publications": 125, "createdThroughSyntheticPublish": true, "catalogPages": 7, "viewports": [320, 390, 768, 1440], "pageOverflow": false, "exactHistoricalAudioReadyState": 4, "audioIsToneNotSpeech": true, "failedDetailAudioControls": 0, "failedDetailCopyControls": 0, "failedDetailCoverageControls": 0, "failedCatalogRows": 0, "auditorMutationAudioRubricControls": 0, "clipboardUsed": false, "temporaryTabClosed": true, "viewportReset": true},
+  "fixtures": [{"catalogReads": 22, "exactReads": 9, "httpPosts": 0, "briefingContentUnchanged": true, "publicationsUnchanged": true, "exitCode": 0}, {"catalogReads": 9, "exactReads": 9, "httpPosts": 0, "briefingContentUnchanged": true, "publicationsUnchanged": true, "exitCode": 0}],
+  "externalCalls": 0,
+  "productionReady": false,
+  "estimatePercent": 60,
+  "unverified": ["frozen-multipage-observation", "native-concurrency-large-history", "full-reference-accessibility", "live-semantic-audio-quality", "native-postgresql-cloud", "real-devices", "full-release-recovery-activation"]
+}

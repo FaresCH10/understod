@@ -1,0 +1,21 @@
+{
+  "checkpoint":"operational-recovery-provenance",
+  "date":"2026-10-11",
+  "goalStatus":"active",
+  "productionReady":false,
+  "activationAllowed":false,
+  "completionEstimate":{"percent":70,"basis":"Historical unaudited estimate; not measured readiness."},
+  "migration":"078_operational_audit_receipts.sql",
+  "implementation":["Narrow exact mandatory operational receipt capture and immutable guards","Only existing original identifiers backfilled, never reconstructing erased data","Atomic audit/capture failure rollback","Pre-expiry equality proof for mandatory activity","Application and SQL quarantine use retained proof with all other fences unchanged","Privacy v3 access projection and exact replay lookup use immutable receipts, not expired display identities"],
+  "tests":[
+    {"command":"node --test --test-concurrency=1 tests/activity-retention.test.mjs tests/restore-access-restrictions.test.mjs tests/postgres-embedded.test.mjs tests/restore-retention.test.mjs tests/privacy-ledger.test.mjs tests/restore-privacy-retirements.test.mjs tests/postgres-backup.test.mjs","passed":44,"failed":0,"skipped":0,"durationMs":161298.769,"exitCode":0},
+    {"command":"node --test tests/operational-audit-upgrade.test.mjs","passed":1,"failed":0,"skipped":0,"durationMs":2252.1758,"exitCode":0},
+    {"command":"node --test tests/restore-access-restrictions.test.mjs","passed":8,"failed":0,"skipped":0,"durationMs":36858.9866,"exitCode":0}
+  ],
+  "testsLimit":"Final eight-check access suite adds an aged synthetic prior no-change reconciliation marker case after the 44-check run. It is a controlled fixture, not a natural seven-day wait or native concurrency proof.",
+  "build":{"exitCode":0,"shellFiles":63,"hashFailures":0,"warnings":["Main chunk exceeds 500 kB","Mixed static/dynamic worker-offline import"]},
+  "preservation":{"originalEightSQLiteBusinessFingerprintsMatch":true,"integrity":"ok","foreignKeyViolations":0,"originalMigrated":false,"originalPreviewRestarted":false,"externalCalls":0},
+  "ui":"No UI change in this prerequisite. Built activity policy/history CUA evidence in prior activity checkpoint predates migration 078; no new Reticle verdict.",
+  "remaining":["Briefing-content retention and other operational lifecycles","Later activity-policy/redaction source reconciliation","Accepted-input/staging reconciliation and final source cutoff/activation","Native PostgreSQL/concurrency/cloud provisioning/deployment","Full reference/device/a11y/security/release gates"],
+  "checkpointPause":{"seconds":30.0299,"resumed":true,"next":"Archived briefing-content lifecycle: preserve version/outcome/provenance, fence pending work and inventory all stored source/prepared/manifest copies before redaction."}
+}

@@ -1,0 +1,14 @@
+{
+  "checkpoint": "staff-metadata-search",
+  "date": "2026-10-12",
+  "syntheticOnly": true,
+  "tests": {"files": 7, "passed": 36, "failed": 0, "skipped": 0, "durationMs": 11272.4363, "exitCode": 0},
+  "initialSandboxRun": {"passed": 30, "failed": 6, "reason": "local loopback EACCES", "exitCode": 1},
+  "build": {"passed": true, "modules": 2022, "shellHashes": 65, "hashFailures": 0, "existingWarnings": ["large entry chunk", "mixed worker-offline imports"]},
+  "preservation": {"originalBusinessTablesMatched": 8, "integrity": "ok", "foreignKeyViolations": 0, "originalPreviewRestarted": false, "originalMigrated": false},
+  "browser": {"widths": [320, 390, 768, 1440], "workerReload": true, "crewDestination": true, "briefingReload": true, "categoryFilter": true, "emptyResults": true, "paging": true, "auditorBriefingOnly": true, "longArabicTitleWrap": true, "reticleVerdict": false},
+  "fixtures": [{"session": 63486, "searches": 7, "writes": 0, "businessUnchanged": true, "externalCalls": 0, "exitCode": 0}, {"session": 31268, "searches": 4, "writes": 0, "businessUnchanged": true, "externalCalls": 0, "exitCode": 0}],
+  "diagnostics": "kept local at user request",
+  "productionReady": false,
+  "completionEstimate": "70 percent historical and unaudited; not promoted"
+}

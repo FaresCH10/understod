@@ -1,0 +1,40 @@
+{
+  "checkpoint": "privacy-replay-state",
+  "capturedAt": "2026-10-11T21:43:37Z",
+  "status": "partial-production-gate",
+  "completionEstimatePercent": 70,
+  "estimateAudited": false,
+  "implemented": [
+    "Authenticated backup/target-bound exact predecessor for six production replay commands",
+    "Locked full before/after inventories with deferred constraints and explicit transformation tables",
+    "No guard/sequence/table identity drift or private reference rebinding/resurrection",
+    "File-synced encrypted successor prepared before commit with separate postcommit acknowledgement",
+    "Exact state and committed per-site audit validation for candidate reuse",
+    "Lost acknowledgement recovery without writes or invented state history"
+  ],
+  "verification": {
+    "recoveryRegression": {"files": 9, "passed": 67, "failed": 0, "skipped": 0, "durationMs": 78709.6115, "exitCode": 0},
+    "authorizedLoopbackRegression": {"files": 2, "passed": 7, "failed": 0, "skipped": 0, "durationMs": 2885.8594, "exitCode": 0},
+    "focusedStateTests": {"passed": 3, "failed": 0, "skipped": 0, "durationMs": 13222.8478, "exitCode": 0},
+    "initialCommitFailureFixture": "Injected too early during migration verification; corrected to arm after replay constraint flush, not treated as a pass",
+    "build": {"passed": true, "modules": 2019, "existingWarnings": ["chunk exceeds 500 kB", "worker-offline mixed static/dynamic import"]},
+    "shellHashes": {"matched": 63, "failed": 0},
+    "originalSQLite": {"matchedTableFingerprints": 8, "integrity": "ok", "foreignKeyViolations": 0},
+    "nativePostgres": false,
+    "neon": false,
+    "browserVerdict": false
+  },
+  "preservation": {"originalMigration": false, "originalPreviewRestart": false, "externalProviderOrMail": false, "cloudOrDeployment": false, "newMigration": false},
+  "remaining": [
+    "Stage-specific authenticated accounting for irreversible physical cleanup",
+    "Source maintenance/storage writer cutoff authority",
+    "Native Neon Free direct roles/password/TLS/concurrency/backup-restore/private-storage proof",
+    "Full reference/device/accessibility/security/release gates",
+    "Separately authorized activation"
+  ],
+  "authoritativeReconciliationComplete": false,
+  "activationAllowed": false,
+  "productionReady": false,
+  "goalStatus": "active",
+  "checkpointPause": {"elapsedSeconds": 30.0476, "resumed": "Inspected seventeen-stage physical cleanup sweep and independent transaction/removal boundaries"}
+}

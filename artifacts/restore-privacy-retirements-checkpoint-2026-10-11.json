@@ -1,0 +1,75 @@
+{
+  "checkpoint": "2026-10-11T11:09:00Z",
+  "scope": "Historical original-source retirement/redaction reconciliation in stopped quarantined restores; not full reconciliation or activation",
+  "migration": "073_restore_privacy_retirements.sql",
+  "ledgerFormat": "understood-postgres-privacy-ledger-v2",
+  "changes": [
+    "Immutable bounded proof binds backup/ledger fingerprint, exact original input metadata, source receipt/policy and capture time",
+    "SQL guards require full quarantine, exact original scoped policy receipt, original retirement cutoff and case activity rather than current extended/disabled policy",
+    "Fresh target text/case/generated tombstones preserve publication, assignment, outcomes, current policies and honest case resolution clocks",
+    "Original case-resolution provenance is retained separately and survives a later backup of a quarantined restore",
+    "Recording/source purge intents are queued anew; generated/follow-up/voice bytes are fenced for target cleanup without copying original completion success",
+    "Proof, redaction, cleanup queues and exact ledger-bound per-site audit commit atomically; changed ledger conflicts and exact retry is write-free",
+    "Maintenance-only confirmed distinct-target command encrypts purpose-bound acknowledgement in a new private directory and always forbids activation"
+  ],
+  "existingLedgerRegression": {"session": 97045, "terminalExitCode": 0, "tests": 10, "passed": 10, "failed": 0, "durationMs": 24276.5343},
+  "initialHistoricalRun": {
+    "session": 88958, "terminalExitCode": 1, "tests": 5, "passed": 3, "failed": 2, "durationMs": 13211.9649,
+    "failures": ["Fixture checked original-upload bytes through the WAV namespace", "Fixture attempted unsupported null audio retention policy"],
+    "corrections": ["Use existsOriginal for original-upload objects", "Keep bounded audio policy while independently disabling text/case/generated policies"]
+  },
+  "correctedFocusedRun": {
+    "session": 88900, "terminalExitCode": 0, "tests": 31, "passed": 31, "failed": 0, "skipped": 0, "durationMs": 29617.1357,
+    "limitation": "Command included nonexistent generated-retention filename; no standalone generated suite proof inferred. Final command uses actual generated-audio.test.mjs. Inherited second-restore test was added after this run."
+  },
+  "initialSandboxRegression": {
+    "session": 86062, "terminalExitCode": 1, "tests": 121, "passed": 114, "failed": 6, "skipped": 1, "durationMs": 75080.8662,
+    "failureCause": "All six HTTP failures were disposable loopback connect EACCES, not counted green"
+  },
+  "finalRegression": {
+    "session": 28266, "terminalExitCode": 0,
+    "command": "node --test tests/restore-privacy-retirements.test.mjs tests/privacy-ledger.test.mjs tests/restore-retention.test.mjs tests/text-retention.test.mjs tests/case-retention.test.mjs tests/generated-audio.test.mjs tests/postgres-backup.test.mjs tests/postgres-backup-native.test.mjs tests/case-followups.test.mjs tests/case-voice.test.mjs tests/source-audio-storage.test.mjs",
+    "tests": 121, "passed": 120, "failed": 0, "skipped": 1, "durationMs": 79652.0506,
+    "permission": "Authorized disposable localhost HTTP connectivity only; no external services",
+    "skip": "Dedicated isolated source/empty-target native PostgreSQL databases and installed utilities not configured"
+  },
+  "storageEvidence": {
+    "families": ["recording", "source", "source-original", "generated", "case-followup", "case-voice"],
+    "actualOwnedLocalFiles": true,
+    "actualSourceAbsenceBeforePolicyExtension": true,
+    "targetBytesPresentAfterReplay": true,
+    "freshTargetSweepVerifiesAbsence": true,
+    "failedDeleteAcknowledgementCannotCompleteTarget": true,
+    "nativePostgresOrCloudProof": false
+  },
+  "build": {"command": "npm run build", "terminalExitCode": 0, "typescript": "passed", "modules": 2016, "entryKilobytes": 558.53, "entryGzipKilobytes": 150.29, "shellHashes": 63, "shellFailures": 0, "warnings": ["Entry chunk exceeds 500 kB", "worker-offline static import prevents its dynamic import splitting"]},
+  "preservation": {"readOnly": true, "originalBusinessHashesMatched": 8, "sqliteIntegrity": "ok", "foreignKeyViolations": 0, "originalDatabaseMigrated": false, "existingPreviewRestarted": false},
+  "sourceSha256": {
+    "server/postgres/migrations/073_restore_privacy_retirements.sql": "2700979fe8c57fdf65439502c8e4a7203b71e825576e8b12bd5bdc36364f8f4a",
+    "server/postgres/privacy-ledger.mjs": "7b689f1d76079f40d54470f0d1eb513ead6be6ded6c8769375b525f64ab424cd",
+    "scripts/postgres-privacy.mjs": "229bbd18beba6ecf3bb23e8f01daad0bb4ae511a27681c58af21fa94de8dc683",
+    "server/postgres/text-retention.mjs": "da248f31429c1ce9328bc43984c5f2edf960630a5ac1b4968c84fd5d1bb80395",
+    "server/postgres/case-retention.mjs": "beb01db5ca9770508a209009f6bc18681149d42b51d7d179c23118cd9f6d9cc0",
+    "tests/restore-privacy-retirements.test.mjs": "02eaf5469289031388cfc65d0736ffbb6038bf6b895e345f099573173a22f8c0",
+    "tests/privacy-ledger.test.mjs": "c828d4796b4a45440b35c3762dd95857805b134ec301a40996b3a5a5c5d55166",
+    "docs/PRIVACY_LEDGER.md": "4d535a25b0bdf90bb6f7516b20beccbb3b15aaec7a94d041648305cffe010ebd"
+  },
+  "externalRequests": 0,
+  "authoritativeReconciliationComplete": false,
+  "activationAllowed": false,
+  "productionReady": false,
+  "limitations": [
+    "Later staff/worker/site/tenant restrictions and broader lifecycle replay remain unfinished",
+    "Immutable accepted-input staging/acceptance changes after the backup still fail closed rather than inventing receipt lineage",
+    "Final source cutoff and separately authorized activation remain unfinished; old ledger is not perpetual authority",
+    "Source fixture past resolution is explicitly authored during construction with trigger re-enabled before operations; not a historical user-flow claim",
+    "Embedded physical copies and scripted snapshot-ID transport are not native pg_dump/Neon/concurrency/cloud proof",
+    "Command tests use authored encrypted baseline metadata, not native archive transport",
+    "Accepted-command retry is exercised; actual post-commit result-file failure is documented but not injected",
+    "No UI/browser/hardware/live AI/real worker data/security/full release verdict"
+  ],
+  "checkpointPause": {"status": "complete", "requestedMs": 30000, "elapsedMs": 30028.6, "resumed": true, "nextInspection": "Existing staff revocation has immutable request/revision receipts; worker disable has scoped audit and grant/session revocation. Restore tenant quarantine independently increments revision, so later source restrictions must be preserved separately without replacing maintenance suspension or importing old sessions."},
+  "completionEstimate": {"percent": 70, "audited": false, "meaning": "Historical implementation estimate; no readiness promotion"},
+  "goalStatus": "active",
+  "nextMajorTask": "Source-authoritative later staff/worker/site/tenant access restriction reconciliation while preserving full quarantine"
+}

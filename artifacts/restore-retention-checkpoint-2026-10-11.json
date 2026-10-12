@@ -1,0 +1,43 @@
+{
+  "checkpoint": "2026-10-11T09:51:13Z",
+  "scope": "Isolated restored elapsed-policy and existing worker-deletion sweep; not authoritative post-backup privacy reconciliation or activation",
+  "changes": [
+    "SQLite and PostgreSQL recording purge completion requires strict physical absence and an unexpired owned cleanup lease",
+    "PostgreSQL interrupted staging cleanup requires strict physical absence and a live lease",
+    "Bounded isolated restore sweep reuses existing cleanup and deletion operations without dispatching providers, mail, publication or access",
+    "Final all-table locked inspection counts deferred cleanup and active leases, verifies all retired references absent and retained references intact",
+    "Encrypted backup-bound retention CLI output keeps authoritative privacy reconciliation required and activation forbidden"
+  ],
+  "focusedRegression": {"tests": 18, "passed": 18, "failed": 0, "skipped": 0, "durationMs": 7563.6549},
+  "initialRestoreFixtureRun": {"tests": 6, "passed": 4, "failed": 2, "durationMs": 16582.9312, "failures": ["Historical case fixture was overwritten by the honest resolution-clock trigger", "Staged storage fixture lacked required checksum/byte metadata"], "correction": "Authored past-resolution fixture construction temporarily disables and then reenables only its clock trigger; staged metadata supplied"},
+  "initialSandboxRegression": {"session": 19605, "terminalExitCode": 1, "tests": 82, "passed": 66, "failed": 16, "skipped": 0, "durationMs": 83402.2376, "failureCause": "All 16 HTTP fixture failures were sandbox loopback connect EACCES; not counted green"},
+  "finalRegression": {
+    "session": 77572,
+    "terminalExitCode": 0,
+    "command": "node --test tests/restore-retention.test.mjs tests/retention.test.mjs tests/case-retention.test.mjs tests/postgres-backup.test.mjs tests/deletions.test.mjs tests/deletion-pseudonyms.test.mjs tests/deletion-redactions.test.mjs tests/postgres-domain.test.mjs tests/postgres-backup-native.test.mjs",
+    "tests": 83, "passed": 82, "failed": 0, "skipped": 1, "durationMs": 85273.8223,
+    "permission": "Authorized disposable local loopback fixture connectivity",
+    "skip": "Explicitly isolated source/empty-target native PostgreSQL databases and installed utilities not supplied"
+  },
+  "build": {"command": "npm run build", "terminalExitCode": 0, "typescript": "passed", "modules": 2016, "entryKilobytes": 558.53, "entryGzipKilobytes": 150.29, "shellHashes": 63, "shellFailures": 0, "warnings": ["Entry chunk exceeds 500 kB", "worker-offline static import prevents its dynamic import splitting"]},
+  "preservation": {"readOnly": true, "originalBusinessHashesMatched": 8, "sqliteIntegrity": "ok", "foreignKeyViolations": 0, "existingPreviewRestarted": false},
+  "sourceSha256": {
+    "server/postgres/restore-retention.mjs": "b65d6cc8debc07cc59bf369a57e77063332fbb54938deea3342212695133ce32",
+    "server/postgres/retention.mjs": "d8b38aaf66a7ed3fd90a5d74e28bdc2cf71494f4e6d14984f80720ed1ef5a9f1",
+    "server/retention.mjs": "3c369c78306a7f0395316429ec2e6bbb898bdd6cee273e44672e7860efea494a",
+    "server/postgres/recordings.mjs": "a8896678f2680a86e1b3c9cd7f7db22f2b5c5277ac684a7c4aa93a951a47721f",
+    "server/postgres/case-retention.mjs": "18005cdd5ff0037858aeee83f8b880171ca3a8bb67731a49fc70cca68877c0e6",
+    "scripts/postgres-backup.mjs": "1ce31cec9b8e7ebfbc3763e3207b001b081fdbee8345044c4c8caf86d4e611d6",
+    "tests/restore-retention.test.mjs": "bc7ec0463f0aeeafd2b915f184e4bdcd3107c4d171848c22f9d15515aa3728d3",
+    "tests/retention.test.mjs": "3cddfd18ee43fd31cc843a8482b04c928c2997df02d6147d79432245410e9dc9",
+    "tests/deletions.test.mjs": "24b537fe52c0916fecc43b601a0454a4d29543eb0e0a2d5befba6ed441cc7831",
+    "tests/deletion-pseudonyms.test.mjs": "f175126bac77330bdad019eb6235bf2121adb688bba63fb0b35780c699b35dd3",
+    "docs/RESTORE_RETENTION.md": "4b28e2bff91933428215ac6007b8f61fa37298036afec52761c78e841441ef6e",
+    "docs/POSTGRES_BACKUP.md": "b842ab5a83e1d6f688ee86e6630330ae4a3474f02f4a5a87f50301cbdc298b31"
+  },
+  "externalRequests": 0,
+  "limitations": ["Authoritative post-backup deletion, revocation, policy changes and retirement/redaction reconciliation remains unfinished", "No restore activation implemented", "Broader activity/briefing retention remains open", "Historical SQL fixtures do not prove real user history", "No native PostgreSQL/Neon/R2 concurrency or cloud proof", "No UI/browser/hardware/model-quality proof or production readiness promotion"],
+  "checkpointPause": {"elapsedMs": 30026.1, "resumed": true, "nextInspection": "Read scoped deletion acceptance and immutable generated-retirement guards; later receipts require source-authoritative replay rather than fabricated customer sessions or policy bypass"},
+  "goalStatus": "active",
+  "nextMajorTask": "Authoritative post-backup privacy ledger export/import/reconciliation with exact scope and immutable evidence, preserving restore quarantine"
+}

@@ -1,0 +1,48 @@
+{
+  "checkpoint": "restore-cleanup-state",
+  "capturedAt": "2026-10-12T04:47:13Z",
+  "status": "partial-production-gate",
+  "completionEstimatePercent": 70,
+  "estimateAudited": false,
+  "migration": "083_restore_cleanup_transitions.sql",
+  "implemented": [
+    "Mandatory authenticated exact predecessor for production cleanup",
+    "Existing cleanup transaction boundaries with full locks, inventories and nonmutable input-column guards",
+    "Actual retained per-site transition receipts and precommit file-synced encrypted candidates",
+    "Retired-family-bound pre-removal intentions and fresh absence witnesses without physical rollback claims",
+    "Previously witnessed absence revalidation and fail-closed uncertain transition handling",
+    "Same-ledger original admission for narrowly classified accounted cleanup differences; raw input gaps remain visible",
+    "Late privacy replay after physical cleanup rejected before mutation pending full cross-phase reconciliation"
+  ],
+  "verification": {
+    "broadRegression": {"files": 15, "passed": 89, "failed": 0, "skipped": 0, "durationMs": 85703.0888, "exitCode": 0},
+    "finalAffectedRegression": {"files": 3, "passed": 39, "failed": 0, "skipped": 0, "durationMs": 69710.8024, "exitCode": 0},
+    "newestPhaseAdmissionChainAssertions": {"passed": 1, "failed": 0, "skipped": 0, "durationMs": 13300.6026, "exitCode": 0},
+    "migrationSweepRegression": {"passed": 26, "failed": 0, "skipped": 0, "durationMs": 56113.2239, "exitCode": 0},
+    "archivedActivityDeletionFocused": {"passed": 1, "failed": 0, "skipped": 0, "durationMs": 16136.6419, "exitCode": 0},
+    "initialFailures": ["New audit action absent from retained receipt allowlist, resolved by forward migration", "Embedded physical sequence restart drift 2 to 33; exact production check retained and fixture explicitly emulates logical restore setval", "Stale migration expectations", "Overly specific assertion missed existing immutable-outcome SQL rejection"],
+    "build": {"passed": true, "modules": 2019, "existingWarnings": ["chunk exceeds 500 kB", "worker-offline mixed static/dynamic import"]},
+    "shellHashes": {"matched": 63, "failed": 0},
+    "originalSQLite": {"matchedTableFingerprints": 8, "integrity": "ok", "foreignKeyViolations": 0},
+    "nativePostgres": false,
+    "neon": false,
+    "cloudStorage": false,
+    "browserVerdict": false
+  },
+  "preservation": {"originalMigration": false, "originalPreviewRestart": false, "externalProviderOrMail": false, "cloudOrDeployment": false},
+  "remaining": [
+    "Full specification/reference requirements audit and remaining major application coverage",
+    "Complete journal chain/incomplete-intent recovery workflow and cross-phase reconciliation",
+    "Source maintenance/storage writer cutoff authority",
+    "Native Neon Free direct roles/password/TLS/concurrency/backup-restore/private-storage proof",
+    "Privacy-approved live AI evaluation; Gemini Free remains synthetic-only",
+    "Full reference/device/accessibility/security/fresh-install/CI/release gates",
+    "Separately authorized activation"
+  ],
+  "authoritativeReconciliationComplete": false,
+  "activationAllowed": false,
+  "productionReady": false,
+  "goalStatus": "active",
+  "checkpointPause": {"elapsedSeconds": 30.0289, "resumed": "Full specification/reference/feature-gate inspection, with historical estimates and missing claims treated as unverified"},
+  "scopeAuditFinding": "S09 microphone capture already exists in SourceAudio.tsx and is wired by NewBriefing.tsx; corrected stale register claim, not counted as a newly built feature"
+}

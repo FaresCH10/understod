@@ -1,0 +1,49 @@
+{
+  "name": "understood",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/postgres-hosted.mjs api",
+    "hosted:check": "node scripts/postgres-hosted.mjs check",
+    "hosted:worker": "node scripts/postgres-hosted.mjs worker",
+    "dev": "node scripts/dev.mjs",
+    "api": "node server/index.mjs",
+    "worker": "node server/worker.mjs",
+    "postgres:check": "node scripts/postgres-rehearsal.mjs check",
+    "postgres:api": "node scripts/postgres-rehearsal.mjs api",
+    "postgres:worker": "node scripts/postgres-rehearsal.mjs worker",
+    "seed": "node server/seed.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "evaluate:contract": "node scripts/evaluate-synthetic.mjs contract",
+    "evaluate:local": "node scripts/evaluate-synthetic.mjs local",
+    "evaluate:runtime": "node scripts/evaluate-runtime.mjs",
+    "evaluate:rehearsal": "node scripts/evaluate-rehearsal.mjs",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 3020"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.1146.0",
+    "@js-temporal/polyfill": "0.5.1",
+    "csv-parse": "7.0.3",
+    "lucide-react": "1.50.0",
+    "pg": "8.23.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@reticlehq/react": "^3.6.0",
+    "@reticlehq/vite-plugin": "^3.6.0",
+    "@types/node": "24.19.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.2"
+  },
+  "engines": {
+    "node": ">=24.5.0"
+  }
+}

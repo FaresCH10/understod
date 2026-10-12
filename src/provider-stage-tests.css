@@ -1,0 +1,8 @@
+.provider-stage-tests { width:100%; min-width:0; }
+.provider-stage-test { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,2fr); gap:16px; padding:16px 0; border-bottom:1px solid #e3e8e7; align-items:start; }
+.provider-stage-test:last-child { border-bottom:0; }
+.provider-stage-test > * { min-width:0; overflow-wrap:anywhere; }
+.provider-stage-test small,.provider-test-evidence span,.provider-test-evidence time { display:block; color:#5e6672; font-size:13px; margin-top:4px; }
+.provider-test-state { display:flex; gap:7px; align-items:start; font-size:14px; }
+.provider-test-state svg { flex-shrink:0; margin-top:2px; }
+@media(max-width:620px) { .provider-stage-test { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; } .provider-test-evidence { grid-column:1/-1; } }

@@ -1,0 +1,22 @@
+import {createGeminiAdapter} from './gemini.mjs';
+import {bundleHash} from './prepared-bundle.mjs';
+
+export const preparationInputHash=({source,revision,languages,review=null,glossary})=>bundleHash({source,revision,languages,review,glossary});
+
+export function resolvePreparationAdapter(env=process.env,{fetchImpl=fetch}={}) {
+  const mode=env.UNDERSTOOD_PREPARATION_ADAPTER ?? 'disabled';
+  if(mode==='disabled')return undefined;
+  if(mode!=='gemini-free' || env.UNDERSTOOD_TIER!=='local' || env.UNDERSTOOD_AI_MODE!=='synthetic'
+    || env.UNDERSTOOD_DATA_CLASS!=='synthetic' || env.UNDERSTOOD_ACCESS_MODE!=='credential')throw Error('Preparation provider requires an isolated synthetic credential runtime');
+  let hashes;
+  try {
+    const raw=env.UNDERSTOOD_SYNTHETIC_PREPARATION_HASHES;
+    if(typeof raw!=='string' || raw.length>7000)throw Error();hashes=JSON.parse(raw);
+    if(!Array.isArray(hashes) || !hashes.length || hashes.length>100 || new Set(hashes).size!==hashes.length
+      || !hashes.every(hash=>typeof hash==='string' && /^[a-f0-9]{64}$/.test(hash)))throw Error();
+  }catch {throw Error('Set exact synthetic preparation input hashes before enabling generation');}
+  const permitted=new Set(hashes),options={apiKey:env.GEMINI_API_KEY,dataClass:'synthetic',fetchImpl};
+  const select=adapter=>Object.freeze(Object.fromEntries(['provenance','capabilities','prepare','checkPreparation','translate','checkTranslation','speech'].map(key=>[key,adapter[key]])));
+  return Object.freeze({...select(createGeminiAdapter(options)),permitsPreparation:input=>permitted.has(preparationInputHash(input)),
+    withJournal:requestJournal=>select(createGeminiAdapter({...options,requestJournal}))});
+}

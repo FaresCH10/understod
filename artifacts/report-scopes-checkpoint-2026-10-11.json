@@ -1,0 +1,35 @@
+{
+  "checkpoint": "S16/A15 publication-crew and latest-response report scopes",
+  "status": "verified_local_application_checkpoint",
+  "updatedAt": "2026-10-11T15:32:00Z",
+  "productionReady": false,
+  "implementationPercentage": {"historicalEstimate": 70,"audited": false,"notLaunchReadiness": true},
+  "implementation": ["Immutable publication-time crew/no-crew audience", "No invented legacy crew provenance", "Inclusive site-civil latest-receipt dates with frozen assigned denominators", "Strict scoped HTTP inputs", "Frozen export filters/rows/time zone and exact replay", "Scoped UI apply/clear/retry", "SQLite-to-PostgreSQL audience/filter/output preservation"],
+  "tests": {
+    "focusedScopes": {"tests":7,"passed":7,"failed":0,"skipped":0,"exitCode":0,"durationMs":4454.8392},
+    "newPopulatedCutover": {"tests":1,"passed":1,"failed":0,"skipped":0,"exitCode":0,"durationMs":5747.9599},
+    "intermediateBroad": {"session":55710,"tests":78,"passed":77,"failed":1,"skipped":0,"exitCode":1,"durationMs":185489.135,"failure":"Older purge fixture omitted the required physical-absence adapter contract; production guard retained, fixture corrected."},
+    "intermediateHTTPAndCutover": {"session":55908,"tests":21,"passed":20,"failed":1,"exitCode":1,"failure":"Historical HTTP fixture only had a superseded version but omitted its publication ID; corrected to explicitly select the version."},
+    "intermediatePopulatedCutover": {"session":28256,"tests":22,"passed":21,"failed":1,"exitCode":1,"failure":"New SQLite cutover fixture omitted directory schema initialization; corrected, focused populated cutover passes."},
+    "earlierScopeFixtures": "Three SQLite failures: missing receipt schema and synchronous rejection wrapping. Fixtures corrected; all seven scope tests pass. Initial 19 loopback EACCES errors in regression were environment failures, not green runs.",
+    "final": {"session":56886,"command":"node --test --test-concurrency=1 tests/report-scopes.test.mjs tests/exports.test.mjs tests/report-publications.test.mjs tests/reports.test.mjs tests/postgres-domain.test.mjs tests/postgres-import.test.mjs tests/postgres-backup.test.mjs","status":"terminal","exitCode":0,"tests":79,"passed":79,"failed":0,"skipped":0,"durationMs":293825.3573}
+  },
+  "browser": {
+    "fixture":"scripts/report-scopes-browser-fixture.mjs",
+    "database":"in-memory synthetic PGlite, current migrations and real domain/credential/export routes",
+    "desktop":{"viewportWidth":1440,"documentWidth":1425,"assigned":1,"responses":1,"completion":100,"crewId":"morning","responseFrom":"2026-10-25","responseThrough":"2026-10-25","timezone":"Asia/Beirut","exportPosts":1,"exportStatus":"ready","frozenRows":[["Worker 001","en","assessed","matched","2026-10-24T22:00:00.000Z",1]],"checksum":"909a259811f65859b2a4ed54977dac5688515c93ac2359e2c8a84d83c7a27e2e","session":32984,"terminalExitCode":0},
+    "mobile":{"viewportWidth":320,"documentWidths":[320,305],"noCrewAssigned":1,"noCrewResponses":0,"clearAssigned":3,"clearResponses":2,"clearCompletion":67,"session":27131,"terminalExitCode":0,"exportPosts":0},
+    "screenshots":{"artifacts/report-scopes-desktop-2026-10-11.jpg":"a6eb7f7ee275418b77f49406df687a753d3b98a026fed6863b608bd16fb70416","artifacts/report-scopes-mobile-2026-10-11.jpg":"df098c7ab89db358c94e9f1c876a82cfc211510205825b3f07a20de4e1176261"},
+    "limitations":["Download-event tool stalled 2542.113 seconds and reset; browser download completion is not proven", "Mobile full-page screenshot failed; actual viewport screenshot saved and inspected", "Reticle session unconnected; no Reticle verdict", "Native date fill initially cleared values; native keyboard segments retained values and real GET received both dates"],
+    "externalRequests":0,"viewportReset":true,"qaTabClosed":true,
+    "initialSandboxFixture":{"session":60989,"pid":15300,"browserResult":"loopback timeout","stoppedVerifiedOwnProcess":true,"terminalExitCode":1}
+  },
+  "build":{"exitCode":0,"modules":2016,"mainJs":"index-X6X1ilzT.js","mainKb":558.53,"gzipKb":150.29,"reportChunk":"Reports-CSrvC3v7.js","shellHashCount":63,"shellHashFailures":0,"warnings":["main chunk over 500 kB","ineffective worker-offline dynamic import"]},
+  "preservation":{"originalDatabaseMigrated":false,"previewRestarted":false,"businessFingerprintsMatched":8,"counts":{"organizations":2,"sites":2,"workers":34,"briefings":2,"publications":1,"assignments":30,"attempts":26,"clarifications":4},"integrity":"ok","foreignKeyViolations":0},
+  "sourceHashes":{"server/report-scope.mjs":"4497508c4304ca27a8275ee440ba25b6c02ae1a87f078bcf374b8b053e4fa612","server/postgres/migrations/075_report_scopes.sql":"ded02f0173928f86d722017d6f560e3010680f97b0846f44bd15533365e5d879","src/Reports.tsx":"12859dbcc99510d515562ab0ae48a5e324f07c20db31c3bfb3a0ed7984429517","tests/report-scopes.test.mjs":"4985071771f9bb322c8f585c209cae22e9e2b8871e7656f2aebd7e0ba22286bb","tests/report-publications.test.mjs":"e51f42cb86b30fdb136eb9c0d84427d4af92bb8a020bc38de368218d4abd2ef6","tests/postgres-import.test.mjs":"79f3f33d7d9d185a5dd6d0ae031bccedca9605f5f02c3a4b1a6637e9098f5f9e"},
+  "boundaries":{"realDataOnGeminiFree":false,"cloudAccountConnection":false,"deployment":false,"nativePostgresProven":false,"activationForbidden":true},
+  "nextApplicationRequirement":"S34 actual configured quota and pause read models; do not invent plan entitlements or provider costs",
+  "remaining":["Native/cloud/concurrency/TLS and live synthetic provider proof","Source-authoritative accepted-input lifecycle/final cutoff and restore activation gate","Broader activity/briefing retention","Full reference/native-language/accessibility/device/security and release gates"],
+  "checkpointPause":{"status":"complete","requestedSeconds":30,"actualSeconds":30.0311,"resumed":true},
+  "goal":"active"
+}

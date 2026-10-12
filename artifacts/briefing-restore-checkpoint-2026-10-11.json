@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-11",
+  "checkpoint": "historical-briefing-restore",
+  "migration": "082_restore_briefing_redactions.sql",
+  "ledgerFormat": "understood-postgres-privacy-ledger-v6",
+  "goalStatus": "active",
+  "checkpointPause": {"elapsedSeconds": 30.0272, "resumed": "accepted-input/staging lifecycle ledger and restore inventory inspection"},
+  "completionEstimate": {"percentage": 70, "basis": "historical unaudited estimate", "promoted": false},
+  "verification": {
+    "combinedRegression": {"sessionId": 37345, "checks": 103, "passed": 103, "failed": 0, "skipped": 0, "durationMs": 72677.7395, "exitCode": 0},
+    "earlierRelatedRegression": {"sessionId": 67741, "checks": 60, "passed": 60, "failed": 0, "skipped": 0, "durationMs": 59727.0293, "exitCode": 0},
+    "sqliteReminderFix": {"checks": 8, "passed": 8, "failed": 0, "durationMs": 5890.2442},
+    "productionBuild": {"exitCode": 0, "modules": 2019, "warnings": ["main chunk over 500 kB", "worker-offline mixed static/dynamic import"]},
+    "shellHashes": {"files": 63, "failed": 0},
+    "originalSQLite": {"businessFingerprints": 8, "matched": 8, "integrity": "ok", "foreignKeyViolations": 0},
+    "browser": {"passed": false, "reticle": "no connected session", "directNavigation": "sandbox fixture timed out; accessible fixture navigation client-blocked", "fixtureStopped": true, "externalRequests": 0}
+  },
+  "recordedIntermediateFailures": [
+    "Three HTTP tests denied loopback by sandbox; authorized synthetic loopback rerun passed.",
+    "Worker outcome assertion used an attempt without its acceptance receipt; fixture corrected and outcome assertion retained.",
+    "Two SQLite inbox/reminder tests found first-time conversation setup nesting a transaction; authority-checked setup moved outside read transaction and final combined rerun passed."
+  ],
+  "implemented": [
+    "confirmed stopped isolated quarantine-only replay with original source policy/context/hash binding",
+    "fresh target physical redaction and separate immutable root provenance journal",
+    "atomic audit rollback, deferred physical completion, bounded fresh clocks and exact write-free replay recovery",
+    "second backup retains original root origin and source capture instead of intermediate cleanup authority",
+    "backup/ledger/purpose-authenticated encrypted briefings command",
+    "expired worker admission/provider/operational dispatch fences and content-free outcome history",
+    "SQLite first-time inbox setup transaction fix"
+  ],
+  "unchanged": ["original preview databases and ports", "historical version/outcome/archive/case clocks", "current disabled/extended source policies"],
+  "externalOperations": {"providerCalls": 0, "mail": 0, "cloudProvisioning": 0, "deployment": 0, "realWorkerData": 0},
+  "remaining": ["accepted-input/staging lifecycle reconciliation", "final source cutoff and separately authorized activation", "native PostgreSQL/Neon/private-storage/concurrency verification", "full reference/device/a11y/security/release gates", "expired worker history browser verification"],
+  "activationAllowed": false,
+  "authoritativeReconciliationComplete": false,
+  "productionReady": false
+}

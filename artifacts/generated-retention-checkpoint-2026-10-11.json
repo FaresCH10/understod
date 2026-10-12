@@ -1,0 +1,22 @@
+{
+  "checkpoint": "2026-10-11",
+  "productionReady": false,
+  "migration": "072_generated_audio_retention.sql",
+  "externalRequests": 0,
+  "checks": [
+    {"name":"generated/runtime/migration/provenance/pipeline", "passed":49, "failed":0, "skipped":0, "durationMs":55855.8995},
+    {"name":"cutover/runtime/case/text/recovery", "passed":24, "failed":0, "skipped":0, "durationMs":13971.7087}
+  ],
+  "fixtures": [
+    {"name":"lost-ack-before-wrap-fix", "posts":2, "receipts":2, "revision":2, "days":null, "lostAcknowledgements":1, "failedReceiptReads":1, "terminal":true},
+    {"name":"rebuilt-normal-save-mobile-disable", "posts":2, "receipts":2, "revision":2, "days":null, "lostAcknowledgements":0, "failedReceiptReads":0, "terminal":true}
+  ],
+  "build":{"passed":true, "shellHashesMatched":63, "entryKB":558.53, "entryGzipKB":150.29, "warningsRemain":true},
+  "preservation":{"businessTablesMatched":8, "integrity":"ok", "foreignKeyViolations":0},
+  "screenshots":[
+    {"path":"artifacts/generated-retention-desktop-2026-10-11.jpg", "sha256":"b17427c18ffdddea957a2f61837da4fd265d34e281fd07c3dd2b31212e25d975", "sectionClient":947, "sectionScroll":947},
+    {"path":"artifacts/generated-retention-mobile-2026-10-11.jpg", "sha256":"42ee245834a0b6060a42cc4e16dde2e58ce5c20e573b2471649168cc7d0f71ac", "sectionClient":267, "sectionScroll":267, "viewport":320, "pageScroll":305},
+    {"path":"artifacts/generated-retention-mobile-overflow-2026-10-11.jpg", "sha256":"3b38e0f2f100a8f42e88fa3486d6e42a34cd0125d349934585ff386ff7ab8681", "result":"historical failure, fixed and rechecked"}
+  ],
+  "limitations":["Disposable local synthetic evidence only", "No Reticle verdict", "No live PostgreSQL concurrency or cloud storage verdict", "Full relational/private-object restore unfinished", "Historical expiry rows are authored guard fixtures"]
+}

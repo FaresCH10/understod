@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-10-11T19:29:00Z",
+  "migration": ["079_archived_briefing_content_retention.sql", "080_restore_activity_redactions.sql"],
+  "privacyLedgerFormat": "understood-postgres-privacy-ledger-v4",
+  "focusedBriefingTests": {"passed": 21, "failed": 0, "skipped": 0, "durationMs": 19732.3714, "exitCode": 0},
+  "finalRelatedRegression": {"tests": 57, "passed": 56, "failed": 0, "skipped": 1, "durationMs": 51786.4812, "exitCode": 0},
+  "nativeSkip": "Explicit isolated PostgreSQL source/empty-target and native tools are not provisioned.",
+  "nonGreenRuns": [
+    "Briefing fixtures corrected; exact JSON tombstone equality fixed after a restoration guard failure.",
+    "Sandbox loopback EACCES rerun with local synthetic test permission.",
+    "Six-policy test expected only four zero-valued policy families; expectation expanded without removing invariants.",
+    "A migration was edited during a live run, causing checksum verification failure; stable migration rerun.",
+    "Upgrade test expectation extended through 080; exact durable replay receipt now recoverable read-only despite later target policy conflicts."
+  ],
+  "browser": {
+    "fixture": "In-memory synthetic built app on owned port 3210; original preview untouched.",
+    "observed": ["Lost acknowledgement retained a pending command", "Reload and receipt-only refresh confirmed seven-day policy", "One briefing physically expired", "320px disable preserved earlier expiry", "Expired history contained no copy button", "No horizontal document overflow at 320px"],
+    "screenshots": ["artifacts/briefing-retention-desktop-2026-10-11.jpg", "artifacts/briefing-retention-mobile-2026-10-11.jpg", "artifacts/expired-briefing-mobile-2026-10-11.jpg"],
+    "fixtureProcessAbsent": true,
+    "shutdownCountersCaptured": false,
+    "reticleVerified": false
+  },
+  "preservation": {"originalBusinessFingerprintsMatched": 8, "originalIntegrity": "ok", "foreignKeyViolations": 0, "shellFilesMatched": 63, "buildPassed": true, "originalMigrated": false, "previewRestarted": false},
+  "checkpointPauseSeconds": 30.0284,
+  "secondCheckpointPauseSeconds": 30.0460,
+  "resumedNextInventory": "Historical briefing replay needs scoped original archive/publication/case provenance, all eight content hashes and fresh generated-byte absence; older target publication/case states must not be rewritten to fake source history.",
+  "scopeLimits": ["Briefing policy waits for separate verified generated-audio cleanup", "Historical briefing-content replay remains unimplemented", "Accepted-input/final source cutoff/activation unfinished", "Native/cloud/concurrency/reference/device/a11y/security/full release gates unproved"],
+  "historicalUnauditedCompletionEstimatePercent": 70,
+  "externalOperations": false,
+  "realDataSentToFreeGemini": false,
+  "goalStatus": "active",
+  "authoritativeReconciliationComplete": false,
+  "activationAllowed": false,
+  "productionReady": false
+}

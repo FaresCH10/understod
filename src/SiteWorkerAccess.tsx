@@ -1,0 +1,70 @@
+import {useEffect,useRef,useState,type FormEvent} from 'react';
+import {Pause,Play,RefreshCw,Clock3,ShieldAlert,Archive,ArchiveRestore} from 'lucide-react';
+
+export type AccessSite={id:string;name:string;workerAccess:'active'|'paused';accessRevision:number;lifecycle:'active'|'archived';lifecycleRevision:number};
+type Session={clientContext:string;expiresAt:string};
+type Body={requestId:string;siteId:string;revision:number;state:'active'|'paused'|'archived';reason:string;confirmed:true};
+type Pending={expiresAt:string;body:Body};
+function valid(value:unknown,session:Session,lifecycle:boolean):value is Pending {
+  const p=value as Pending,b=p?.body;
+  return !!p && Object.keys(p).length===2 && p.expiresAt===session.expiresAt && Date.parse(p.expiresAt)>Date.now() && !!b && Object.keys(b).length===6
+    && typeof b.requestId==='string' && /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(b.requestId)
+    && typeof b.siteId==='string' && b.siteId.length>0 && b.siteId.length<=100 && !/[\x00-\x1f\x7f]/.test(b.siteId)
+    && Number.isSafeInteger(b.revision) && b.revision>=0 && ['active',lifecycle?'archived':'paused'].includes(b.state)
+    && ['pilot_review','operational','security'].includes(b.reason) && b.confirmed===true;
+}
+export function SiteWorkerAccess({session,target,disabled,onLocked,onClose,onSaved,lifecycle=false}:{session:Session;target:AccessSite|null;disabled:boolean;onLocked:(v:boolean)=>void;onClose:()=>void;onSaved:()=>void;lifecycle?:boolean}) {
+  const key=`understood:site-${lifecycle?'lifecycle':'access'}:${session.clientContext}`;
+  const [dependencies,setDependencies]=useState<{label:string;count:number}[]|null>(null),[dependencyRefresh,setDependencyRefresh]=useState(0),[dependencyError,setDependencyError]=useState('');
+  const [pending,setPending]=useState<Pending|null>(null),[busy,setBusy]=useState(false),[missing,setMissing]=useState(false),[corrupt,setCorrupt]=useState(false),[rejected,setRejected]=useState(false);
+  const [reason,setReason]=useState('pilot_review'),[confirmed,setConfirmed]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState('');
+  const mounted=useRef(true),sending=useRef(false),callbacks=useRef({onLocked,onClose,onSaved});callbacks.current={onLocked,onClose,onSaved};
+  const locked=!!target || !!pending || busy || corrupt;
+  useEffect(()=>{callbacks.current.onLocked(locked);},[locked]);
+  useEffect(()=>{if(target){setConfirmed(false);setReason('pilot_review');setMessage('');setError('');}},[target]);
+  useEffect(()=>{let current=true;setDependencies(null);setDependencyError('');if(!lifecycle || !target)return;
+    fetch(`/api/settings/sites/${encodeURIComponent(target.id)}/lifecycle`,{credentials:'include',cache:'no-store',signal:AbortSignal.timeout(15000),headers:{'x-client-session-context':session.clientContext}})
+      .then(async response=>{const result=await response.json();if(!response.ok)throw Error(result.error || 'Site dependencies unavailable');if(result.siteId!==target.id || result.revision!==target.lifecycleRevision || result.state!==target.lifecycle || !Array.isArray(result.dependencies) || result.dependencies.some((item:{label:unknown;count:unknown})=>typeof item.label!=='string' || !Number.isSafeInteger(item.count) || Number(item.count)<1))throw Error('Site changed. Close this form and refresh sites.');if(current)setDependencies(result.dependencies);})
+      .catch(e=>{if(current)setDependencyError(e.message);});return()=>{current=false;};
+  },[target,lifecycle,dependencyRefresh,session.clientContext]);
+  async function request(path:string,body?:Body) {
+    if(Date.parse(session.expiresAt)<=Date.now())throw Error('Session expired. Sign in again.');
+    const response=await fetch(`/api/settings/sites/${lifecycle?'lifecycle':'access'}${path}`,{credentials:'include',cache:'no-store',signal:AbortSignal.timeout(15000),headers:{'content-type':'application/json','x-client-session-context':session.clientContext},...(body?{method:'POST',body:JSON.stringify(body)}:{})});
+    const result=await response.json();if(!response.ok){if(body && [400,409].includes(response.status))setRejected(true);throw Error(result.error || 'Site access unavailable');}return result;
+  }
+  function remove(value:Pending) {
+    if(sessionStorage.getItem(key)!==JSON.stringify(value))throw Error('The saved access request changed. Reload before continuing.');
+    sessionStorage.removeItem(key);setPending(null);setMissing(false);setRejected(false);
+  }
+  async function check(value:Pending) {
+    if(sending.current)return;sending.current=true;setBusy(true);setError('');
+    try{const result=await request(`/receipts/${value.body.requestId}`);if(!mounted.current)return;
+      if(result.found===false && Object.keys(result).length===1){setMissing(true);return;}
+      const b=value.body,r=result.request;
+      if(result.found!==true || result.revision!==b.revision+1 || !r || Object.keys(r).length!==5 || r.siteId!==b.siteId || r.revision!==b.revision || r.state!==b.state || r.reason!==b.reason || r.confirmed!==true)throw Error('Access receipt could not be verified.');
+      remove(value);setMessage(lifecycle?(b.state==='archived'?'Site archived.':'Site restored. Worker access remains paused.'):(b.state==='paused'?'Worker access paused.':'Worker access resumed.'));callbacks.current.onClose();callbacks.current.onSaved();
+    }catch(e){if(mounted.current)setError((e as Error).message);}finally{sending.current=false;if(mounted.current)setBusy(false);}
+  }
+  async function send(value:Pending) {
+    if(sending.current)return;sending.current=true;setBusy(true);setMissing(false);setRejected(false);setError('');
+    try{if(sessionStorage.getItem(key)!==JSON.stringify(value))throw Error('The saved access request changed. Reload before continuing.');await request('',value.body);}
+    catch(e){if(mounted.current)setError((e as Error).message);}
+    finally{sending.current=false;if(mounted.current){setBusy(false);void check(value);}}
+  }
+  function submit(event:FormEvent) {
+    event.preventDefault();if(!target || disabled || !confirmed || pending || corrupt || sending.current || lifecycle && (!dependencies || target.lifecycle==='active' && dependencies.length>0))return;
+    const value:Pending={expiresAt:session.expiresAt,body:{requestId:crypto.randomUUID(),siteId:target.id,revision:lifecycle?target.lifecycleRevision:target.accessRevision,state:lifecycle?(target.lifecycle==='active'?'archived':'active'):(target.workerAccess==='active'?'paused':'active'),reason,confirmed:true}};
+    try{if(sessionStorage.getItem(key))throw Error('An earlier access request needs checking.');sessionStorage.setItem(key,JSON.stringify(value));if(sessionStorage.getItem(key)!==JSON.stringify(value))throw Error('Access request could not be saved.');setPending(value);void send(value);}catch(e){setError((e as Error).message);}
+  }
+  useEffect(()=>{mounted.current=true;try{const raw=sessionStorage.getItem(key);if(raw){if(raw.length>2048)throw Error();const value:unknown=JSON.parse(raw);if(!valid(value,session,lifecycle))throw Error();setPending(value);void check(value);}}catch{setCorrupt(true);setError('Saved access request unavailable. Sign in again before changing access.');}return()=>{mounted.current=false;callbacks.current.onLocked(false);};},[key]);
+  const frozen=disabled || busy;
+  return <div className="site-access-editor">{message && <p role="status">{message}</p>}{error && <p role="alert" className="record-error">{error}</p>}
+    {pending && <div className="notice notice-amber"><Clock3 size={20}/><div><strong>{lifecycle?'Site lifecycle':'Worker access'} request awaiting confirmation</strong><p dir="auto">{pending.body.siteId}</p><div className="actions"><button className="button outline" disabled={frozen} onClick={()=>void check(pending)}><RefreshCw size={18}/>Check {lifecycle?'site':'access'} receipt</button>{missing && <button className="button primary" disabled={frozen} onClick={()=>void send(pending)}><RefreshCw size={18}/>Retry unchanged {lifecycle?'site':'access'} request</button>}{missing && rejected && <button className="button outline" disabled={frozen} onClick={()=>{try{remove(pending);callbacks.current.onClose();callbacks.current.onSaved();}catch(e){setError((e as Error).message);}}}>Dismiss rejected request</button>}</div></div></div>}
+    {target && !pending && !corrupt && <form className="site-create-form" onSubmit={submit}><fieldset disabled={frozen}><legend>{lifecycle?(target.lifecycle==='active'?'Archive site':'Restore site'):(target.workerAccess==='active'?'Pause worker access':'Resume worker access')}: {target.name}</legend>
+      <div className="notice notice-amber"><ShieldAlert size={22}/><p>{lifecycle?(target.lifecycle==='active'?'New operational work will be blocked and worker sessions and links revoked. Staff can read saved history, and privacy cleanup continues. Already cached device data is not erased.':'Operational work can resume. Worker access stays paused until explicitly resumed with newly issued links. Saved history is unchanged.'):(target.workerAccess==='active'?'Current worker sessions and links will be revoked. Already cached device data is not erased. Staff access, saved responses and processing history are preserved.':'Workers will need newly issued access links. Previously revoked links and sessions will not be restored.')}</p></div>
+      {lifecycle && <div>{dependencyError?<p role="alert">{dependencyError}</p>:dependencies===null?<p role="status">Checking site dependencies...</p>:dependencies.length>0?<><p>Close these dependencies before archiving:</p><ul>{dependencies.map(item=><li key={item.label}>{item.label}: {item.count}</li>)}</ul></>:<p>No active dependencies.</p>}<button type="button" className="button outline" onClick={()=>{setConfirmed(false);setDependencyRefresh(n=>n+1);}}><RefreshCw size={18}/>Refresh dependencies</button></div>}
+      <label className="field">Reason<select value={reason} onChange={e=>{setReason(e.target.value);setConfirmed(false);}}><option value="pilot_review">Pilot review</option><option value="operational">Operational change</option><option value="security">Security review</option></select></label>
+      <label className="billing-confirm"><input type="checkbox" checked={confirmed} onChange={e=>setConfirmed(e.target.checked)}/><span>I understand the {lifecycle?'site lifecycle':'worker access'} impact.</span></label><div className="actions"><button type="button" className="button outline" onClick={()=>callbacks.current.onClose()}>Cancel {lifecycle?'site':'access'} change</button><button className="button primary" disabled={!confirmed || lifecycle && (!dependencies || target.lifecycle==='active' && dependencies.length>0)}>{lifecycle?(target.lifecycle==='active'?<Archive size={18}/>:<ArchiveRestore size={18}/>):(target.workerAccess==='active'?<Pause size={18}/>:<Play size={18}/>)}Confirm {lifecycle?(target.lifecycle==='active'?'archive':'restore'):(target.workerAccess==='active'?'pause':'resume')}</button></div>
+    </fieldset></form>}
+  </div>;
+}

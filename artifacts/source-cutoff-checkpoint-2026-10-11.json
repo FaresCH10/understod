@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-11",
+  "checkpoint": "complete-source-cutoff-observation",
+  "goalStatus": "active",
+  "ledgerFormat": "understood-postgres-privacy-ledger-v7",
+  "completionEstimate": {"percentage": 70, "basis": "historical unaudited estimate", "promoted": false},
+  "verification": {
+    "finalRegression": {"sessionId": 40966, "files": 8, "checks": 57, "passed": 57, "failed": 0, "skipped": 0, "durationMs": 62474.522, "exitCode": 0},
+    "earlierRegression": {"sessionId": 62714, "checks": 57, "passed": 57, "failed": 0, "skipped": 0, "durationMs": 62369.9162, "exitCode": 0},
+    "initialFocused": {"sessionId": 28718, "checks": 14, "passed": 14, "failed": 0, "skipped": 0, "durationMs": 13693.4022, "exitCode": 0},
+    "expandedFocused": {"sessionId": 61030, "checks": 4, "passed": 4, "failed": 0, "skipped": 0, "durationMs": 8643.7817, "exitCode": 0},
+    "productionBuild": {"exitCode": 0, "modules": 2019, "entry": "index-4retpApQ.js", "warnings": ["main chunk over 500 kB", "worker-offline mixed static/dynamic import"]},
+    "shellHashes": {"files": 63, "failed": 0},
+    "originalSQLite": {"businessFingerprints": 8, "matched": 8, "integrity": "ok", "foreignKeyViolations": 0},
+    "browser": {"attemptedThisCheckpoint": false, "passed": false, "reason": "Backend-only maintenance change; no new browser verdict."},
+    "nativeUtilitiesExecuted": false
+  },
+  "implemented": [
+    "strict full source inventory validation including duplicate/unsupported data and precise 64-bit sequence checks",
+    "bidirectional whole-source versus backup table/sequence/definition/private-reference comparison",
+    "independent sourceSnapshot differences in encrypted privacy plans and aggregate-only console output",
+    "source-bound read-only snapshot command authenticates backup file checksums before private output",
+    "actual retained source byte hash/size and definitive non-retained absence verification under locked snapshot",
+    "purpose-bound encrypted source observation and matching v7 ledger, new-only output and no activation",
+    "physical embedded restore detects non-submission source changes despite zero accepted-input gaps",
+    "current runbook corrects obsolete no-PostgreSQL/no-outbox descriptions"
+  ],
+  "externalOperations": {"providerCalls": 0, "mail": 0, "cloudProvisioning": 0, "deployment": 0, "realWorkerData": 0},
+  "ownedSessionsTerminal": true,
+  "originalPreviewChanged": false,
+  "remaining": ["durable source write fence and continuing quiescence", "exact target business-state accounting after quarantine and cleanup", "fresh target private verification and separately authorized release", "native PostgreSQL/Neon/private-storage/concurrency verification", "complete reference/device/a11y/security/release gates", "prior expired worker history browser verification"],
+  "sourceCutoffEstablished": false,
+  "activationAllowed": false,
+  "authoritativeReconciliationComplete": false,
+  "productionReady": false
+}

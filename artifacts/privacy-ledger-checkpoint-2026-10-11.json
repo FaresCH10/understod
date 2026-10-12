@@ -1,0 +1,57 @@
+{
+  "checkpoint": "2026-10-11T10:31:11Z",
+  "scope": "Encrypted original-source privacy ledger/comparison and atomic original worker-deletion/current-four-policy replay; not complete reconciliation or activation",
+  "changes": [
+    "Original-source export shares the locked backup snapshot transaction and binds exact encrypted baseline, schema and endpoint identity",
+    "Bounded private metadata covers original decisions, current restrictions/policies, immutable content hashes and six object-reference families without exporting worker answers/transcripts or identity labels",
+    "Read-only comparison verifies quarantine, guarded definitions, migration contract and immutable accepted-input/export/import identities before reporting differences",
+    "Redaction markers or absent transcripts without scoped original deletion/tombstone evidence are conflicts, not authority",
+    "Atomic deletion replay preserves original request ID, actor, fingerprint, reason and timestamp for restored workers; missing actors are disabled placeholders without credentials or sessions",
+    "Atomic current audio/response-text/resolved-case/generated-audio policy replay preserves original receipts and explicit disables; same-revision conflict or missing current decision proof rejects replay",
+    "Per-site immutable audit binds backup ID, ledger ID, full fingerprint and operation; exact retry performs no writes and audit failure rolls back all decision/actor/state changes",
+    "Encrypted commands retain quarantine and never copy original physical-cleanup/completion claims or authorize activation"
+  ],
+  "originalExportComparisonRun": {"session": 80586, "terminalExitCode": 0, "tests": 5, "passed": 5, "failed": 0, "skipped": 0, "durationMs": 15729.2543},
+  "initialReplayRun": {"session": 63789, "terminalExitCode": 1, "tests": 8, "passed": 7, "failed": 1, "durationMs": 30880.3042, "failure": "Assertion compared the same original timestamp serialized in target local timezone versus source UTC", "correction": "Disposable target verification query uses UTC; original request timestamp is not rewritten"},
+  "correctedDeletionReplayRun": {"session": 91422, "terminalExitCode": 0, "tests": 8, "passed": 8, "failed": 0, "skipped": 0, "durationMs": 28126.7585},
+  "focusedAllDecisionRun": {"session": 65303, "terminalExitCode": 0, "tests": 10, "passed": 10, "failed": 0, "skipped": 0, "durationMs": 33831.5748},
+  "initialSandboxRegression": {"session": 47080, "terminalExitCode": 1, "tests": 93, "passed": 76, "failed": 16, "skipped": 1, "durationMs": 107569.7326, "failureCause": "All 16 failures were disposable HTTP fixture loopback connect EACCES; not counted green"},
+  "finalRegression": {
+    "session": 58477,
+    "terminalExitCode": 0,
+    "command": "node --test tests/privacy-ledger.test.mjs tests/restore-retention.test.mjs tests/retention.test.mjs tests/case-retention.test.mjs tests/postgres-backup.test.mjs tests/deletions.test.mjs tests/deletion-pseudonyms.test.mjs tests/deletion-redactions.test.mjs tests/postgres-domain.test.mjs tests/postgres-backup-native.test.mjs",
+    "tests": 93, "passed": 92, "failed": 0, "skipped": 1, "durationMs": 90915.8204,
+    "permission": "Authorized disposable localhost HTTP fixture connectivity; no external services",
+    "skip": "Dedicated isolated source/empty-target native PostgreSQL databases and installed utilities not configured"
+  },
+  "build": {"command": "npm run build", "terminalExitCode": 0, "typescript": "passed", "modules": 2016, "entryKilobytes": 558.53, "entryGzipKilobytes": 150.29, "shellHashes": 63, "shellFailures": 0, "warnings": ["Entry chunk exceeds 500 kB", "worker-offline static import prevents its dynamic import splitting"]},
+  "preservation": {"readOnly": true, "originalBusinessHashesMatched": 8, "sqliteIntegrity": "ok", "foreignKeyViolations": 0, "originalDatabaseMigrated": false, "existingPreviewRestarted": false},
+  "sourceSha256": {
+    "server/postgres/privacy-ledger.mjs": "2719592ef1e0017ffc0ac9329ac3a244c81c1a54f5d2f9c2305b112223e45f4c",
+    "scripts/postgres-privacy.mjs": "52fc7968d16e6a94c0cc9bbe273e5a8a63c175846130512865f6079ed1fbfd02",
+    "tests/privacy-ledger.test.mjs": "c828d4796b4a45440b35c3762dd95857805b134ec301a40996b3a5a5c5d55166",
+    "server/postgres/backup.mjs": "3fbda1ba2777ab2ecb90f0efa25e066d14e3e61200c15a02b2de485c7c5ac481",
+    "server/postgres/restore-retention.mjs": "a30a6952121065faf401207fb13868446467e1ec985a9ca61b324f918e41af24",
+    "docs/PRIVACY_LEDGER.md": "f637dfe4ca5aff48fced78457a6ff7cb5fa423b72522a5744dae01516aeed54b",
+    "docs/RESTORE_RETENTION.md": "1f795109a9312b17a06e24c15abd2725020553281f5748be4754e30c78053585",
+    "docs/POSTGRES_BACKUP.md": "b3bb67aa2fbb7c368c3a9449692ed5d1e39561bd36f3e0054795ab14381d579b"
+  },
+  "externalRequests": 0,
+  "authoritativeReconciliationComplete": false,
+  "activationAllowed": false,
+  "productionReady": false,
+  "limitations": [
+    "Historical policy-bound retirement/redaction receipts and original case-resolution evidence still require replay",
+    "Later access restrictions, final source cutoff and verified activation remain unfinished",
+    "Current-policy replay alone cannot reconcile content erased under an earlier shorter policy",
+    "Embedded physical copies and scripted snapshot-ID transport do not prove native PostgreSQL/Neon concurrency or cloud backup",
+    "Object cleanup in new ledger tests uses explicit absence mocks, not actual private-object removal",
+    "Command tests use authored encrypted baseline metadata, not native archive transport",
+    "Accepted-command retry is exercised; post-commit result-file failure is documented but not injected in these tests",
+    "No UI/browser/hardware/live AI/real worker data/security/full release verdict"
+  ],
+  "checkpointPause": {"status": "complete", "elapsedMs": 30031.1, "resumed": true, "nextInspection": "Read migrations 071/072: original case-resolution/recent-content evidence and exact historical generated policy/artifact identity must authorize tombstone replay without guard bypass"},
+  "completionEstimate": {"percent": 70, "audited": false, "meaning": "Historical implementation estimate; no readiness promotion"},
+  "goalStatus": "active",
+  "nextMajorTask": "Historical source-authoritative retirement/redaction reconciliation without bypassing immutable input, case-resolution or exact policy guards"
+}

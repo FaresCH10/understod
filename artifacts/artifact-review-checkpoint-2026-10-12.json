@@ -1,0 +1,17 @@
+{
+  "checkpoint": "artifact-review-views-and-nullable-glossary-override",
+  "dataClass": "synthetic",
+  "requirements": ["S18.1", "S18.4", "S18.6", "A02", "A04", "A05"],
+  "fullSuite": {"files": 157, "tests": 839, "passed": 835, "failed": 0, "skipped": 4, "durationMs": 256582.6545, "exitCode": 0, "externalDatabaseUrlsDisabled": true},
+  "postFixBundleAndHelperSuite": {"tests": 22, "passed": 22, "failed": 0, "skipped": 0, "durationMs": 674.1349, "exitCode": 0},
+  "earlierRelatedSuite": {"files": 6, "tests": 50, "passed": 50, "failed": 0, "skipped": 0, "durationMs": 183502.0629, "exitCode": 0, "beganBeforeNullableSuggestionFix": true},
+  "build": {"modules": 2032, "exitCode": 0, "shellFiles": 61, "hashFailures": 0, "existingWarnings": ["entry-chunk-size", "mixed-worker-offline-import"]},
+  "preservation": {"originalSQLiteTables": 8, "allFingerprintsMatch": true, "integrity": "ok", "foreignKeyViolations": 0, "originalPreviewRestarted": false, "originalDatabaseMigrated": false},
+  "browser": {"viewports": [320, 390, 768, 1440], "languages": ["ar", "ur"], "roles": ["owner", "auditor"], "keyboardTabs": true, "exactClipboardValues": true, "clipboardRestored": true, "immutableMutationControlsAbsent": true, "glossaryPagingAndDrillDown": true, "failedReadHidesStaleRows": true, "privateAudioFailureHasNoDeviceFallback": true, "temporaryTabClosed": true, "viewportReset": true},
+  "fixtures": [{"reads": 5, "httpPosts": 0, "briefingContentUnchanged": true, "publicationsUnchanged": true, "exitCode": 0}, {"reads": 1, "httpPosts": 0, "briefingContentUnchanged": true, "publicationsUnchanged": true, "exitCode": 0}],
+  "initialFixture": {"exitCode": 1, "browserServerStarted": false, "reason": "preparation blocked by nullable suggestion contract mismatch"},
+  "externalCalls": 0,
+  "productionReady": false,
+  "estimatePercent": 60,
+  "unverified": ["full-reference-accessibility", "full-version-catalog", "unrecorded-historical-glossary-content", "live-semantic-audio-quality", "native-postgresql-cloud", "real-devices", "full-release-recovery-activation"]
+}

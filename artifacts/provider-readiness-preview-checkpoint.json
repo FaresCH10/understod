@@ -1,0 +1,43 @@
+{
+  "hashes": {
+    "organizations": {
+      "count": 2,
+      "hash": "9c2a0ac364541df1ff47a200804358f6f0721e335bba2c135d7379f016438a47"
+    },
+    "sites": {
+      "count": 2,
+      "hash": "a7600c0da1e3c606983f3e9d88488dcb38a2ba8d3f53e75da06ddb9ad90de608"
+    },
+    "workers": {
+      "count": 34,
+      "hash": "1f691004a91c62bcbc9e5738c6b6472187db77468fdaa0edf0cac01a37138572"
+    },
+    "briefings": {
+      "count": 2,
+      "hash": "483d54e4b1d778ac66f5dbbe5de69f8ac85ab889db9e55fac64f2e54b86789c2"
+    },
+    "publications": {
+      "count": 1,
+      "hash": "7fdd71361254bef7f9f321af2070add84db2d723d7abd7ca719d473bafbc469e"
+    },
+    "assignments": {
+      "count": 30,
+      "hash": "19e416f01219b80dcbb47af97be37b471266ff7dbd587f7143d72e53b2747490"
+    },
+    "attempts": {
+      "count": 26,
+      "hash": "43b5e12a13ce452872786b77af3210035971a4dd7b15fc0ffdf767ec71c2f89a"
+    },
+    "clarifications": {
+      "count": 4,
+      "hash": "57f14ff216c2cf266dfa8f816dbc51b4bfbba0b480ba45b509a394310f7e1fa5"
+    }
+  },
+  "integrity": {
+    "integrity_check": "ok"
+  },
+  "foreignKeys": 0,
+  "checkedAt": "2026-10-10T16:54:10Z",
+  "baselineAvailable": false,
+  "evidence": "Post-restart read-only checkpoint only. Pre-restart inspector had a quoting syntax error; no before/after equality claim."
+}
