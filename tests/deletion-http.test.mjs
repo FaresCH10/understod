@@ -1,5 +1,9 @@
 import test from 'node:test';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import assert from 'node:assert/strict';
+import {applicationCleanupEvidence} from '../server/deletion-scope.mjs';
+import {readDeletionReceipt,verifyDeletionAcceptance,readPrivacyWorkerPage} from '../src/deletion-state.ts';
 import {randomUUID} from 'node:crypto';
 import {PGlite} from '@electric-sql/pglite';
 import {openDatabase} from '../server/db.mjs';
@@ -58,6 +62,7 @@ for(const backend of ['SQLite','PostgreSQL'])test(`${backend} deletion HTTP requ
     const firstResponse=await call(listPath+'?pageSize=100',admin);
     assert.equal(firstResponse.status,200);assert.match(firstResponse.headers.get('cache-control'),/no-store/);
     const firstPage=await firstResponse.json(),secondPage=await (await call(listPath+'?pageSize=100&page=2',admin)).json();
+    assert.deepEqual(readPrivacyWorkerPage(firstPage),firstPage);assert.deepEqual(readPrivacyWorkerPage(secondPage),secondPage);
     assert.ok(firstPage.total>100);assert.equal(firstPage.items.length,100);
     assert.equal(new Set([...firstPage.items,...secondPage.items].map(row=>row.id)).size,firstPage.total);
     assert.equal((await (await call(listPath+'?search=%25',admin)).json()).total,0);
@@ -88,6 +93,7 @@ for(const backend of ['SQLite','PostgreSQL'])test(`${backend} deletion HTTP requ
     const recovered=await call(path,owner);
     assert.equal(recovered.status,200);assert.match(recovered.headers.get('cache-control'),/no-store/);
     const accepted=await recovered.json();assert.equal(accepted.id,input.requestId);assert.equal(accepted.status,'queued');
+    assert.deepEqual(accepted.cleanupEvidence,applicationCleanupEvidence());assert.deepEqual(readDeletionReceipt(accepted,'worker-30'),accepted);
     assert.equal((await (await call(path,owner,input)).json()).duplicate,true);
     assert.equal((await call(path,owner,{...input,reason:'customer_policy'})).status,409);
     assert.equal((await call('/people/workers/worker-30/reenable',owner,{requestId:randomUUID(),expectedCode:'Worker 030',confirmed:true})).status,409);
@@ -100,11 +106,14 @@ for(const backend of ['SQLite','PostgreSQL'])test(`${backend} deletion HTTP requ
     assert.equal(await (pg?pgComplete:processOneDeletionCompletion)(connection,{},options),true);
     const receipt=await (await call(path,owner)).json();
     assert.equal(receipt.status,'complete');assert.ok(receipt.completedAt);
+    assert.deepEqual(receipt.cleanupEvidence,applicationCleanupEvidence());assert.deepEqual(readDeletionReceipt(receipt,'worker-30'),receipt);
+    const duplicate=await (await call(path,owner,input)).json();verifyDeletionAcceptance(duplicate,input.requestId);assert.deepEqual(duplicate.cleanupEvidence,applicationCleanupEvidence());
     assert.doesNotMatch(JSON.stringify(receipt),/Worker 030|fingerprint|token_hash/);
     assert.equal((await (await call(path,owner,input)).json()).status,'complete');
     assert.equal(await (pg?pgComplete:processOneDeletionCompletion)(connection,{},options),false);
     const completed=await (await call(listPath+'?status=complete',admin)).json();
     assert.equal(completed.total,1);assert.match(completed.items[0].code,/^Deleted /);
+    assert.deepEqual(readPrivacyWorkerPage(completed),completed);assert.deepEqual(completed.items[0].cleanupEvidence,applicationCleanupEvidence());
     assert.doesNotMatch(JSON.stringify(completed),/Worker 030|fingerprint|token_hash|answer_text/);
     const adminInput={requestId:randomUUID(),expectedCode:'Privacy 001',reason:'customer_policy',confirmed:true};
     assert.equal((await call('/people/workers/privacy-001/deletion',admin,adminInput)).status,200);

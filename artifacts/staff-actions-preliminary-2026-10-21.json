@@ -1,0 +1,336 @@
+{
+  "measurements": [
+    {
+      "buttons": [
+        {
+          "bottom": 400.203125,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 307,
+          "right": 586.578125,
+          "scroll": 278,
+          "top": 352.203125
+        },
+        {
+          "bottom": 384.203125,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 598.578125,
+          "right": 885.296875,
+          "scroll": 285,
+          "top": 336.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1265,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 320,
+      "sameRow": false,
+      "width": 1280
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 400.203125,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 307,
+          "right": 586.578125,
+          "scroll": 278,
+          "top": 352.203125
+        },
+        {
+          "bottom": 384.203125,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 598.578125,
+          "right": 885.296875,
+          "scroll": 285,
+          "top": 336.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1265,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 390,
+      "sameRow": false,
+      "width": 1280
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 400.203125,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 307,
+          "right": 586.578125,
+          "scroll": 278,
+          "top": 352.203125
+        },
+        {
+          "bottom": 384.203125,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 598.578125,
+          "right": 885.296875,
+          "scroll": 285,
+          "top": 336.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1265,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 768,
+      "sameRow": false,
+      "width": 1280
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 400.203125,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 307,
+          "right": 586.578125,
+          "scroll": 278,
+          "top": 352.203125
+        },
+        {
+          "bottom": 384.203125,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 598.578125,
+          "right": 885.296875,
+          "scroll": 285,
+          "top": 336.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1265,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 1440,
+      "sameRow": false,
+      "width": 1280
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 400.203125,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 307,
+          "right": 586.578125,
+          "scroll": 278,
+          "top": 352.203125
+        },
+        {
+          "bottom": 384.203125,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 598.578125,
+          "right": 885.296875,
+          "scroll": 285,
+          "top": 336.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1265,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 1585,
+      "sameRow": false,
+      "width": 1280
+    }
+  ],
+  "focusChecks": [
+    {
+      "activeTag": "H3",
+      "activeText": "In-person recordings",
+      "busy": "true",
+      "inDialog": true,
+      "rows": 0,
+      "stage": "held-page-2"
+    },
+    {
+      "activeTag": "H3",
+      "activeText": "In-person recordings",
+      "busy": "false",
+      "inDialog": true,
+      "rows": 2,
+      "stage": "received-page-2"
+    },
+    {
+      "activeTag": "H3",
+      "activeText": "In-person recordings",
+      "inDialog": true,
+      "privateDiagnosticShown": false,
+      "rows": 0,
+      "stage": "failed-page-2"
+    },
+    {
+      "activeLabel": "Refresh recordings",
+      "activeTag": "BUTTON",
+      "inDialog": true,
+      "rows": 2,
+      "stage": "tab-after-recovery"
+    }
+  ],
+  "screenshots": [
+    "D:/understod/artifacts/staff-actions-en-1585-2026-10-21.png"
+  ],
+  "form": {
+    "actions": [
+      "Generate and send follow-up",
+      "Record in-person clarification"
+    ],
+    "counter": "0 / 1000",
+    "dialogInsideForm": false,
+    "formId": "_r_0_",
+    "submitFormMatches": true
+  },
+  "heldCounters": {
+    "audioPosts": 0,
+    "receiptReads": 0,
+    "listReads": 2,
+    "listPages": [
+      "1",
+      "2"
+    ],
+    "noticeReads": 1,
+    "playbackReads": 0,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 0,
+    "seededRecordings": 12,
+    "externalCalls": 0,
+    "actualMicrophoneUsed": false,
+    "held": false,
+    "listHeld": true,
+    "objects": 12,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "caseMessages": 0,
+    "caseStatus": "open",
+    "followupMode": "queue-only",
+    "followups": [],
+    "recordings": [
+      {
+        "request_id": "5c46942a-36df-4b3a-89ff-5a34395286a5",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:24.903Z"
+      },
+      {
+        "request_id": "0febc84e-f7fa-4c53-a52d-48fd831e3ec1",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:24.918Z"
+      },
+      {
+        "request_id": "b22c4df0-94b4-47e8-ad66-463de4d16f9d",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:24.933Z"
+      },
+      {
+        "request_id": "b4d6970f-630a-4851-81fc-94fec6c543af",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:24.948Z"
+      },
+      {
+        "request_id": "745f5367-0ba2-40a4-b336-c37830003de6",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:24.963Z"
+      },
+      {
+        "request_id": "77f168f3-0608-49af-8d47-e33383a1ab22",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:24.977Z"
+      },
+      {
+        "request_id": "76d6f155-e065-474f-96fe-2517c02996a8",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:24.993Z"
+      },
+      {
+        "request_id": "0c78c1e2-a2d5-4c35-8c25-f0bbd8bbdd2e",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:25.008Z"
+      },
+      {
+        "request_id": "07cdf17e-88b3-439d-b058-fc194a8c1c0d",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:25.022Z"
+      },
+      {
+        "request_id": "dd7a4478-75ea-4368-b892-15fa75a99178",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:25.036Z"
+      },
+      {
+        "request_id": "a8469711-e0df-40d0-9b4c-1018296bc6ea",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:25.050Z"
+      },
+      {
+        "request_id": "ed1949e9-ab26-4ea1-9f2b-add76f54ddac",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:01:25.063Z"
+      }
+    ]
+  },
+  "accepted": false,
+  "limits": [
+    "Unconfigured preliminary fixture correctly hid generation; configured queue-only fixture exposes it without running a provider",
+    "Preliminary action group inherited a16px top margin; corrected source/build is separate",
+    "Viewport commands targeted the control tab; measured app width stayed1280, so none of these width checks is accepted",
+    "The image filename contains1585 but its actual viewport was1280; not reference-sized proof"
+  ]
+}

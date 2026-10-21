@@ -5,6 +5,7 @@ import {PGlite} from '@electric-sql/pglite';
 import {openDatabase} from '../server/db.mjs';
 import {seed} from '../server/seed.mjs';
 import {requestWorkerDeletion} from '../server/deletions.mjs';
+import {applicationCleanupEvidence} from '../server/deletion-scope.mjs';
 import {requestWorkerDeletion as pgRequest} from '../server/postgres/deletions.mjs';
 import {runMigrations} from '../server/postgres/migrate.mjs';
 import {issueWorkerGrant,createSession} from '../server/auth.mjs';
@@ -95,7 +96,7 @@ test('SQLite deletion acceptance is scoped, confirmed, audit-atomic, revokes acc
     assert.equal(db.prepare("SELECT active FROM workers WHERE id='worker-30'").get().active,1);
     assert.equal(db.prepare('SELECT count(*) AS count FROM worker_deletion_requests').get().count,0);
     db.exec('DROP TRIGGER fail_deletion_audit');
-    assert.deepEqual(requestWorkerDeletion(db,owner,'worker-30',change),{id:change.requestId,status:'queued',duplicate:false});
+    assert.deepEqual(requestWorkerDeletion(db,owner,'worker-30',change),{id:change.requestId,status:'queued',duplicate:false,cleanupEvidence:applicationCleanupEvidence()});
     assert.equal(requestWorkerDeletion(db,owner,'worker-30',change).duplicate,true);
     assert.throws(()=>requestWorkerDeletion(db,owner,'worker-30',{...change,reason:'customer_policy'}),/conflict/);
     assert.throws(()=>requestWorkerDeletion(db,owner,'worker-30',input()),/pending/);

@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-15T04:54:13Z",
+  "state": "verified-bounded-native-checkpoint",
+  "overallEstimatePercent": 69,
+  "estimateRangePercent": [62, 75],
+  "taskEstimates": {"nativePostgres": 75, "artifactReadKeys": 85, "liveSyntheticAi": 45, "hostedRelease": 20},
+  "productionReady": false,
+  "goalRemainsActive": true,
+  "fullRegression": {
+    "tests": 1026,
+    "passed": 1022,
+    "failed": 0,
+    "skippedLocalNativePrerequisites": 4,
+    "durationMs": 220764.8971,
+    "exitCode": 0,
+    "evidence": "artifacts/neon-stable-build-suite-110bc507-d1d1-425b-9426-a511da3068fa.json"
+  },
+  "build": {"passed": true, "modules": 2068, "entryKb": 670.23, "existingWarningsRemain": true},
+  "nativeEvidence": {
+    "noLoginPermissions": "artifacts/neon-rehearsal-7c172712-5b54-4d0a-b7d1-3fcb759e1599.json",
+    "extendedConcurrencyAndOwnedWorkerDeath": "artifacts/neon-rehearsal-091c4332-517f-4efd-9dde-991d8eb75a0e.json",
+    "directLoginAndRuntime": "artifacts/neon-login-2f94d92b-ffa0-4eaf-ab0f-a3adeb3324bc.json",
+    "temporaryResourcesRemoved": true,
+    "existingCatalogAndAclMatched": true,
+    "providerCalls": 0,
+    "realDataUsed": false
+  },
+  "preservationEvidence": "artifacts/neon-login-preservation-ec988671-ca59-401e-909f-7052cca65599.json",
+  "remaining": [
+    "Native encrypted database and private-object backup/restore, cutoff and activation",
+    "Other worker/storage/provider crash scenarios and separate service profiles",
+    "Complete reference, localization, accessibility and real-device acceptance",
+    "Complete live synthetic voice and independent semantic/audio quality",
+    "Privacy-approved real-worker AI path; Gemini Free stays synthetic-only",
+    "Hosted application/private storage, clean CI/setup and full release acceptance"
+  ]
+}

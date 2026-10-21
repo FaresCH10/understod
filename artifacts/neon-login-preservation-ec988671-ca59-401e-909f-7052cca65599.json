@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-10-15T04:51:17.170Z",
+  "tables": [
+    {
+      "table": "organizations",
+      "count": 2,
+      "unchanged": true
+    },
+    {
+      "table": "sites",
+      "count": 2,
+      "unchanged": true
+    },
+    {
+      "table": "workers",
+      "count": 34,
+      "unchanged": true
+    },
+    {
+      "table": "briefings",
+      "count": 2,
+      "unchanged": true
+    },
+    {
+      "table": "publications",
+      "count": 1,
+      "unchanged": true
+    },
+    {
+      "table": "assignments",
+      "count": 30,
+      "unchanged": true
+    },
+    {
+      "table": "attempts",
+      "count": 26,
+      "unchanged": true
+    },
+    {
+      "table": "clarifications",
+      "count": 4,
+      "unchanged": true
+    }
+  ],
+  "integrityOk": true,
+  "foreignKeyViolations": 0,
+  "shellAssets": 55,
+  "shellHashesMatch": true,
+  "filesScanned": 1504,
+  "secretMatches": 0,
+  "envIgnored": true,
+  "exampleGeminiBlank": true,
+  "productionVerdict": false
+}

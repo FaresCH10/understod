@@ -115,15 +115,29 @@ function authority(db,session,type='staff') {
     .get(session.grant_id,session.org_id,session.site_id,session.principal_id,NOW())) throw new Error('Forbidden');
 }
 
-function submissionHistory(db,session,assignmentId,page,pageSize,privateDetails) {
+function submissionHistory(db,session,assignmentId,page,pageSize,privateDetails,submissionId) {
   const receipt=db.prepare('SELECT COUNT(*) AS total,MAX(sequence) AS latest FROM submission_receipts WHERE assignment_id=? AND org_id=?').get(assignmentId,session.org_id);
   const rows=db.prepare(`SELECT sr.sequence,sr.submission_id,sr.kind,sr.received_at,t.answer_text,t.outcome,${privateDetails ? 't.reasons_json,' : ''}
-    r.id AS recording_id,r.status AS audio_status,r.transcript FROM submission_receipts sr
+    r.id AS recording_id,r.status AS audio_status,r.transcript,r.duration_seconds FROM submission_receipts sr
     LEFT JOIN attempts t ON t.assignment_id=sr.assignment_id AND t.submission_id=sr.submission_id AND t.org_id=sr.org_id
     LEFT JOIN recordings r ON r.assignment_id=sr.assignment_id AND r.submission_id=sr.submission_id AND r.org_id=sr.org_id AND r.site_id=? AND r.received_at IS NOT NULL
-    WHERE sr.assignment_id=? AND sr.org_id=? ORDER BY sr.sequence DESC LIMIT ? OFFSET ?`)
-    .all(session.site_id,assignmentId,session.org_id,pageSize,(page-1)*pageSize);
-  return {receipts:rows.map((row) => (privateDetails ? receiptRow : workerReceiptRow)(row,receipt.latest)),total:receipt.total,page,pageSize};
+    WHERE sr.assignment_id=? AND sr.org_id=? ${submissionId===undefined?'':'AND sr.submission_id=?'} ORDER BY sr.sequence DESC LIMIT ? OFFSET ?`)
+    .all(session.site_id,assignmentId,session.org_id,...(submissionId===undefined?[]:[submissionId]),pageSize,(page-1)*pageSize);
+  return {receipts:rows.map((row) => submissionId===undefined?(privateDetails ? receiptRow : workerReceiptRow)(row,receipt.latest):{...workerReceiptRow(row,receipt.latest),durationSeconds:row.duration_seconds??null}),total:receipt.total,page,pageSize};
+}
+
+export function workerSubmission(db,session,assignmentId,submissionId,input={}){
+  workerRequestReceiptInput(assignmentId,'answer',submissionId);submissionFilters(input);
+  if(Object.keys(input).length)throw Error('Invalid response filter');
+  return transaction(db,()=>{
+    authority(db,session,'worker');
+    const assignment=db.prepare(`SELECT a.id,a.language,p.version,p.state FROM assignments a JOIN publications p ON p.id=a.publication_id AND p.org_id=a.org_id AND p.site_id=a.site_id
+      WHERE a.id=? AND a.org_id=? AND a.site_id=? AND a.worker_id=?`).get(assignmentId,session.org_id,session.site_id,session.principal_id);
+    if(!assignment)throw Error('Response unavailable');
+    const receipt=submissionHistory(db,session,assignmentId,1,1,false,submissionId).receipts[0];
+    if(!receipt)throw Error('Response unavailable');
+    return {assignment,receipt};
+  });
 }
 
 export function workerSubmissions(db,session,assignmentId,input={}) {

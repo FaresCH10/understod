@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-14",
+  "overallEstimatePercent": 60,
+  "taskEstimatePercent": 85,
+  "staffRequestFencingEstimatePercent": 96,
+  "fullSuite": {"files": 171, "tests": 931, "passed": 927, "failed": 0, "skipped": 4, "exitCode": 0, "durationMs": 224558.2563},
+  "focusedRegression": {"passed": 29, "failed": 0, "skipped": 0, "durationMs": 5533.2915},
+  "build": {"typecheck": true, "production": true, "modules": 2054, "entryKb": 631.24, "shellFiles": 56, "shellHashesMatch": true},
+  "originalDatabase": {"fingerprintsMatch": 8, "integrity": "ok", "foreignKeyViolations": 0, "migrated": false},
+  "browser": {"lostAcknowledgementRecovered": true, "receiptOutageRecovered": true, "laterRejectionPreservesOriginal": true, "beforeCommitFailureExplicitRetry": true, "firstBriefingSelectionPersists": true, "supervisorDenied": true, "width320ScrollWidth": 305, "width320NoticeClientAndScroll": 267, "width390NoticeClientAndScroll": 337},
+  "fixture": {"terminal": true, "explicitPosts": 6, "acceptedReceipts": 4, "setupAuditEvents": 4, "finalRevision": 4, "finalStep": "briefing", "firstBriefingId": "shelf", "protectedTablesUnchanged": 8, "externalRequests": 0},
+  "temporaryTabClosed": true,
+  "viewportReset": true,
+  "productionReady": false,
+  "remaining": ["Broader authority loss and assistive acceptance", "Actual devices", "Native PostgreSQL acceptance", "Usage and App helpers", "Live synthetic AI", "Authorized hosting and release gates"]
+}

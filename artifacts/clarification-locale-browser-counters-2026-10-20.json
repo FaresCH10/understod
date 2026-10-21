@@ -1,0 +1,86 @@
+{
+  "counters": {
+    "listReads": 2,
+    "detailReads": 4,
+    "actionPosts": 1,
+    "receiptReads": 1,
+    "otherPosts": 1,
+    "fixtureOwnerChanges": 0,
+    "repeatPosts": 0,
+    "reviewPosts": 2,
+    "workflowReads": 9,
+    "workflowReceipts": 0,
+    "fixtureRepeatChanges": 0,
+    "fixtureReviewChanges": 0,
+    "fixtureAnswers": 0,
+    "creationPosts": 1,
+    "creationReceipts": 0,
+    "creationSubjectReads": 1,
+    "externalCalls": 0,
+    "clarification_action_receipts": 1,
+    "clarification_creations": 1,
+    "clarifications": 3,
+    "help_requests": 1,
+    "attempts": 14,
+    "case_messages": 0,
+    "case_reviews": 14,
+    "case_repeats": 13,
+    "submission_receipts": 14,
+    "originalAttemptUnchanged": true,
+    "latestDeadline": "2026-11-01T06:30:00.000Z"
+  },
+  "queueWidths": [
+    {
+      "controls": [
+        "Worker 021 کا معاملہ دیکھیں",
+        "Worker 014 کا معاملہ دیکھیں"
+      ],
+      "document": 305,
+      "width": 320
+    },
+    {
+      "controls": [
+        "Worker 021 کا معاملہ دیکھیں",
+        "Worker 014 کا معاملہ دیکھیں"
+      ],
+      "document": 375,
+      "width": 390
+    },
+    {
+      "controls": [
+        "Worker 021 کا معاملہ دیکھیں",
+        "Worker 014 کا معاملہ دیکھیں"
+      ],
+      "document": 753,
+      "width": 768
+    },
+    {
+      "controls": [],
+      "document": 1440,
+      "width": 1440
+    }
+  ],
+  "createWidths": [
+    {
+      "document": 305,
+      "overflow": [],
+      "width": 320
+    },
+    {
+      "document": 375,
+      "overflow": [],
+      "width": 390
+    },
+    {
+      "document": 753,
+      "overflow": [],
+      "width": 768
+    },
+    {
+      "document": 1440,
+      "overflow": [],
+      "width": 1440
+    }
+  ],
+  "viewportReset": true
+}

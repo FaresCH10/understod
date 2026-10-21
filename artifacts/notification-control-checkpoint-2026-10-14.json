@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-14",
+  "overallEstimatePercent": 60,
+  "taskEstimatePercent": 85,
+  "staffRequestFencingEstimatePercent": 95,
+  "fullSuite": {"files": 170, "tests": 926, "passed": 922, "failed": 0, "skipped": 4, "exitCode": 0, "durationMs": 242645.4589},
+  "focusedRegression": {"passed": 33, "failed": 0, "skipped": 0, "durationMs": 5101.8118},
+  "build": {"typecheck": true, "production": true, "modules": 2052, "entryKb": 634.64, "shellFiles": 55, "shellHashesMatch": true},
+  "originalDatabase": {"fingerprintsMatch": 8, "integrity": "ok", "foreignKeyViolations": 0, "migrated": false},
+  "browser": {"lostAcknowledgementRecovered": true, "laterRejectedRetryPreservesOriginal": true, "beforeCommitFailureExplicitRetry": true, "personalActorIsolation": true, "unreadPageTwoItems": 4, "width320ScrollWidth": 305, "width390RecoveryFits": true, "privateObjectTextAbsent": true},
+  "fixture": {"terminal": true, "explicitPosts": 5, "personalReadRows": 3, "publicationsUnchanged": true, "auditUnchanged": true, "externalRequests": 0},
+  "temporaryTabClosed": true,
+  "viewportReset": true,
+  "productionReady": false,
+  "remaining": ["Broader authority loss and assistive acceptance", "Real devices", "Native PostgreSQL acceptance", "Onboarding and usage helpers", "App helpers", "Live synthetic AI", "Authorized hosting and release gates"]
+}

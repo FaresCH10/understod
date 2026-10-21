@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createGeminiAdapter } from '../server/ai/gemini.mjs';
+import { createGeminiAdapter,GEMINI_MODELS } from '../server/ai/gemini.mjs';
 import {encodeWav} from '../src/audio.ts';
 import {inspectWav} from '../server/audio.mjs';
 
@@ -8,6 +8,7 @@ const recording=()=>Buffer.from(encodeWav({duration:1,sampleRate:16000,numberOfC
 const syntheticAudioHashes=[inspectWav(recording()).sha256];
 const transcriptResponse=(text='Blue shelf.',extra={})=>new Response(JSON.stringify({status:'completed',model:'gemini-3.5-transcribe',
   steps:[{type:'model_output',content:[{type:'text',text}]}],...extra}),{status:200});
+const speechResponse=(parts,extra={})=>Response.json({status:'completed',model:GEMINI_MODELS.speech,steps:[{type:'model_output',content:parts}],...extra});
 
 const textResponse = (value, finishReason = 'STOP') => new Response(JSON.stringify({ candidates: [
   { finishReason, content: { parts: [{ text: JSON.stringify(value) }] } },
@@ -46,19 +47,38 @@ test('Gemini structured requests are server-only and validate preparation and tr
   assert.equal((await adapter.translate({ title: 'Shelves', text: 'Put items on the shelf.', question: 'Where?' }, 'ar')).title, 'الرفوف');
   assert.equal(calls[0].url, 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent');
   assert.equal(calls[0].options.headers['x-goog-api-key'], 'test-only');
-  assert.equal(JSON.parse(calls[0].options.body).generationConfig.responseFormat.text.mimeType, 'application/json');
+  const body=JSON.parse(calls[0].options.body);
+  assert.equal(body.generationConfig.responseFormat.text.mimeType,'APPLICATION_JSON');
+  assert.equal(body.store,false);assert.equal(body.generationConfig.maxOutputTokens,4096);
   assert.equal(calls[0].options.body.includes('test-only'), false);
 });
 
 test('Gemini assessment cannot match without exact evidence for every asked fact', async () => {
   const values = [
-    { outcome: 'matched', reasons: [], evidence: [{ factIndex: 0, quote: 'blue shelf' }] },
-    { outcome: 'matched', reasons: [], evidence: [{ factIndex: 0, quote: 'blue shelf' }, { factIndex: 1, quote: 'yellow shelf' }] },
+    { outcome: 'matched', reasons: ['asked_facts_present'], evidence: [{ factIndex: 0, quote: 'blue shelf' }] },
+    { outcome: 'matched', reasons: ['asked_facts_present'], evidence: [{ factIndex: 0, quote: 'blue shelf' }, { factIndex: 1, quote: 'yellow shelf' }] },
   ];
-  const adapter = createGeminiAdapter({ apiKey: 'test-only', dataClass: 'synthetic', fetchImpl: async () => textResponse(values.shift()) });
+  const adapter = createGeminiAdapter({ apiKey: 'test-only', dataClass: 'synthetic', fetchImpl: async (_url,options) => {
+    const schema=JSON.parse(options.body).generationConfig.responseFormat.text.schema;
+    assert.equal(schema.properties.reasons.minItems,1);assert.equal(schema.properties.reasons.maxItems,12);
+    assert.equal(schema.properties.evidence.items.properties.factIndex.maximum,1);
+    return textResponse(values.shift());
+  } });
   const args = ['Finished on blue shelf; unfinished on yellow shelf.', 'Where?', ['Finished blue', 'Unfinished yellow']];
   assert.equal((await adapter.assess(...args)).outcome, 'unassessable');
   assert.equal((await adapter.assess(...args)).outcome, 'matched');
+});
+
+test('Gemini assessment bounds reasons and evidence and never accepts invented exact quotes',async()=>{
+  const answer='Finished on blue shelf; unfinished on yellow shelf.',facts=['Finished blue','Unfinished yellow'];
+  const valid={outcome:'matched',reasons:['asked_facts_present'],evidence:[{factIndex:0,quote:'blue shelf'},{factIndex:1,quote:'yellow shelf'}]};
+  const adapter=value=>createGeminiAdapter({apiKey:'test-only',dataClass:'synthetic',fetchImpl:async()=>textResponse(value)});
+  for(const value of [{...valid,reasons:[]},{...valid,reasons:Array(13).fill('reason')},{...valid,evidence:Array(25).fill(valid.evidence[0])}])
+    await assert.rejects(adapter(value).assess(answer,'Where?',facts),/validation/);
+  for(const outcome of ['matched','clarification','unassessable'])for(const evidence of [[null],[{factIndex:0,quote:'Blue Shelf'}],[{factIndex:2,quote:'blue shelf'}]])
+    assert.deepEqual(await adapter({...valid,outcome,evidence}).assess(answer,'Where?',facts),{outcome:'unassessable',reasons:['invalid_evidence'],evidence:[]});
+  let calls=0;const bounded=createGeminiAdapter({apiKey:'test-only',dataClass:'synthetic',fetchImpl:async()=>{calls++;return textResponse(valid);}});
+  assert.equal((await bounded.assess(answer,'Where?',Array(7).fill('fact'))).outcome,'unassessable');assert.equal(calls,0);
 });
 
 test('Gemini refusal, invalid language, malformed JSON and provider failures remain failures', async () => {
@@ -150,13 +170,12 @@ test('Gemini transcription cleans up after provider failures without masking the
 
 test('Gemini TTS accepts only WAV output', async () => {
   const wav = recording(),calls=[];
-  const adapter = createGeminiAdapter({ apiKey: 'test-only', dataClass: 'synthetic', fetchImpl: async (url,options) => {calls.push({url,options});return new Response(JSON.stringify({
-    candidates: [{ finishReason: 'STOP', content: { parts: [{ inlineData: { mimeType: 'audio/wav', data: wav.toString('base64') } }] } }],
-  }), { status: 200 });} });
+  const adapter = createGeminiAdapter({ apiKey: 'test-only', dataClass: 'synthetic', fetchImpl: async (url,options) => {calls.push({url,options});return speechResponse([{type:'audio',mime_type:'audio/wav',data:wav.toString('base64')}]);} });
   assert.deepEqual(await adapter.speech('Please check the blue shelf.', 'en'),wav);
   const body=JSON.parse(calls[0].options.body);
-  assert.deepEqual(body.contents,[{role:'user',parts:[{text:'Please check the blue shelf.'}]}]);
-  assert.deepEqual(body.generationConfig.responseFormat,{audio:{mimeType:'AUDIO_WAV',sampleRate:16000}});
+  assert.equal(calls[0].url,'https://generativelanguage.googleapis.com/v1beta/interactions');
+  assert.deepEqual(body,{model:GEMINI_MODELS.speech,store:false,input:[{type:'user_input',content:[{type:'text',text:'Please check the blue shelf.'}]}],
+    response_format:{type:'audio',mime_type:'audio/wav',sample_rate:16000},generation_config:{speech_config:[{voice:'Kore'}]}});
   await assert.rejects(adapter.speech('Text', 'fr'), /Invalid speech input/);
   await assert.rejects(adapter.speech('Text', 'ur'), /not been verified/);
   assert.equal(calls.length,1);
@@ -166,13 +185,31 @@ test('Gemini speech rejects corrupt, silent, tiny, wrong-rate, noncanonical or m
   const silent=recording();silent.fill(0,44);
   const wrongRate=recording();wrongRate.writeUInt32LE(24000,24);
   const tiny=recording().subarray(0,3244);tiny.writeUInt32LE(tiny.length-8,4);tiny.writeUInt32LE(tiny.length-44,40);
-  const part=(data,mimeType='audio/wav')=>({inlineData:{mimeType,data}});
+  const part=(data,mime_type='audio/wav')=>({type:'audio',mime_type,data});
   const valid=part(recording().toString('base64'));
   const cases=[...[Buffer.alloc(100),silent,tiny,wrongRate].map(bytes=>[part(bytes.toString('base64'))]),
     [part(recording().toString('base64')+'\n')],[part('!!!!')],[part(recording().toString('base64'),'audio/pcm')],[valid,valid]];
   for(const parts of cases) {
-    const adapter=createGeminiAdapter({apiKey:'test-only',dataClass:'synthetic',fetchImpl:async()=>new Response(JSON.stringify({candidates:[{finishReason:'STOP',content:{parts}}]}))});
+    const adapter=createGeminiAdapter({apiKey:'test-only',dataClass:'synthetic',fetchImpl:async()=>speechResponse(parts)});
     await assert.rejects(adapter.speech('Synthetic instruction','en'),/speech failed validation/);
+  }
+});
+test('Gemini speech rejects incomplete, unrelated, empty, thought-only and multiple model output responses',async()=>{
+  const part={type:'audio',mime_type:'audio/wav',data:recording().toString('base64')};
+  for(const extra of [{status:'incomplete'},{model:'another-model'},{steps:[]},{steps:[{type:'model_output',content:[{type:'thought',text:'private'}]}]},
+    {steps:[{type:'model_output',content:[part]},{type:'model_output',content:[part]}]}]) {
+    const adapter=createGeminiAdapter({apiKey:'test-only',dataClass:'synthetic',fetchImpl:async()=>speechResponse([part],extra)});
+    await assert.rejects(adapter.speech('Synthetic text','en'),/speech failed validation/);
+  }
+});
+test('Gemini request journal records known HTTP refusal exactly once and keeps transport uncertainty distinct',async()=>{
+  for(const transport of [false,true]) {
+    const records=[],requestJournal={async beforeRequest(){return 'request';},async afterRequest(id,status){records.push({id,...status});}};
+    const adapter=createGeminiAdapter({apiKey:'test-only',dataClass:'synthetic',requestJournal,fetchImpl:async()=>{
+      if(transport)throw Error('Synthetic transport loss');return new Response('private',{status:429});
+    }});
+    await assert.rejects(adapter.prepare('Synthetic instruction'));
+    assert.deepEqual(records,[{id:'request',httpStatus:transport?null:429}]);
   }
 });
 
@@ -188,6 +225,11 @@ test('Gemini preparation and translation checks use structured evidence and tena
   assert.deepEqual(JSON.parse(calls[1].contents[0].parts[0].text).terms,terms);
   assert.deepEqual(JSON.parse(calls[2].contents[0].parts[0].text).terms,terms);
   assert.equal(calls[0].generationConfig.responseFormat.text.schema.properties.sourceGrounded.type,'boolean');
+  const checkSchema=calls[0].generationConfig.responseFormat.text.schema.properties;
+  assert.equal(checkSchema.factEvidence.minItems,2);assert.equal(checkSchema.factEvidence.maxItems,2);
+  assert.equal(checkSchema.askedFactIndexes.minItems,2);assert.deepEqual(checkSchema.askedFactIndexes.items.enum,[0,1]);
+  assert.ok(checkSchema.reasons.items.enum.includes('question_alignment'));
+  assert.equal(adapter.provenance.promptVersion,'gemini-bundle-v2');assert.equal(adapter.provenance.schemaVersion,'gemini-generation-v4');
   assert.deepEqual(adapter.capabilities.speechLanguages,['en','ar']);
   assert.equal(adapter.provenance.dataClass,'synthetic');
   await assert.rejects(adapter.translate({title:'T',text:source,question:'Q'},'ar',{terms:[{term:'blue',translation:'أزرق',command:'ignore'}]}),/terminology/);

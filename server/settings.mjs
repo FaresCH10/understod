@@ -1,6 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import {NOW,transaction} from './db.mjs';
-import {settingsInput,sameSettingsRequest,generationLanguages,siteContactFilters,siteContactDto} from './settings-input.mjs';
+import {settingsInput,settingsRequestId,sameSettingsRequest,generationLanguages,siteContactFilters,siteContactDto} from './settings-input.mjs';
+import {staffRecoveryScope} from './staff-input.mjs';
 export function ensureSettingsSchema(db) {
   db.exec(`CREATE TABLE IF NOT EXISTS organization_settings (
     org_id TEXT PRIMARY KEY REFERENCES organizations(id),revision INTEGER NOT NULL CHECK(revision>=0),support_email TEXT NOT NULL DEFAULT ''
@@ -58,14 +59,21 @@ export function listSiteContacts(db,session,input={}) {
     return {items:db.prepare(`SELECT id,name,role,active FROM staff WHERE ${where} ORDER BY lower(name),id LIMIT ? OFFSET ?`).all(...values,f.pageSize,(f.page-1)*f.pageSize).map(siteContactDto),total,page:f.page,pageSize:f.pageSize};});
 }
 export function getSettings(db,session) {
-  return transaction(db,()=>{authority(db,session);return {...context(db,session),canWrite:session.role==='owner',canWriteSite:['owner','administrator'].includes(session.role)};});
+  return transaction(db,()=>{authority(db,session);return {...context(db,session),recoveryScope:staffRecoveryScope(session),canWrite:session.role==='owner',canWriteSite:['owner','administrator'].includes(session.role)};});
+}
+export function settingsReceipt(db,session,kind,id){
+  settingsRequestId(id);if(!['organization','site'].includes(kind))throw Error('Invalid settings request');
+  return transaction(db,()=>{authority(db,session,kind);
+    const row=db.prepare('SELECT * FROM settings_requests WHERE id=? AND org_id=? AND site_id=? AND kind=? AND created_by=?').get(id,session.org_id,session.site_id,kind,session.principal_id);
+    return row?{requestId:row.id,kind:row.kind,request:JSON.parse(row.request_json),revision:row.revision}:null;
+  });
 }
 export function updateSettings(db,session,kind,input) {
   const value=settingsInput(kind,input);
   return transaction(db,()=>{
     authority(db,session,kind);
     const old=db.prepare('SELECT * FROM settings_requests WHERE id=? AND org_id=? AND site_id=?').get(input.requestId,session.org_id,session.site_id);
-    if(old) {if(old.kind!==kind || !sameSettingsRequest(JSON.parse(old.request_json),value)) throw new Error('Settings request conflict');return {revision:old.revision,duplicate:true};}
+    if(old) {if(old.created_by!==session.principal_id || old.kind!==kind || !sameSettingsRequest(JSON.parse(old.request_json),value)) throw new Error('Settings request conflict');return {revision:old.revision,duplicate:true};}
     const current=context(db,session)[kind];
     if(current.revision!==value.revision) throw new Error('Settings revision changed');
     if(current.name===value.name && (kind==='organization' ? current.supportEmail===value.supportEmail : current.timezone===value.timezone && (value.generationLanguages===undefined || JSON.stringify(current.generationLanguages)===JSON.stringify(value.generationLanguages)) && (value.primaryContactId===undefined || (value.primaryContactId===(current.primaryContact?.id ?? null) && value.deputyContactId===(current.deputyContact?.id ?? null))))) throw new Error('Settings unchanged');

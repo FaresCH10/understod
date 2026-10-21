@@ -1,5 +1,13 @@
 # Private Worker Offline Briefings
 
+21 October 2026 correction: frozen assignment language may differ from the
+current worker profile. Worker/profile/session/context/expiry and exact scope
+bindings remain; only the unnecessary language-equality restriction is removed.
+Notice GET explicitly selects the frozen language with captured context.
+Mixed EN-profile/UR-assignment encrypted save/read regression passes, with
+notice-mismatch and changed-profile denial retained. Clean77bbf986 passes1,323
+tests/four native-only skips. This is not physical-device/offline acceptance.
+
 Checkpoint: 2026-10-10. Partial S25/S41/A07/M4 coverage, not a production or
 full offline-readiness claim.
 

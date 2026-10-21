@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-21T06:13:06.196Z",
+  "pid": 7016,
+  "startedAtBeirut": "2026-10-21 09:12:27",
+  "expiresAfterSeconds": 1200,
+  "url": "http://127.0.0.1:3237/api/qa-staff",
+  "tab": "8",
+  "visible": false,
+  "build": ".clean-check/f4dfba7f-0f7e-44a1-83c7-b4428e49b897/workspace/dist",
+  "storage": "isolated in-memory synthetic",
+  "actualMicrophoneUsed": false,
+  "nativeMicrophonePermission": "denied by fixture",
+  "simulatedMicrophone": "fixed synthetic tone only",
+  "original3020AndDatabaseUntouched": true,
+  "requiredQaFixturesStopped": true,
+  "previewIntentionallyRunning": true,
+  "productionReady": false
+}

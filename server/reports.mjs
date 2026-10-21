@@ -1,18 +1,8 @@
 import { ensureRecordingSchema, isCurrentRecording, responseColumns } from "./recordings.mjs";
 import {NOW,transaction} from './db.mjs';
 import {ensureReportAudienceSchema,reportScope,selectReport} from './report-scope.mjs';
-
-export function reportPublicationFilters(input={}) {
-  if(!input || typeof input!=='object' || Array.isArray(input) || Object.keys(input).some(key=>!['search','from','through','page','pageSize'].includes(key)))throw Error('Invalid report publication filter');
-  const {search='',from='',through=''}=input,page=Number(input.page ?? 1),pageSize=Number(input.pageSize ?? 20);
-  if(typeof search!=='string' || search.length>120 || !Number.isSafeInteger(page) || page<1 || page>5000 || !Number.isInteger(pageSize) || pageSize<1 || pageSize>50)throw Error('Invalid report publication filter');
-  for(const value of [from,through]) {
-    if(typeof value!=='string')throw Error('Invalid report publication date');
-    if(value && (!/^\d{4}-\d{2}-\d{2}$/.test(value) || value.startsWith('0000') || !Number.isFinite(Date.parse(`${value}T00:00:00.000Z`)) || new Date(`${value}T00:00:00.000Z`).toISOString().slice(0,10)!==value))throw Error('Invalid report publication date');
-  }
-  if(from && through && from>through)throw Error('Invalid report publication date');
-  return {search:search.trim(),from,through,page,pageSize};
-}
+import {reportPublicationFilters} from './report-input.mjs';
+export {reportPublicationFilters} from './report-input.mjs';
 
 export function publicationDateBounds({from,through}) {
   const bounds={};

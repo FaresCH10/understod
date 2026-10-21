@@ -1,0 +1,14 @@
+{
+  "checkpoint":"worker-submission-history-local","date":"2026-10-16",
+  "overallEstimatePercent":73,"taskEstimatePercent":75,"productionVerdict":false,
+  "cleanRun":"056ee876-0556-49b9-b7aa-4280da7affdf","cleanExec":99457,"cleanExitCode":0,
+  "tests":{"total":1201,"passed":1197,"failed":0,"nativeOnlySkipped":4,"durationMs":340893.6029},
+  "source":{"files":847,"unchanged":true,"sha256":"42dd9e65e3370936877d75583b014b4dcb32705dd756b63fea4704951e5b7abf"},
+  "evaluations":{"contract":43,"pipeline":10,"scriptedRequests":24,"externalRequests":0},
+  "httpReaderArtifact":"worker-submissions-http-5cd9fbea-73a0-46f7-bac4-935aec6fbda1.json",
+  "httpReaderChecks":8,"httpReaderExec":48518,"httpReaderExitCode":0,
+  "fixture":{"memoryOnly":true,"httpMutations":0,"seededAttempts":6,"attemptsAfter":6,"cases":0,"externalCalls":0,"closed":true},
+  "browserAcceptance":false,"browserFailure":"Two webview attachment timeouts; inventories confirmed no QA tab; user preview not navigated",
+  "preservationArtifact":"clean-backup-preservation-f532f481-45cf-46c8-85e9-1db728a8fe19.json",
+  "remaining":["rendered-paging-delay-failure-session-localization-keyboard","immediate-receipt-screen","S23-S44-reference","real-device","assistive-technology","native-hosted-transport","live-quality"]
+}

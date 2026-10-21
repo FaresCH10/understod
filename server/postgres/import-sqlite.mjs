@@ -3,8 +3,10 @@ import { randomUUID } from 'node:crypto';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { verifyLocalBackup } from '../../scripts/local-backup.mjs';
-import { createPostgresPool } from './db.mjs';
+import { createPostgresPool, acquirePostgresClient } from './db.mjs';
 import { runMigrations, schemaName } from './migrate.mjs';
+import {validateImportedCaseVoice,normalizeImportedCaseVoice} from './staff-case-recording-import.mjs';
+import {inspectCaseWorkflowRuntimeGuards} from './case-workflow-permissions.mjs';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const columns = {
@@ -28,16 +30,22 @@ const columns = {
   attempts: 'id org_id assignment_id submission_id answer_text outcome reasons_json received_at',
   clarifications: 'id org_id assignment_id attempt_id reason owner_staff_id status notes created_at',
   jobs: 'id org_id site_id briefing_id revision kind status attempts due_at lease_until error created_at',
+  preparation_requests:'request_id org_id site_id briefing_id revision job_id generation request_json requested_by created_at',
   worker_grants: 'id org_id site_id worker_id token_hash expires_at redeemed_at revoked_at created_at',
   sessions: 'token_hash org_id site_id principal_type principal_id expires_at revoked_at grant_id access_mode',
   audit: 'id org_id site_id actor_type actor_id action object_id occurred_at',
   notification_reads:'event_id staff_id org_id site_id read_at',
   recordings: 'id org_id site_id assignment_id submission_id sha256 duration_seconds bytes status transcript error created_at attempts lease_until retry_at received_at lease_token',
+  processing_retries:'request_id org_id site_id requested_by kind job_id publication_id assignment_id generation request_json created_at',
   submission_receipts: 'sequence org_id assignment_id submission_id kind received_at',
   report_exports: 'id org_id site_id publication_id requested_by created_at expires_at status snapshot_json csv checksum attempts lease_token lease_until error',
+  report_export_retries:'request_id org_id site_id export_id requested_by attempts created_at',
   worker_imports: 'id org_id site_id requested_by filename sha256 status rows_json errors_json created_at expires_at imported_count',
   help_requests: 'case_id org_id site_id assignment_id text created_at',
   case_messages:'id org_id site_id case_id assignment_id actor_type actor_id language text request_hash created_at',
+  case_voice:'id request_id org_id site_id assignment_id worker_id kind requested_case_id case_id language sha256 bytes duration_seconds status created_at received_at lease_token lease_until cleanup_state cleanup_token cleanup_until cleanup_checked_at actor_type actor_id actor_role',
+  clarification_action_receipts:'request_id org_id site_id case_id actor_id actor_role kind request_hash effect result_status result_owner_id reason_code created_at',
+  clarification_creations:'request_id org_id site_id case_id assignment_id publication_id publication_version attempt_id actor_id actor_role request_hash created_at',
   publication_requests: 'request_id org_id site_id briefing_id publication_id request_json',
   publication_schedules:'id org_id site_id briefing_id request_json snapshot_hash recipients_json requested_by authority_json publish_at created_at state publication_id error finished_at attempts retry_at',
   publication_withdrawals: 'request_id org_id site_id publication_id version reason withdrawn_by occurred_at',
@@ -88,6 +96,9 @@ const omitted = ['staff_credentials', 'auth_attempts'];
 const sourceOnlyAuth = ['staff_recovery_mail', 'staff_recovery_tokens'];
 const optional = new Set(['organization_settings','site_settings','settings_requests','invoices','invoice_payments','invoice_voids','crews','crew_memberships','report_exports','worker_imports','recordings','help_requests','publication_requests','publication_withdrawals','directory_reactivations','briefing_copies','briefing_archives']);
 optional.add('draft_reviews');optional.add('briefing_review_requests');
+optional.add('report_export_retries');
+optional.add('preparation_requests');
+optional.add('processing_retries');
 optional.add('publication_report_audience');
 optional.add('briefing_language_requests');
 optional.add('pilot_inquiries');
@@ -97,6 +108,9 @@ optional.add('site_access_controls');optional.add('site_access_requests');
 optional.add('site_lifecycle');optional.add('site_lifecycle_requests');
 optional.add('case_routing');
 optional.add('case_messages');
+optional.add('case_voice');
+optional.add('clarification_action_receipts');
+optional.add('clarification_creations');
 optional.add('recording_notices');optional.add('recording_notice_requests');
 optional.add('notification_reads');
 optional.add('publication_schedules');
@@ -163,11 +177,13 @@ function snapshotRows(path) {
       const accepted = evidence.get(`${row.assignment_id}\0${row.submission_id}`);
       if (!accepted || accepted.kind !== row.kind || accepted.org_id !== row.org_id || accepted.received_at !== row.received_at) throw new Error('Source receipt evidence mismatch');
     }
+    validateImportedCaseVoice(result);
     return result;
   } finally { db.close(); }
 }
 
 function valuesFor(table, row, now) {
+  if(table==='case_voice')return normalizeImportedCaseVoice(row,now);
   const copy = { ...row };
   if(table==='attempts'){
     const value=JSON.parse(copy.reasons_json);
@@ -229,7 +245,7 @@ export async function importSqliteBackup(pool, { source, schema, requestId, data
   const { databasePath, manifest } = await verifyLocalBackup(source);
   const snapshot = snapshotRows(databasePath);
   const counts = Object.fromEntries(tables.map((table) => [table, snapshot[table].length]));
-  const client = await pool.connect(); let begun = false;
+  const client = await acquirePostgresClient(pool); let begun = false, discard = false;
   try {
     await client.query('BEGIN'); begun = true;
     await client.query("SELECT set_config('search_path',quote_ident($1)||',pg_catalog',true)", [schema]);
@@ -251,6 +267,7 @@ export async function importSqliteBackup(pool, { source, schema, requestId, data
       if ((await client.query(`SELECT 1 FROM ${table.identifier} LIMIT 1`)).rows.length) throw new Error('Target schema must be empty');
     }
     const now = new Date().toISOString();
+    if(snapshot.case_voice.length)await inspectCaseWorkflowRuntimeGuards(client,schema);
     for (const table of tables) {
       const fields = columns[table].split(' ');
       if (table === 'assignments') fields.push('language');
@@ -262,6 +279,9 @@ export async function importSqliteBackup(pool, { source, schema, requestId, data
       if(table==='report_exports')fields.push('filters_json');
       const placeholders = fields.map((_, index) => `$${index + 1}`).join(',');
       const sql = `INSERT INTO "${table}" (${fields.map((field) => `"${field}"`).join(',')}) ${table === 'submission_receipts' ? 'OVERRIDING SYSTEM VALUE ' : ''}VALUES (${placeholders})`;
+      // Maintenance-only, empty-target import of validated history. Runtime roles
+      // cannot ALTER, and rollback restores the guard even on insertion failure.
+      if(table==='case_voice'&&snapshot[table].length)await client.query('ALTER TABLE case_voice DISABLE TRIGGER case_voice_guard');
       for (const row of snapshot[table]) {
         const copy = valuesFor(table, row, now);
         if(table==='site_settings')copy.generation_languages_json ??= '["en","ar","ur"]';
@@ -270,6 +290,7 @@ export async function importSqliteBackup(pool, { source, schema, requestId, data
         if(table==='report_exports')copy.filters_json ??= '{"crewId":"","responseFrom":"","responseThrough":""}';
         await client.query(sql, fields.map((field) => copy[field]));
       }
+      if(table==='case_voice'&&snapshot[table].length)await client.query('ALTER TABLE case_voice ENABLE TRIGGER case_voice_guard');
       const count = (await client.query(`SELECT COUNT(*)::int AS n FROM "${table}"`)).rows[0].n;
       if (count !== counts[table]) throw new Error('Migration count mismatch');
     }
@@ -289,12 +310,12 @@ export async function importSqliteBackup(pool, { source, schema, requestId, data
       [requestId, manifest.id, manifest.database.sha256, dataClass, JSON.stringify(counts)]);
     for (const site of snapshot.sites) await client.query(`INSERT INTO audit(id,org_id,site_id,actor_type,actor_id,action,object_id,occurred_at)
       VALUES ($1,$2,$3,'system','sqlite-migration','sqlite.imported',$4,$5)`, [randomUUID(),site.org_id,site.id,requestId,now]);
-    await client.query(dryRun ? 'ROLLBACK' : 'COMMIT'); begun = false;
+    discard = true; await client.query(dryRun ? 'ROLLBACK' : 'COMMIT'); begun = false; discard = false;
     return { requestId, dryRun, duplicate: false, counts, credentialsImported: false };
   } catch (error) {
-    if (begun) { try { await client.query('ROLLBACK'); } catch (rollbackError) { error.cause = rollbackError; } }
+    if (begun) { try { await client.query('ROLLBACK'); } catch (rollbackError) { discard = true; error.cause = rollbackError; } }
     throw error;
-  } finally { client.release(); }
+  } finally { client.release(discard || undefined); }
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {

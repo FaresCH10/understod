@@ -40,8 +40,8 @@ function authority(db,session,write=false){
   return {...session,...(session.principal_type==='worker'?{language:row.language}:{})};
 }
 const current=(db,session)=>db.prepare('SELECT * FROM recording_notices WHERE org_id=? AND site_id=?').get(session.org_id,session.site_id);
-export function getRecordingNotice(db,session){
-  ensureRecordingNoticeSchema(db);return transaction(db,()=>{const principal=authority(db,session);return {...noticeView(current(db,session),principal),...(principal.principal_type==='staff'?{recoveryScope:staffRecoveryScope(principal)}:{})};});
+export function getRecordingNotice(db,session,{language}={}){
+  ensureRecordingNoticeSchema(db);return transaction(db,()=>{const principal=authority(db,session);return {...noticeView(current(db,session),principal,language),...(principal.principal_type==='staff'?{recoveryScope:staffRecoveryScope(principal)}:{})};});
 }
 export function recordingNoticeReceipt(db,session,requestId){
   noticeRequestId(requestId);ensureRecordingNoticeSchema(db);

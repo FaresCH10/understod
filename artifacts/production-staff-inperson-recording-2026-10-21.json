@@ -1,0 +1,284 @@
+{
+  "checkedAt": "2026-10-21T06:07:27.167Z",
+  "scope": "local-private-staff-inperson-recording",
+  "productionReady": false,
+  "progress": {
+    "overall": 80,
+    "range": [
+      73,
+      86
+    ],
+    "staffCaseDetailAndRecovery": 90,
+    "previousCaseDetailAndRecovery": 88,
+    "staffInPersonRecording": 85,
+    "previousStaffInPersonRecording": 0,
+    "method": "Engineering estimates of implementation and verification, not test pass rates or production acceptance."
+  },
+  "clean": {
+    "id": "f4dfba7f-0f7e-44a1-83c7-b4428e49b897",
+    "startedAt": "2026-10-21T05:48:18.594Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-21T05:48:20.550Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T05:48:35.856Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-21T05:48:35.857Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T05:48:40.128Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-21T05:48:40.128Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T05:53:49.155Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-21T05:53:49.157Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T05:53:49.823Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-21T05:53:49.823Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T05:53:53.798Z"
+      }
+    ],
+    "source": {
+      "files": 909,
+      "sha256": "a74f05915c9e392d6bbfe9b708c933a372e69955b9d18343ba9507f95ae4656c"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-21T05:53:54.547Z",
+    "parentSession": 3879,
+    "parentExitObserved": true,
+    "parentExitCode": 0,
+    "summary": {
+      "tests": 1316,
+      "pass": 1312,
+      "fail": 0,
+      "skipped": 4
+    },
+    "durationMs": 308709.5333
+  },
+  "sourceNow": {
+    "files": 909,
+    "sha256": "a74f05915c9e392d6bbfe9b708c933a372e69955b9d18343ba9507f95ae4656c",
+    "matchesClean": true
+  },
+  "initialClean": {
+    "id": "1dd4ebcb-18ef-437d-9a6f-2397688f6a86",
+    "startedAt": "2026-10-20T18:50:10.444Z",
+    "state": "failed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-20T18:50:11.616Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T18:50:20.466Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-20T18:50:20.467Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T18:50:24.721Z"
+      },
+      {
+        "name": "tests",
+        "state": "failed",
+        "startedAt": "2026-10-20T18:50:24.722Z",
+        "exitCode": 1,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T18:56:41.399Z"
+      }
+    ],
+    "source": {
+      "files": 905,
+      "sha256": "0bc1e28cb0b795186f9a474b267bc76d8e43f6d10fbe97d26a90d1781ebcfb40"
+    },
+    "finishedAt": "2026-10-20T18:56:41.401Z",
+    "parentSession": 85564,
+    "parentExitObserved": true,
+    "parentExitCode": 1,
+    "summary": {
+      "tests": 1309,
+      "pass": 1302,
+      "fail": 3,
+      "skipped": 4
+    },
+    "accepted": false,
+    "repairs": "Two094 migration counts corrected to095. Worker-freshness test passed unchanged alone; timing inferred, not independently reproduced. Only intentional staleness now uses150ms; unchanged production30s admission/recovery window removes the150ms completion assumption. Three focused repairs pass."
+  },
+  "interruptedClean": {
+    "id": "488a9862-c757-4979-a0a6-ce7531d36d45",
+    "startedAt": "2026-10-20T18:58:53.737Z",
+    "state": "running",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-20T18:58:55.011Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T18:59:06.642Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-20T18:59:06.643Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T18:59:11.146Z"
+      },
+      {
+        "name": "tests",
+        "state": "running",
+        "startedAt": "2026-10-20T18:59:11.147Z"
+      }
+    ],
+    "source": {
+      "files": 905,
+      "sha256": "88c2f4554897f7b5fc48c9b844538d9f2add0091381b9cf73322e7c6f251510f"
+    },
+    "parentSession": 51919,
+    "parentHandleMissing": true,
+    "parentExitObserved": false,
+    "accepted": false,
+    "reason": "Interrupted during tests; partial log and stale running result are not completion evidence."
+  },
+  "evaluations": {
+    "contractCases": 43,
+    "pipelineChecks": 10,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "browser": {
+    "path": "artifacts/staff-recording-browser-final-2026-10-21.json",
+    "assetsMatchClean": true,
+    "assetFiles": 60,
+    "ownedFixtureProcessesAbsent": true,
+    "parentExitCodeUnavailable": true,
+    "tabsClosed": true,
+    "viewportReset": true,
+    "original3020Untouched": true,
+    "limits": [
+      "Synthetic fixed-tone simulator only, not physical microphone, codec or phone acceptance",
+      "Pagination loading removes the focused page button; the next Tab remains inside the modal; explicit page-change focus is still to improve",
+      "Record action is inside the follow-up panel, not yet the exact side-by-side reference composition",
+      "No independent language or assistive-technology acceptance",
+      "No current migration095 native or hosted acceptance"
+    ]
+  },
+  "verified": [
+    "Both-engine staff-author audio staging, exact receipts, private authenticated ranges and actual audit clocks",
+    "Original author/role and declared language independent from assignment language",
+    "No worker answer, chat message, submission receipt, AI assessment or automatic resolution",
+    "Conditional-save uncertainty, corrupt readback, failed audit and revoked staff",
+    "Deletion requires physical absence; interrupted cleanup and late-object rechecks",
+    "Private WAV backup/restore and guarded historical import; privacy ledger v8 author/purpose binding",
+    "Actual separate API/worker acceptance/cleanup, immutable receipt, restricted cleanup columns and ACL/guard drift denial",
+    "Captured notice/capture/preview/explicit save and metadata-only browser recovery",
+    "Actual reload and receipt GET without reupload, Cancel/clear/save focus, one-click restart, private playback and failed integrity",
+    "Read/context fail-closed behavior, bounded history and twelve EN/AR/UR width checks"
+  ],
+  "focused": {
+    "staffHttpAndDomain": {
+      "session": 35142,
+      "exitCode": 0,
+      "tests": 11,
+      "passed": 11
+    },
+    "backendPrivacyImportTimeline": {
+      "session": 68482,
+      "exitCode": 0,
+      "tests": 39,
+      "passed": 39
+    },
+    "permissions": {
+      "tests": 3,
+      "passed": 3,
+      "exitCode": 0
+    },
+    "privacyAuthorBinding": {
+      "tests": 1,
+      "passed": 1,
+      "exitCode": 0
+    },
+    "finalClientAndHttp": {
+      "tests": 18,
+      "passed": 18,
+      "exitCode": 0
+    }
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-b4d23492-d884-4354-a790-b0e729de4c49.json",
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 75,
+    "allHashesMatch": true,
+    "filesScanned": 5841,
+    "configuredSecretMatches": 0
+  },
+  "schemaMigration": 95,
+  "privacyLedgerFormat": "understood-postgres-privacy-ledger-v8",
+  "workerTables": {
+    "ordinaryDml": 84,
+    "columnRestricted": 10,
+    "writeCapable": 94,
+    "readOnly": 34,
+    "hidden": 11
+  },
+  "verificationLimits": [
+    "Synthetic fixed-tone simulator only, not physical microphone, codec or phone acceptance",
+    "Pagination loading removes the focused page button; the next Tab remains inside the modal; explicit page-change focus is still to improve",
+    "Record action is inside the follow-up panel, not yet the exact side-by-side reference composition",
+    "No independent language or assistive-technology acceptance",
+    "No current migration095 native or hosted acceptance",
+    "Denied/empty/interrupted/storing and competing-note browser checks belong to the separately saved preliminary candidate",
+    "No complete backup/provider/device erasure proof or privacy-approved real-worker AI path"
+  ],
+  "cloudDatabaseStorageChanged": false,
+  "nativeAcceptanceClaimed": false,
+  "liveProviderMailCalls": 0,
+  "realWorkerDataUsed": false,
+  "actualMicrophoneUsed": false,
+  "billingChanged": false,
+  "deployment": false,
+  "nextTask": "Verify the actual worker voice-preview, uncertain-upload, exact receipt and local-discard journeys; then remaining reference controls, pagination focus and broader accessibility."
+}

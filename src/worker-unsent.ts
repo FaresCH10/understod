@@ -1,5 +1,10 @@
 export type WorkerLeaveAction='back'|'logout'|'type';
 export type UnsentWork={answer:string;help:string;audio:boolean};
+export function workerInputAvailability(work:UnsentWork&{helpVoice:boolean;conversation:boolean}){
+  return {answerBlocked:!!work.help.trim()||work.helpVoice||work.conversation,
+    helpBlocked:!!work.answer.trim()||work.audio||work.conversation,
+    conversationBlocked:!!work.answer.trim()||work.audio||!!work.help.trim()||work.helpVoice};
+}
 export function recorderHasUnsent(phase:string){return ['requesting','recording','preview','uploading'].includes(phase);}
 export function workerLeaveRequired(action:WorkerLeaveAction,work:UnsentWork){
   return work.audio || (action!=='type' && !!(work.answer.trim() || work.help.trim()));

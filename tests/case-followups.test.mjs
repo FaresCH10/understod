@@ -15,6 +15,7 @@ import {resolveCaseFollowup} from '../server/ai/case-followup-config.mjs';
 import {caseFollowupInputHash} from '../server/ai/case-followup-bundle.mjs';
 import {GEMINI_MODELS} from '../server/ai/gemini.mjs';
 import {encodeWav} from '../src/audio.ts';
+import {listCaseTimeline} from '../server/postgres/case-timeline.mjs';
 
 const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 const worker={principal_type:'worker',principal_id:'worker-14',org_id:'cedar',site_id:'beirut'};
@@ -55,6 +56,11 @@ test('queued follow-up freezes scope and exact command, delivers checked transla
     await assert.rejects(followupReceipt(f.pool,{...owner,principal_id:'other',role:'supervisor'},f.caseId,f.input.requestId),/unavailable/);
     assert.equal(await f.process(),true);assert.equal(await f.process(),false);
     const receipt=await followupReceipt(f.pool,owner,f.caseId,f.input.requestId);assert.equal(receipt.status,'delivered');assert.ok(receipt.deliveredAt);
+    const timeline=await listCaseTimeline(f.pool,owner,f.caseId);
+    assert.equal(timeline.items.filter(row=>row.kind==='followup_queued').length,1);assert.equal(timeline.items.filter(row=>row.kind==='followup_delivered').length,1);
+    assert.equal(timeline.items.filter(row=>row.kind==='message_received').length,0);
+    assert.equal(timeline.items.find(row=>row.kind==='followup_delivered').occurredAt,receipt.deliveredAt);
+    assert.equal(JSON.stringify(timeline).includes(f.input.text),false);
     assert.deepEqual(await f.queue(),receipt);
     const thread=await listCaseMessages(f.pool,worker,f.caseId);assert.equal(thread.total,1);assert.match(thread.items[0].text,/العناصر/);assert.match(thread.items[0].audioUrl,/\/audio$/);
     assert.deepEqual(f.calls,['translate','check',['speech',thread.items[0].text,'ar']]);
@@ -148,7 +154,9 @@ test('Gemini follow-up dispatch requires persisted quotas and journals exactly t
     const live=resolveCaseFollowup({UNDERSTOOD_CASE_FOLLOWUP_ADAPTER:'gemini',UNDERSTOOD_DATA_CLASS:'synthetic',GEMINI_API_KEY:'synthetic-key'},
       {fetchImpl:async(_url,options)=>{
         assert.equal(options.headers['x-goog-api-key'],'synthetic-key');
-        const index=calls++,part=index<2?{text:JSON.stringify(outputs[index])}:{inlineData:{mimeType:'audio/wav',data:wav().toString('base64')}};
+        const index=calls++;
+        if(index===2)return Response.json({status:'completed',model:GEMINI_MODELS.speech,steps:[{type:'model_output',content:[{type:'audio',mime_type:'audio/wav',data:wav().toString('base64')}]}]});
+        const part={text:JSON.stringify(outputs[index])};
         return new Response(JSON.stringify({candidates:[{finishReason:'STOP',content:{parts:[part]}}]}),{status:200});
       }});
     Object.assign(f.adapter,live);await f.queue();await f.process();assert.equal(calls,0);
@@ -182,8 +190,8 @@ test('English metered follow-up links one accepted speech operation, with exact 
     await requestHelp(f.pool,person,'assignment-2',{requestId:caseId,text:'Synthetic English help'});
     const adapter=resolveCaseFollowup({UNDERSTOOD_CASE_FOLLOWUP_ADAPTER:'gemini',UNDERSTOOD_DATA_CLASS:'synthetic',GEMINI_API_KEY:'synthetic-key'},
       {fetchImpl:async(url,options)=>{
-        calls++;assert.match(url,new RegExp(`${GEMINI_MODELS.speech}:generateContent$`));assert.match(options.body,/Please explain where unfinished items go/);
-        return Response.json({candidates:[{finishReason:'STOP',content:{parts:[{inlineData:{mimeType:'audio/wav',data:wav().toString('base64')}}]}}]});
+        calls++;assert.equal(url,'https://generativelanguage.googleapis.com/v1beta/interactions');assert.equal(JSON.parse(options.body).model,GEMINI_MODELS.speech);assert.match(options.body,/Please explain where unfinished items go/);
+        return Response.json({status:'completed',model:GEMINI_MODELS.speech,steps:[{type:'model_output',content:[{type:'audio',mime_type:'audio/wav',data:wav().toString('base64')}]}]});
       }});
     const options={adapter,dataClass:'synthetic'},input={requestId:randomUUID(),text:f.input.text};
     await queueCaseFollowup(f.pool,owner,caseId,input,options);

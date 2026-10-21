@@ -33,7 +33,7 @@ function poolFor(db){let failure='',snapshots=0;return {async connect(){return {
   if(sql==='SELECT pg_export_snapshot() AS id'){snapshots++;return {rows:[{id:'00000001-00000001-1'}]};}
   return args?.length?db.query(sql,args):(await db.exec(sql)).at(-1)||{rows:[]};
 },release(){}};},fail(value){failure=value;},get snapshots(){return snapshots;}};}
-async function fixture({retiredPublication=false}={}){
+async function fixture({retiredPublication=false,staffVoice=false}={}){
   const db=new PGlite(),pool=poolFor(db),root=await mkdtemp(join(tmpdir(),'understood-privacy-ledger-'));
   await db.exec(`CREATE SCHEMA ${schema};SET search_path TO ${schema},pg_catalog`);await runMigrations(pool,{schema});
   await db.exec(`INSERT INTO organizations VALUES('org','SECRET_ORGANIZATION_LABEL');INSERT INTO sites VALUES('site','org','SECRET_SITE_LABEL','UTC');
@@ -51,6 +51,12 @@ async function fixture({retiredPublication=false}={}){
   await db.query(`INSERT INTO recordings(id,org_id,site_id,assignment_id,submission_id,sha256,duration_seconds,bytes,status,received_at,transcript)
     VALUES($1,'org','site','assignment','recorded',$2,1,100,'received',clock_timestamp(),'SECRET_TRANSCRIPT')`,[recordingId,'a'.repeat(64)]);
   await saveRetention(pool,session,{requestId:randomUUID(),revision:0,audioDays:30,confirmed:true},{schema});
+  if(staffVoice){
+    await db.exec("INSERT INTO clarifications(id,org_id,site_id,assignment_id,reason,status) VALUES('staff-case','org','site','assignment','Staff follow-up','open')");
+    await db.query(`INSERT INTO case_voice(id,request_id,org_id,site_id,assignment_id,worker_id,kind,requested_case_id,language,sha256,bytes,duration_seconds,status,lease_token,lease_until,actor_type,actor_id,actor_role)
+      VALUES($1,$2,'org','site','assignment','worker','in_person','staff-case','ur',$3,32044,1,'storing',$4,clock_timestamp()+interval '120 seconds','staff','owner','owner')`,[randomUUID(),randomUUID(),'d'.repeat(64),randomUUID()]);
+    await db.exec("UPDATE case_voice SET status='received',case_id=requested_case_id,received_at=clock_timestamp(),lease_token=NULL,lease_until=NULL");
+  }
   if(retiredPublication)await db.exec(`INSERT INTO publications(id,org_id,site_id,briefing_id,version,snapshot_json,state)
     VALUES('retired-pub','org','site','retired-brief',1,'{"body":"SECRET_RETIRED_PUBLICATION"}','published');
     INSERT INTO assignments(id,org_id,site_id,publication_id,worker_id,language,due_at)
@@ -75,6 +81,19 @@ async function fixture({retiredPublication=false}={}){
     },
     async close(){await target.close();await db.close();await rm(root,{recursive:true,force:true});}};
 }
+
+test('privacy ledger v8 binds private staff audio to its historical author without exporting audio or staff labels',async()=>{
+  const f=await fixture({staffVoice:true});try{
+    await f.db.exec("UPDATE staff SET role='auditor',active=false WHERE id='owner'");
+    const ledger=await exportPrivacyLedger(f.pool,f.baseline,f.options),voice=ledger.tables.case_voice[0];
+    assert.equal(voice.actor_type,'staff');assert.equal(voice.actor_id,'owner');assert.equal(voice.actor_role,'owner');assert.equal(voice.kind,'in_person');
+    assert.doesNotMatch(JSON.stringify(ledger),/SECRET_|audioUrl|storageKey/);validatePrivacyLedger(ledger,f.baseline);
+    for(const change of [{actor_id:'foreign'},{actor_role:'auditor'},{actor_type:'worker'},{kind:'reply'}]){
+      const changed=structuredClone(ledger);Object.assign(changed.tables.case_voice[0],change);assert.throws(()=>validatePrivacyLedger(changed,f.baseline),/authorship/);
+    }
+    const old=structuredClone(ledger);old.format='understood-postgres-privacy-ledger-v7';assert.throws(()=>validatePrivacyLedger(old,f.baseline),/Invalid privacy ledger/);
+  }finally{await f.close();}
+});
 
 async function expiredBriefingLedger(f) {
   await saveBriefingRetention(f.pool,session,{requestId:randomUUID(),revision:0,days:7,confirmed:true},{schema});
@@ -218,7 +237,7 @@ test('ledger exposes historical activity and briefing expiry without silently ce
     await saveActivityRetention(f.pool,session,{requestId:randomUUID(),revision:1,days:null,confirmed:true},{schema});
     await saveBriefingRetention(f.pool,session,{requestId:randomUUID(),revision:1,days:null,confirmed:true},{schema});
     const ledger=await exportPrivacyLedger(f.pool,f.baseline,f.options);
-    assert.equal(ledger.format,'understood-postgres-privacy-ledger-v7');assert.doesNotMatch(JSON.stringify(ledger),/SECRET_/);
+    assert.equal(ledger.format,'understood-postgres-privacy-ledger-v8');assert.doesNotMatch(JSON.stringify(ledger),/SECRET_/);
     await f.quarantine();const options={isolatedTarget:true,writersStopped:true},before=await inventory({pool:f.targetPool});
     const report=await planPrivacyReconciliation(f.targetPool,f.baseline,ledger,options);
     assert.deepEqual(report.conflicts,[]);assert.deepEqual(report.historicalContentReplayPending,{activity:1,briefing:1});

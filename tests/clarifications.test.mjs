@@ -7,6 +7,9 @@ import { seed } from '../server/seed.mjs';
 import { metrics } from '../server/domain.mjs';
 import { ensureRecordingSchema } from '../server/recordings.mjs';
 import { ensureClarificationSchema,requestHelp,workerHelpCases,listClarifications,getClarification,assignClarification,resolveClarification } from '../server/clarifications.mjs';
+import {checkedClarificationPage,checkedClarificationDetail,checkedClarificationActionReceipt} from '../src/clarification-contract.ts';
+import {clarificationActionHash} from '../src/clarification-action-recovery.ts';
+import {checkedCaseTimeline} from '../src/case-timeline.ts';
 
 const maya={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 const worker={principal_type:'worker',principal_id:'worker-30',org_id:'cedar',site_id:'beirut'};
@@ -101,7 +104,7 @@ test('clarification HTTP shares paged contract and denies worker/staff/foreign c
   const base=`http://127.0.0.1:${server.address().port}/api`;
   const request=async(path,cookie,body) => {
     const headers={...(cookie ? {cookie} : {}),'content-type':'application/json'};
-    if(body!==undefined && path.startsWith('/worker/'))headers['x-client-session-context']=(await (await fetch(base+'/session',{headers:{cookie}})).json()).clientContext || '';
+    if(cookie && (body!==undefined && path.startsWith('/worker/') || path.startsWith('/clarifications')))headers['x-client-session-context']=(await (await fetch(base+'/session',{headers:{cookie}})).json()).clientContext || '';
     return fetch(base+path,{headers,...(body===undefined ? {} : {method:'POST',body:JSON.stringify(body)})});
   };
   const login=async (principal) => (await request('/demo/session',null,{principal})).headers.get('set-cookie').split(';')[0];
@@ -109,6 +112,22 @@ test('clarification HTTP shares paged contract and denies worker/staff/foreign c
     const staff=await login('maya'),workerCookie=await login('worker-30'),other=await login('harbor-owner');
     assert.equal((await request('/clarifications')).status,401);
     const list=await (await request('/clarifications?status=open&pageSize=2',staff)).json();assert.equal(list.total,3);assert.equal(list.rows.length,2);
+    const staffContext=(await (await request('/session',staff)).json()).clientContext;
+    checkedClarificationPage(list,1,2,staffContext);
+    const detail=await (await request(`/clarifications/${list.rows[1].id}`,staff)).json();checkedClarificationDetail(detail,detail.id,staffContext);
+    const timelinePath=`/clarifications/${detail.id}/timeline`,timelineResponse=await request(timelinePath,staff),timeline=checkedCaseTimeline(await timelineResponse.json(),detail.id,1,staffContext);
+    assert.equal(timelineResponse.status,200);assert.equal(timelineResponse.headers.get('cache-control'),'no-store');assert.ok(timeline.items.some(row=>row.kind==='response_received'));
+    assert.equal((await request(timelinePath,workerCookie)).status,403);assert.equal((await request(timelinePath,other)).status,404);
+    assert.equal((await fetch(base+timelinePath,{headers:{cookie:staff}})).status,409);
+    assert.equal((await fetch(base+timelinePath,{headers:{cookie:staff,'x-client-session-context':'f'.repeat(64)}})).status,409);
+    for(const query of ['?page=1&page=2','?pageSize=50','?org_id=harbor'])assert.equal((await request(timelinePath+query,staff)).status,400);
+    const content={kind:'assign',ownerId:detail.owner_staff_id==='maya'?null:'maya',expectedOwnerId:detail.owner_staff_id},pending={id:randomUUID(),kind:'assign',hash:await clarificationActionHash(content)};
+    const action=await request(`/clarifications/${detail.id}/assign`,staff,{requestId:pending.id,ownerId:content.ownerId,expectedOwnerId:content.expectedOwnerId});assert.equal(action.status,200);
+    const accepted=checkedClarificationActionReceipt(await action.json(),detail.id,pending,staffContext);assert.equal(accepted.effect,'applied');
+    const lookup=await request(`/clarifications/${detail.id}/actions/${pending.id}`,staff);assert.equal(lookup.status,200);assert.deepEqual(await lookup.json(),accepted);
+    assert.equal((await request(`/clarifications/${detail.id}/actions/${pending.id}?unexpected=1`,staff)).status,400);
+    assert.equal((await request('/clarifications?status=open&status=all',staff)).status,400);
+    assert.equal((await fetch(base+'/clarifications',{headers:{cookie:staff}})).status,409);
     const id=list.rows[0].id;
     assert.equal((await request(`/clarifications/${id}`,workerCookie)).status,403);
     assert.equal((await request(`/clarifications/${id}`,other)).status,404);
@@ -119,6 +138,14 @@ test('clarification HTTP shares paged contract and denies worker/staff/foreign c
     assert.equal((await request(`/clarifications/${id}/resolve`,staff,{notes:'Changed notes.'})).status,409);
     const helpId=randomUUID();assert.equal((await request('/worker/briefings/assignment-30/help',workerCookie,{requestId:helpId,text:'Please help me'})).status,201);
     const publicCases=await (await request('/worker/briefings/assignment-30/help',workerCookie)).json();assert.equal(publicCases[0].helpText,'Please help me');assert.equal(Object.hasOwn(publicCases[0],'notes'),false);
+    const context=(await (await request('/session',workerCookie)).json()).clientContext;
+    const historyResponse=await request('/worker/briefings/assignment-30/help-history?page=1&pageSize=5',workerCookie),history=await historyResponse.json();
+    assert.equal(historyResponse.status,200);assert.equal(historyResponse.headers.get('cache-control'),'no-store');assert.equal(history.clientContext,context);
+    assert.equal(history.assignment.id,'assignment-30');assert.equal(history.assignment.version,3);assert.equal(history.cases[0].helpText,'Please help me');assert.equal(history.total,1);
+    assert.equal((await request('/worker/briefings/assignment-30/help-history?pageSize=50',workerCookie)).status,400);
+    assert.equal((await request('/worker/briefings/assignment-29/help-history',workerCookie)).status,404);
+    assert.equal((await request('/worker/briefings/assignment-30/help-history',staff)).status,403);
+    assert.equal((await fetch(base+'/worker/briefings/assignment-30/help-history',{headers:{cookie:workerCookie,'x-client-session-context':'f'.repeat(64)}})).status,409);
     assert.equal((await request('/worker/briefings/assignment-29/help',workerCookie)).status,404);
     assert.equal((await request('/worker/briefings/assignment-30/help',staff)).status,403);
     assert.equal((await (await request('/session',staff)).json()).staffRole,'owner');

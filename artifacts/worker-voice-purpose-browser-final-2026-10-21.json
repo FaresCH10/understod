@@ -1,0 +1,517 @@
+{
+  "noticeGates": [
+    {
+      "mode": "fail-notice",
+      "recordingDisabled": true,
+      "privateDiagnosticShown": false
+    },
+    {
+      "mode": "invalid-notice",
+      "recordingDisabled": true,
+      "privateDiagnosticShown": false
+    },
+    {
+      "mode": "wrong-notice-language",
+      "recordingDisabled": true,
+      "privateDiagnosticShown": false
+    }
+  ],
+  "permissionCopy": [
+    {
+      "locale": "en",
+      "purpose": "help",
+      "verified": true
+    },
+    {
+      "locale": "ar",
+      "purpose": "reply",
+      "verified": true
+    },
+    {
+      "locale": "ur",
+      "purpose": "reply",
+      "verified": true
+    }
+  ],
+  "measurements": [
+    {
+      "document": 305,
+      "locale": "en",
+      "recorders": [
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        },
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        }
+      ],
+      "requestedWidth": 320,
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "en",
+      "recorders": [
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        },
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        }
+      ],
+      "requestedWidth": 390,
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "en",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 768,
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "en",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 1440,
+      "width": 1440
+    },
+    {
+      "document": 305,
+      "locale": "ar",
+      "recorders": [
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        },
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        }
+      ],
+      "requestedWidth": 320,
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "ar",
+      "recorders": [
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        },
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        }
+      ],
+      "requestedWidth": 390,
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "ar",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 768,
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "ar",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 1440,
+      "width": 1440
+    },
+    {
+      "document": 305,
+      "locale": "ur",
+      "recorders": [
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        },
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        }
+      ],
+      "requestedWidth": 320,
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "ur",
+      "recorders": [
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        },
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        }
+      ],
+      "requestedWidth": 390,
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "ur",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 768,
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "ur",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 1440,
+      "width": 1440
+    }
+  ],
+  "screenshots": [
+    "D:/understod/artifacts/worker-voice-purpose-ur-390-2026-10-21.png"
+  ],
+  "storingBeforeTimeout": {
+    "helpPosts": 0,
+    "replyPosts": 1,
+    "receiptReads": 0,
+    "playbackReads": 0,
+    "noticeReads": 9,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 6,
+    "postRequestIds": [
+      "9f91054c-d99a-4aac-8c9a-75029c1687ab"
+    ],
+    "actualMicrophoneUsed": false,
+    "externalCalls": 0,
+    "held": true,
+    "objects": 1,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "cases": 1,
+    "messages": 1,
+    "recordings": [
+      {
+        "request_id": "9f91054c-d99a-4aac-8c9a-75029c1687ab",
+        "kind": "reply",
+        "assignment_id": "answered",
+        "status": "storing",
+        "received_at": null
+      }
+    ],
+    "assignmentLanguages": [
+      {
+        "id": "answered",
+        "language": "en"
+      },
+      {
+        "id": "fresh",
+        "language": "en"
+      }
+    ],
+    "profileLanguage": "en"
+  },
+  "storingAfterReceipt": {
+    "helpPosts": 0,
+    "replyPosts": 1,
+    "receiptReads": 1,
+    "playbackReads": 0,
+    "noticeReads": 9,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 6,
+    "postRequestIds": [
+      "9f91054c-d99a-4aac-8c9a-75029c1687ab"
+    ],
+    "actualMicrophoneUsed": false,
+    "externalCalls": 0,
+    "held": true,
+    "objects": 1,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "cases": 1,
+    "messages": 1,
+    "recordings": [
+      {
+        "request_id": "9f91054c-d99a-4aac-8c9a-75029c1687ab",
+        "kind": "reply",
+        "assignment_id": "answered",
+        "status": "storing",
+        "received_at": null
+      }
+    ],
+    "assignmentLanguages": [
+      {
+        "id": "answered",
+        "language": "en"
+      },
+      {
+        "id": "fresh",
+        "language": "en"
+      }
+    ],
+    "profileLanguage": "en"
+  },
+  "afterStoringRecovery": {
+    "helpPosts": 0,
+    "replyPosts": 1,
+    "receiptReads": 2,
+    "playbackReads": 0,
+    "noticeReads": 10,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 6,
+    "postRequestIds": [
+      "9f91054c-d99a-4aac-8c9a-75029c1687ab"
+    ],
+    "actualMicrophoneUsed": false,
+    "externalCalls": 0,
+    "held": false,
+    "objects": 1,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "cases": 1,
+    "messages": 2,
+    "recordings": [
+      {
+        "request_id": "9f91054c-d99a-4aac-8c9a-75029c1687ab",
+        "kind": "reply",
+        "assignment_id": "answered",
+        "status": "received",
+        "received_at": "2026-10-21T11:42:32.394Z"
+      }
+    ],
+    "assignmentLanguages": [
+      {
+        "id": "answered",
+        "language": "en"
+      },
+      {
+        "id": "fresh",
+        "language": "en"
+      }
+    ],
+    "profileLanguage": "en"
+  },
+  "afterFailedRecovery": {
+    "helpPosts": 0,
+    "replyPosts": 2,
+    "receiptReads": 3,
+    "playbackReads": 0,
+    "noticeReads": 11,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 7,
+    "postRequestIds": [
+      "9f91054c-d99a-4aac-8c9a-75029c1687ab",
+      "f1cf52cf-ba31-42e4-840f-c61982d52933"
+    ],
+    "actualMicrophoneUsed": false,
+    "externalCalls": 0,
+    "held": false,
+    "objects": 2,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "cases": 1,
+    "messages": 2,
+    "recordings": [
+      {
+        "request_id": "9f91054c-d99a-4aac-8c9a-75029c1687ab",
+        "kind": "reply",
+        "assignment_id": "answered",
+        "status": "received",
+        "received_at": "2026-10-21T11:42:32.394Z"
+      },
+      {
+        "request_id": "f1cf52cf-ba31-42e4-840f-c61982d52933",
+        "kind": "reply",
+        "assignment_id": "answered",
+        "status": "failed",
+        "received_at": null
+      }
+    ],
+    "assignmentLanguages": [
+      {
+        "id": "answered",
+        "language": "en"
+      },
+      {
+        "id": "fresh",
+        "language": "en"
+      }
+    ],
+    "profileLanguage": "en"
+  },
+  "contextNoticeLocked": true,
+  "finalCounters": {
+    "helpPosts": 0,
+    "replyPosts": 2,
+    "receiptReads": 3,
+    "playbackReads": 0,
+    "noticeReads": 12,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 7,
+    "postRequestIds": [
+      "9f91054c-d99a-4aac-8c9a-75029c1687ab",
+      "f1cf52cf-ba31-42e4-840f-c61982d52933"
+    ],
+    "actualMicrophoneUsed": false,
+    "externalCalls": 0,
+    "held": false,
+    "objects": 2,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "cases": 1,
+    "messages": 2,
+    "recordings": [
+      {
+        "request_id": "9f91054c-d99a-4aac-8c9a-75029c1687ab",
+        "kind": "reply",
+        "assignment_id": "answered",
+        "status": "received",
+        "received_at": "2026-10-21T11:42:32.394Z"
+      },
+      {
+        "request_id": "f1cf52cf-ba31-42e4-840f-c61982d52933",
+        "kind": "reply",
+        "assignment_id": "answered",
+        "status": "failed",
+        "received_at": null
+      }
+    ],
+    "assignmentLanguages": [
+      {
+        "id": "answered",
+        "language": "en"
+      },
+      {
+        "id": "fresh",
+        "language": "en"
+      }
+    ],
+    "profileLanguage": "en"
+  },
+  "cleanRun": "9db95d02-a69e-435c-a88d-8aa598b8417d",
+  "sourceSha256": "ee2bbd4e90783ce3b5628278d056a3ba9fbcea2a42902edaf7e0129ec51191f2",
+  "fixture": {
+    "pid": 7864,
+    "parentSession": 13456,
+    "port": 3241
+  },
+  "knownLimits": [
+    "Session-lock fallback still renders English; broader interface localization remains incomplete",
+    "Fixed tone simulator, not a physical microphone or speech-quality test",
+    "Failed object remains pending cleanup; this is not physical-erasure acceptance",
+    "Permission copy rendered in all three languages; format and lazy-render error copy have focused dictionary/wiring checks, not injected render crashes",
+    "Broader references, independent language/AT/phone, native95, hosted and privacy gates remain"
+  ]
+}

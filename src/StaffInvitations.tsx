@@ -1,48 +1,56 @@
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {ArrowLeft,ChevronLeft,ChevronRight,Mail,Plus,RefreshCw,Send,ShieldCheck,X} from 'lucide-react';
 import {readPendingInvitation,savePendingInvitation,clearPendingInvitation,checkedInvitationResult,checkedInvitationReceipt,checkedInvitationPage,type PendingInvitation,type InvitationRow as Row,type InvitationPage as Page} from './invitation-recovery';
+import {useStaffRequest,type StaffRequestAuthority} from './useStaffRequest';
+import {completeStaffRequest,retainStaffRequest,StaffRequestError} from './staff-request';
 const roles:Record<string,string>={owner:'Owner',administrator:'Administrator',supervisor:'Supervisor',auditor:'Read-only auditor'};
 const delivery:Record<string,string>={queued:'Delivery queued',processing:'Delivery in progress',sent:'Provider accepted email',ignored:'Delivery stopped',failed:'Delivery failed',expired:'Delivery expired'};
-class InvitationError extends Error {constructor(message:string,public uncertain=false){super(message);}}
-async function request<T>(path:string,body?:unknown):Promise<T> {
-  let response:Response,value;
-  try {response=await fetch(`/api/settings/invitations${path}`,{credentials:'include',...(body ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)} : {})});value=await response.json();}
-  catch {throw new InvitationError('The result could not be confirmed. Check the saved request before retrying.',!!body);}
-  if(!response.ok) throw new InvitationError(value.error || 'Invitation unavailable.',!!body && response.status>=500);return value;
+function useInvitationRequests(authority:StaffRequestAuthority) {
+  const scoped=useStaffRequest(authority);
+  const complete=<T,>(value:unknown,validate:(value:unknown)=>T|Promise<T>,done:(result:T)=>void)=>completeStaffRequest(value,validate,done,scoped.current,authority.canMutate);
+  const accepted=(value:unknown,pending:PendingInvitation,done:()=>void)=>complete(value,async value=>{
+    checkedInvitationResult(value,pending);
+    const receipt=await scoped.request(`/api/settings/invitations/receipts/${pending.requestId}`);
+    const result=await checkedInvitationReceipt(receipt,pending);
+    if(result===false)throw Error('The invitation outcome is not confirmed. Check the saved request.');return result;
+  },done);
+  return {...scoped,complete,accepted};
 }
-const destination=(pending:PendingInvitation)=>pending.action==='issue' ? '' : `/${encodeURIComponent(pending.id)}/${pending.action}`;
-export function StaffInvitations({actorRole,scope,onBack}:{actorRole:string;scope:string;onBack:()=>void}) {
+const destination=(pending:PendingInvitation)=>`/api/settings/invitations${pending.action==='issue' ? '' : `/${encodeURIComponent(pending.id)}/${pending.action}`}`;
+export function StaffInvitations({actorRole,scope,onBack,authority}:{actorRole:string;scope:string;onBack:()=>void;authority:StaffRequestAuthority}) {
+  const {request,current}=useInvitationRequests(authority);
   const [status,setStatus]=useState('all'),[page,setPage]=useState(1),[refresh,setRefresh]=useState(0),[data,setData]=useState<Page|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState(''),[message,setMessage]=useState(''),[form,setForm]=useState<Row|'issue'|null>(null),[action,setAction]=useState<'resend'|'cancel'>('resend');
   const [pending,setPending]=useState<PendingInvitation|null>(()=>{try{return readPendingInvitation(sessionStorage,scope);}catch{return null;}}),[recoveryError]=useState(()=>{try {readPendingInvitation(sessionStorage,scope);return '';}catch(err){return (err as Error).message;}});
   const heading=useRef<HTMLHeadingElement>(null),trigger=useRef<HTMLButtonElement|null>(null),focusAfterSave=useRef(false),focusAfterClose=useRef(false);
   useEffect(()=>{heading.current?.focus();},[pending,recoveryError,page]);
   useEffect(()=>{if(focusAfterSave.current && !form && !pending) {heading.current?.focus();focusAfterSave.current=false;}},[form,pending]);
   useEffect(()=>{if(focusAfterClose.current && !form) {trigger.current?.focus();focusAfterClose.current=false;}},[form]);
-  useEffect(()=>{if(pending || recoveryError) return;let current=true;setLoading(true);setError('');request<Page>(`?${new URLSearchParams({status,page:String(page),pageSize:'5'})}`).then(value=>{
+  useEffect(()=>{if(pending || recoveryError) return;const controller=new AbortController();setLoading(true);setData(null);setError('');request<Page>(`/api/settings/invitations?${new URLSearchParams({status,page:String(page),pageSize:'5'})}`,undefined,controller.signal).then(value=>{
     checkedInvitationPage(value,page);
-    if(current) setData(value);
-  }).catch(err=>{if(current) {setData(null);setError(err.message);}}).finally(()=>{if(current) setLoading(false);});return()=>{current=false;};},[status,page,refresh,pending,recoveryError]);
-  const saved=(value:PendingInvitation)=>{focusAfterSave.current=true;setPending(null);setForm(null);setMessage(value.action==='cancel' ? 'Invitation cancelled. Earlier links are no longer active.' : 'Invitation email queued. Inbox delivery is not confirmed.');setRefresh(n=>n+1);};
+    if(!controller.signal.aborted && current()) setData(value);
+  }).catch(err=>{if(!controller.signal.aborted && current()) {setData(null);setError(err.message);}}).finally(()=>{if(!controller.signal.aborted && current()) setLoading(false);});return()=>controller.abort();},[status,page,refresh,pending,recoveryError,request,current]);
+  const saved=(value:PendingInvitation)=>{if(!current())return;focusAfterSave.current=true;setPending(null);setForm(null);setMessage(value.action==='cancel' ? 'Invitation cancelled. Earlier links are no longer active.' : 'Invitation email queued. Inbox delivery is not confirmed.');setRefresh(n=>n+1);};
   const close=()=>{focusAfterClose.current=true;setForm(null);};
   if(recoveryError) return <><h1>Invitation recovery</h1><p role="alert">{recoveryError}</p></>;
-  if(pending) return <InvitationRecovery pending={pending} scope={scope} onSaved={()=>saved(pending)}/>;
+  if(pending) return <InvitationRecovery authority={authority} pending={pending} scope={scope} onSaved={()=>saved(pending)}/>;
   const pages=Math.max(1,Math.ceil((data?.total || 0)/5)),canWrite=['owner','administrator'].includes(actorRole) && data?.canWrite;
   return <><button className="button subtle" onClick={onBack}><ArrowLeft size={18}/>Staff & access</button><div className="page-header"><div><h1 ref={heading} tabIndex={-1}>Staff invitations</h1><p>Assigned site</p></div><div className="actions"><button className="icon-button" disabled={loading} title="Refresh invitations" aria-label="Refresh invitations" onClick={()=>setRefresh(n=>n+1)}><RefreshCw size={20}/></button>{canWrite && <button className="button primary" onClick={event=>{trigger.current=event.currentTarget;setForm('issue');}}><Plus size={18}/>Invite staff</button>}</div></div>
     {message && <p role="status">{message}</p>}<label className="select-label">Status<select value={status} onChange={event=>{setStatus(event.target.value);setPage(1);setForm(null);}}>{['all','pending','accepted','cancelled','expired'].map(state=><option key={state} value={state}>{state==='all' ? 'All invitations' : state[0].toUpperCase()+state.slice(1)}</option>)}</select></label>
     {error && <p className="record-error" role="alert">{error}</p>}{loading ? <p role="status">Loading invitations...</p> : data && <section className="invitation-list" aria-label="Invitations">{!data.total && <p>No invitations match this status.</p>}{data.items.map(row=><article key={row.id} className="invitation-row"><Mail size={22}/><div><h2 dir="auto">{row.name}</h2><p>{roles[row.role]} <span aria-hidden="true">·</span> <span dir="ltr">{row.emailHint}</span></p><small>{row.state==='pending' ? `Expires ${new Date(row.expiresAt).toLocaleString()}` : row.state[0].toUpperCase()+row.state.slice(1)}{row.delivery ? ` · ${delivery[row.delivery] || 'Delivery unavailable'}` : ''}</small></div><span className={`status status-${row.state==='accepted' ? 'green' : row.state==='pending' ? 'amber' : 'blue'}`}>{row.state}</span>{canWrite && row.state==='pending' && (actorRole==='owner' || !['owner','administrator'].includes(row.role)) && <div className="actions"><button className="button outline" onClick={event=>{trigger.current=event.currentTarget;setForm(row);setAction('resend');}}><Send size={16}/>Resend</button><button className="icon-button" title={`Cancel invitation for ${row.name}`} aria-label={`Cancel invitation for ${row.name}`} onClick={event=>{trigger.current=event.currentTarget;setForm(row);setAction('cancel');}}><X size={18}/></button></div>}</article>)}<div className="audit-pagination"><span>Page {page} of {pages}</span><button className="icon-button" title="Previous invitations" aria-label="Previous invitations" disabled={page<=1} onClick={()=>{setPage(n=>n-1);setForm(null);}}><ChevronLeft size={18}/></button><button className="icon-button" title="Next invitations" aria-label="Next invitations" disabled={page>=pages} onClick={()=>{setPage(n=>n+1);setForm(null);}}><ChevronRight size={18}/></button></div></section>}
-    {form && <InvitationForm key={form==='issue' ? form : `${form.id}:${action}`} row={form==='issue' ? null : form} action={form==='issue' ? 'issue' : action} actorRole={actorRole} scope={scope} onSaved={saved} onPending={setPending} onClose={close}/>}
+    {form && <InvitationForm authority={authority} key={form==='issue' ? form : `${form.id}:${action}`} row={form==='issue' ? null : form} action={form==='issue' ? 'issue' : action} actorRole={actorRole} scope={scope} onSaved={saved} onPending={value=>{if(current())setPending(value);}} onClose={close}/>}
   </>;
 }
-function InvitationForm({row,action,actorRole,scope,onSaved,onPending,onClose}:{row:Row|null;action:'issue'|'resend'|'cancel';actorRole:string;scope:string;onSaved:(value:PendingInvitation)=>void;onPending:(value:PendingInvitation)=>void;onClose:()=>void}) {
+function InvitationForm({row,action,actorRole,scope,onSaved,onPending,onClose,authority}:{row:Row|null;action:'issue'|'resend'|'cancel';actorRole:string;scope:string;onSaved:(value:PendingInvitation)=>void;onPending:(value:PendingInvitation)=>void;onClose:()=>void;authority:StaffRequestAuthority}) {
+  const {request,current,accepted}=useInvitationRequests(authority);
   const [name,setName]=useState(''),[email,setEmail]=useState(''),[role,setRole]=useState('supervisor'),[confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('');const dialog=useRef<HTMLDialogElement>(null),sending=useRef(false);
   useEffect(()=>{const element=dialog.current;element?.showModal();element?.querySelector<HTMLInputElement>('input[required]')?.focus();return()=>{element?.close();};},[]);
   async function submit(event:FormEvent) {
-    event.preventDefault();if(!confirmed || sending.current) return;
+    event.preventDefault();if(!confirmed || sending.current || !current()) return;
     const id=crypto.randomUUID(),pending:PendingInvitation={requestId:id,id:row?.id || id,action,body:action==='issue' ? {name,email,role,confirmed:true} : {revision:row!.revision,confirmed:true}};
     sending.current=true;setBusy(true);setError('');let stored=false;
-    try {savePendingInvitation(sessionStorage,scope,pending);stored=true;checkedInvitationResult(await request(destination(pending),{...pending.body,requestId:pending.requestId}),pending);clearPendingInvitation(sessionStorage,scope,id);onSaved(pending);}
-    catch(err) {if(stored && (!(err instanceof InvitationError) || err.uncertain)) onPending(pending);else {try {if(stored) clearPendingInvitation(sessionStorage,scope,id);setError((err as Error).message);setConfirmed(false);}catch {onPending(pending);}}}
-    finally {sending.current=false;setBusy(false);}
+    try {savePendingInvitation(sessionStorage,scope,pending);stored=true;const result=await request(destination(pending),{...pending.body,requestId:pending.requestId});await accepted(result,pending,()=>{clearPendingInvitation(sessionStorage,scope,id,pending);onSaved(pending);});}
+    catch(err) {if(!current())return;if(retainStaffRequest(false,stored,err instanceof StaffRequestError?err:null)) onPending(pending);else {try {if(stored) clearPendingInvitation(sessionStorage,scope,id,pending);setError((err as Error).message);setConfirmed(false);}catch {onPending(pending);}}}
+    finally {sending.current=false;if(current())setBusy(false);}
   }
   return <dialog ref={dialog} className="invitation-dialog" aria-labelledby="invitation-form-title" onCancel={event=>{event.preventDefault();if(!busy) onClose();}}><form onSubmit={event=>void submit(event)}><div className="page-header"><h2 id="invitation-form-title">{action==='issue' ? 'Invite staff' : action==='resend' ? 'Resend invitation' : 'Cancel invitation'}</h2><button className="icon-button" type="button" disabled={busy} title="Close invitation" aria-label="Close invitation" onClick={onClose}><X size={18}/></button></div>
     {action==='issue' ? <><label className="field">Name<input autoFocus required maxLength={120} disabled={busy} value={name} onChange={event=>{setName(event.target.value);setConfirmed(false);}}/></label><label className="field">Email<input type="email" autoComplete="off" required maxLength={254} disabled={busy} value={email} onChange={event=>{setEmail(event.target.value);setConfirmed(false);}}/></label><label className="field">Site role<select value={role} disabled={busy} onChange={event=>{setRole(event.target.value);setConfirmed(false);}}>{Object.keys(roles).filter(value=>actorRole==='owner' || !['owner','administrator'].includes(value)).map(value=><option key={value} value={value}>{roles[value]}</option>)}</select></label></> : <p><strong dir="auto">{row?.name}</strong><br/>{row?.emailHint} <span aria-hidden="true">·</span> {roles[row!.role]}</p>}
@@ -50,11 +58,12 @@ function InvitationForm({row,action,actorRole,scope,onSaved,onPending,onClose}:{
     {error && <p role="alert" className="record-error">{error}</p>}<div className="actions"><button type="button" className="button outline" disabled={busy} onClick={onClose}>Cancel</button><button className="button primary" disabled={busy || !confirmed}><Mail size={18}/>{busy ? 'Saving...' : action==='cancel' ? 'Confirm cancellation' : 'Queue invitation email'}</button></div>
   </form></dialog>;
 }
-function InvitationRecovery({pending,scope,onSaved}:{pending:PendingInvitation;scope:string;onSaved:()=>void}) {
+function InvitationRecovery({pending,scope,onSaved,authority}:{pending:PendingInvitation;scope:string;onSaved:()=>void;authority:StaffRequestAuthority}) {
+  const {request,current,complete,accepted}=useInvitationRequests(authority);
   const [busy,setBusy]=useState(false),[absent,setAbsent]=useState(false),[error,setError]=useState(''),[refresh,setRefresh]=useState(0);const sending=useRef(false),callback=useRef(onSaved),heading=useRef<HTMLHeadingElement>(null);callback.current=onSaved;
-  const finish=(value:unknown)=>{checkedInvitationResult(value,pending);clearPendingInvitation(sessionStorage,scope,pending.requestId);callback.current();};
+  const finish=()=>{clearPendingInvitation(sessionStorage,scope,pending.requestId,pending);callback.current();};
   useEffect(()=>{heading.current?.focus();},[]);
-  useEffect(()=>{let current=true;setBusy(true);setAbsent(false);setError('');request(`/receipts/${pending.requestId}`).then(value=>checkedInvitationReceipt(value,pending)).then(value=>{if(!current) return;if(value===false) setAbsent(true);else finish(value);}).catch(err=>{if(current) setError(err.message);}).finally(()=>{if(current) setBusy(false);});return()=>{current=false;};},[pending,scope,refresh]);
-  async function retry() {if(!absent || sending.current) return;sending.current=true;setBusy(true);setError('');try {finish(await request(destination(pending),{...pending.body,requestId:pending.requestId}));}catch(err){setError((err as Error).message);}finally{sending.current=false;setBusy(false);}}
+  useEffect(()=>{const controller=new AbortController();setBusy(true);setAbsent(false);setError('');request(`/api/settings/invitations/receipts/${pending.requestId}`,undefined,controller.signal).then(value=>complete(value,value=>checkedInvitationReceipt(value,pending),result=>{if(controller.signal.aborted)return;if(result===false)setAbsent(true);else finish();})).catch(err=>{if(!controller.signal.aborted && current())setError(err.message);}).finally(()=>{if(!controller.signal.aborted && current())setBusy(false);});return()=>controller.abort();},[pending,scope,refresh,request,current]);
+  async function retry() {if(!absent || sending.current || !current()) return;sending.current=true;setBusy(true);setError('');try {const result=await request(destination(pending),{...pending.body,requestId:pending.requestId});await accepted(result,pending,finish);}catch(err){if(current())setError((err as Error).message);}finally{sending.current=false;if(current())setBusy(false);}}
   return <><h1 ref={heading} tabIndex={-1}>Invitation recovery</h1><p className="staff-recovery-request">Request {pending.requestId}</p><p>{pending.action==='issue' ? `${pending.body.name} · ${roles[pending.body.role!]} · ${pending.body.email}` : `${pending.action==='resend' ? 'Resend' : 'Cancel'} invitation ${pending.id}`}</p>{busy && <p role="status">Checking the saved request...</p>}{error && <p className="record-error" role="alert">{error}</p>}{absent && <p>No accepted receipt was found for this request.</p>}<div className="actions"><button className="button outline" disabled={busy} onClick={()=>setRefresh(n=>n+1)}><RefreshCw size={18}/>Check receipt</button>{absent && <button className="button primary" disabled={busy} onClick={()=>void retry()}><Send size={18}/>Retry unchanged request</button>}</div></>;
 }

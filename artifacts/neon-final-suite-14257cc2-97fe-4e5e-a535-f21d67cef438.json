@@ -1,0 +1,11 @@
+{
+  "startedAt": "2026-10-14T20:00:36.407Z",
+  "updatedAt": "2026-10-14T20:00:36.477Z",
+  "logPath": "artifacts/neon-final-suite-14257cc2-97fe-4e5e-a535-f21d67cef438.log",
+  "testFiles": 188,
+  "providerCredentialsInherited": false,
+  "cloudDatabaseConfigurationInherited": false,
+  "productionVerdict": false,
+  "state": "running",
+  "childPid": 24348
+}

@@ -116,10 +116,12 @@ receipt metadata are still private; protect the file and key accordingly.
 Source rows, object bytes and access are not modified. No provider, mail or
 private-storage call runs.
 
-The current format is `understood-postgres-privacy-ledger-v7`. It includes
+The current format is `understood-postgres-privacy-ledger-v8`. It includes
 audio/case birth metadata, restored-retirement provenance, original access
 receipts and credential change fingerprints. Names, email, salts, password hashes
-and session tokens are not exported. A v1/v2/v3/v4 ledger lacks required bindings:
+and session tokens are not exported. Version8 also binds private case audio to
+its original worker/staff purpose and staff author/role without exporting audio
+or staff labels. Earlier v1-v7 ledgers lack the current required bindings:
 re-export from the stopped original source rather than modifying an old ledger.
 
 ## Read-Only Comparison

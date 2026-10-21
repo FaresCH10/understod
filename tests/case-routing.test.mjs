@@ -4,7 +4,7 @@ import {randomUUID} from 'node:crypto';
 import {PGlite} from '@electric-sql/pglite';
 import {openDatabase,transaction} from '../server/db.mjs';
 import {seed} from '../server/seed.mjs';
-import {ensureClarificationSchema,requestHelp,assignClarification,resolveClarification,getClarification,workerHelpCases} from '../server/clarifications.mjs';
+import {ensureClarificationSchema,requestHelp,assignClarification,resolveClarification,getClarification,workerHelpCases,workerHelpHistory} from '../server/clarifications.mjs';
 import * as pgCases from '../server/postgres/clarifications.mjs';
 import {ensureCaseRoutingSchema,routeNewCase,processOneCaseEscalation} from '../server/case-routing.mjs';
 import * as pgRouting from '../server/postgres/case-routing.mjs';
@@ -29,7 +29,7 @@ async function fixture(pg) {
   const q=async(sql,args=[])=>pg?db.query(sql,args):{rows:db.prepare(sql).all(...args)};
   await q(`INSERT INTO staff(id,org_id,site_id,name,role) VALUES('routing-deputy','cedar','beirut','Deputy','supervisor'),('routing-manual','cedar','beirut','Manual','supervisor')`);
   await q(`INSERT INTO site_settings(site_id,org_id,revision,primary_contact_id,deputy_contact_id) VALUES('beirut','cedar',0,'maya','routing-deputy')`);
-  const call=(name,...args)=>pg?pgCases[name](pool,...args,options):({requestHelp,assignClarification,resolveClarification,getClarification,workerHelpCases})[name](db,...args);
+  const call=(name,...args)=>pg?pgCases[name](pool,...args,options):({requestHelp,assignClarification,resolveClarification,getClarification,workerHelpCases,workerHelpHistory})[name](db,...args);
   const escalate=()=>pg?pgRouting.processOneCaseEscalation(pool,options):processOneCaseEscalation(db);
   const past=async()=>{
     const id=randomUUID(),created=new Date(Date.now()-25*3600000).toISOString();
@@ -42,6 +42,32 @@ async function fixture(pg) {
   };
   return {db,q,call,escalate,past,p:n=>pg?`$${n}`:'?',close:()=>db.close()};
 }
+
+for(const pg of [false,true])test(`${pg?'PostgreSQL':'SQLite'} worker Help history pages every own case beyond the old100-row limit without changing evidence or leaking notes`,async()=>{
+  const f=await fixture(pg);try{
+    const ids=[];
+    for(let i=0;i<7;i++){const id=randomUUID();ids.push(id);await f.call('requestHelp',worker,'assignment-30',{requestId:id,text:`Synthetic independent help ${i}`});}
+    await f.call('resolveClarification',owner,ids[0],{notes:'Private synthetic supervisor notes'});
+    for(let i=0;i<101;i++)await f.q(`INSERT INTO clarifications(id,org_id,${pg?'site_id,':''}assignment_id,reason,status,notes,created_at)
+      VALUES(${f.p(1)},'cedar',${pg?"'beirut',":''}'assignment-30','Synthetic historical follow-up','open','Private historical notes',${f.p(2)})`,[randomUUID(),'2026-01-01T00:00:00.000Z']);
+    const inventory=async()=>Promise.all(['clarifications','help_requests','case_routing','attempts','audit','submission_receipts'].map(async table=>(await f.q(`SELECT * FROM ${table} ORDER BY 1`)).rows));
+    const before=await inventory(),found=[];
+    for(let page=1;page<=22;page++){
+      const value=await f.call('workerHelpHistory',worker,'assignment-30',{page,pageSize:5});
+      assert.deepEqual({...value.assignment},{id:'assignment-30',version:3,language:pg?'en':'ur',state:'published'});
+      assert.equal(value.total,108);assert.equal(value.page,page);assert.equal(value.pageSize,5);assert.equal(value.cases.length,page===22?3:5);
+      for(const row of value.cases){assert.deepEqual(Object.keys(row).sort(),['createdAt','helpText','id','owner','status']);found.push(row.id);}
+      assert.ok(!JSON.stringify(value).includes('Private'));
+    }
+    assert.equal(new Set(found).size,108);assert.ok(ids.every(id=>found.includes(id)));
+    assert.deepEqual((await f.call('workerHelpHistory',worker,'assignment-30',{page:5000})).cases,[]);
+    for(const filters of [{page:0},{page:5001},{page:true},{page:[]},{page:'1e0'},{pageSize:50},{workerId:'another'},{version:4}])
+      await assert.rejects(async()=>f.call('workerHelpHistory',worker,'assignment-30',filters),/Invalid help history/);
+    await assert.rejects(async()=>f.call('workerHelpHistory',{...worker,principal_id:'another'},'assignment-30',{}),/Forbidden|unavailable/);
+    await assert.rejects(async()=>f.call('workerHelpHistory',owner,'assignment-30',{}),/Forbidden/);
+    assert.deepEqual(await inventory(),before);
+  }finally{await f.close();}
+});
 
 for(const pg of [false,true])test(`${pg?'PostgreSQL':'SQLite'} cases route once, keep independent deadlines and escalate atomically without changing original evidence`,async()=>{
   const f=await fixture(pg);

@@ -1,0 +1,186 @@
+{
+  "checkedAt": "2026-10-16T05:11:27.026Z",
+  "tables": [
+    {
+      "table": "organizations",
+      "count": 2,
+      "sha256": "fc143569ccb971f2b50bb396435ae20c9ba5a4ac743d0a29ae2628bba7c3705d"
+    },
+    {
+      "table": "sites",
+      "count": 2,
+      "sha256": "2429427353c2a1a906734ece41e11733549fe5ef8bc86b66ef8fb4e9a1e5473f"
+    },
+    {
+      "table": "workers",
+      "count": 34,
+      "sha256": "aed045cb0eea14429a29c68b01e7d0073383ea444e02cd64d590ddfe46fad20c"
+    },
+    {
+      "table": "briefings",
+      "count": 2,
+      "sha256": "896bf0de5940547a3e6d17e1e6a75ae2ce96b5728d95f530df3ed4c4356bd0fb"
+    },
+    {
+      "table": "publications",
+      "count": 1,
+      "sha256": "874eef858781b0fbf7819261803b0576a1e18436625ca4e8be5d615236b1defe"
+    },
+    {
+      "table": "assignments",
+      "count": 30,
+      "sha256": "b93ccad5b050f03c7cee960bf4bc96011c4cd2e5a8a612f3998edcf51db80d4b"
+    },
+    {
+      "table": "attempts",
+      "count": 26,
+      "sha256": "068bd2b0788338771ef489b84ba26d34b0ea9b54855c23978a9042cdf09d3900"
+    },
+    {
+      "table": "clarifications",
+      "count": 4,
+      "sha256": "84189766ffbcaec111e4223d93afb038b385ac61d72e212840eb0847be3ca1bb"
+    }
+  ],
+  "integrityOk": true,
+  "foreignKeyViolations": 0,
+  "shells": [
+    {
+      "directory": "dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/bc0bfa2a-4ba4-4ab6-8d36-62073d5f658e/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/e40616ec-6d21-4ee4-abe7-bb80e27dbe3b/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/747d3395-92dc-4e8e-a66b-d2ae0a9c1a1e/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/99f90eb2-717a-4e05-ba7a-14af3522d0bc/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/4deefb4c-5094-460b-8bc5-875a507d6424/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/40c75c5e-8e6b-468a-831d-d3cb4bdced31/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/9cc91df8-999e-4431-86fe-d34119843f01/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".tools/crew-rtl-preview/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/a7f72d68-e42e-41b9-a420-377d2265983c/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".tools/site-crews-preview/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/b1ec0c63-9c02-45fb-b931-e54c4ba74962/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/6f06f347-36b3-4719-8cb2-1240d514b0dc/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/493d367d-40ca-4b44-9ddb-536f28fb77d0/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/d95947b4-ac0d-41d1-8ac8-b93ef550bb22/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/0dc72f84-7c89-4cd7-8a76-ef61fc51ce17/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/0dbcbc34-02dd-4eb9-b49b-6bc76d6960e2/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/bbcf3ff4-d131-4628-9136-fd900d8c8082/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/ec590f05-c8fa-419b-95fa-b351605f2321/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/a88a3875-1faf-4f71-a830-1dbaa8be9534/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/7fa49ae1-8127-447b-8a9d-e4f3c5e68830/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/7ba8b703-a873-4e24-bc6d-93d52f40f924/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/e5a1ff9f-47f0-459e-a77d-aa7dbc49c8bb/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/bfbca555-7889-49cc-bb77-291d1865bd77/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/650e1447-8227-4a07-9b29-54209ad479a9/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/140abc11-005b-404e-8fc4-320e156225a3/workspace/dist",
+      "files": 56,
+      "hashesMatch": true
+    }
+  ],
+  "filesScanned": 2656,
+  "secretMatches": 0,
+  "envIgnored": true,
+  "privateStorageEnvIgnored": true,
+  "exampleGeminiBlank": true,
+  "workerVerificationExampleDisabled": true,
+  "productionVerdict": false
+}

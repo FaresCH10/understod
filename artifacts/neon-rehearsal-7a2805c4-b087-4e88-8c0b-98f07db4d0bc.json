@@ -1,0 +1,60 @@
+{
+  "startedAt": "2026-10-14T17:43:28.168Z",
+  "updatedAt": "2026-10-14T17:45:21.665Z",
+  "runId": "7a2805c4-b087-4e88-8c0b-98f07db4d0bc",
+  "schema": "understood_neon_test_7a2805c4b0874e888c0b98f07db4d0bc",
+  "kind": "isolated-synthetic-database",
+  "state": "passed",
+  "checks": [
+    "verified-tls-empty-target",
+    "migration-checksums-and-exact-replay",
+    "concurrent-publication-exactly-once",
+    "concurrent-submission-exactly-once",
+    "concurrent-claimed-assessment-exactly-once",
+    "cross-tenant-foreign-key-and-reader-denial",
+    "immutable-publication-and-audit",
+    "exact-publication-provider-history-without-invented-journal",
+    "extended-auth-retry-lease-billing-withdrawal-concurrency"
+  ],
+  "cleanup": "verified-removed",
+  "productionVerdict": false,
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "phase": "finished",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "migrationsApplied": 86,
+  "committedCounts": {
+    "publications": 1,
+    "publication_requests": 1,
+    "assignments": 1,
+    "attempts": 1,
+    "submission_receipts": 1,
+    "assessment_jobs": 1
+  },
+  "denials": {
+    "foreignKey": "23503",
+    "publication": "23514",
+    "audit": "23514",
+    "foreignReader": "unavailable"
+  },
+  "committedCountsPhase": "after-core-assessment-before-extension",
+  "concurrency": {
+    "kind": "extended-synthetic-concurrency",
+    "state": "passed",
+    "checks": [
+      "single-use-grant-redemption-and-session-revocation",
+      "concurrent-exact-retry-receipt-replay-and-generation-race",
+      "expired-lease-takeover-rejects-late-obsolete-completion",
+      "payment-versus-void-single-consistent-winner",
+      "concurrent-withdrawal-preserves-frozen-snapshot-and-earlier-answer",
+      "global-and-key-auth-admission-cannot-oversubscribe"
+    ],
+    "providerCalls": 0,
+    "realDataUsed": false,
+    "processDeathVerified": false,
+    "productionVerdict": false,
+    "phase": "concurrency-finished"
+  },
+  "outsideCatalogIdentitiesUnchanged": true
+}

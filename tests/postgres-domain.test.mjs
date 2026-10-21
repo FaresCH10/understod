@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { PGlite } from '@electric-sql/pglite';
@@ -175,7 +177,7 @@ async function withHttp(f,run) {
   const base=`http://127.0.0.1:${server.address().port}`;
   const request=async(path,cookie,init={}) => {
     const headers={origin,'content-type':'application/json',...(cookie ? {cookie} : {}),...init.headers};
-    if(init.method==='POST' && path.startsWith('/worker/') && !Object.hasOwn(headers,'x-client-session-context')) {
+    if(cookie && (init.method==='POST' && path.startsWith('/worker/') || path.startsWith('/clarifications')) && !Object.hasOwn(headers,'x-client-session-context')) {
       const session=await (await fetch(`${base}/api/session`,{headers:{cookie}})).json();headers['x-client-session-context']=session.clientContext || '';
     }
     return fetch(`${base}/api${path}`,{...init,headers});
@@ -531,7 +533,9 @@ test('PostgreSQL overview and preparation queue report scoped live evidence, exa
     assert.equal((await getBriefing(pool,owner,'brief',options)).publications[0].metrics.assigned,2);
     const draft=await createDraft(pool,owner,{requestId:randomUUID(),title:'New briefing',source:CANONICAL_SOURCE},options);
     await queuePreparation(pool,owner,draft.id,1,options);
-    const jobs=await listProcessing(pool,owner,{},options); assert.equal(jobs.total,1); assert.equal(jobs.items[0].briefing_id,draft.id); assert.equal(jobs.items[0].status,'queued');
+    const jobs=await listProcessing(pool,owner,{kind:'prepare'},options); assert.equal(jobs.total,1); assert.equal(jobs.items[0].briefing_id,draft.id); assert.equal(jobs.items[0].status,'queued');
+    const allJobs=await listProcessing(pool,owner,{},options);assert.equal(allJobs.total,2);
+    const checkJob=allJobs.items.find(row=>row.kind==='answer_check');assert.equal(checkJob.status,'complete');assert.equal(checkJob.publication_id,pub.id);assert.equal(checkJob.assignment_id,assignment);assert.notEqual(checkJob.title,'Changed draft');
     assert.ok(!/lease_token|prepared_json|rubric/.test(JSON.stringify(jobs)));
     await assert.rejects(staffOverview(pool,worker,options),/Forbidden/);
     await assert.rejects(listProcessing(pool,worker,{},options),/Forbidden/);
@@ -543,6 +547,7 @@ test('PostgreSQL overview and preparation queue report scoped live evidence, exa
       const staff=cookieOf(await request('/auth/staff/login',null,post({email:'owner@example.test',password:'long-enough-password'})));
       const member=cookieOf(await request('/auth/worker/redeem',null,post({token:grant.token})));
       assert.equal((await request('/overview',staff)).status,200); assert.equal((await request('/processing',staff)).status,200);
+      const checkedDetail=await request(`/processing/${encodeURIComponent(checkJob.id)}`,staff);assert.equal(checkedDetail.status,200);assert.equal((await checkedDetail.json()).id,checkJob.id);
       assert.equal((await request('/overview',member)).status,403); assert.equal((await request('/processing',member)).status,403);
     });
   } finally {await db.close();}
@@ -675,9 +680,9 @@ test('PostgreSQL export leases fence stale completion, revoke requesters, bound 
       assert.equal(await processOneExport(pool,broken),true);
       const status=(await listExports(pool,owner,options)).find((row) => row.id===failed.id);
       assert.equal(status.status,'failed'); assert.equal(status.attempts,n+1); assert.equal(status.error,'Export generation failed');
-      if (n<2) await retryExport(pool,owner,failed.id,options);
+      if (n<2) await retryExport(pool,owner,failed.id,{requestId:randomUUID(),attempts:n+1},options);
     }
-    await assert.rejects(retryExport(pool,owner,failed.id,options),/cannot be retried/);
+    await assert.rejects(retryExport(pool,owner,failed.id,{requestId:randomUUID(),attempts:2},options),/cannot be retried/);
     const interrupted=await makeJob(); f.setFail('INSERT INTO audit');
     await assert.rejects(processOneExport(pool,options),/Injected/); f.setFail('');
     assert.equal((await db.query('SELECT status,csv FROM report_exports WHERE id=$1',[interrupted.id])).rows[0].status,'processing');
@@ -933,6 +938,12 @@ test('PostgreSQL HTTP activity and help enforce credentials, scope, filter bound
       const notes='Private supervisor resolution';
       assert.equal((await request(`/clarifications/${input.requestId}/resolve`,staff,post({notes}))).status,200);
       const safe=await (await request(path,member)).json(); assert.equal(safe[0].status,'resolved'); assert.ok(!JSON.stringify(safe).includes(notes));
+      const helpHistory=await request(`${path}-history?page=1&pageSize=5`,member),helpPage=await helpHistory.json();
+      assert.equal(helpHistory.status,200);assert.equal(helpHistory.headers.get('cache-control'),'no-store');assert.equal(helpPage.clientContext,clientContext);
+      assert.equal(helpPage.assignment.id,assignment);assert.equal(helpPage.cases[0].status,'resolved');assert.equal(helpPage.total,1);assert.ok(!JSON.stringify(helpPage).includes(notes));
+      assert.equal((await request(`${path}-history?pageSize=50`,member)).status,400);
+      assert.equal((await request(`${path}-history`,staff)).status,403);
+      assert.equal((await request('/worker/briefings/missing/help-history',member)).status,404);
       const events=await (await request('/audit?action=help.requested',staff)).json(); assert.equal(events.total,1);
       assert.equal((await request(`/audit/${events.rows[0].id}`,foreign)).status,404);
       assert.equal((await request(`/audit/${events.rows[0].id}`,member)).status,403);

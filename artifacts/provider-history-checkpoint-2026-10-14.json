@@ -1,0 +1,15 @@
+{
+  "checkedAt":"2026-10-14T16:09:00Z",
+  "overallEstimate":67,"uncertaintyRange":[60,73],"taskEstimate":85,
+  "goalStatus":"active","productionVerdict":false,
+  "focused":{"tests":27,"pass":27,"fail":0,"durationMs":35713.1055},
+  "fullSuite":{"tests":996,"pass":992,"fail":0,"skipped":4,"durationMs":358508.2645,"session":90327,"exitCode":0,"log":"artifacts/provider-history-suite-2026-10-14.log"},
+  "build":{"modules":2067,"entryKB":669.55,"session":81016,"exitCode":0,"existingWarningsRemain":true},
+  "fixtures":[
+    {"session":55568,"exitCode":0,"reads":85,"failedReads":13,"mutations":0,"protectedInventories":10,"allUnchanged":true,"externalCalls":0,"constructedMetadata":true},
+    {"session":72273,"exitCode":0,"reads":7,"failedReads":0,"mutations":0,"protectedInventories":10,"allUnchanged":true,"externalCalls":0,"constructedMetadata":true}
+  ],
+  "browser":{"paging":true,"keyboard":true,"outageRecovery":true,"auditorReadOnly":true,"viewport":320,"documentWidth":305,"requestTableWidth":233,"requestTableScrollWidth":670,"viewportReset":true,"temporaryTabsClosed":true},
+  "preservation":{"originalBusinessFingerprints":8,"allUnchanged":true,"integrity":"ok","foreignKeyViolations":0,"shellAssets":55,"allShellHashesMatch":true,"scannedFiles":1454,"currentSecretMatches":0,"exampleBlank":true,"originalPreviewsUntouched":true},
+  "remaining":["native PostgreSQL and historical upgrade readback","staff authority and read-key transitions","polling continuity","all44 reference and language/accessibility/device acceptance","complete live synthetic voice and independent quality","privacy-approved real-data AI","authorized hosted deployment and release"]
+}

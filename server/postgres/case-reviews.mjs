@@ -6,7 +6,8 @@ const iso=value=>value instanceof Date?value.toISOString():value;
 const uuid=value=>typeof value==='string' && /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(value);
 const date=value=>typeof value==='string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(value) && Number.isFinite(Date.parse(value)) && new Date(value).toISOString()===value;
 export const caseDeadlineOverride=`(SELECT v.due_at FROM case_reviews v WHERE v.case_id=c.id AND v.org_id=c.org_id AND v.site_id=c.site_id AND v.kind='deadline' ORDER BY v.sequence DESC LIMIT 1)`;
-const dto=row=>({id:row.id,caseId:row.case_id,kind:row.kind,createdAt:iso(row.created_at),dueAt:iso(row.due_at),expectedDueAt:iso(row.expected_due_at),reason:row.reason,attemptId:row.attempt_id,actorId:row.actor_id});
+export const caseReviewRow=row=>({id:row.id,caseId:row.case_id,kind:row.kind,createdAt:iso(row.created_at),dueAt:iso(row.due_at),expectedDueAt:iso(row.expected_due_at),reason:row.reason,attemptId:row.attempt_id,actorId:row.actor_id,requestHash:row.request_hash});
+const dto=caseReviewRow;
 function inputReview(input) {
   if(!input || typeof input!=='object' || Array.isArray(input) || !uuid(input.requestId))throw Error('Invalid case review');
   let content;

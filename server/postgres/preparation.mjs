@@ -1,4 +1,5 @@
 import { randomUUID,createHash } from 'node:crypto';
+import {preparationRequestInput,preparationRequestId,preparationReference,preparationRequestReceipt} from '../preparation-request-input.mjs';
 import { syntheticPrepare } from '../domain.mjs';
 import { domainTransaction,domainAudit,requirePrincipal,readySnapshot,requireActiveBriefing } from './domain.mjs';
 import { draftInput,expectedRevision,copyDraftInput,checkDraftCopyReplay,archiveBriefingInput } from '../briefing-input.mjs';
@@ -114,7 +115,9 @@ export async function copyDraft(pool,session,id,input,{schema='public'}={}) {
 
 export async function queuePreparation(pool,session,briefingId,revision,{schema='public'}={}) {
   expectedRevision(revision);
-  return domainTransaction(pool,schema,async (client) => {
+  return domainTransaction(pool,schema,client=>queuePreparationTransaction(client,session,briefingId,revision));
+}
+async function queuePreparationTransaction(client,session,briefingId,revision) {
     await requirePrincipal(client,session,'staff');
     const briefing=(await client.query('SELECT revision,state FROM briefings WHERE id=$1 AND org_id=$2 AND site_id=$3 FOR UPDATE',[briefingId,session.org_id,session.site_id])).rows[0];
     if (!briefing) throw new Error('Briefing unavailable');
@@ -130,6 +133,45 @@ export async function queuePreparation(pool,session,briefingId,revision,{schema=
     await bindPreparationAuthority(client,session,jobId);
     await domainAudit(client,session,'briefing.processing_requested',jobId);
     return {id:jobId,state:'processing',duplicate:false};
+}
+
+async function preparationContext(client,session,id) {
+  await requirePrincipal(client,session,'staff');preparationReference(id);
+  const row=(await client.query('SELECT revision,state FROM briefings WHERE id=$1 AND org_id=$2 AND site_id=$3 FOR UPDATE',[id,session.org_id,session.site_id])).rows[0];
+  if(!row)throw Error('Briefing unavailable');
+  await requireActiveBriefing(client,session,id);
+  const job=(await client.query("SELECT id,status FROM jobs WHERE briefing_id=$1 AND org_id=$2 AND site_id=$3 AND revision=$4 AND kind='prepare' FOR UPDATE",[id,session.org_id,session.site_id,row.revision])).rows[0];
+  const generation=job?(await client.query('SELECT count(*)::int AS n FROM preparation_requests WHERE job_id=$1',[job.id])).rows[0].n:0;
+  return {briefingId:id,revision:row.revision,state:row.state,job:job?{...job,generation}:null};
+}
+export function getPreparationRequestContext(pool,session,id,{schema='public'}={}) {
+  return domainTransaction(pool,schema,client=>preparationContext(client,session,id));
+}
+export function getPreparationRequestReceipt(pool,session,id,requestId,{schema='public'}={}) {
+  preparationReference(id);preparationRequestId(requestId);
+  return domainTransaction(pool,schema,async client=>{
+    await requirePrincipal(client,session,'staff');
+    const row=(await client.query('SELECT * FROM preparation_requests WHERE request_id=$1 AND briefing_id=$2 AND org_id=$3 AND site_id=$4 AND requested_by=$5',[requestId,id,session.org_id,session.site_id,session.principal_id])).rows[0];
+    return row?preparationRequestReceipt(row):{found:false};
+  });
+}
+export function requestPreparation(pool,session,id,value,{schema='public'}={}) {
+  const input=preparationRequestInput(id,value),{requestId,briefingId,...body}=input;
+  return domainTransaction(pool,schema,async client=>{
+    await requirePrincipal(client,session,'staff');
+    await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[`preparation-request:${requestId}`]);
+    const saved=(await client.query('SELECT * FROM preparation_requests WHERE request_id=$1',[requestId])).rows[0];
+    if(saved) {
+      if(saved.org_id!==session.org_id || saved.site_id!==session.site_id || saved.requested_by!==session.principal_id
+        || saved.briefing_id!==id || JSON.stringify(preparationRequestInput(saved.briefing_id,{...saved.request_json,requestId:saved.request_id}))!==JSON.stringify(input))throw Error('Preparation request conflict');
+      return {...preparationRequestReceipt(saved).result,duplicate:true};
+    }
+    const context=await preparationContext(client,session,id);
+    if(context.revision!==input.revision || (context.job?.id ?? null)!==input.jobId || (context.job?.generation ?? 0)!==input.generation
+      || !['draft','failed'].includes(context.state) || context.job && context.job.status!=='failed')throw Error('Preparation request state changed');
+    const result=await queuePreparationTransaction(client,session,id,input.revision);
+    const row=(await client.query('INSERT INTO preparation_requests(request_id,org_id,site_id,briefing_id,revision,job_id,generation,request_json,requested_by) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *',[requestId,session.org_id,session.site_id,id,input.revision,result.id,input.generation,JSON.stringify(body),session.principal_id])).rows[0];
+    return {...preparationRequestReceipt(row).result,duplicate:false};
   });
 }
 

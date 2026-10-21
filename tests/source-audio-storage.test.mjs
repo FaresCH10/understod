@@ -258,6 +258,7 @@ for(const pg of [false,true]) {
         body:JSON.stringify(pg?{email:'synthetic@example.test',password:'Synthetic-only-password-123'}:{principal:'maya'})});
       assert.equal(login.status,200);const cookie=login.headers.get('set-cookie').split(';')[0];
       const session=await (await fetch(base+'/session',{headers:{cookie}})).json();
+      const capturedHeaders={cookie,'x-client-session-context':session.clientContext};
       const metadata=Buffer.from(JSON.stringify(value)),prefix=Buffer.alloc(8);prefix.writeUInt32LE(metadata.length);prefix.writeUInt32LE(wav().length,4);
       const body=Buffer.concat([prefix,metadata,wav(),original]);
       const post=(headers={},payload=body)=>fetch(base+'/source-audio',{method:'POST',headers:{cookie,origin:config.publicOrigin,'content-type':'application/octet-stream',
@@ -270,10 +271,10 @@ for(const pg of [false,true]) {
       const accepted=await post();assert.equal(accepted.status,201);assert.match(accepted.headers.get('cache-control'),/no-store/);
       const receipt=await accepted.json();assert.equal(receipt.requestId,value.requestId);
       assert.equal((await post()).status,200);
-      const lookup=await fetch(base+'/source-audio/'+value.requestId,{headers:{cookie}});assert.equal(lookup.status,200);assert.equal((await lookup.json()).receivedAt,receipt.receivedAt);
-      const history=await fetch(base+'/source-audio?page=1',{headers:{cookie}});assert.equal(history.status,200);assert.match(history.headers.get('cache-control'),/no-store/);
+      const lookup=await fetch(base+'/source-audio/'+value.requestId,{headers:capturedHeaders});assert.equal(lookup.status,200);assert.equal((await lookup.json()).receivedAt,receipt.receivedAt);
+      const history=await fetch(base+'/source-audio?page=1',{headers:capturedHeaders});assert.equal(history.status,200);assert.match(history.headers.get('cache-control'),/no-store/);
       assert.deepEqual((await history.json()).items,[{...receipt,title:value.title}].map(({duplicate,...row})=>row));
-      for(const query of ['page=1&page=2','page=0','site=foreign'])assert.equal((await fetch(base+'/source-audio?'+query,{headers:{cookie}})).status,400);
+      for(const query of ['page=1&page=2','page=0','site=foreign'])assert.equal((await fetch(base+'/source-audio?'+query,{headers:capturedHeaders})).status,400);
       assert.equal((await fetch(base+'/source-audio')).status,401);
       await f.process(undefined,st);
       const retryId=randomUUID(),retryUrl=base+`/source-audio/${value.requestId}/retries`,retryBody={requestId:retryId,sourceHash:receipt.requestHash,confirmed:true};
@@ -282,21 +283,35 @@ for(const pg of [false,true]) {
       assert.equal((await retry({'x-client-session-context':''})).status,409);
       assert.equal((await retry({origin:'https://foreign.example'})).status,403);
       assert.equal((await retry({}, {...retryBody,confirmed:false})).status,400);
-      const absent=await fetch(retryUrl+'/'+retryId,{headers:{cookie}});assert.equal(absent.status,200);assert.equal((await absent.json()).found,false);
+      const changedLogin=await fetch(base+(pg?'/auth/staff/login':'/demo/session'),{method:'POST',headers:{origin:config.publicOrigin,'content-type':'application/json'},body:JSON.stringify(pg?{email:'synthetic@example.test',password:'Synthetic-only-password-123'}:{principal:'maya'})});
+      assert.equal(changedLogin.status,200);const changedCookie=changedLogin.headers.get('set-cookie').split(';')[0];
+      const snapshot=async()=>({sources:(await f.raw('SELECT * FROM source_audio_requests ORDER BY request_id')).rows,
+        retries:pg || f.db.prepare("SELECT name FROM sqlite_master WHERE name='source_audio_retries'").get()?(await f.raw('SELECT * FROM source_audio_retries ORDER BY retry_id')).rows:null,
+        audit:(await f.raw('SELECT * FROM audit ORDER BY id')).rows});
+      const before=await snapshot();
+      for(const context of [undefined,'invalid','b'.repeat(64)]) {
+        const headers={cookie,...(context===undefined?{}:{'x-client-session-context':context})};
+        for(const path of ['/source-audio',`/source-audio/${value.requestId}`,`/source-audio/${value.requestId}/retries/${retryId}`])assert.equal((await fetch(base+path,{headers})).status,409,path);
+        assert.equal((await fetch(retryUrl,{method:'POST',headers:{...headers,origin:config.publicOrigin,'content-type':'application/json'},body:JSON.stringify(retryBody)})).status,409);
+      }
+      assert.equal((await fetch(retryUrl,{method:'POST',headers:{...capturedHeaders,cookie:changedCookie,origin:config.publicOrigin,'content-type':'application/json'},body:JSON.stringify(retryBody)})).status,409);
+      assert.equal((await fetch(base+'/source-audio',{headers:{...capturedHeaders,cookie:changedCookie}})).status,409);
+      assert.deepEqual(await snapshot(),before);
+      const absent=await fetch(retryUrl+'/'+retryId,{headers:capturedHeaders});assert.equal(absent.status,200);assert.equal((await absent.json()).found,false);
       const queued=await retry();assert.equal(queued.status,200);assert.match(queued.headers.get('cache-control'),/no-store/);const retryReceipt=await queued.json();
       assert.equal(retryReceipt.retryId,retryId);assert.equal(retryReceipt.sourceRequestId,value.requestId);
       assert.deepEqual(await (await retry()).json(),retryReceipt);
-      assert.deepEqual(await (await fetch(retryUrl+'/'+retryId,{headers:{cookie}})).json(),retryReceipt);
+      assert.deepEqual(await (await fetch(retryUrl+'/'+retryId,{headers:capturedHeaders})).json(),retryReceipt);
       assert.equal((await retry({}, {...retryBody,requestId:randomUUID()})).status,409);
       assert.equal((await fetch(retryUrl+'/'+retryId)).status,401);
-      assert.equal((await fetch(retryUrl+'/'+retryId+'?site=foreign',{headers:{cookie}})).status,400);
+      assert.equal((await fetch(retryUrl+'/'+retryId+'?site=foreign',{headers:capturedHeaders})).status,400);
       for(const kind of ['audio','original']) {
         const response=await fetch(base+`/source-audio/${value.requestId}/${kind}`,{headers:{cookie}});
         assert.equal(response.status,200);assert.match(response.headers.get('cache-control'),/no-store/);assert.equal(response.headers.get('x-content-type-options'),'nosniff');
         assert.deepEqual(Buffer.from(await response.arrayBuffer()),kind==='audio'?wav():original);
       }
       assert.equal((await fetch(base+'/source-audio/'+value.requestId)).status,401);
-      assert.equal((await fetch(base+'/source-audio/'+value.requestId+'?site=foreign',{headers:{cookie}})).status,400);
+      assert.equal((await fetch(base+'/source-audio/'+value.requestId+'?site=foreign',{headers:capturedHeaders})).status,400);
       const read=st.read;st.read=async r=>{const bytes=await read(r);await f.raw(pg?"UPDATE staff SET active=false WHERE id='maya'":"UPDATE staff SET active=0 WHERE id='maya'");return bytes;};
       await assert.rejects(f.audio(owner,value.requestId,st),/Forbidden/);
     }finally {await new Promise(resolve=>server.close(resolve));await f.close();}

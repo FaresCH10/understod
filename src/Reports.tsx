@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Clock3, Download, FileText, History, RefreshCw, Search, TriangleAlert, Users } from 'lucide-react';
+import {useStaffRequest,type StaffRequestAuthority} from './useStaffRequest';
+import {useArtifactMutation} from './useArtifactMutation';
+import {checkedArtifactScope} from './artifact-request';
+import type {ArtifactDefinition} from './useArtifactRequest';
+import {readPendingExport,savePendingExport,clearPendingExport,checkedExportReceipt,checkedExportResult,checkedExportRow,type PendingExport,type ExportAccepted} from './export-recovery';
+import {CaseLocalePicker} from './CaseLocalePicker';
+import {reportLocale,reportText,reportErrorText,reportState,reportLanguage,reportTimestamp,type ReportLocale,type ReportTextKey} from './report-locale';
 
 type Counts = { assigned: number; responses: number; matches: number; clarifications: number; unassessed: number; pending: number; completion: number };
 type Publication = { id: string; title: string; version: number; state: string };
@@ -10,47 +17,50 @@ type Report = { title: string; publicationId: string; version: number; metrics: 
   availablePublications: Publication[]; languages: { language: string; assigned: number; received: number; completion: number }[] };
 type Export = { id: string; status: string; createdAt: string; expiresAt: string; filename: string; attempts: number; error: string | null;filters?:ReportFilters & {timezone?:string} };
 
-async function request<T>(path: string, body?: unknown, signal?:AbortSignal): Promise<T> {
-  const response = await fetch(`/api${path}`, { credentials: 'include',cache:'no-store',signal, ...(body ? { method: 'POST',
-    headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : {}) });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || 'Request failed');
-  return data;
-}
+const definition:ArtifactDefinition<PendingExport,ExportAccepted>={endpoint:'/api/reports/exports',roles:['owner','supervisor','auditor'],
+  path:value=>value.kind==='create'?'':`/${encodeURIComponent(value.exportId!)}/retry`,receiptPath:value=>`/receipts/${value.kind}/${encodeURIComponent(value.requestId)}`,
+  result:checkedExportResult,receipt:checkedExportReceipt,clear:clearPendingExport};
 
-const languageNames: Record<string, string> = { en: 'English (EN)', ar: 'Arabic (AR)', ur: 'Urdu (UR)' };
-
-function PublicationHistory({onSelect,disabled}:{onSelect:(id:string)=>void;disabled:boolean}) {
+function PublicationHistory({onSelect,disabled,authority,language}:{onSelect:(id:string)=>void;disabled:boolean;authority:StaffRequestAuthority;language:ReportLocale}) {
+  const {request,current}=useStaffRequest(authority);
+  const t=(key:ReportTextKey)=>reportText(language,key);
+  const historyHeading=useRef<HTMLHeadingElement>(null);
   const [filters,setFilters]=useState({search:'',from:'',through:''}),[page,setPage]=useState(1),[tick,setTick]=useState(0);
   const [data,setData]=useState<PublicationPage|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState('');
   useEffect(()=>{
     const controller=new AbortController();setLoading(true);setData(null);setError('');
-    void request<PublicationPage>(`/reports/publications?${new URLSearchParams({...filters,page:String(page),pageSize:'20'})}`,undefined,controller.signal)
-      .then(value=>{if(!controller.signal.aborted)setData(value);})
-      .catch((err:Error)=>{if(!controller.signal.aborted)setError(err.message);})
-      .finally(()=>{if(!controller.signal.aborted)setLoading(false);});
+    void request<PublicationPage>(`/api/reports/publications?${new URLSearchParams({...filters,page:String(page),pageSize:'20'})}`,undefined,controller.signal)
+      .then(value=>{if(current() && !controller.signal.aborted)setData(value);})
+      .catch((err:Error)=>{if(current() && !controller.signal.aborted)setError(err.message);})
+      .finally(()=>{if(current() && !controller.signal.aborted)setLoading(false);});
     return()=>controller.abort();
-  },[filters,page,tick]);
+  },[filters,page,tick,request,current]);
   const pages=Math.max(1,Math.ceil((data?.total || 0)/20));
-  const date=(value:string)=>new Intl.DateTimeFormat('en-GB',{timeZone:data?.timezone || 'UTC',dateStyle:'medium',timeStyle:'short'}).format(new Date(value));
-  return <section className="report-publication-history" aria-label="Publication history">
-    <div className="people-panel-heading"><h2>Publication history</h2><button className="icon-button" title="Refresh publication history" aria-label="Refresh publication history" disabled={loading || disabled} onClick={()=>setTick(value=>value+1)}><RefreshCw size={18}/></button></div>
-    <form className="filters" onSubmit={event=>{event.preventDefault();const values=new FormData(event.currentTarget);setPage(1);setFilters({search:String(values.get('search') || ''),from:String(values.get('from') || ''),through:String(values.get('through') || '')});}}>
-      <label className="select-label">Title<input name="search" type="search" maxLength={120} disabled={disabled}/></label>
-      <label className="select-label">Published from<input name="from" type="date" disabled={disabled}/></label>
-      <label className="select-label">Published through<input name="through" type="date" disabled={disabled}/></label>
-      <button className="icon-button" type="submit" aria-label="Apply publication filters" title="Apply publication filters" disabled={disabled}><Search size={20}/></button>
+  const changePage=(next:number)=>{historyHeading.current?.focus();setPage(next);};
+  const date=(value:string)=>{const stamp=reportTimestamp(language,value,data?.timezone||'UTC');return <time dateTime={value}><bdi>{stamp.text}</bdi> <bdi dir="ltr">{stamp.offset}</bdi></time>;};
+  return <section className="report-publication-history" aria-label={t('Publication history')} aria-busy={loading}>
+    <div className="people-panel-heading"><h2 ref={historyHeading} tabIndex={-1}>{t('Publication history')}</h2><button className="icon-button" title={t('Refresh publication history')} aria-label={t('Refresh publication history')} disabled={loading || disabled} onClick={()=>{historyHeading.current?.focus();setTick(value=>value+1);}}><RefreshCw size={18}/></button></div>
+    <form className="filters" onSubmit={event=>{event.preventDefault();const values=new FormData(event.currentTarget);changePage(1);setFilters({search:String(values.get('search') || ''),from:String(values.get('from') || ''),through:String(values.get('through') || '')});}}>
+      <label className="select-label">{t('Title')}<input name="search" type="search" maxLength={120} disabled={disabled} dir="auto"/></label>
+      <label className="select-label">{t('Published from')}<input name="from" type="date" disabled={disabled}/></label>
+      <label className="select-label">{t('Published through')}<input name="through" type="date" disabled={disabled}/></label>
+      <button className="icon-button" type="submit" aria-label={t('Apply publication filters')} title={t('Apply publication filters')} disabled={disabled}><Search size={20}/></button>
     </form>
-    {data && <p className="muted">{data.timezone} · {data.total} published {data.total===1?'version':'versions'}</p>}
-    {loading ? <p role="status">Loading publication history...</p> : error ? <p role="alert" className="record-error">{error}</p> : <>
-      <ul className="report-publication-list">{data?.items.map(item=><li key={item.id}><button className="publication-choice" disabled={disabled} onClick={()=>onSelect(item.id)}><FileText size={20}/><span><strong>{item.title} · v{item.version}</strong><small>{item.state} · {date(item.publishedAt)}</small></span><ChevronRight size={18}/></button></li>)}</ul>
-      {!data?.items.length && <p>{page>pages?'This page is no longer available.':'No published versions match these filters.'}</p>}
-      {data && <div className="audit-pagination"><span>Page {page} of {pages}</span><div className="actions"><button className="icon-button" aria-label="Previous publication page" title="Previous publication page" disabled={disabled || page<=1} onClick={()=>setPage(value=>value-1)}><ChevronLeft size={18}/></button><button className="icon-button" aria-label="Next publication page" title="Next publication page" disabled={disabled || page>=pages} onClick={()=>setPage(value=>value+1)}><ChevronRight size={18}/></button>{page>pages && <button className="button outline" disabled={disabled} onClick={()=>setPage(1)}>First page</button>}</div></div>}
+    {data && <p className="muted"><bdi>{data.timezone}</bdi> · {reportText(language,'{count} published versions',{count:data.total})}</p>}
+    {loading ? <p role="status">{t('Loading publication history...')}</p> : error ? <p role="alert" className="record-error">{reportErrorText(language,error,'Publication history could not be loaded. Refresh to try again.')}</p> : <>
+      <ul className="report-publication-list">{data?.items.map(item=><li key={item.id}><button className="publication-choice" disabled={disabled} onClick={()=>onSelect(item.id)}><FileText size={20}/><span><strong><bdi>{item.title}</bdi> · {reportText(language,'Published v{version}',{version:item.version})}</strong><small>{reportState(language,item.state)} · {date(item.publishedAt)}</small></span>{language==='en'?<ChevronRight size={18}/>:<ChevronLeft size={18}/>}</button></li>)}</ul>
+      {!data?.items.length && <p>{t(page>pages?'This page is no longer available.':'No published versions match these filters.')}</p>}
+      {data && <div className="audit-pagination"><span>{reportText(language,'Page {page} of {pages}',{page,pages})}</span><div className="actions"><button className="icon-button" aria-label={t('Previous publication page')} title={t('Previous publication page')} disabled={disabled || page<=1} onClick={()=>changePage(page-1)}>{language==='en'?<ChevronLeft size={18}/>:<ChevronRight size={18}/>}</button><button className="icon-button" aria-label={t('Next publication page')} title={t('Next publication page')} disabled={disabled || page>=pages} onClick={()=>changePage(page+1)}>{language==='en'?<ChevronRight size={18}/>:<ChevronLeft size={18}/>}</button>{page>pages && <button className="button outline" disabled={disabled} onClick={()=>changePage(1)}>{t('First page')}</button>}</div></div>}
     </>}
   </section>;
 }
 
-export function ReportsPage({ refresh }: { refresh: number }) {
+export function ReportsPage({refresh,authority,language='en',onLanguageChange}:{refresh:number;authority:StaffRequestAuthority;language?:ReportLocale;onLanguageChange?:(language:ReportLocale)=>void}) {
+  const {request,current}=useStaffRequest(authority);
+  const locale=reportLocale(language),t=(key:ReportTextKey)=>reportText(locale,key);
+  const allowed=definition.roles!.includes(authority.session.staffRole || ''),scope=allowed?authority.session.staffScope:null;
+  const canExport=allowed && authority.session.siteState!=='archived';
+  const [recovery]=useState(()=>{try{return {pending:scope?readPendingExport(sessionStorage,checkedArtifactScope(scope,authority.session,definition.roles)):null,error:''};}catch(reason){return {pending:null,error:(reason as Error).message};}});
   const [publicationId, setPublicationId] = useState('');
   const [filters,setFilters]=useState<ReportFilters>({crewId:'',responseFrom:'',responseThrough:''});
   const [chosenFilters,setChosenFilters]=useState<ReportFilters>({crewId:'',responseFrom:'',responseThrough:''});
@@ -58,98 +68,109 @@ export function ReportsPage({ refresh }: { refresh: number }) {
   const [exports, setExports] = useState<Export[]>([]);
   const [error, setError] = useState('');
   const [exportError, setExportError] = useState('');
+  const [exportLoading,setExportLoading]=useState(true);
   const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<ReportTextKey|null>(null);
   const [historyRefresh, setHistoryRefresh] = useState(0);
   const [historyOpen,setHistoryOpen]=useState(false);
   const [reportRefresh,setReportRefresh]=useState(0);
   const historyTrigger=useRef<HTMLButtonElement>(null);
-  const requestKey = useRef<{ publicationId: string; requestId: string;filters:ReportFilters } | null>(null);
-  const sending = useRef(false);
+  const operation=useArtifactMutation(authority,scope,definition,savePendingExport,canExport,(_result,pending)=>{
+    setMessage(pending.kind==='create'?'Export request accepted. Check export history for its current status.':'Export retry accepted. Check export history for its current status.');
+    setHistoryRefresh(value=>value+1);
+  },recovery.pending);
+  const {busy}=operation;
+  useEffect(()=>{
+    if(!recovery.pending)return;
+    const controller=new AbortController();queueMicrotask(()=>{if(!controller.signal.aborted)void operation.check(controller.signal);});
+    return()=>controller.abort();
+  },[operation.api,recovery.pending]);
   useEffect(() => {
-    let current = true;
-    setLoading(true); setError('');
-    request<Report>(`/reports?${new URLSearchParams({...filters,...(publicationId?{publicationId}:{})})}`)
-      .then((data) => { if (current) setReport(data); })
-      .catch((err: Error) => { if (current) { setReport(null); setError(err.message); } })
-      .finally(() => { if (current) setLoading(false); });
-    return () => { current = false; };
-  }, [publicationId, refresh,filters,reportRefresh]);
+    const controller=new AbortController(),live=()=>current() && !controller.signal.aborted;
+    setReport(null);setLoading(true); setError('');
+    request<Report>(`/api/reports?${new URLSearchParams({...filters,...(publicationId?{publicationId}:{})})}`,undefined,controller.signal)
+      .then((data) => { if (live()) setReport(data); })
+      .catch((err: Error) => { if (live()) setError(err.message); })
+      .finally(() => { if (live()) setLoading(false); });
+    return () => controller.abort();
+  }, [publicationId, refresh,filters,reportRefresh,request,current]);
   useEffect(() => {
-    let current = true;
+    const controller=new AbortController(),live=()=>current() && !controller.signal.aborted;
     let timer: number;
+    setExportLoading(true);setExports([]);setExportError('');
     const load = async () => {
       try {
-        const rows = await request<Export[]>('/reports/exports');
-        if (!current) return;
+        const value=await request<unknown>('/api/reports/exports',undefined,controller.signal);
+        if(!Array.isArray(value) || value.length>50)throw Error('Export history cannot be verified.');
+        const rows=value.map(checkedExportRow);
+        if (!live()) return;
         setExports(rows); setExportError('');
         timer = window.setTimeout(load, rows.some((row) => ['queued', 'processing'].includes(row.status)) ? 1500 : 60_000);
-      } catch (err) { if (current) { setExportError((err as Error).message); timer = window.setTimeout(load, 60_000); } }
+      } catch (err) { if (live()) { setExports([]);setExportError((err as Error).message); timer = window.setTimeout(load, 60_000); } }
+      finally{if(live())setExportLoading(false);}
     };
     void load();
-    return () => { current = false; window.clearTimeout(timer); };
-  }, [refresh, historyRefresh]);
+    return () => { controller.abort();window.clearTimeout(timer); };
+  }, [refresh, historyRefresh,request,current]);
   const exportReport = async () => {
-    if (!report?.publicationId || sending.current) return;
-    sending.current = true; setBusy(true); setExportError(''); setMessage('');
-    if (requestKey.current?.publicationId !== report.publicationId || JSON.stringify(requestKey.current?.filters)!==JSON.stringify(filters)) requestKey.current = { publicationId: report.publicationId, requestId: crypto.randomUUID(),filters };
-    try {
-      const result = await request<Export>('/reports/exports', requestKey.current);
-      setMessage(result.status === 'ready' ? 'Export is ready to download.' : `Export ${result.status}.`);
-      requestKey.current = null;
-      setHistoryRefresh((value) => value + 1);
-    } catch (err) { setExportError((err as Error).message); }
-    finally { sending.current = false; setBusy(false); }
+    if(!report?.publicationId || operation.pending.current || recovery.error || !canExport || !current())return;
+    setMessage(null);await operation.write({kind:'create',requestId:crypto.randomUUID(),exportId:null,body:{publicationId:report.publicationId,filters:structuredClone(filters)}});
   };
-  const retry = async (id: string) => {
-    if (sending.current) return;
-    sending.current = true; setBusy(true); setExportError('');
-    try { await request(`/reports/exports/${id}/retry`, {}); setMessage('Export queued.'); setHistoryRefresh((value) => value + 1); }
-    catch (err) { setExportError((err as Error).message); }
-    finally { sending.current = false; setBusy(false); }
+  const retry = async (row: Export) => {
+    if(operation.pending.current || recovery.error || !canExport || !current())return;
+    setMessage(null);await operation.write({kind:'retry',requestId:crypto.randomUUID(),exportId:row.id,body:{attempts:row.attempts}});
   };
-  const date = (value: string) => new Intl.DateTimeFormat('en-GB', { timeZone: report?.timezone || 'UTC', dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
+  const date=(value:string,timezone=report?.timezone||'UTC')=>{const stamp=reportTimestamp(locale,value,timezone);return <time dateTime={value}><bdi>{stamp.text}</bdi> <bdi dir="ltr">{stamp.offset}</bdi></time>;};
   const m = report?.metrics;
   const windowed=Boolean(filters.responseFrom || filters.responseThrough);
   const width = (count: number) => `${m?.assigned ? count / m.assigned * 100 : 0}%`;
   return <>
-    <div className="page-header"><div><h1>Briefing activity</h1><p>{report?.title ? `${report.title} · Published v${report.version}` : 'Response activity at this site'}</p></div>
-      <div className="actions"><a className="button outline" href="#reports/activity"><History size={18} />Activity history</a><button className="button primary" onClick={() => void exportReport()} disabled={loading || busy || !m}><Download size={18} />{busy ? 'Queuing...' : 'Export CSV'}</button></div>
+    <div className="page-header report-header"><div><h1>{t('Briefing activity')}</h1><p>{report?.title ? <><bdi>{report.title}</bdi> · {reportText(locale,'Published v{version}',{version:report.version})}</> : t('Response activity at this site')}</p></div>
+      <div className="actions">{onLanguageChange&&<CaseLocalePicker locale={locale} onChange={onLanguageChange}/>}<a className="button outline" href="#reports/activity"><History size={18} />{t('Activity history')}</a><button className="button primary" onClick={() => void exportReport()} disabled={loading || busy || !m || !canExport || !!operation.pending.current || !!recovery.error}><Download size={18} />{t(busy?'Working...':'Export CSV')}</button></div>
     </div>
-    <div className="filters"><button ref={historyTrigger} className="button outline" disabled={busy} aria-expanded={historyOpen} aria-controls="report-publication-history" onClick={()=>setHistoryOpen(value=>!value)}><History size={18}/>Briefing version<ChevronDown size={18}/></button>
-      {report?.asOf && <span className="report-date">{date(report.asOf)} · {report.timezone}</span>}</div>
-    {historyOpen && <div id="report-publication-history"><PublicationHistory disabled={busy} onSelect={id=>{setPublicationId(id);setFilters(value=>({...value,crewId:''}));setChosenFilters(value=>({...value,crewId:''}));setHistoryOpen(false);historyTrigger.current?.focus();}}/></div>}
+    <div className="filters"><button ref={historyTrigger} className="button outline" disabled={busy} aria-expanded={historyOpen} aria-controls="report-publication-history" onClick={()=>setHistoryOpen(value=>!value)}><History size={18}/>{t('Briefing version')}<ChevronDown size={18}/></button>
+      {report?.asOf && <span className="report-date">{date(report.asOf)} · <bdi>{report.timezone}</bdi></span>}</div>
+    {historyOpen && <div id="report-publication-history"><PublicationHistory language={locale} authority={authority} disabled={busy} onSelect={id=>{if(!current())return;setPublicationId(id);setFilters(value=>({...value,crewId:''}));setChosenFilters(value=>({...value,crewId:''}));setHistoryOpen(false);historyTrigger.current?.focus();}}/></div>}
     <form className="filters report-scope-filters" onSubmit={event=>{event.preventDefault();if(!busy && !loading)setFilters({...chosenFilters});}}>
-      <label className="select-label">Crew at publication<select value={chosenFilters.crewId} disabled={busy || loading || !report?.crewSnapshotAvailable} onChange={event=>setChosenFilters(value=>({...value,crewId:event.target.value}))}><option value="">All assigned workers</option>{report?.availableCrews?.map(crew=><option key={crew.id} value={crew.id}>{crew.name}</option>)}{report?.crewSnapshotAvailable && <option value="@unassigned">No crew</option>}</select></label>
-      <label className="select-label">Latest response from<input type="date" value={chosenFilters.responseFrom} disabled={busy || loading || !report?.filters} onChange={event=>setChosenFilters(value=>({...value,responseFrom:event.target.value}))}/></label>
-      <label className="select-label">Latest response through<input type="date" min={chosenFilters.responseFrom || undefined} value={chosenFilters.responseThrough} disabled={busy || loading || !report?.filters} onChange={event=>setChosenFilters(value=>({...value,responseThrough:event.target.value}))}/></label>
-      <button className="icon-button" type="submit" aria-label="Apply report filters" title="Apply report filters" disabled={busy || loading || !report?.filters}><Search size={20}/></button>
-      <button className="icon-button" type="button" aria-label="Clear report filters" title="Clear report filters" disabled={busy || loading} onClick={()=>{const empty={crewId:'',responseFrom:'',responseThrough:''};setChosenFilters(empty);setFilters(empty);}}><RefreshCw size={18}/></button>
+      <label className="select-label">{t('Crew at publication')}<select value={chosenFilters.crewId} disabled={busy || loading || !report?.crewSnapshotAvailable} onChange={event=>setChosenFilters(value=>({...value,crewId:event.target.value}))}><option value="">{t('All assigned workers')}</option>{report?.availableCrews?.map(crew=><option key={crew.id} value={crew.id}>{crew.name}</option>)}{report?.crewSnapshotAvailable && <option value="@unassigned">{t('No crew')}</option>}</select></label>
+      <label className="select-label">{t('Latest response from')}<input type="date" value={chosenFilters.responseFrom} disabled={busy || loading || !report?.filters} onChange={event=>setChosenFilters(value=>({...value,responseFrom:event.target.value}))}/></label>
+      <label className="select-label">{t('Latest response through')}<input type="date" min={chosenFilters.responseFrom || undefined} value={chosenFilters.responseThrough} disabled={busy || loading || !report?.filters} onChange={event=>setChosenFilters(value=>({...value,responseThrough:event.target.value}))}/></label>
+      <button className="icon-button" type="submit" aria-label={t('Apply report filters')} title={t('Apply report filters')} disabled={busy || loading || !report?.filters}><Search size={20}/></button>
+      <button className="icon-button" type="button" aria-label={t('Clear report filters')} title={t('Clear report filters')} disabled={busy || loading} onClick={()=>{const empty={crewId:'',responseFrom:'',responseThrough:''};setChosenFilters(empty);setFilters(empty);}}><RefreshCw size={18}/></button>
     </form>
-    {report?.filters && !report.crewSnapshotAvailable && <p className="muted">Historical crew snapshot unavailable for this version.</p>}
-    {windowed && <p className="report-date">Latest-response window: {filters.responseFrom || 'Start'} to {filters.responseThrough || 'Present'} · {report?.timezone}</p>}
-    {loading ? <p>Loading report...</p> : error ? <div className="actions"><p role="alert" className="record-error">{error}</p><button className="icon-button" title="Retry report" aria-label="Retry report" disabled={busy} onClick={()=>setReportRefresh(value=>value+1)}><RefreshCw size={18}/></button></div> : !m ? <p>No published briefing is available.</p> : <>
+    {report?.filters && !report.crewSnapshotAvailable && <p className="muted">{t('Historical crew snapshot unavailable for this version.')}</p>}
+    {windowed && <p className="report-date">{t('Latest-response window')}: <bdi dir="ltr">{filters.responseFrom||t('Start')}</bdi> {t('to')} <bdi dir="ltr">{filters.responseThrough||t('Present')}</bdi> · <bdi>{report?.timezone}</bdi></p>}
+    {loading ? <p role="status">{t('Loading report...')}</p> : error ? <div className="actions"><p role="alert" className="record-error">{reportErrorText(locale,error,'The report could not be loaded. Try again.')}</p><button className="icon-button" title={t('Retry report')} aria-label={t('Retry report')} disabled={busy} onClick={()=>setReportRefresh(value=>value+1)}><RefreshCw size={18}/></button></div> : !m ? <p>{t('No published briefing is available.')}</p> : <>
       <div className="metrics">{[
-        { icon: FileText, value: m.assigned, label: 'assigned' }, { icon: Users, value: m.responses, label: 'responses' },
-        { icon: CheckCircle2, value: m.matches, label: 'match key facts' }, { icon: TriangleAlert, value: m.clarifications, label: 'need clarification' },
-        { icon: Clock3, value: m.pending, label: windowed?'no response in window':'awaiting response' },
+        { icon: FileText, value: m.assigned, label: t('assigned') }, { icon: Users, value: m.responses, label: t('responses') },
+        { icon: CheckCircle2, value: m.matches, label: t('match key facts') }, { icon: TriangleAlert, value: m.clarifications, label: t('need clarification') },
+        { icon: Clock3, value: m.pending, label: t(windowed?'no response in window':'awaiting response') },
       ].map(({ icon: Icon, value, label }, index) => <div className={`metric ${index === 3 ? 'metric-warn' : ''}`} key={label}><div className="metric-icon"><Icon size={28} /></div><div><strong>{value}</strong><span>{label}</span></div></div>)}</div>
-      <section className="panel"><h2>Response status</h2><div className="report-bar"><span style={{ width: width(m.matches) }} /><span style={{ width: width(m.clarifications) }} /><span style={{ width: width(m.unassessed) }} /><span style={{ width: width(m.pending) }} /></div>
-        <div className="report-bottom"><div className="legend"><span><i className="dot green" />{m.matches} match the rubric</span><span><i className="dot amber" />{m.clarifications} need clarification</span><span><i className="dot blue" />{m.unassessed} awaiting assessment</span><span><i className="dot grey" />{m.pending} {windowed?'no response in window':'awaiting response'}</span></div><strong>{m.completion}% <small>response completion</small></strong></div>
+      <section className="panel"><h2>{t('Response status')}</h2><div className="report-bar"><span style={{ width: width(m.matches) }} /><span style={{ width: width(m.clarifications) }} /><span style={{ width: width(m.unassessed) }} /><span style={{ width: width(m.pending) }} /></div>
+        <div className="report-bottom"><div className="legend"><span><i className="dot green" />{m.matches} {t('match the rubric')}</span><span><i className="dot amber" />{m.clarifications} {t('need clarification')}</span><span><i className="dot blue" />{m.unassessed} {t('awaiting assessment')}</span><span><i className="dot grey" />{m.pending} {t(windowed?'no response in window':'awaiting response')}</span></div><strong>{m.completion}% <small>{t('response completion')}</small></strong></div>
       </section>
     </>}
-    {message && <p role="status">{message}</p>}
+    {message && <p role="status">{t(message)}</p>}
+    {recovery.error && <p role="alert" className="record-error">{reportErrorText(locale,recovery.error,'Saved export request cannot be verified. It has not been repeated or removed.')}</p>}
+    {operation.error && <p role="alert" className="record-error">{reportErrorText(locale,operation.error,operation.pending.current?'The export outcome is not confirmed. Check the saved request before retrying.':'The export request could not be completed.')}</p>}
+    {operation.pending.current && <section className="report-export-recovery" aria-label={t('Saved export request')}>
+      <h2>{t(operation.pending.current.kind==='create'?'Recover export request':'Recover export retry')}</h2>
+      <p>{t('Original request')}: <bdi dir="ltr">{operation.pending.current.requestId}</bdi></p>
+      {operation.pending.current.kind==='create' ? <>
+        <p>{t('Published version')}: <bdi dir="ltr">{String(operation.pending.current.body.publicationId)}</bdi></p>
+        <p>{t('Crew')}: <bdi>{(operation.pending.current.body.filters as ReportFilters).crewId==='@unassigned'?t('No crew'):String((operation.pending.current.body.filters as ReportFilters).crewId||t('All assigned workers'))}</bdi> · {t('Latest responses')}: <bdi dir="ltr">{String((operation.pending.current.body.filters as ReportFilters).responseFrom||t('Start'))}</bdi> {t('to')} <bdi dir="ltr">{String((operation.pending.current.body.filters as ReportFilters).responseThrough||t('Present'))}</bdi></p>
+      </> : <><p>{t('Export')}: <bdi dir="ltr">{operation.pending.current.exportId}</bdi></p><p>{t('Original failed attempt')}: {String(operation.pending.current.body.attempts)}</p></>}
+      <div className="actions"><button className="button outline" disabled={busy} onClick={()=>void operation.check()}><RefreshCw size={18}/>{t('Check saved request')}</button>{operation.checked && <button className="button primary" disabled={busy || !canExport} onClick={()=>void operation.write(operation.pending.current!)}><RefreshCw size={18}/>{t('Retry original request')}</button>}</div>
+    </section>}
     <div className="report-grid">
-      {m && <section className="panel"><h2>Language breakdown</h2><div className="table-wrap"><table className="language-table"><thead><tr><th>Assignment language</th><th>Assigned</th><th>Received</th><th>Completion</th></tr></thead><tbody>{report.languages.map((row) => <tr key={row.language}><td>{languageNames[row.language] || row.language}</td><td>{row.assigned}</td><td>{row.received}</td><td><div className="language-completion"><span>{row.completion}%</span><meter min="0" max="100" value={row.completion} aria-label={`${row.language} response completion`} /></div></td></tr>)}</tbody></table></div></section>}
-      <section className="panel export-history"><div className="people-panel-heading"><h2>Export history</h2><button className="icon-button" title="Refresh exports" aria-label="Refresh exports" onClick={() => setHistoryRefresh((value) => value + 1)}><RefreshCw size={18} /></button></div>
-        {exportError && <p role="alert" className="record-error">{exportError}</p>}
-        {!exports.length ? <p>No exports requested.</p> : <ul className="export-list">{exports.map((item) => <li key={item.id}><FileText size={24} /><div className="export-info"><strong>{item.filename}</strong><span className={`status status-${item.status === 'ready' ? 'green' : item.status === 'failed' ? 'red' : 'blue'}`}>{item.status}</span><small>{date(item.createdAt)}</small>{(item.filters?.responseFrom || item.filters?.responseThrough) && <small>Latest responses: {item.filters.responseFrom || 'Start'} to {item.filters.responseThrough || 'Present'} · {item.filters.timezone || report?.timezone}</small>}{item.filters?.crewId && <small>Crew-filtered audience</small>}{item.status === 'ready' && <small>Expires {date(item.expiresAt)}</small>}{item.error && <small>{item.error}</small>}</div>
-          {item.status === 'ready' && <a className="button outline" href={`/api/reports/exports/${item.id}/download`} download={item.filename}><Download size={16} />Download</a>}
-          {item.status === 'failed' && item.attempts < 3 && <button className="button outline" disabled={busy} onClick={() => void retry(item.id)}><RefreshCw size={16} />Retry</button>}
+      {m && <section className="panel"><h2>{t('Language breakdown')}</h2><div className="table-wrap"><table className="language-table"><thead><tr><th>{t('Assignment language')}</th><th>{t('Assigned')}</th><th>{t('Received')}</th><th>{t('Completion')}</th></tr></thead><tbody>{report.languages.map((row) => <tr key={row.language}><td><bdi>{reportLanguage(locale,row.language)}</bdi></td><td>{row.assigned}</td><td>{row.received}</td><td><div className="language-completion"><span>{row.completion}%</span><meter min="0" max="100" value={row.completion} aria-label={reportText(locale,'{language} response completion',{language:reportLanguage(locale,row.language)})} /></div></td></tr>)}</tbody></table></div></section>}
+      <section className="panel export-history"><div className="people-panel-heading"><h2>{t('Export history')}</h2><button className="icon-button" title={t('Refresh exports')} aria-label={t('Refresh exports')} disabled={exportLoading} onClick={() => setHistoryRefresh((value) => value + 1)}><RefreshCw size={18} /></button></div>
+        {exportLoading?<p role="status">{t('Loading export history...')}</p>:exportError?<p role="alert" className="record-error">{reportErrorText(locale,exportError,'Export history cannot be verified.')}</p>:!exports.length ? <p>{t('No exports requested.')}</p> : <ul className="export-list">{exports.map((item) => <li key={item.id}><FileText size={24} /><div className="export-info"><strong><bdi dir="ltr">{item.filename}</bdi></strong><span className={`status status-${item.status === 'ready' ? 'green' : item.status === 'failed' ? 'red' : 'blue'}`}>{reportState(locale,item.status)}</span><small>{date(item.createdAt,item.filters?.timezone||report?.timezone)}</small>{(item.filters?.responseFrom || item.filters?.responseThrough) && <small>{t('Latest responses')}: <bdi dir="ltr">{item.filters.responseFrom||t('Start')}</bdi> {t('to')} <bdi dir="ltr">{item.filters.responseThrough||t('Present')}</bdi> · <bdi>{item.filters.timezone||report?.timezone}</bdi></small>}{item.filters?.crewId && <small>{t('Crew-filtered audience')}</small>}{item.status === 'ready' && <small>{t('Expires')} {date(item.expiresAt,item.filters?.timezone||report?.timezone)}</small>}{item.error && <small>{reportErrorText(locale,item.error,'Export generation failed')}</small>}</div>
+          {item.status === 'ready' && <a className="button outline" href={`/api/reports/exports/${item.id}/download`} download={item.filename}><Download size={16} />{t('Download')}</a>}
+          {item.status === 'failed' && item.attempts < 3 && <button className="button outline" disabled={busy || !canExport || !!operation.pending.current || !!recovery.error} onClick={() => void retry(item)}><RefreshCw size={16} />{t('Retry')}</button>}
         </li>)}</ul>}
       </section>
     </div>
-    <div className="notice"><TriangleAlert size={22} /><span>Response status is not proof of safe work or internal understanding.</span></div>
+    <div className="notice"><TriangleAlert size={22} /><span>{t('Response status is not proof of safe work or internal understanding.')}</span></div>
   </>;
 }

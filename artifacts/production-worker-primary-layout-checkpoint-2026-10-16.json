@@ -1,0 +1,14 @@
+{
+  "checkpoint":"worker-primary-first-layout-local","date":"2026-10-16",
+  "overallEstimatePercent":73,"taskEstimatePercent":85,"productionVerdict":false,
+  "cleanRun":"947bfe0f-12f9-4d38-9e7b-c5037bc94646","cleanExec":4153,"cleanExitCode":0,
+  "tests":{"total":1196,"passed":1192,"failed":0,"nativeOnlySkipped":4,"durationMs":294630.701},
+  "source":{"files":845,"unchanged":true,"sha256":"25d3e9a8540d9704f211464d5aa2d735d2b5df5d02f46865d56405e1c9bebe18"},
+  "evaluations":{"contract":43,"pipeline":10,"scriptedRequests":24,"externalRequests":0},
+  "fixture":{"memoryOnly":true,"exec":1182,"exitCode":0,"audioReads":8,"writes":0,"attempts":0,"externalCalls":0,"briefingsUnchanged":true,"publicationsUnchanged":true},
+  "checks":["primary-before-visible-mounted-recovery-tools","explicit-synthetic-text-save-reload-restore","no-answer-sent","test-snapshot-removed","shared-device-policy-restored","slider-focus-gap-8px","keyboard-seek-0.1seconds"],
+  "responsive":{"languages":["en","ar","ur"],"widths":[320,390,768,1440],"selectedEnglishReferenceViewport":{"width":821,"height":1600},"overflow":false,"mobilePlayerTop":424.671875,"widePlayerTop":378.75},
+  "preservationArtifact":"clean-backup-preservation-9cb5251e-9a5c-4345-8f6c-ec608bdf4cf0.json",
+  "ownedTabsClosed":true,"viewportReset":true,
+  "limits":["full-matched-reference","independent-language","assistive-technology","real-phone","actual-speech-quality","native-and-hosted"]
+}

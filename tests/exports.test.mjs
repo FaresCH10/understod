@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import { randomUUID } from 'node:crypto';
 import { openDatabase } from '../server/db.mjs';
 import { seed } from '../server/seed.mjs';
@@ -53,10 +55,10 @@ test('exports recover expired leases, fence revoked requester and enforce bounde
     assert.equal(db.prepare("SELECT COUNT(*) AS n FROM audit WHERE action='export.failed' AND object_id=?").get(second.id).n, 1);
     assert.throws(() => downloadExport(db, maya, first.id), /Forbidden/);
     db.prepare('UPDATE staff SET active=1 WHERE id=?').run('maya');
-    retryExport(db, maya, second.id);
+    retryExport(db, maya, second.id,{requestId:randomUUID(),attempts:1});
     assert.equal(processOneExport(db), true);
     db.prepare("UPDATE report_exports SET status='failed',attempts=3 WHERE id=?").run(second.id);
-    assert.throws(() => retryExport(db, maya, second.id), /cannot be retried/);
+    assert.throws(() => retryExport(db, maya, second.id,{requestId:randomUUID(),attempts:2}), /cannot be retried/);
     const expiredId = randomUUID();
     db.prepare(`INSERT INTO report_exports(id,org_id,site_id,publication_id,requested_by,created_at,expires_at,status,snapshot_json,csv)
       VALUES (?,'cedar','beirut','shelf-v3','maya','2000-01-01T00:00:00.000Z','2000-01-02T00:00:00.000Z','ready','[]','private')`).run(expiredId);

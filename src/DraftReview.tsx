@@ -3,56 +3,52 @@ import {Pencil,RefreshCw,Save,X,TriangleAlert} from 'lucide-react';
 import {readPendingReview,savePendingReview,clearPendingReview,pendingReviewContent,checkedReviewResult,type PendingReview,type TranslationEdits} from './review-recovery';
 import {sameReview} from '../server/briefing-input.mjs';
 import {translationEdits} from '../server/translation-input.mjs';
+import {useBriefingRequest,BriefingRequestError} from './BriefingControls';
+import type {StaffRequestAuthority} from './useStaffRequest';
+import {retainStaffRequest} from './staff-request';
 type Review={revision:number;question:string;facts:string[];askedFacts:string[];translations?:TranslationEdits};
 type Prepared={question:string;facts:string[];rubric?:{askedFacts:string[]}};
 type TranslationTarget={code:'ar'|'ur';name:string;dir:'rtl';title:string;text:string;question:string};
 class ReviewError extends Error {constructor(message:string,public uncertain=false){super(message);}}
-async function requestReview(path:string,body?:unknown) {
-  let response:Response,data;
-  try {response=await fetch(`/api${path}`,{credentials:'include',...(body ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)} : {})});data=await response.json();}
-  catch {throw new ReviewError('Connection interrupted. Check the saved review request.',!!body);}
-  if(!response.ok) throw new ReviewError(data.error || 'Draft review request failed.',!!body && response.status>=500);
-  return data;
-}
-const saveReview=(id:string,body:unknown)=>requestReview(`/briefings/${encodeURIComponent(id)}/review`,body);
 const lines=(text:string)=>text.split(/\r?\n/).map(line=>line.trim()).filter(Boolean);
 export function useReviewRecovery(scope?:string|null) {
   return useState(()=>{try {return {pending:scope ? readPendingReview(sessionStorage,scope) : null,error:''};}catch(reason) {return {pending:null,error:(reason as Error).message};}});
 }
-export function DraftReviewRecovery({pending,scope,onResolved}:{pending:PendingReview;scope:string;onResolved:(id:string)=>void}) {
+export function DraftReviewRecovery({pending,scope,onResolved,authority}:{pending:PendingReview;scope:string;onResolved:(id:string)=>void;authority:StaffRequestAuthority}) {
+  const {request,current:sessionCurrent,complete}=useBriefingRequest(authority);
   const [busy,setBusy]=useState(false),[checked,setChecked]=useState(false),[error,setError]=useState(''),[refresh,setRefresh]=useState(0);
   const sending=useRef(false),heading=useRef<HTMLHeadingElement>(null),resolved=useRef(onResolved);resolved.current=onResolved;
   useEffect(()=>{heading.current?.focus();},[]);
   useEffect(()=>{
-    let current=true;setBusy(true);setChecked(false);setError('');
-    requestReview(`/briefing-review/receipts/${pending.requestId}`).then(async value=>{
-      if(!current) return;
-      if(value.found===true) {
+    const controller=new AbortController();setBusy(true);setChecked(false);setError('');
+    request<any>(`/briefing-review/receipts/${pending.requestId}`,'GET',undefined,controller.signal).then(value=>complete(value,async input=>{
+      const value=input as any;
+      if(value?.found===true) {
         checkedReviewResult(value,pending);
         if(value.contentExpired===true){
-          const verified=await requestReview(`/briefing-review/receipts/${pending.requestId}/verify`,pending.body);
-          if(!current)return;
+          const verified=await request<any>(`/briefing-review/receipts/${pending.requestId}/verify`,'POST',pending.body,controller.signal);
           checkedReviewResult(verified,pending);
           if(verified.found!==true || verified.matches!==true)throw new Error('Expired review receipt could not be verified.');
         }else if(value.id!==pending.briefingId || !value.request || !sameReview(value.request,pendingReviewContent(pending))) throw new Error('Saved receipt does not match this pending review request.');
-        clearPendingReview(sessionStorage,scope,pending.requestId);resolved.current(value.id);
-      } else if(value.found===false) setChecked(true);else throw new Error('Review receipt response cannot be verified.');
-    }).catch(reason=>{if(current) setError(reason.message);}).finally(()=>{if(current) setBusy(false);});
-    return ()=>{current=false;};
-  },[refresh,pending,scope]);
+        return value.id as string;
+      } else if(value?.found===false)return null;else throw new Error('Review receipt response cannot be verified.');
+    },id=>{if(controller.signal.aborted)return;if(id){clearPendingReview(sessionStorage,scope,pending.requestId);resolved.current(id);}else setChecked(true);} ))
+      .catch(reason=>{if(!controller.signal.aborted && sessionCurrent())setError(reason.message);}).finally(()=>{if(!controller.signal.aborted && sessionCurrent())setBusy(false);});
+    return ()=>controller.abort();
+  },[refresh,pending,scope,request,sessionCurrent,complete]);
   async function retry() {
-    if(sending.current || busy || !checked) return;sending.current=true;setBusy(true);setError('');
+    if(sending.current || busy || !checked || !sessionCurrent()) return;sending.current=true;setBusy(true);setError('');
     try {
       savePendingReview(sessionStorage,scope,pending);
-      const value=await saveReview(pending.briefingId,{...pending.body,requestId:pending.requestId});
-      checkedReviewResult(value,pending);
-      clearPendingReview(sessionStorage,scope,pending.requestId);resolved.current(value.id);
-    } catch(reason) {setError((reason as Error).message);}
-    finally {sending.current=false;setBusy(false);}
+      const value=await request(`/briefings/${encodeURIComponent(pending.briefingId)}/review`,'POST',{...pending.body,requestId:pending.requestId});
+      await complete(value,value=>checkedReviewResult(value,pending),result=>{clearPendingReview(sessionStorage,scope,pending.requestId);resolved.current(result.id);});
+    } catch(reason) {if(sessionCurrent())setError((reason as Error).message);}
+    finally {sending.current=false;if(sessionCurrent())setBusy(false);}
   }
   return <><h1 ref={heading} tabIndex={-1}>Recover draft review</h1><section className="panel"><h2>Review for source revision {pending.body.revision}</h2><p>{pending.body.question || 'Automatic question'}</p><p>{busy ? 'Checking saved review...' : checked ? 'No saved receipt was found. You can retry the original confirmed review.' : 'The pending review has not been resolved.'}</p>{error && <p role="alert" className="record-error">{error}</p>}<div className="actions"><button className="button outline" disabled={busy} onClick={()=>setRefresh(value=>value+1)}><RefreshCw size={18}/>Check saved review</button>{checked && <button className="button primary" disabled={busy} onClick={()=>void retry()}><Save size={18}/>Retry original review</button>}</div></section></>;
 }
-export function DraftReview({id,revision,review,prepared,canWrite,scope,disabled,failed,onChanged,onEditingChange,target}:{id:string;revision:number;review:Review|null;prepared:Prepared|null;canWrite:boolean;scope?:string|null;disabled:boolean;failed:boolean;onChanged:()=>void;onEditingChange:(value:boolean)=>void;target?:TranslationTarget}) {
+export function DraftReview({id,revision,review,prepared,canWrite,scope,disabled,failed,onChanged,onEditingChange,target,authority}:{id:string;revision:number;review:Review|null;prepared:Prepared|null;canWrite:boolean;scope?:string|null;disabled:boolean;failed:boolean;onChanged:()=>void;onEditingChange:(value:boolean)=>void;target?:TranslationTarget;authority:StaffRequestAuthority}) {
+  const {request,current,complete}=useBriefingRequest(authority);
   const [editing,setEditing]=useState(false),[question,setQuestion]=useState(''),[facts,setFacts]=useState(''),[asked,setAsked]=useState(''),[confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[uncertain,setUncertain]=useState(false),[error,setError]=useState('');
   const [translated,setTranslated]=useState({title:'',text:'',question:''}),[automatic,setAutomatic]=useState(false);
   const sending=useRef(false),pending=useRef<{key:string;id:string}|null>(null),locked=busy || uncertain;
@@ -67,21 +63,23 @@ export function DraftReview({id,revision,review,prepared,canWrite,scope,disabled
     if(target) {setTranslated(review?.translations?.[target.code] || {title:target.title,text:target.text,question:target.question});setAutomatic(false);}
   }
   async function submit(event:FormEvent) {
-    event.preventDefault();if(sending.current || !confirmed || !valid) return;
+    event.preventDefault();if(sending.current || !confirmed || !valid || !current()) return;
     const body={revision,question:question.trim(),facts:lines(facts),askedFacts:lines(asked),...(Object.keys(translations).length ? {translations} : {}),confirmed:true},key=JSON.stringify(body);
     if(pending.current?.key!==key) pending.current={key,id:crypto.randomUUID()};
     sending.current=true;setBusy(true);setError('');let sent=false;
     try {
       if(!scope) throw new ReviewError('Review recovery scope is unavailable. Sign in again before saving.');
       savePendingReview(sessionStorage,scope,{requestId:pending.current.id,briefingId:id,body:{...body,confirmed:true}});sent=true;
-      const result=await saveReview(id,{...body,requestId:pending.current.id});checkedReviewResult(result,{requestId:pending.current.id,briefingId:id,body:{...body,confirmed:true}});clearPendingReview(sessionStorage,scope,pending.current.id);
-      pending.current=null;setUncertain(false);setEditing(false);onEditingChange(false);onChanged();
+      const submitted={requestId:pending.current.id,briefingId:id,body:{...body,confirmed:true as const}};
+      const result=await request(`/briefings/${encodeURIComponent(id)}/review`,'POST',{...body,requestId:submitted.requestId});
+      await complete(result,value=>checkedReviewResult(value,submitted),()=>{clearPendingReview(sessionStorage,scope,submitted.requestId);pending.current=null;setUncertain(false);setEditing(false);onEditingChange(false);onChanged();});
     } catch(reason) {
-      let unknown=sent && (!(reason instanceof ReviewError) || reason.uncertain);
+      if(!current())return;
+      let unknown=retainStaffRequest(uncertain,sent,reason instanceof BriefingRequestError?reason:null);
       if(sent && !unknown && scope) {try {clearPendingReview(sessionStorage,scope,pending.current!.id);}catch {unknown=true;}}
       setUncertain(unknown);setError((reason as Error).message);
     }
-    finally {sending.current=false;setBusy(false);}
+    finally {sending.current=false;if(current())setBusy(false);}
   }
   return <div className="draft-review">
     {!target && (prepared ? <><p className="question">{prepared.question}</p><strong className="small-heading">Key facts</strong><ul>{prepared.facts.map((fact,index)=><li key={index}>{fact}</li>)}</ul>{canWrite && <details><summary>Private answer rubric</summary><ul>{prepared.rubric?.askedFacts.map((fact,index)=><li key={index}>{fact}</li>)}</ul></details>}</> : <p>No current prepared question or translations.</p>)}

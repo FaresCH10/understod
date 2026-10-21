@@ -1,13 +1,15 @@
 import test from 'node:test';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import {PGlite} from '@electric-sql/pglite';
 import {openDatabase} from '../server/db.mjs';
 import {seed} from '../server/seed.mjs';
-import {ensureSettingsSchema,getSettings,updateSettings,listSiteContacts} from '../server/settings.mjs';
+import {ensureSettingsSchema,getSettings,updateSettings,settingsReceipt,listSiteContacts} from '../server/settings.mjs';
 import {settingsInput} from '../server/settings-input.mjs';
 import {ensureBillingSchema,createInvoice,getInvoice} from '../server/billing.mjs';
-import {getSettings as pgGet,updateSettings as pgUpdate,listSiteContacts as pgContacts} from '../server/postgres/settings.mjs';
+import {getSettings as pgGet,updateSettings as pgUpdate,settingsReceipt as pgReceipt,listSiteContacts as pgContacts} from '../server/postgres/settings.mjs';
 import {createInvoice as pgInvoice,getInvoice as pgInvoiceGet} from '../server/postgres/billing.mjs';
 import {runMigrations} from '../server/postgres/migrate.mjs';
 import {createAppServer} from '../server/index.mjs';
@@ -17,6 +19,7 @@ import {createDraft,queuePreparation} from '../server/preparation.mjs';
 import {processOne} from '../server/worker.mjs';
 import {createDraft as pgDraft,queuePreparation as pgQueue,processOnePreparation as pgProcess} from '../server/postgres/preparation.mjs';
 import {CANONICAL_SOURCE} from '../server/domain.mjs';
+import {checkedSettingsReceipt} from '../src/workspace-settings-state.ts';
 const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 const orgInput=()=>({requestId:randomUUID(),revision:0,name:'Updated Synthetic Organization',supportEmail:'support@example.test',confirmed:true});
 const siteInput=()=>({requestId:randomUUID(),revision:0,name:'Updated Synthetic Site',timezone:'UTC',confirmed:true});
@@ -68,7 +71,7 @@ async function fixture(pg) {
     const db=openDatabase(':memory:');seed(db);ensureSettingsSchema(db);ensureBillingSchema(db);
     db.prepare('INSERT INTO staff VALUES(?,?,?,?,?,1)').run('auditor','cedar','beirut','Synthetic auditor','auditor');
     db.prepare('INSERT INTO staff VALUES(?,?,?,?,?,1)').run('rami','cedar','beirut','Synthetic supervisor','supervisor');
-    return {db,get:s=>getSettings(db,s),contacts:(s,v)=>listSiteContacts(db,s,v),update:(s,k,v)=>updateSettings(db,s,k,v),invoice:v=>createInvoice(db,owner,v),invoiceGet:id=>getInvoice(db,owner,id),
+    return {db,get:s=>getSettings(db,s),receipt:(s,k,id)=>settingsReceipt(db,s,k,id),contacts:(s,v)=>listSiteContacts(db,s,v),update:(s,k,v)=>updateSettings(db,s,k,v),invoice:v=>createInvoice(db,owner,v),invoiceGet:id=>getInvoice(db,owner,id),
       raw:async(sql,values=[])=>({rows:db.prepare(sql).all(...values)}),fail(){db.exec("CREATE TRIGGER reject_settings_audit BEFORE INSERT ON audit WHEN NEW.action LIKE 'settings.%' BEGIN SELECT RAISE(ABORT,'Injected failure'); END");},reset(){db.exec('DROP TRIGGER reject_settings_audit');},close:async()=>db.close()};
   }
   const db=new PGlite(),options={schema:'understood_test_settings'};let fail=false,lost=false;
@@ -77,7 +80,7 @@ async function fixture(pg) {
   await db.query("INSERT INTO organizations VALUES('cedar','Cedar Works'),('harbor','Other Organization')");
   await db.query("INSERT INTO sites VALUES('beirut','cedar','Beirut site','Asia/Beirut'),('harbor-yard','harbor','Other site','UTC')");
   await db.query("INSERT INTO staff(id,org_id,site_id,name,role) VALUES('maya','cedar','beirut','Maya','owner'),('rami','cedar','beirut','Rami','supervisor'),('auditor','cedar','beirut','Auditor','auditor'),('harbor-owner','harbor','harbor-yard','Other','owner')");
-  return {db,pool,options,get:s=>pgGet(pool,s,options),contacts:(s,v)=>pgContacts(pool,s,v,options),update:(s,k,v)=>pgUpdate(pool,s,k,v,options),invoice:v=>pgInvoice(pool,owner,v,options),invoiceGet:id=>pgInvoiceGet(pool,owner,id,{},options),raw:(sql,v)=>db.query(sql,v),fail(){fail=true;},reset(){fail=false;},lose(){lost=true;},close:()=>db.close()};
+  return {db,pool,options,get:s=>pgGet(pool,s,options),receipt:(s,k,id)=>pgReceipt(pool,s,k,id,options),contacts:(s,v)=>pgContacts(pool,s,v,options),update:(s,k,v)=>pgUpdate(pool,s,k,v,options),invoice:v=>pgInvoice(pool,owner,v,options),invoiceGet:id=>pgInvoiceGet(pool,owner,id,{},options),raw:(sql,v)=>db.query(sql,v),fail(){fail=true;},reset(){fail=false;},lose(){lost=true;},close:()=>db.close()};
 }
 for(const pg of [false,true])test(`${pg?'PostgreSQL':'SQLite'} site contacts are scoped, paged, revalidated and replayable without changing access or cases`,async()=>{
   const f=await fixture(pg);
@@ -117,6 +120,12 @@ for(const pg of [false,true]) test(`${pg ? 'PostgreSQL' : 'SQLite'} workspace ed
     const input=orgInput();f.fail();await assert.rejects(async()=>f.update(owner,'organization',input),/Injected/);f.reset();assert.equal((await f.get(owner)).organization.name,'Cedar Works');
     if(pg) {f.lose();await assert.rejects(f.update(owner,'organization',input),/Lost commit/);}else await f.update(owner,'organization',input);
     assert.equal((await f.update(owner,'organization',input)).duplicate,true);
+    checkedSettingsReceipt(await f.receipt(owner,'organization',input.requestId),'organization',input);
+    assert.equal(await f.receipt(owner,'site',input.requestId),null);
+    await f.raw("INSERT INTO staff(id,org_id,site_id,name,role) VALUES('other-owner','cedar','beirut','Other synthetic owner','owner')");
+    const otherOwner={...owner,principal_id:'other-owner'};
+    assert.equal(await f.receipt(otherOwner,'organization',input.requestId),null);
+    await assert.rejects(async()=>f.update(otherOwner,'organization',input),/conflict/);
     await assert.rejects(async()=>f.update(owner,'organization',{...input,name:'Changed payload'}),/conflict/);
     await assert.rejects(async()=>f.update(owner,'organization',orgInput()),/revision changed/);
     const site=siteInput();await f.update(owner,'site',site);const current=await f.get(owner);assert.equal(current.organization.revision,1);assert.equal(current.site.revision,1);assert.equal(current.site.timezone,'UTC');
@@ -144,6 +153,7 @@ for(const pg of [false,true]) test(`${pg ? 'PostgreSQL' : 'SQLite'} workspace ed
       assert.equal((await call('/settings/site',cookie,{...siteInput(),revision:2,timezone:'bad'})).status,400);
       assert.equal((await call('/settings/site',cookie,{...siteInput(),revision:2,primaryContactId:'maya',deputyContactId:'harbor-owner'})).status,400);
       const change={...siteInput(),revision:2,name:'HTTP Synthetic Site',primaryContactId:'maya',deputyContactId:'rami'};assert.equal((await call('/settings/site',cookie,change)).status,200);assert.equal((await (await call('/settings/site',cookie,change)).json()).duplicate,true);
+      const receipt=await call(`/settings/site/receipts/${change.requestId}`,cookie);assert.equal(receipt.status,200);assert.match(receipt.headers.get('cache-control'),/no-store/);checkedSettingsReceipt(await receipt.json(),'site',change);
       const current=(await (await call('/settings',cookie)).json()).site;
       const selection={...siteInput(),revision:3,name:current.name,timezone:current.timezone,generationLanguages:['en'],confirmed:true};
       assert.equal((await call('/settings/site',cookie,selection)).status,200);

@@ -1,0 +1,29 @@
+{
+  "startedAt": "2026-10-15T05:19:18.684Z",
+  "finishedAt": "2026-10-15T05:25:34.822Z",
+  "runId": "162031cf-aee7-4630-9d43-7d9c4b976a34",
+  "source": "understood_backup_src_162031cfaee746309d437d9c4b976a34",
+  "target": "understood_backup_dst_162031cfaee746309d437d9c4b976a34",
+  "state": "passed",
+  "checks": [
+    "actual-native-custom-archive-encrypted-round-trip",
+    "complete-relational-inventory-and-guard-parity",
+    "synthetic-private-recording-byte-readback",
+    "restored-access-quarantined-activation-denied"
+  ],
+  "cleanup": {
+    "source": "verified-removed",
+    "target": "verified-removed"
+  },
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "productionVerdict": false,
+  "phase": "finished",
+  "dumpMajor": 18,
+  "restoreMajor": 18,
+  "postgresMajor": 18,
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "existingCatalogAndAclUnchanged": true,
+  "passfilesRemoved": true,
+  "archiveSha256": "e2246ba91d22345bc3d017586c09ede52d9df180b1eeb480f050445f1cad84e2"
+}

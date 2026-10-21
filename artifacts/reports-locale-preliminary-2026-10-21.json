@@ -1,0 +1,439 @@
+{
+  "baseline": {
+    "filenames": [
+      "briefing-activity-a717e245-cef2-4b45-996f-df98abfb5938.csv",
+      "briefing-activity-96f0fccc-f737-4c60-8de1-35175189d9fd.csv",
+      "briefing-activity-5ad7ed4b-8876-49b3-bd55-67703fac570e.csv",
+      "briefing-activity-31c93301-8a44-4830-92cc-1c496ed3ec3c.csv",
+      "briefing-activity-af28d3df-2c7a-4e14-be86-29832f613763.csv"
+    ],
+    "metrics": [
+      "30",
+      "24",
+      "21",
+      "3",
+      "6"
+    ],
+    "statuses": [
+      "Processing",
+      "Queued",
+      "Ready",
+      "Failed",
+      "Expired"
+    ],
+    "times": [
+      "2026-10-21T13:02:04.503Z",
+      "2026-10-21T13:01:41.553Z",
+      "2026-10-21T13:01:41.551Z",
+      "2026-10-21T13:01:41.549Z",
+      "2026-10-22T13:01:41.549Z",
+      "2026-10-21T13:01:41.547Z",
+      "2026-10-19T13:01:41.553Z"
+    ]
+  },
+  "measurements": [
+    {
+      "requestedWidth": 320,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 305,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [
+        "Clarifications",
+        "People",
+        "AI processing",
+        "Reports",
+        "Settings"
+      ],
+      "overflowingButtons": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 320
+    },
+    {
+      "requestedWidth": 320,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 305,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [
+        "الأشخاص",
+        "معالجة الذكاء الاصطناعي",
+        "التقارير",
+        "الإعدادات"
+      ],
+      "overflowingButtons": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 320
+    },
+    {
+      "requestedWidth": 320,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 305,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [
+        "افراد",
+        "مصنوعی ذہانت کی پروسیسنگ",
+        "رپورٹس",
+        "ترتیبات"
+      ],
+      "overflowingButtons": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 320
+    },
+    {
+      "requestedWidth": 390,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 375,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [
+        "People",
+        "AI processing",
+        "Reports",
+        "Settings"
+      ],
+      "overflowingButtons": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 390
+    },
+    {
+      "requestedWidth": 390,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 375,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [
+        "الأشخاص",
+        "معالجة الذكاء الاصطناعي",
+        "التقارير",
+        "الإعدادات"
+      ],
+      "overflowingButtons": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 390
+    },
+    {
+      "requestedWidth": 390,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 375,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [
+        "مصنوعی ذہانت کی پروسیسنگ",
+        "رپورٹس",
+        "ترتیبات"
+      ],
+      "overflowingButtons": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 390
+    },
+    {
+      "requestedWidth": 768,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 753,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [
+        "Settings"
+      ],
+      "overflowingButtons": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 768
+    },
+    {
+      "requestedWidth": 768,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 753,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflowingButtons": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 768
+    },
+    {
+      "requestedWidth": 768,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 753,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflowingButtons": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 768
+    },
+    {
+      "requestedWidth": 1440,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 1425,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflowingButtons": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 1440
+    },
+    {
+      "requestedWidth": 1440,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 1425,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflowingButtons": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 1440
+    },
+    {
+      "requestedWidth": 1440,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 1425,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflowingButtons": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 1440
+    },
+    {
+      "requestedWidth": 1586,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 1571,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflowingButtons": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 1586
+    },
+    {
+      "requestedWidth": 1586,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 1571,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflowingButtons": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 1586
+    },
+    {
+      "requestedWidth": 1586,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 1571,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflowingButtons": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 1586
+    }
+  ],
+  "heldPublicationFocus": {
+    "active": "BODY",
+    "activeText": "\n    Understood نظرة عامةالتعليماتالتوضيحاتالأشخاصمعالجة الذكاء الاصطناعيالتقاري",
+    "rows": 0
+  },
+  "accepted": false,
+  "notes": [
+    "Current sidebar intentionally scrolls horizontally on narrow widths; whole-document control bounds include clipped navigation, so report-content bounds must be measured separately.",
+    "Held publication paging lost keyboard focus to BODY; repair and retest required.",
+    "Memory fixture matches overall30/24/21/3/6 but language response distribution is12/10/2, not the S16 image10/8/6; full matched-reference acceptance remains open."
+  ]
+}

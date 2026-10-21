@@ -1,6 +1,6 @@
-import {randomUUID} from 'node:crypto';
+import {createHash,randomUUID} from 'node:crypto';
 import {NOW,transaction} from './db.mjs';
-import {invoiceInput,paymentInput,voidInput,invoiceFilters,paymentFilters,invoiceTotals,invoiceView,billingRequestId} from './billing-input.mjs';
+import {invoiceInput,paymentInput,voidInput,invoiceFilters,paymentFilters,invoiceTotals,invoiceView,billingRequestId,billingRequestSignature} from './billing-input.mjs';
 
 export function ensureBillingSchema(db) {
   db.exec(`CREATE TABLE IF NOT EXISTS invoices (
@@ -115,8 +115,8 @@ export function listInvoices(db,session,input={}) {
 }
 export function billingReceipt(db,session,kind,id) {
   billingRequestId(kind,id);authority(db,session,true);
-  const row=db.prepare(kind==='invoice' ? 'SELECT id,id AS invoiceId FROM invoices WHERE id=? AND org_id=? AND site_id=? AND created_by=?'
-    : kind==='void' ? 'SELECT id,invoice_id AS invoiceId FROM invoice_voids WHERE id=? AND org_id=? AND site_id=? AND created_by=?'
-    : 'SELECT id,invoice_id AS invoiceId FROM invoice_payments WHERE id=? AND org_id=? AND site_id=? AND recorded_by=?').get(id,session.org_id,session.site_id,session.principal_id);
-  return row ? {found:true,kind,...row} : {found:false};
+  const row=db.prepare(kind==='invoice' ? 'SELECT id,id AS invoiceId,request_json FROM invoices WHERE id=? AND org_id=? AND site_id=? AND created_by=?'
+    : kind==='void' ? 'SELECT id,invoice_id AS invoiceId,request_json FROM invoice_voids WHERE id=? AND org_id=? AND site_id=? AND created_by=?'
+    : 'SELECT id,invoice_id AS invoiceId,request_json FROM invoice_payments WHERE id=? AND org_id=? AND site_id=? AND recorded_by=?').get(id,session.org_id,session.site_id,session.principal_id);
+  return row ? {found:true,kind,id:row.id,invoiceId:row.invoiceId,requestHash:createHash('sha256').update(billingRequestSignature(kind,row.id,row.invoiceId,JSON.parse(row.request_json))).digest('hex')} : {found:false};
 }

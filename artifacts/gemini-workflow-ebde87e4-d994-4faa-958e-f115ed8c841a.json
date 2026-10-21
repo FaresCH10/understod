@@ -1,0 +1,32 @@
+{
+  "runId": "8c9392a4-4086-49ae-b13c-18dc9bbaa7b2",
+  "startedAt": "2026-10-14T06:38:59.481Z",
+  "state": "failed",
+  "dataClass": "synthetic",
+  "realDataAllowed": false,
+  "productionReady": false,
+  "models": {
+    "text": "gemini-3.5-flash-lite",
+    "transcription": "gemini-3.5-transcribe",
+    "speech": "gemini-3.8-flash-lite-tts"
+  },
+  "maxExternalRequests": 15,
+  "externalRequests": 2,
+  "checks": [
+    {
+      "name": "credential_bootstrap_and_private_grants",
+      "state": "passed"
+    }
+  ],
+  "fixtureRequests": [],
+  "activeStage": "metered_automatic_preparation_translation_private_speech",
+  "diagnosticCode": "workflow_gate_failed",
+  "jobStates": {
+    "preparation": [
+      "failed"
+    ],
+    "recording": [],
+    "assessment": []
+  },
+  "completedAt": "2026-10-14T06:39:05.174Z"
+}

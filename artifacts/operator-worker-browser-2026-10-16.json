@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-16",
+  "scope": "local-optimized-operator-queue",
+  "productionReady": false,
+  "cleanBuild": "bfbca555-7889-49cc-bb77-291d1865bd77",
+  "sourceSha256": "331417d904eb627c72ea9b4b8cdc22c94e4192548e6f9b2f119fdac955de735e",
+  "backend": "disposable-PGlite",
+  "operatorRole": "operator_ui_runtime",
+  "workerRole": "operator_ui_worker",
+  "workerWasManuallyDriven": true,
+  "transport": "fixed-in-process-mock",
+  "jobs": [
+    {
+      "status": "verified",
+      "n": 1
+    }
+  ],
+  "slots": 1,
+  "calls": 1,
+  "workerActive": false,
+  "receiptOutage": false,
+  "externalRequests": 0,
+  "verificationPosts": 1,
+  "receiptGets": 4,
+  "customerApiCalls": 0,
+  "observed": {
+    "keyboardLogin": true,
+    "lostAcknowledgement": true,
+    "receiptOutage": true,
+    "pendingAfterReload": true,
+    "stalePreviousSuccessCleared": true,
+    "readOnlyReceiptRecovery": true,
+    "completedReceiptClearedPending": true,
+    "stoppedWorkerDisablesConfirmationAndSend": true,
+    "keyboardLogout": true,
+    "viewportReset": true,
+    "desktop1440NoPageOverflow": true,
+    "mobile320NoPageOverflow": true
+  },
+  "screenshots": [
+    "artifacts/operator-worker-stopped-desktop-2026-10-16.jpg",
+    "artifacts/operator-worker-stopped-mobile-2026-10-16.jpg"
+  ],
+  "limits": [
+    "Not hosted TLS/cookie or native concurrency evidence",
+    "Not live Gemini or spoken/semantic quality evidence",
+    "Not complete keyboard/assistive-technology acceptance"
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/ops/session"
+    },
+    {
+      "method": "POST",
+      "path": "/api/ops/login"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/providers"
+    },
+    {
+      "method": "POST",
+      "path": "/api/ops/providers/policy"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/receipts/19f02242-4f0f-458c-8728-c5c51f74017d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/providers"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/overview"
+    },
+    {
+      "method": "POST",
+      "path": "/api/ops/providers/verify"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/receipts/5aff2497-cf6e-414e-809c-5df042d5d927"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/session"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/receipts/5aff2497-cf6e-414e-809c-5df042d5d927"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/receipts/5aff2497-cf6e-414e-809c-5df042d5d927"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/providers"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/providers"
+    },
+    {
+      "method": "GET",
+      "path": "/api/ops/overview"
+    },
+    {
+      "method": "POST",
+      "path": "/api/ops/logout"
+    }
+  ]
+}

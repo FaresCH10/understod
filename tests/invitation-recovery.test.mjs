@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID,createHash} from 'node:crypto';
 import {invitationEmailKey} from '../server/invitation-input.mjs';
+import {completeStaffRequest} from '../src/staff-request.ts';
 import {invitationLinkToken,acceptanceHash,readPendingInvitation,savePendingInvitation,clearPendingInvitation,checkedInvitationResult,checkedInvitationReceipt,checkedInvitationPreview,checkedInvitationPage,readPendingAcceptance,savePendingAcceptance,clearPendingAcceptance,checkedAcceptanceResult} from '../src/invitation-recovery.ts';
 const fixture=()=>{const records=new Map();return {records,storage:{getItem:key=>records.get(key) ?? null,setItem:(key,value)=>records.set(key,value),removeItem:key=>records.delete(key)}};};
 const preview={organization:'Synthetic Works',site:'Test site',name:'Test recipient',role:'supervisor',emailHint:'t***@example.test',expiresAt:'2026-10-08T09:00:00.000Z'};
@@ -26,9 +27,28 @@ test('staff invitation recovery is scope-isolated and proves normalized request 
   const result={id,revision:1,state:'pending',delivery:'queued',duplicate:false};assert.deepEqual(checkedInvitationResult(result,pending),result);
   const receipt={accepted:true,id,action:'issue',request:{name:'Test recipient',role:'supervisor',emailHash:createHash('sha256').update(invitationEmailKey('test@example.test')).digest('hex')},result};
   assert.deepEqual(await checkedInvitationReceipt(receipt,pending),result);assert.equal(await checkedInvitationReceipt({accepted:false},pending),false);
+  await assert.rejects(()=>checkedInvitationReceipt({accepted:false,result},pending),/does not match/);
+  await assert.rejects(()=>checkedInvitationReceipt({...receipt,token:'never accepted'},pending),/does not match/);
+  assert.throws(()=>clearPendingInvitation(storage,'actor:site',id,{...pending,body:{...pending.body,role:'owner'}}),/changed/);
+  assert.deepEqual(readPendingInvitation(storage,'actor:site'),pending);
   for(const request of [{...receipt.request,role:'owner'},{...receipt.request,emailHash:'wrong'},{...receipt.request,site:'another-site'}]) await assert.rejects(()=>checkedInvitationReceipt({...receipt,request},pending),/does not match/);
   for(const patch of [{id:randomUUID()},{revision:2},{state:'accepted'},{delivery:'sent'},{duplicate:null}]) assert.throws(()=>checkedInvitationResult({...result,...patch},pending),/cannot be verified/);
   clearPendingInvitation(storage,'actor:site',id);assert.equal(readPendingInvitation(storage,'actor:site'),null);
+});
+
+test('invitation asynchronous receipt completion never clears saved intent after authority changes or while verification is held',async()=>{
+  const {storage}=fixture(),id=randomUUID(),pending={requestId:id,id,action:'issue',body:{name:'Test recipient',email:'test@example.test',role:'supervisor',confirmed:true}};
+  const receipt={accepted:true,id,action:'issue',request:{name:'Test recipient',role:'supervisor',emailHash:createHash('sha256').update(invitationEmailKey('test@example.test')).digest('hex')},result:{id,revision:1,state:'pending',delivery:'queued',duplicate:false}};
+  savePendingInvitation(storage,'actor:site',pending);
+  for(const gate of ['identity','held']) {
+    let current=true,allowed=true,release;const waiting=new Promise(resolve=>{release=resolve;});
+    const completion=completeStaffRequest(receipt,async value=>{await waiting;return checkedInvitationReceipt(value,pending);},()=>clearPendingInvitation(storage,'actor:site',id,pending),()=>current,()=>allowed);
+    if(gate==='identity')current=false;else allowed=false;release();
+    await assert.rejects(completion,/context changed|verification is pending/i);
+    assert.deepEqual(readPendingInvitation(storage,'actor:site'),pending);
+  }
+  await completeStaffRequest(receipt,value=>checkedInvitationReceipt(value,pending),()=>clearPendingInvitation(storage,'actor:site',id,pending),()=>true);
+  assert.equal(readPendingInvitation(storage,'actor:site'),null);
 });
 test('resend and cancellation recovery require the exact action and revision',async()=>{
   const id=randomUUID();

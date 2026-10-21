@@ -1,0 +1,200 @@
+{
+  "checkedAt": "2026-10-20T18:10:24.659Z",
+  "counters": {
+    "listReads": 0,
+    "detailReads": 2,
+    "timelineReads": 11,
+    "actionPosts": 1,
+    "receiptReads": 0,
+    "otherPosts": 0,
+    "fixtureOwnerChanges": 0,
+    "repeatPosts": 0,
+    "reviewPosts": 0,
+    "workflowReads": 4,
+    "workflowReceipts": 0,
+    "fixtureRepeatChanges": 0,
+    "fixtureReviewChanges": 0,
+    "fixtureAnswers": 0,
+    "creationPosts": 0,
+    "creationReceipts": 0,
+    "creationSubjectReads": 0,
+    "externalCalls": 0,
+    "clarification_action_receipts": 1,
+    "clarification_creations": 0,
+    "clarifications": 2,
+    "help_requests": 1,
+    "attempts": 14,
+    "case_messages": 0,
+    "case_reviews": 12,
+    "case_repeats": 13,
+    "submission_receipts": 14,
+    "originalAttemptUnchanged": true,
+    "latestDeadline": null
+  },
+  "sizes": [
+    {
+      "document": 305,
+      "locale": "en",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 267,
+        "width": 267
+      },
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "en",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 337,
+        "width": 337
+      },
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "en",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 715,
+        "width": 715
+      },
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "en",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 440,
+        "width": 440
+      },
+      "width": 1440
+    },
+    {
+      "document": 305,
+      "locale": "ar",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 267,
+        "width": 267
+      },
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "ar",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 337,
+        "width": 337
+      },
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "ar",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 715,
+        "width": 715
+      },
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "ar",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 440,
+        "width": 440
+      },
+      "width": 1440
+    },
+    {
+      "document": 305,
+      "locale": "ur",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 267,
+        "width": 267
+      },
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "ur",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 337,
+        "width": 337
+      },
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "ur",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 715,
+        "width": 715
+      },
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "ur",
+      "outsideControls": [],
+      "timeline": {
+        "scroll": 440,
+        "width": 440
+      },
+      "width": 1440
+    }
+  ],
+  "pages": [
+    {
+      "page": "Page 1 of 5",
+      "privateReviewText": false,
+      "ownerChange": false,
+      "actorAttribution": true
+    },
+    {
+      "page": "Page 2 of 5",
+      "privateReviewText": false,
+      "ownerChange": false,
+      "actorAttribution": true
+    },
+    {
+      "page": "Page 3 of 5",
+      "privateReviewText": false,
+      "ownerChange": false,
+      "actorAttribution": true
+    },
+    {
+      "page": "Page 4 of 5",
+      "privateReviewText": false,
+      "ownerChange": false,
+      "actorAttribution": true
+    },
+    {
+      "page": "Page 5 of 5",
+      "privateReviewText": false,
+      "ownerChange": true,
+      "actorAttribution": true
+    }
+  ],
+  "keyboard": {
+    "scrollerFocused": true,
+    "arrowDownScrollTop": 40
+  },
+  "faults": {
+    "outageRecovered": true,
+    "malformedRecovered": true,
+    "contextLocked": true
+  },
+  "draftPreserved": true,
+  "viewportReset": true,
+  "productionReady": false
+}

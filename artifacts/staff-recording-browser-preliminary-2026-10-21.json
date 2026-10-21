@@ -1,0 +1,79 @@
+{
+  "checkedAt": "2026-10-21T05:38:28.961Z",
+  "fixtureSession": 93756,
+  "optimizedBuild": ".tools/staff-audio-preview-20261021/dist",
+  "counters": {
+    "audioPosts": 3,
+    "receiptReads": 3,
+    "listReads": 6,
+    "noticeReads": 7,
+    "playbackReads": 1,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 6,
+    "seededRecordings": 0,
+    "externalCalls": 0,
+    "actualMicrophoneUsed": false,
+    "held": false,
+    "objects": 3,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "caseMessages": 0,
+    "caseStatus": "open",
+    "recordings": [
+      {
+        "request_id": "028a05e7-2687-480b-8a8c-ae4234d35b28",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:32:54.509Z"
+      },
+      {
+        "request_id": "b18ee723-a1df-4ec6-824b-7856361c2eb0",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:34:17.288Z"
+      },
+      {
+        "request_id": "1962bd17-1ac6-4cd6-aa5c-309fb6a7e61c",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:37:34.092Z"
+      }
+    ]
+  },
+  "checks": {
+    "explicitCapturePreviewSave": true,
+    "declaredUrduPreservedAcrossEnglishArabicUrduUI": true,
+    "samePreviewBlobAcrossLocales": true,
+    "malformedAcknowledgementRetainsPreview": true,
+    "cancelFirstClearConfirmation": true,
+    "cancelPreservesSamePreview": true,
+    "confirmedLocalClearKeepsPendingReceipt": true,
+    "reloadRecoveryWithoutBrowserAudio": true,
+    "manualGetRecoveryNoDuplicatePost": true,
+    "syntheticMicDeniedEmptyInterrupted": true,
+    "nativePrivatePlayback": true,
+    "heldStorageTimeoutRemainsUnknown": true,
+    "storingReceiptCannotClaimReceived": true,
+    "exactRecoveryAfterStorageRelease": true,
+    "competingResolutionDraftBlocksCaptureAndIsPreserved": true,
+    "originalCaseAndAnswerUnchanged": true
+  },
+  "knownCorrectionsBeforeAcceptance": [
+    "Received-state record control currently requires a reset click",
+    "Redundant generic Discard and controlled Clear preview buttons",
+    "Modal close header scrolls out of view",
+    "Improve read-only explanation for a competing draft"
+  ],
+  "limits": [
+    "Test-only fixed-tone microphone simulator, not physical microphone",
+    "No real phone, independent language, full reference, AT or production acceptance"
+  ],
+  "productionReady": false
+}

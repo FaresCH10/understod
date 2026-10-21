@@ -1,0 +1,147 @@
+{
+  "checkedAt": "2026-10-21T11:27:25.943Z",
+  "scope": "local-worker-voice-notices-interlocks-and-exact-recovery",
+  "productionReady": false,
+  "progress": {
+    "overall": 81,
+    "range": [
+      74,
+      87
+    ],
+    "workerVoiceRecovery": 88,
+    "previousWorkerVoiceRecovery": 80,
+    "workerNavigationAndHelp": 90,
+    "previousWorkerNavigationAndHelp": 89,
+    "method": "Engineering estimates of implementation plus verification; not test pass rates or production acceptance."
+  },
+  "clean": {
+    "id": "77bbf986-8180-4447-9074-16ca58849bc1",
+    "startedAt": "2026-10-21T07:02:49.371Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-21T07:02:50.850Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T07:02:58.500Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-21T07:02:58.500Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T07:03:02.694Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-21T07:03:02.695Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T07:07:54.132Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-21T07:07:54.133Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T07:07:54.721Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-21T07:07:54.721Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T07:07:58.416Z"
+      }
+    ],
+    "source": {
+      "files": 912,
+      "sha256": "c5d0ccaaed809e61bdcadab615376078a97b05a1653dbbe99fb769a6f48213eb"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-21T07:07:58.969Z",
+    "parentSession": 80848,
+    "parentExitObserved": true,
+    "parentExitCode": 0,
+    "summary": {
+      "tests": 1327,
+      "pass": 1323,
+      "fail": 0,
+      "skipped": 4
+    },
+    "durationMs": 291184.9815
+  },
+  "sourceNow": {
+    "files": 912,
+    "sha256": "c5d0ccaaed809e61bdcadab615376078a97b05a1653dbbe99fb769a6f48213eb",
+    "matchesClean": true
+  },
+  "browser": {
+    "path": "artifacts/worker-voice-browser-final-2026-10-21.json",
+    "assetsMatchClean": true,
+    "assetFiles": 60,
+    "terminalCountersChecked": true,
+    "layoutRawArrayRetained": false,
+    "layoutObservationsNotIndependentlyReplayed": true,
+    "limits": [
+      "Fixed one-second tone replaces microphone input; no actual microphone, speech, codec or physical-phone acceptance",
+      "Notice retry attempted after fixture/session expiry reached the session lock; not counted as a notice-failure browser test",
+      "Strict notice failure and context behavior have client and actual HTTP tests, but the full rendered notice-fault matrix remains",
+      "Final worker storing/integrity-failed upload browser matrix remains; prior staff/preliminary checks are not substituted",
+      "Help/reply microphone and format fallback copy still refers to an answer and requires purpose-specific wording",
+      "Raw twelve-width measurement array was lost with the REPL context; observations and three screenshots remain",
+      "No independent language, assistive-technology, full-reference, native-current-policy or hosted acceptance"
+    ]
+  },
+  "evaluations": {
+    "contractCases": 43,
+    "pipelineChecks": 10,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-fc762ea7-0f22-48ea-8f01-1e10869b3b3a.json",
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 79,
+    "allHashesMatch": true,
+    "filesScanned": 6097,
+    "configuredSecretMatches": 0
+  },
+  "repairs": [
+    "Explicit worker notice language independent from profile and frozen assignment",
+    "Captured context on every online notice reader",
+    "Authorized mixed-language offline snapshot without relaxing session binding",
+    "Nested narrow Help button containment",
+    "Received reply remains mounted through unavailable or closed-case reads",
+    "Competing Answer/Help/conversation draft interlocks",
+    "One-click non-answer received-mode restart"
+  ],
+  "retainedNegativeEvidence": [
+    "Initial both-engine explicit-language tests failed twice before repair",
+    "New offline regression exposed the prior profile-equals-assignment restriction before repair",
+    "Preliminary nested Help button overflow retained in preliminary artifact",
+    "Expired-session notice-retry attempt is not accepted as notice-fault browser coverage"
+  ],
+  "schemaMigration": 95,
+  "cloudDatabaseStorageChanged": false,
+  "nativeAcceptanceClaimed": false,
+  "liveProviderMailCalls": 0,
+  "realWorkerDataUsed": false,
+  "actualMicrophoneUsed": false,
+  "billingChanged": false,
+  "deployment": false,
+  "nextTask": "Purpose-specific worker Help/reply fallback copy, remaining voice-failure browser states and reference/keyboard controls; physical-device, independent-language/AT, current native, hosted and privacy gates remain."
+}

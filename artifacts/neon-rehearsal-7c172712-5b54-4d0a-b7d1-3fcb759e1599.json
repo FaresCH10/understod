@@ -1,0 +1,80 @@
+{
+  "startedAt": "2026-10-14T17:30:40.938Z",
+  "updatedAt": "2026-10-14T17:32:12.687Z",
+  "runId": "7c172712-5b54-4d0a-b7d1-3fcb759e1599",
+  "schema": "understood_neon_test_7c1727125b544d0ab7d13fcb759e1599",
+  "kind": "isolated-synthetic-database",
+  "state": "passed",
+  "checks": [
+    "verified-tls-empty-target",
+    "migration-checksums-and-exact-replay",
+    "concurrent-publication-exactly-once",
+    "concurrent-submission-exactly-once",
+    "concurrent-claimed-assessment-exactly-once",
+    "cross-tenant-foreign-key-and-reader-denial",
+    "immutable-publication-and-audit",
+    "exact-publication-provider-history-without-invented-journal",
+    "scoped-nologin-permissions-and-verified-role-cleanup"
+  ],
+  "cleanup": "verified-removed",
+  "productionVerdict": false,
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "phase": "finished",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "migrationsApplied": 86,
+  "committedCounts": {
+    "publications": 1,
+    "publication_requests": 1,
+    "assignments": 1,
+    "attempts": 1,
+    "submission_receipts": 1,
+    "assessment_jobs": 1
+  },
+  "denials": {
+    "foreignKey": "23503",
+    "publication": "23514",
+    "audit": "23514",
+    "foreignReader": "unavailable"
+  },
+  "roles": {
+    "kind": "temporary-scoped-nologin",
+    "state": "passed",
+    "roles": [
+      "understood_test_rt_7c1727125b544d0ab7d13fcb759e1599",
+      "understood_test_denied_7c1727125b544d0ab7d13fcb759e1599"
+    ],
+    "checks": [
+      "complete-runtime-table-policy-without-delegation",
+      "assumed-runtime-read-crud-and-worker-row-lock",
+      "schema-ddl-truncate-maintenance-and-ungranted-role-denied",
+      "runtime-cannot-rewrite-frozen-publication-or-audit",
+      "production-direct-login-gate-still-rejects-assumed-role"
+    ],
+    "cleanup": "verified-removed",
+    "directLoginVerified": false,
+    "databaseWidePrivilegesVerified": false,
+    "productionVerdict": false,
+    "phase": "role-finished",
+    "denials": {
+      "schemaCreate": "42501",
+      "tableDrop": "42501",
+      "truncate": "42501",
+      "maintenance:sqlite_import_runs": "42501",
+      "maintenance:workspace_bootstraps": "42501",
+      "maintenance:restore_privacy_retirements": "42501",
+      "maintenance:restore_access_restrictions": "42501",
+      "maintenance:restore_briefing_redactions": "42501",
+      "maintenance:restore_activity_redactions": "42501",
+      "maintenance:schema_migrations": "42501",
+      "noSchemaAccess": "42501",
+      "frozenPublication": "23514",
+      "immutableAudit": "23514",
+      "sequenceRewrite": "42501",
+      "futureTable": "42501"
+    },
+    "outsideAclAndRolesUnchanged": true
+  },
+  "outsideCatalogIdentitiesUnchanged": true
+}

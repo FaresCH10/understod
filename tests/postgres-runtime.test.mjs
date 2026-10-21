@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { resolve } from 'node:path';
@@ -46,6 +48,8 @@ test('worker cycle awaits each stage, continues after redacted failure and respe
   assert.deepEqual(calls,['started','finished','assessment','expiry']);assert.deepEqual(errors,['assessment']);
   const stop=new AbortController();
   assert.deepEqual(await runWorkerCycle({first:async () => {stop.abort();return true;},second:async () => assert.fail('Stage ran after shutdown')},{signal:stop.signal}),{first:true});
+  const duringObservation=new AbortController();
+  assert.deepEqual(await runWorkerCycle({first:()=>assert.fail('Stage started after observer shutdown')},{signal:duringObservation.signal,onStage:()=>duringObservation.abort()}),{});
 });
 
 test('synthetic assessment cannot certify unsupported facts, swapped shelves or oversized evidence',async () => {

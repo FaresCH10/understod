@@ -1,0 +1,12 @@
+{
+  "startedAt": "2026-10-15T04:46:25.388Z",
+  "updatedAt": "2026-10-15T04:50:06.205Z",
+  "logPath": "artifacts/neon-stable-build-suite-110bc507-d1d1-425b-9426-a511da3068fa.log",
+  "testFiles": 189,
+  "stableBuildHeld": true,
+  "providerCredentialsInherited": false,
+  "cloudDatabaseConfigurationInherited": false,
+  "productionVerdict": false,
+  "state": "passed",
+  "exitCode": 0
+}

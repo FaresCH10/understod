@@ -1,0 +1,102 @@
+{
+  "syntheticOnly": true,
+  "build": "customer-DWAFuK0s",
+  "measurements": [
+    {
+      "dir": "rtl",
+      "documentWidth": 305,
+      "locale": "ar",
+      "messages": 20,
+      "overflow": [],
+      "width": 320
+    },
+    {
+      "dir": "rtl",
+      "documentWidth": 375,
+      "locale": "ar",
+      "messages": 20,
+      "overflow": [],
+      "width": 390
+    },
+    {
+      "dir": "rtl",
+      "documentWidth": 753,
+      "locale": "ar",
+      "messages": 20,
+      "overflow": [],
+      "width": 768
+    },
+    {
+      "dir": "rtl",
+      "documentWidth": 1425,
+      "locale": "ar",
+      "messages": 20,
+      "overflow": [],
+      "width": 1440
+    },
+    {
+      "dir": "rtl",
+      "documentWidth": 305,
+      "locale": "ur",
+      "messages": 20,
+      "overflow": [],
+      "width": 320
+    },
+    {
+      "dir": "rtl",
+      "documentWidth": 375,
+      "locale": "ur",
+      "messages": 20,
+      "overflow": [],
+      "width": 390
+    },
+    {
+      "dir": "rtl",
+      "documentWidth": 753,
+      "locale": "ur",
+      "messages": 20,
+      "overflow": [],
+      "width": 768
+    },
+    {
+      "dir": "rtl",
+      "documentWidth": 1425,
+      "locale": "ur",
+      "messages": 20,
+      "overflow": [],
+      "width": 1440
+    },
+    {
+      "dir": "ltr",
+      "documentWidth": 305,
+      "locale": "en",
+      "messages": 20,
+      "overflow": [],
+      "width": 320
+    },
+    {
+      "dir": "ltr",
+      "documentWidth": 375,
+      "locale": "en",
+      "messages": 20,
+      "overflow": [],
+      "width": 390
+    },
+    {
+      "dir": "ltr",
+      "documentWidth": 753,
+      "locale": "en",
+      "messages": 20,
+      "overflow": [],
+      "width": 768
+    },
+    {
+      "dir": "ltr",
+      "documentWidth": 1425,
+      "locale": "en",
+      "messages": 20,
+      "overflow": [],
+      "width": 1440
+    }
+  ]
+}

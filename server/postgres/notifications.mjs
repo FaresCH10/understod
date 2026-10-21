@@ -26,3 +26,13 @@ export async function readNotification(pool,session,id,{schema='public'}={}) {
     return notificationRow({...event,read_at:receipt.read_at});
   });
 }
+export async function notificationReceipt(pool,session,id,{schema='public'}={}) {
+  notificationId(id);
+  return domainTransaction(pool,schema,async client=>{
+    await requirePrincipal(client,session,'staff',notificationRoles);
+    const row=(await client.query(`SELECT e.id,e.action,e.occurred_at,r.read_at FROM notification_reads r
+      JOIN audit e ON e.id=r.event_id AND e.org_id=r.org_id AND e.site_id=r.site_id
+      WHERE r.event_id=$1 AND r.staff_id=$2 AND r.org_id=$3 AND r.site_id=$4 AND e.action=ANY($5::text[])`,[id,session.principal_id,session.org_id,session.site_id,kinds])).rows[0];
+    return row?{found:true,item:notificationRow(row)}:{found:false};
+  });
+}

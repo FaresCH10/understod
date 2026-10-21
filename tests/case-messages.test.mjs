@@ -17,14 +17,18 @@ import {caseMessageInput,caseMessageFilters} from '../server/case-message-input.
 import {createAppServer} from '../server/index.mjs';
 import {workerBriefings as localInbox} from '../server/responses.mjs';
 import {workerBriefings as pgInbox} from '../server/postgres/read-models.mjs';
+import {checkedConversationPage,checkedConversationReceipt,requestConversation} from '../src/conversation-request.ts';
+import {createPostgresRehearsalServer} from '../server/postgres/http.mjs';
+import {issueWorkerGrant,redeemWorkerGrant,provisionStaffCredential,authenticateStaff} from '../server/postgres/auth.mjs';
 
 const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 const worker={principal_type:'worker',principal_id:'worker-1',org_id:'cedar',site_id:'beirut'};
-async function fixture(pg) {
-  let db,pool;const options={schema:'public'};
+async function fixture(pg,schema='public') {
+  let db,pool;const options={schema};
   if(pg) {
     db=new PGlite();pool={async connect(){return {query:async(sql,args)=>args?.length?db.query(sql,args):(await db.exec(sql)).at(-1)??{rows:[]},release(){}};}};
-    await runMigrations(pool);
+    if(schema!=='public')await db.exec(`CREATE SCHEMA ${schema};SET search_path TO ${schema},pg_catalog`);
+    await runMigrations(pool,options);
     await db.exec(`INSERT INTO organizations VALUES('cedar','Synthetic');INSERT INTO sites VALUES('beirut','cedar','Synthetic','UTC');
       INSERT INTO staff(id,org_id,site_id,name,role) VALUES('maya','cedar','beirut','Maya','owner'),('audit','cedar','beirut','Auditor','auditor');
       INSERT INTO workers(id,org_id,site_id,code,language) VALUES('worker-1','cedar','beirut','Worker 001','en'),('worker-2','cedar','beirut','Worker 002','en'),('worker-14','cedar','beirut','Worker 014','ar');
@@ -62,14 +66,44 @@ test('conversation HTTP fences current page identity, scopes receipts and redact
     assert.equal((await request(path,staff.cookie,input,staff.context)).status,503);
     assert.equal((await request(path,w.cookie,input,w.context)).status,200);
     const receipt=await request(`${path}/${input.requestId}`,w.cookie);assert.equal(receipt.status,200);assert.match(receipt.headers.get('cache-control'),/no-store/);
+    assert.equal(checkedConversationReceipt(await receipt.json(),caseId,input.requestId,w.context,'message').id,input.requestId);
     assert.equal((await request(`${path}/${input.requestId}`,staff.cookie)).status,404);
     assert.equal((await request(path+'?org_id=foreign',w.cookie)).status,400);
-    assert.equal((await (await request(path,w.cookie)).json()).total,1);
+    assert.equal(checkedConversationPage(await (await request(path,w.cookie)).json(),caseId,1,w.context,true).total,1);
     db.exec("CREATE TRIGGER fail_message_audit BEFORE INSERT ON audit WHEN NEW.action='clarification.message' BEGIN SELECT RAISE(ABORT,'private database diagnostic'); END");
     const failed=await request(path,w.cookie,{...input,requestId:randomUUID()},w.context);
     assert.equal(failed.status,503);assert.equal(JSON.stringify(await failed.json()).includes('private database diagnostic'),false);
     assert.equal(db.prepare('SELECT count(*) n FROM case_messages').get().n,1);
   } finally {await new Promise(resolve=>server.close(resolve));db.close();}
+});
+
+test('PostgreSQL HTTP conversation envelopes pass the actual captured client reader for pages, exact messages and queued follow-ups',async()=>{
+  const schema='understood_test_conversation_http',options={schema},f=await fixture(true,schema),origin='http://127.0.0.1:3020';let server;
+  try{
+    const password='Synthetic-conversation-password-123';
+    await provisionStaffCredential(f.pool,{staffId:'maya',orgId:'cedar',siteId:'beirut',email:'conversation@example.test',password},options);
+    const staff=(await authenticateStaff(f.pool,'conversation@example.test',password,'synthetic-conversation',options)).session;
+    const own=await redeemWorkerGrant(f.pool,(await issueWorkerGrant(f.pool,owner,'worker-1',30,options)).token,options);
+    const adapter={provenance:{dataClass:'synthetic'},capabilities:{textLanguages:['en'],speechLanguages:['en']}};
+    server=createPostgresRehearsalServer(f.pool,{...options,caseFollowupAdapter:adapter,dataClass:'synthetic',tier:'local',aiMode:'synthetic',accessMode:'credential',publicOrigin:origin});
+    await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
+    const base=`http://127.0.0.1:${server.address().port}`;
+    const transport=identity=>(path,init={})=>fetch(base+path,{...init,headers:{...init.headers,origin,cookie:`understood_pg_rehearsal=${identity.token}`}});
+    const workerSession=await (await transport(own)('/api/session')).json(),staffSession=await (await transport(staff)('/api/session')).json();
+    const call=(identity,s,isWorker,op)=>requestConversation(transport(identity),s,f.id,isWorker,op,new AbortController().signal,()=>true);
+    const before=(await f.db.query('SELECT count(*)::int n FROM attempts')).rows[0].n;
+    assert.equal((await call(own,workerSession,true,{kind:'page',page:1})).total,0);
+    const requestId=randomUUID(),posted=await call(own,workerSession,true,{kind:'message',requestId,text:'Synthetic own reply'});
+    assert.equal(posted.id,requestId);assert.deepEqual(await call(own,workerSession,true,{kind:'message',requestId}),posted);
+    assert.equal((await call(own,workerSession,true,{kind:'page',page:1})).items[0].text,'Synthetic own reply');
+    const staffPage=await call(staff,staffSession,false,{kind:'page',page:1});assert.equal(staffPage.canGenerate,true);assert.equal(staffPage.canVoice,false);
+    const followupId=randomUUID(),queued=await call(staff,staffSession,false,{kind:'followup',requestId:followupId,text:'Synthetic generated follow-up'});
+    assert.equal(queued.status,'queued');assert.equal(queued.deliveredAt,null);assert.deepEqual(await call(staff,staffSession,false,{kind:'followup',requestId:followupId}),queued);
+    assert.equal((await f.db.query('SELECT count(*)::int n FROM case_followups')).rows[0].n,1);
+    assert.equal((await f.db.query('SELECT count(*)::int n FROM attempts')).rows[0].n,before);
+    await assert.rejects(call(own,workerSession,true,{kind:'message',requestId:randomUUID()}),e=>e.code==='unavailable');
+    await assert.rejects(call(own,{...workerSession,clientContext:'f'.repeat(64)},true,{kind:'page',page:1}),e=>e.code==='session');
+  }finally{if(server)await new Promise(resolve=>server.close(resolve));await f.close();}
 });
 for(const pg of [false,true])test(`${pg?'PostgreSQL':'SQLite'} conversation is scoped, append-only, exactly replayed and separate from assessment`,async()=>{
   const f=await fixture(pg);

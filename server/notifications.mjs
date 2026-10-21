@@ -31,3 +31,13 @@ export function readNotification(db,session,id) {
     return notificationRow({...event,read_at:receipt.read_at});
   });
 }
+export function notificationReceipt(db,session,id) {
+  notificationId(id);
+  return transaction(db,()=>{
+    authority(db,session);
+    const row=db.prepare(`SELECT e.id,e.action,e.occurred_at,r.read_at FROM notification_reads r
+      JOIN audit e ON e.id=r.event_id AND e.org_id=r.org_id AND e.site_id=r.site_id
+      WHERE r.event_id=? AND r.staff_id=? AND r.org_id=? AND r.site_id=? AND e.action IN (${placeholders})`).get(id,session.principal_id,session.org_id,session.site_id,...kinds);
+    return row?{found:true,item:notificationRow(row)}:{found:false};
+  });
+}

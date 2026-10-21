@@ -40,11 +40,11 @@ jobs:
           package-manager-cache: false
       - name: Install Locked Dependencies
         run: npm ci
+      - name: Typecheck And Build
+        run: npm run build
       - name: Tests Including Real PostgreSQL
         run: npm test
       - name: Versioned Synthetic Provider Contract Evaluation
         run: npm run evaluate:contract
       - name: Isolated Synthetic Backend Pipeline Rehearsal
         run: npm run evaluate:rehearsal -- --output pipeline-rehearsal.json
-      - name: Typecheck And Build
-        run: npm run build

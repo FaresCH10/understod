@@ -37,6 +37,17 @@ export const validPageSession=(value:unknown,now=Date.now())=>validWorkerSession
 export function samePageSession(expected:PageSession,current:unknown,now=Date.now()) {
   return expected.role==='worker'?sameWorkerSession(expected,current,now):sameStaffSession(expected,current,now);
 }
+export const staffIdentityText={
+  en:{unrecorded:'Not recorded',owner:'Owner',administrator:'Administrator',supervisor:'Supervisor',auditor:'Auditor'},
+  ar:{unrecorded:'غير مسجل',owner:'المالك',administrator:'المسؤول',supervisor:'المشرف',auditor:'المدقق'},
+  ur:{unrecorded:'درج نہیں',owner:'مالک',administrator:'منتظم',supervisor:'نگران',auditor:'آڈیٹر'},
+};
+export function staffIdentityLabel(value:unknown,language:keyof typeof staffIdentityText,role=false) {
+  const labels=staffIdentityText[language];
+  if(role)return typeof value==='string' && ['owner','administrator','supervisor','auditor'].includes(value)
+    ? labels[value as 'owner'|'administrator'|'supervisor'|'auditor']:labels.unrecorded;
+  return typeof value==='string' && value.trim() && value.length<=254 && !/[\u0000-\u001f\u007f]/.test(value)?value:labels.unrecorded;
+}
 export const staffSessionText={
   en:{title:'This workspace session is locked',body:'The session changed, ended or could not be verified. Unsubmitted changes on this page are no longer open. A request already sent may still complete.',next:'Saved request recovery records have not been replayed or removed.',check:'Recheck session',checking:'Checking session...',same:'The original account and site are verified.',different:'A different account, site or access policy is active.',guest:'No signed-in session is active.',worker:'A worker session is active. Reload and check the worker identity before continuing.',unavailable:'The session could not be verified. No workspace was opened and no request was repeated.',resume:'Return to verified workspace',open:'Open verified account and site',confirm:'I have checked the account and site shown below.',signIn:'Go to sign in',reload:'Reload and check identity',account:'Account',organization:'Organization',site:'Site',role:'Role'},
   ar:{title:'تم قفل جلسة مساحة العمل',body:'تغيّرت الجلسة أو انتهت أو تعذّر التحقق منها. لم تعد التغييرات غير المرسلة في هذه الصفحة مفتوحة. قد يكتمل طلب أُرسل بالفعل.',next:'لم تتم إعادة إرسال سجلات استعادة الطلبات المحفوظة أو حذفها.',check:'إعادة التحقق من الجلسة',checking:'جارٍ التحقق من الجلسة...',same:'تم التحقق من الحساب والموقع الأصليين.',different:'يوجد حساب أو موقع أو سياسة وصول مختلفة نشطة.',guest:'لا توجد جلسة مسجلة الدخول نشطة.',worker:'توجد جلسة عامل نشطة. أعد التحميل وتحقق من هوية العامل قبل المتابعة.',unavailable:'تعذر التحقق من الجلسة. لم يتم فتح مساحة عمل أو إعادة إرسال أي طلب.',resume:'العودة إلى مساحة العمل المتحقق منها',open:'فتح الحساب والموقع المتحقق منهما',confirm:'تحققت من الحساب والموقع الظاهرين أدناه.',signIn:'الانتقال إلى تسجيل الدخول',reload:'إعادة التحميل والتحقق من الهوية',account:'الحساب',organization:'المؤسسة',site:'الموقع',role:'الدور'},

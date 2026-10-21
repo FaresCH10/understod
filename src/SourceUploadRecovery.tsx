@@ -4,11 +4,14 @@ import SourceAudio from './SourceAudio';
 import SourceTranscriptionRetry from './SourceTranscriptionRetry';
 import type {PreparedSourceAudio} from './source-audio';
 import {checkSourceUpload,sendSourceUpload,type PendingSourceUpload,type SourceUploadReceipt} from './source-audio-upload';
+import {useBriefingRequest} from './BriefingControls';
+import type {StaffRequestAuthority} from './useStaffRequest';
 
-export default function SourceUploadRecovery({pending,audio,onAudio,onActivity,onAccepted,onResolved,onContinue,navigate}:{
+export default function SourceUploadRecovery({pending,audio,onAudio,onActivity,onAccepted,onResolved,onContinue,navigate,authority}:{
   pending:PendingSourceUpload;audio:PreparedSourceAudio|null;onAudio:(value:PreparedSourceAudio|null)=>void;onActivity:(active:boolean)=>void;
-  onAccepted:(accepted:boolean)=>void;onResolved:(id:string)=>void;onContinue:()=>void;navigate:(path:string)=>void;
+  onAccepted:(accepted:boolean)=>void;onResolved:(id:string)=>void;onContinue:()=>void;navigate:(path:string)=>void;authority:StaffRequestAuthority;
 }) {
+  const {current,ensureCompletion,sourceFetch}=useBriefingRequest(authority);
   const [busy,setBusy]=useState(false),[error,setError]=useState(''),[receipt,setReceipt]=useState<SourceUploadReceipt|null>(null),[refresh,setRefresh]=useState(0),[url,setUrl]=useState('');
   const sending=useRef(false),controller=useRef<AbortController|null>(null),heading=useRef<HTMLHeadingElement>(null),callbacks=useRef({onAccepted,onResolved});
   callbacks.current={onAccepted,onResolved};
@@ -20,24 +23,25 @@ export default function SourceUploadRecovery({pending,audio,onAudio,onActivity,o
     return()=>{current=false;if(objectUrl)URL.revokeObjectURL(objectUrl);};
   },[audio]);
   function applyReceipt(next:SourceUploadReceipt) {
+    ensureCompletion();
     setReceipt(next);callbacks.current.onAccepted(Boolean(next.found && next.receivedAt));
     if(next.status==='transcribed' && next.briefingId)callbacks.current.onResolved(next.briefingId);
   }
   useEffect(()=>{
     const check=new AbortController();controller.current=check;setBusy(true);setReceipt(null);setError('');
     const timeout=setTimeout(()=>check.abort(),30000);
-    checkSourceUpload(pending,undefined,check.signal).then(next=>{if(!check.signal.aborted)applyReceipt(next);})
-      .catch(reason=>{if(!check.signal.aborted)setError((reason as Error).message);else if(controller.current===check)setError('Receipt check timed out. Check again before retrying.');})
-      .finally(()=>{clearTimeout(timeout);if(controller.current===check){controller.current=null;setBusy(false);}});
+    checkSourceUpload(pending,sourceFetch,check.signal).then(next=>{if(!check.signal.aborted && current())applyReceipt(next);})
+      .catch(reason=>{if(!current())return;if(!check.signal.aborted)setError((reason as Error).message);else if(controller.current===check)setError('Receipt check timed out. Check again before retrying.');})
+      .finally(()=>{clearTimeout(timeout);if(controller.current===check){controller.current=null;if(current())setBusy(false);}});
     return()=>{controller.current=null;check.abort();clearTimeout(timeout);};
-  },[pending,refresh]);
+  },[pending,refresh,sourceFetch,current]);
   async function retry() {
-    if(sending.current || busy || !audio || !receipt || (receipt.found && receipt.status!=='storing'))return;
+    if(sending.current || busy || !audio || !receipt || (receipt.found && receipt.status!=='storing') || !current())return;
     sending.current=true;setBusy(true);setError('');setReceipt(null);
     const upload=new AbortController();controller.current=upload;const timeout=setTimeout(()=>upload.abort(),45000);
-    try {const next=await sendSourceUpload(pending,audio,undefined,upload.signal);if(!upload.signal.aborted)applyReceipt(next);}
-    catch(reason){if(controller.current===upload)setError(upload.signal.aborted?'Upload outcome is not confirmed. Check the receipt before retrying.':(reason as Error).message);}
-    finally {clearTimeout(timeout);sending.current=false;if(controller.current===upload){controller.current=null;setBusy(false);}}
+    try {const next=await sendSourceUpload(pending,audio,sourceFetch,upload.signal);if(!upload.signal.aborted && current())applyReceipt(next);}
+    catch(reason){if(controller.current===upload && current())setError(upload.signal.aborted?'Upload outcome is not confirmed. Check the receipt before retrying.':(reason as Error).message);}
+    finally {clearTimeout(timeout);sending.current=false;if(controller.current===upload){controller.current=null;if(current())setBusy(false);}}
   }
   const retryable=receipt && !receipt.audioStatus && (!receipt.found || receipt.status==='storing');
   return <section className="panel draft-creation-recovery"><h1 ref={heading} tabIndex={-1}>Source audio receipt</h1><p>{pending.title}</p>

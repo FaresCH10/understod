@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-19T14:34:02.832Z",
+  "scope": "separate-in-memory-fixture-single-explicit-help-request",
+  "productionReady": false,
+  "checks": [
+    "one deliberate synthetic Help submit",
+    "new own case appears in paginated history",
+    "zero answer submissions",
+    "mixed English/Arabic/Urdu and180-character unbroken word wraps at actual320px",
+    "RTL panel andzero measured horizontal/paragraph overflow",
+    "actual saved Help case survives reload without another POST",
+    "no submitted-answer result manufactured"
+  ],
+  "fixtureBeforeReload": {
+    "answerPosts": 0,
+    "helpPosts": 1,
+    "otherPosts": 0,
+    "listReads": 1,
+    "detailReads": 2,
+    "helpHistoryReads": 4,
+    "attempts": 0,
+    "cases": 10,
+    "externalCalls": 0
+  },
+  "screenshot": "worker-help-history-long-ur-320-2026-10-19.png",
+  "limits": [
+    "fixture memory persists across browser reload only; not database restart proof",
+    "not independent Urdu review or real-device acceptance",
+    "not real worker data"
+  ]
+}

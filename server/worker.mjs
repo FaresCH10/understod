@@ -25,6 +25,10 @@ import {resolveSourceTranscription} from './ai/source-transcription-config.mjs';
 import {processOnePilot} from './pilot.mjs';
 import {pilotDestination} from './pilot-input.mjs';
 import {processOneCaseEscalation} from './case-routing.mjs';
+import {ensureStaffCaseRecordingSchema} from './staff-case-recording-schema.mjs';
+import {processOneStaffCaseRecordingPurge} from './staff-case-recordings.mjs';
+import {audioStore} from './private-storage.mjs';
+import {DEFAULT_AUDIO_ROOT} from './recordings.mjs';
 
 export function processOne(db) {
   ensureDraftReviewSchema(db);
@@ -68,6 +72,8 @@ if (process.argv[1]?.endsWith('worker.mjs')) {
   const sourceAdapter=resolveSourceTranscription();
   const mail=config.accessMode==='credential' ? resolveMailConfig({publicOrigin:config.publicOrigin,allowLocal:true}) : {available:false};
   const db = openDatabase();
+  ensureStaffCaseRecordingSchema(db);
+  const privateAudio=audioStore(DEFAULT_AUDIO_ROOT);
   const destination=pilotDestination();
   console.log('Synthetic processor started.');
   let ticking=false;
@@ -76,6 +82,7 @@ if (process.argv[1]?.endsWith('worker.mjs')) {
     try {while(processOne(db)) {} for(let i=0;i<5 && processOneSchedule(db);i++) {} for(let i=0;i<100 && processOneReminder(db);i++) {} while(processOneExport(db)) {} expireWorkerImports(db);expireRecovery(db);
       for(let i=0;i<5 && await processOneAudioPurge(db);i++) {}
       for(let i=0;i<5 && await processOneSourceAudioCleanup(db);i++) {}
+      for(let i=0;i<5 && await processOneStaffCaseRecordingPurge(db,privateAudio);i++) {}
       for(let i=0;i<5 && await processOneSourceAudio(db,sourceAdapter);i++) {}
       for(let i=0;i<5 && processOneCaseEscalation(db);i++) {}
       for(let i=0;i<5 && processOneDeletionRedaction(db);i++) {}

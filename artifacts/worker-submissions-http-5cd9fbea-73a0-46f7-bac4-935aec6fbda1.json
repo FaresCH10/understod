@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-16T12:18:54.284Z",
+  "run": "056ee876-0556-49b9-b7aa-4280da7affdf",
+  "checks": [
+    "scoped-first-page-exact-states",
+    "scoped-second-page-historical-states",
+    "failed-read-not-empty",
+    "unexpected-private-field-rejected",
+    "mismatched-context-rejected",
+    "late-selection-response-rejected",
+    "new-selection-exact-empty-history",
+    "server-rejects-stale-context"
+  ],
+  "passed": true,
+  "fixture": {
+    "fixture": "memory-only-worker-navigation",
+    "counters": {
+      "answerPosts": 0,
+      "helpPosts": 0,
+      "otherPosts": 0,
+      "listReads": 0,
+      "detailReads": 0
+    },
+    "attempts": 6,
+    "cases": 0,
+    "externalCalls": 0
+  },
+  "browserAcceptance": false,
+  "productionVerdict": false
+}

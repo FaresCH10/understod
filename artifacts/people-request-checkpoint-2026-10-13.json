@@ -1,0 +1,15 @@
+{
+  "dateUtc":"2026-10-13",
+  "scope":"Worker/crew directory and management captured authority; import/access/deletion/assignments excluded",
+  "focusedRegression":{"files":["briefing-session-context","people-http","people","search","deletion-http","session-http","staff-request"],"passed":33,"failed":0,"skipped":0,"exitCode":0,"durationMs":10503.775},
+  "fullSyntheticSuite":{"testFiles":163,"tests":872,"passed":868,"failed":0,"skipped":4,"exitCode":0,"durationMs":314317.7437,"qualification":"After final invitation and worker/crew source changes","externalDatabaseTestUrlsRemoved":true,"log":"artifacts/people-request-suite-2026-10-13.log"},
+  "build":{"exitCode":0,"modules":2039,"entryKb":580.75,"shellFiles":69,"shellMismatches":0,"existingWarningsRemain":true},
+  "protectedDatabase":{"matchingFingerprints":8,"integrity":"ok","foreignKeyViolations":0,"readOnlyVerification":true},
+  "browser":{"newVerdict":false,"passed":false,"reason":"Windows browser runtime startup unresolved at preceding local inventory attempt","externalDiagnosticsSent":false},
+  "allOwnedCommandsTerminal":true,
+  "originalPreviewRestarted":false,
+  "originalDatabaseMigrated":false,
+  "externalRolloutPerformed":false,
+  "progressEstimates":{"peopleManagementBoundary":75,"wholeStaffRequestFencing":70,"staffSessionGuard":65,"overall":60,"overallRange":[55,65]},
+  "productionReady":false
+}

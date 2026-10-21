@@ -1,0 +1,831 @@
+{
+  "sourceSha256": "6012cb5cfebcf10f1b115248b1775fab514aa1474f4a2a0005c6292fd7b6f407",
+  "cleanRun": "4b338be1-726a-48df-a1a0-46c45527b0ce",
+  "fixtureTerminal": {"parentSession":66584,"pid":11316,"exitCodeObserved":true,"exitCode":0,"explicitOwnedStop":true},
+  "measurements": [
+    {
+      "buttons": [
+        {
+          "bottom": 1966.6875,
+          "client": 231,
+          "label": "Generate and send follow-up",
+          "left": 36,
+          "right": 269,
+          "scroll": 231,
+          "top": 1899.90625
+        },
+        {
+          "bottom": 2045.46875,
+          "client": 231,
+          "label": "Record in-person clarification",
+          "left": 36,
+          "right": 269,
+          "scroll": 231,
+          "top": 1978.6875
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 305,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 320,
+      "sameRow": false,
+      "width": 320
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1872.34375,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 36,
+          "right": 315.578125,
+          "scroll": 278,
+          "top": 1824.34375
+        },
+        {
+          "bottom": 1932.34375,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 36,
+          "right": 322.71875,
+          "scroll": 285,
+          "top": 1884.34375
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 375,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 390,
+      "sameRow": false,
+      "width": 390
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1795.5,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 36,
+          "right": 315.578125,
+          "scroll": 278,
+          "top": 1747.5
+        },
+        {
+          "bottom": 1795.5,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 327.578125,
+          "right": 614.296875,
+          "scroll": 285,
+          "top": 1747.5
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 753,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 768,
+      "sameRow": true,
+      "width": 768
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1160.203125,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 307,
+          "right": 586.578125,
+          "scroll": 278,
+          "top": 1112.203125
+        },
+        {
+          "bottom": 1160.203125,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 598.578125,
+          "right": 885.296875,
+          "scroll": 285,
+          "top": 1112.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1425,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 1440,
+      "sameRow": true,
+      "width": 1440
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1160.203125,
+          "client": 278,
+          "label": "Generate and send follow-up",
+          "left": 307,
+          "right": 586.578125,
+          "scroll": 278,
+          "top": 1112.203125
+        },
+        {
+          "bottom": 1160.203125,
+          "client": 285,
+          "label": "Record in-person clarification",
+          "left": 598.578125,
+          "right": 885.296875,
+          "scroll": 285,
+          "top": 1112.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1570,
+      "locale": "en",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 1585,
+      "sameRow": true,
+      "width": 1585
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1242.34375,
+          "client": 180,
+          "label": "إنشاء المتابعة وإرسالها",
+          "left": 86.796875,
+          "right": 269,
+          "scroll": 180,
+          "top": 1194.34375
+        },
+        {
+          "bottom": 1302.34375,
+          "client": 183,
+          "label": "تسجيل توضيح حضوري",
+          "left": 83.734375,
+          "right": 269,
+          "scroll": 183,
+          "top": 1254.34375
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 305,
+      "locale": "ar",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 320,
+      "sameRow": false,
+      "width": 320
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1194.34375,
+          "client": 180,
+          "label": "إنشاء المتابعة وإرسالها",
+          "left": 156.796875,
+          "right": 339,
+          "scroll": 180,
+          "top": 1146.34375
+        },
+        {
+          "bottom": 1254.34375,
+          "client": 183,
+          "label": "تسجيل توضيح حضوري",
+          "left": 153.734375,
+          "right": 339,
+          "scroll": 183,
+          "top": 1206.34375
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 375,
+      "locale": "ar",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 390,
+      "sameRow": false,
+      "width": 390
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1141.5,
+          "client": 180,
+          "label": "إنشاء المتابعة وإرسالها",
+          "left": 534.796875,
+          "right": 717,
+          "scroll": 180,
+          "top": 1093.5
+        },
+        {
+          "bottom": 1141.5,
+          "client": 183,
+          "label": "تسجيل توضيح حضوري",
+          "left": 337.53125,
+          "right": 522.796875,
+          "scroll": 183,
+          "top": 1093.5
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 753,
+      "locale": "ar",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 768,
+      "sameRow": true,
+      "width": 768
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 520.203125,
+          "client": 180,
+          "label": "إنشاء المتابعة وإرسالها",
+          "left": 935.796875,
+          "right": 1118,
+          "scroll": 180,
+          "top": 472.203125
+        },
+        {
+          "bottom": 520.203125,
+          "client": 183,
+          "label": "تسجيل توضيح حضوري",
+          "left": 738.53125,
+          "right": 923.796875,
+          "scroll": 183,
+          "top": 472.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1425,
+      "locale": "ar",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 1440,
+      "sameRow": true,
+      "width": 1440
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1242.34375,
+          "client": 193,
+          "label": "رابطہ تیار کر کے بھیجیں",
+          "left": 73.8125,
+          "right": 269,
+          "scroll": 193,
+          "top": 1194.34375
+        },
+        {
+          "bottom": 1294.34375,
+          "client": 36,
+          "label": "",
+          "left": 233,
+          "right": 269,
+          "scroll": 36,
+          "top": 1254.34375
+        },
+        {
+          "bottom": 1354.34375,
+          "client": 160,
+          "label": "بالمشافہ ریکارڈنگ",
+          "left": 107,
+          "right": 269,
+          "scroll": 160,
+          "top": 1306.34375
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 305,
+      "locale": "ur",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 320,
+      "sameRow": false,
+      "width": 320
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1218.34375,
+          "client": 193,
+          "label": "رابطہ تیار کر کے بھیجیں",
+          "left": 143.8125,
+          "right": 339,
+          "scroll": 193,
+          "top": 1170.34375
+        },
+        {
+          "bottom": 1218.34375,
+          "client": 36,
+          "label": "",
+          "left": 95.8125,
+          "right": 131.8125,
+          "scroll": 36,
+          "top": 1170.34375
+        },
+        {
+          "bottom": 1278.34375,
+          "client": 160,
+          "label": "بالمشافہ ریکارڈنگ",
+          "left": 177,
+          "right": 339,
+          "scroll": 160,
+          "top": 1230.34375
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 375,
+      "locale": "ur",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 390,
+      "sameRow": false,
+      "width": 390
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 1141.5,
+          "client": 193,
+          "label": "رابطہ تیار کر کے بھیجیں",
+          "left": 521.8125,
+          "right": 717,
+          "scroll": 193,
+          "top": 1093.5
+        },
+        {
+          "bottom": 1141.5,
+          "client": 36,
+          "label": "",
+          "left": 473.8125,
+          "right": 509.8125,
+          "scroll": 36,
+          "top": 1093.5
+        },
+        {
+          "bottom": 1141.5,
+          "client": 160,
+          "label": "بالمشافہ ریکارڈنگ",
+          "left": 299.8125,
+          "right": 461.8125,
+          "scroll": 160,
+          "top": 1093.5
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 753,
+      "locale": "ur",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 768,
+      "sameRow": true,
+      "width": 768
+    },
+    {
+      "buttons": [
+        {
+          "bottom": 520.203125,
+          "client": 193,
+          "label": "رابطہ تیار کر کے بھیجیں",
+          "left": 922.8125,
+          "right": 1118,
+          "scroll": 193,
+          "top": 472.203125
+        },
+        {
+          "bottom": 520.203125,
+          "client": 36,
+          "label": "",
+          "left": 874.8125,
+          "right": 910.8125,
+          "scroll": 36,
+          "top": 472.203125
+        },
+        {
+          "bottom": 520.203125,
+          "client": 160,
+          "label": "بالمشافہ ریکارڈنگ",
+          "left": 700.8125,
+          "right": 862.8125,
+          "scroll": 160,
+          "top": 472.203125
+        }
+      ],
+      "dialogInsideForm": false,
+      "document": 1425,
+      "locale": "ur",
+      "outsideButtons": [],
+      "overflowingButtons": [],
+      "overlap": false,
+      "requestedWidth": 1440,
+      "sameRow": true,
+      "width": 1440
+    }
+  ],
+  "focusChecks": [
+    {
+      "activeTag": "H3",
+      "busy": "true",
+      "inside": true,
+      "locale": "en",
+      "rows": 0,
+      "stage": "held"
+    },
+    {
+      "activeTag": "H3",
+      "inside": true,
+      "locale": "en",
+      "rows": 2,
+      "stage": "page2"
+    },
+    {
+      "activeTag": "H3",
+      "diagnosticShown": false,
+      "inside": true,
+      "locale": "en",
+      "rows": 0,
+      "stage": "failed"
+    },
+    {
+      "activeLabel": "Refresh recordings",
+      "activeTag": "BUTTON",
+      "inside": true,
+      "locale": "en",
+      "stage": "tab"
+    },
+    {
+      "activeTag": "H3",
+      "inside": true,
+      "locale": "ar",
+      "rows": 10,
+      "stage": "page1"
+    },
+    {
+      "activeTag": "H3",
+      "inside": true,
+      "locale": "ar",
+      "rows": 2,
+      "stage": "page2"
+    },
+    {
+      "activeTag": "H3",
+      "inside": true,
+      "locale": "ur",
+      "rows": 10,
+      "stage": "page1"
+    },
+    {
+      "activeTag": "H3",
+      "inside": true,
+      "locale": "ur",
+      "rows": 2,
+      "stage": "page2"
+    }
+  ],
+  "screenshots": [
+    "D:/understod/artifacts/staff-actions-aligned-en-1585-2026-10-21.png",
+    "D:/understod/artifacts/staff-actions-aligned-ur-390-2026-10-21.png"
+  ],
+  "localeDraftChecks": [
+    {
+      "captureDisabled": true,
+      "insideForm": false,
+      "locale": "ar",
+      "stage": "history-with-draft"
+    },
+    {
+      "counter": "41 / 1000",
+      "form": "_r_0_",
+      "locale": "ur",
+      "stage": "language-change",
+      "text": "Please explain where unfinished items go."
+    }
+  ],
+  "beforeSubmit": {
+    "counter": "41 / 1000",
+    "dialogInsideForm": false,
+    "formMatches": true,
+    "text": "Please explain where unfinished items go."
+  },
+  "afterSubmit": {
+    "audioPosts": 0,
+    "receiptReads": 0,
+    "listReads": 10,
+    "listPages": [
+      "1",
+      "2",
+      "2",
+      "2",
+      "2",
+      "1",
+      "2",
+      "2",
+      "1",
+      "2"
+    ],
+    "noticeReads": 3,
+    "playbackReads": 0,
+    "otherPosts": 1,
+    "simulatedMicrophoneRequests": 0,
+    "seededRecordings": 12,
+    "externalCalls": 0,
+    "actualMicrophoneUsed": false,
+    "held": false,
+    "listHeld": false,
+    "objects": 12,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "caseMessages": 0,
+    "caseStatus": "open",
+    "followupMode": "queue-only",
+    "followups": [
+      {
+        "id": "701d8c9f-efeb-477b-b0ad-084a482bd208",
+        "status": "queued",
+        "language": "ar"
+      }
+    ],
+    "recordings": [
+      {
+        "request_id": "a7e0766f-e13d-452f-842c-e4e737868477",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.610Z"
+      },
+      {
+        "request_id": "71249d70-7cef-40ae-911e-df09b406349d",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.628Z"
+      },
+      {
+        "request_id": "3fd7779d-538b-4182-855b-cc152e1b3fd3",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.644Z"
+      },
+      {
+        "request_id": "2f9758b3-84bc-47c0-be87-c86efedb81da",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.660Z"
+      },
+      {
+        "request_id": "6aa372bb-60d2-48cf-9a4c-35d720261eb7",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.678Z"
+      },
+      {
+        "request_id": "5113daf3-1cc4-4c8e-9ad1-a09305013b1d",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.702Z"
+      },
+      {
+        "request_id": "c21ab4cf-f0d6-46c5-9571-d9a7955cbb74",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.719Z"
+      },
+      {
+        "request_id": "853b5f59-3fdb-41ab-9514-9dd5f55d3243",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.737Z"
+      },
+      {
+        "request_id": "b07a6b6d-0372-4a27-af0d-6b33f6cba0c7",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.765Z"
+      },
+      {
+        "request_id": "f82f666a-27fa-48bb-822e-874858e6ecc5",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.793Z"
+      },
+      {
+        "request_id": "50f5e237-72df-4ab1-9b5a-b33ac1ed93c3",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.810Z"
+      },
+      {
+        "request_id": "a8a24e82-5c90-475b-ba76-3fa65172a244",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.831Z"
+      }
+    ]
+  },
+  "finalCounters": {
+    "audioPosts": 1,
+    "receiptReads": 0,
+    "listReads": 12,
+    "listPages": [
+      "1",
+      "2",
+      "2",
+      "2",
+      "2",
+      "1",
+      "2",
+      "2",
+      "1",
+      "2",
+      "2",
+      "1"
+    ],
+    "noticeReads": 4,
+    "playbackReads": 0,
+    "otherPosts": 1,
+    "simulatedMicrophoneRequests": 1,
+    "seededRecordings": 12,
+    "externalCalls": 0,
+    "actualMicrophoneUsed": false,
+    "held": false,
+    "listHeld": false,
+    "objects": 13,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "caseMessages": 0,
+    "caseStatus": "open",
+    "followupMode": "queue-only",
+    "followups": [
+      {
+        "id": "701d8c9f-efeb-477b-b0ad-084a482bd208",
+        "status": "queued",
+        "language": "ar"
+      }
+    ],
+    "recordings": [
+      {
+        "request_id": "a7e0766f-e13d-452f-842c-e4e737868477",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.610Z"
+      },
+      {
+        "request_id": "71249d70-7cef-40ae-911e-df09b406349d",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.628Z"
+      },
+      {
+        "request_id": "3fd7779d-538b-4182-855b-cc152e1b3fd3",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.644Z"
+      },
+      {
+        "request_id": "2f9758b3-84bc-47c0-be87-c86efedb81da",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.660Z"
+      },
+      {
+        "request_id": "6aa372bb-60d2-48cf-9a4c-35d720261eb7",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.678Z"
+      },
+      {
+        "request_id": "5113daf3-1cc4-4c8e-9ad1-a09305013b1d",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.702Z"
+      },
+      {
+        "request_id": "c21ab4cf-f0d6-46c5-9571-d9a7955cbb74",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.719Z"
+      },
+      {
+        "request_id": "853b5f59-3fdb-41ab-9514-9dd5f55d3243",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.737Z"
+      },
+      {
+        "request_id": "b07a6b6d-0372-4a27-af0d-6b33f6cba0c7",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.765Z"
+      },
+      {
+        "request_id": "f82f666a-27fa-48bb-822e-874858e6ecc5",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.793Z"
+      },
+      {
+        "request_id": "50f5e237-72df-4ab1-9b5a-b33ac1ed93c3",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.810Z"
+      },
+      {
+        "request_id": "a8a24e82-5c90-475b-ba76-3fa65172a244",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T12:07:09.831Z"
+      },
+      {
+        "request_id": "c8574308-46c2-41ce-bcbc-969d55977913",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ar",
+        "status": "received",
+        "received_at": "2026-10-21T12:13:02.987Z"
+      }
+    ]
+  },
+  "privateSaveWhileFollowupQueued": true,
+  "fixture": {
+    "port": 3245,
+    "pid": 11316,
+    "parentSession": 66584,
+    "followupMode": "queue-only"
+  },
+  "limits": [
+    "Synthetic fixed tone, not physical microphone or speech-quality acceptance",
+    "Follow-up is queued only; no generation worker/provider or delivered follow-up is claimed",
+    "Reference action placement was inspected qualitatively, not full matched-reference acceptance",
+    "Existing draft interlocks intentionally retain history-only access while another case draft is active",
+    "Independent language/AT, full references, native95, hosted and privacy gates remain"
+  ]
+}

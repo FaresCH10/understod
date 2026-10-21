@@ -1,0 +1,33 @@
+{
+  "productionReady": false,
+  "scope": "temporary-local-synthetic-user-preview",
+  "pid": 29780,
+  "startedAt": "2026-10-20T16:46:26.8953896+03:00",
+  "expiresInSeconds": 1200,
+  "url": "http://127.0.0.1:3233/api/qa-clarifications",
+  "build": "8be48ec7-0bd8-41ad-a1a2-833ecf85c2c9",
+  "memoryOnly": true,
+  "source": ".tools/start-staff-creation-preview.mjs",
+  "stdout": ".tools/staff-creation-preview-20261020-1347.log",
+  "stderr": ".tools/staff-creation-preview-20261020-1347.err.log",
+  "browserLegendExpandedAndVerified": true,
+  "screenshot": "artifacts/clarification-queue-preview-2026-10-20.png",
+  "counters": {
+    "listReads": 1,
+    "creationPosts": 0,
+    "creationReceipts": 0,
+    "actionPosts": 0,
+    "reviewPosts": 0,
+    "repeatPosts": 0,
+    "externalCalls": 0,
+    "clarification_creations": 0,
+    "clarifications": 1,
+    "help_requests": 1,
+    "attempts": 1,
+    "case_messages": 0,
+    "submission_receipts": 1,
+    "creationAttemptsUnchanged": true
+  },
+  "originalDataUsed": false,
+  "cloudBillingDeploymentChanged": false
+}

@@ -15,14 +15,17 @@ export function storePendingNotice(storage:Storage,scope:string,value:NoticeChan
   const raw=JSON.stringify(value);storage.setItem(key(scope),raw);
   if(storage.getItem(key(scope))!==raw)throw Error('Notice recovery storage is unavailable. No request was sent.');
 }
-export function clearPendingNotice(storage:Storage,scope:string,requestId:string){
-  if(readPendingNotice(storage,scope)?.requestId!==requestId)throw Error('Pending recording notice changed.');
+export function clearPendingNotice(storage:Storage,scope:string,requestId:string,expected?:NoticeChange){
+  const pending=readPendingNotice(storage,scope);
+  if(pending?.requestId!==requestId || expected && (!pending || pending.scope!==expected.scope || !sameNoticeRequest(recordingNoticeInput(pending),recordingNoticeInput(expected))))throw Error('Pending recording notice changed.');
   storage.removeItem(key(scope));if(storage.getItem(key(scope))!==null)throw Error('Notice recovery storage could not be cleared.');
 }
 export function verifyNoticeReceipt(value:unknown,pending:NoticeChange){
   const row=value as {requestId?:string;request?:unknown;revision?:number};
   const request=recordingNoticeInput(pending);
-  if(!row || row.requestId!==pending.requestId || row.revision!==pending.revision+1 || !sameNoticeRequest(row.request,request))throw Error('Recording notice receipt cannot be verified.');
+  if(!row || typeof row!=='object' || Array.isArray(row) || Object.keys(row).sort().join(',')!=='request,requestId,revision'
+    || row.requestId!==pending.requestId || row.revision!==pending.revision+1 || !row.request
+    || Object.keys(row.request).sort().join(',')!=='notices,revision,scope' || !sameNoticeRequest(row.request,request))throw Error('Recording notice receipt cannot be verified.');
 }
 export function workerRecordingNotice(value:unknown,language:RecordingLanguage){
   const row=value as {revision?:number;configured?:boolean;language?:string;notice?:unknown};

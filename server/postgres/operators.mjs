@@ -6,6 +6,7 @@ import {cookieToken} from '../auth.mjs';
 import {operatorContext} from '../operator-input.mjs';
 
 export const OPERATOR_COOKIE='understood_operator';
+export const HOSTED_OPERATOR_COOKIE='__Host-understood_operator';
 export async function operatorAudit(client,id,action,objectType,objectId) {
   await client.query('INSERT INTO operator_audit(id,operator_id,action,object_type,object_id) VALUES($1,$2,$3,$4,$5)',[randomUUID(),id,action,objectType,objectId]);
 }
@@ -25,8 +26,8 @@ export async function provisionOperator(pool,{id,email,password,name},{schema='p
 export async function authenticateOperator(pool,input,address,{schema='public'}={}) {
   if(!input || Object.keys(input).some(key=>!['email','password'].includes(key)) || typeof input.email!=='string' || input.email.length>254 || typeof input.password!=='string' || input.password.length>256 || typeof address!=='string' || address.length>128)throw Error('Invalid operator login');
   const email=normalizeEmail(input.email);
-  if(!await domainTransaction(pool,schema,client=>consumeAuthBudget(client,[tokenHash(`operator:ip:${address}`),tokenHash(`operator:email:${email}`)],5)))throw Error('Invalid credentials');
-  const row=await domainTransaction(pool,schema,async client=>(await client.query('SELECT * FROM platform_operators WHERE email=$1',[email])).rows[0]);
+  if(!await domainTransaction(pool,schema,client=>consumeAuthBudget(client,[tokenHash(`operator:ip:${address}`),tokenHash(`operator:email:${email}`)],5,{table:'operator_auth_attempts'})))throw Error('Invalid credentials');
+  const row=await domainTransaction(pool,schema,async client=>(await client.query('SELECT id,email,name,active,revision,password_salt,password_hash FROM platform_operators WHERE email=$1',[email])).rows[0]);
   const matches=await passwordMatches(input.password,row);
   if(!row?.active || !matches)throw Error('Invalid credentials');
   return domainTransaction(pool,schema,async client=>{
@@ -34,19 +35,19 @@ export async function authenticateOperator(pool,input,address,{schema='public'}=
     await client.query('DELETE FROM operator_sessions WHERE expires_at<=clock_timestamp() OR revoked_at IS NOT NULL');
     await client.query('UPDATE operator_sessions SET revoked_at=clock_timestamp() WHERE operator_id=$1',[row.id]);
     const token=randomBytes(32).toString('base64url'),hash=tokenHash(token),maxSeconds=3600;
-    const session=(await client.query("INSERT INTO operator_sessions VALUES($1,$2,$3,clock_timestamp()+interval '1 hour',NULL) RETURNING *",[hash,row.id,row.revision])).rows[0];
+    const session=(await client.query("INSERT INTO operator_sessions(token_hash,operator_id,operator_revision,expires_at,revoked_at) VALUES($1,$2,$3,clock_timestamp()+interval '1 hour',NULL) RETURNING token_hash,operator_id,operator_revision,expires_at,revoked_at",[hash,row.id,row.revision])).rows[0];
     await operatorAudit(client,row.id,'operator.signed_in','operator',row.id);
     return {token,maxSeconds,session:{...session,name:row.name}};
   });
 }
 export async function requireOperatorInTransaction(client,identity) {
-  const row=(await client.query(`SELECT s.*,o.name FROM operator_sessions s JOIN platform_operators o ON o.id=s.operator_id
+  const row=(await client.query(`SELECT s.token_hash,s.operator_id,s.operator_revision,s.expires_at,s.revoked_at,o.name FROM operator_sessions s JOIN platform_operators o ON o.id=s.operator_id
     WHERE s.token_hash=$1 AND o.active=true AND o.revision=s.operator_revision AND s.revoked_at IS NULL AND s.expires_at>clock_timestamp() FOR SHARE OF s,o`,[identity?.token_hash ?? ''])).rows[0];
   if(!row)throw Error('Operator sign in required');
   return row;
 }
-export async function requireOperator(pool,req,{schema='public',context=true}={}) {
-  const token=cookieToken(req,OPERATOR_COOKIE);
+export async function requireOperator(pool,req,{schema='public',context=true,cookieName=OPERATOR_COOKIE}={}) {
+  const token=cookieToken(req,cookieName);
   if(typeof token!=='string' || !/^[a-zA-Z0-9_-]{43}$/.test(token))throw Error('Operator sign in required');
   const row=await domainTransaction(pool,schema,client=>requireOperatorInTransaction(client,{token_hash:tokenHash(token)}));
   const provided=req.headers['x-operator-context'],expected=operatorContext(row);

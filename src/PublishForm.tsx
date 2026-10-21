@@ -1,6 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import {ChevronLeft,ChevronRight,Search,Send,X,Users,RefreshCw,CalendarClock} from 'lucide-react';
-import {request,BriefingRequestError} from './BriefingControls';
+import {useBriefingRequest,BriefingRequestError} from './BriefingControls';
+import type {StaffRequestAuthority} from './useStaffRequest';
 import {savePendingPublication,clearPendingPublication,checkedPublicationResult,type PendingPublication} from './publication-recovery';
 import CivilTimeField from './CivilTimeField';
 import {publicationTimes} from './civil-time';
@@ -9,7 +10,8 @@ type Worker={id:string;code:string;language:string;crew_name:string|null};
 type WorkerPage={items:Worker[];total:number;page:number;pageSize:number};
 
 type Crew={id:string;name:string;member_count:number};
-function CrewRecipients({disabled,onSelected,onLoading}:{disabled:boolean;onSelected:(workers:Worker[])=>boolean;onLoading:(loading:boolean)=>void}) {
+function CrewRecipients({disabled,onSelected,onLoading,authority}:{disabled:boolean;onSelected:(workers:Worker[])=>boolean;onLoading:(loading:boolean)=>void;authority:StaffRequestAuthority}) {
+  const {request,current}=useBriefingRequest(authority);
   const [search,setSearch]=useState(''),[page,setPage]=useState(1),[refresh,setRefresh]=useState(0),[choice,setChoice]=useState<Crew|null>(null);
   const [data,setData]=useState<{items:Crew[];total:number}|null>(null),[loading,setLoading]=useState(true),[adding,setAdding]=useState(false),[error,setError]=useState(''),[result,setResult]=useState('');
   const addingRequest=useRef<AbortController|null>(null);
@@ -18,22 +20,22 @@ function CrewRecipients({disabled,onSelected,onLoading}:{disabled:boolean;onSele
     const controller=new AbortController();setLoading(true);setData(null);setError('');
     const query=new URLSearchParams({search,status:'active',page:String(page),pageSize:'20'});
     request<{items:Crew[];total:number}>(`/people/crews?${query}`,'GET',undefined,controller.signal)
-      .then(value=>{if(!controller.signal.aborted)setData(value);}).catch(reason=>{if(!controller.signal.aborted)setError((reason as Error).message);})
-      .finally(()=>{if(!controller.signal.aborted)setLoading(false);});
+      .then(value=>{if(!controller.signal.aborted && current())setData(value);}).catch(reason=>{if(!controller.signal.aborted && current())setError((reason as Error).message);})
+      .finally(()=>{if(!controller.signal.aborted && current())setLoading(false);});
     return ()=>controller.abort();
-  },[search,page,refresh]);
+  },[search,page,refresh,request,current]);
   const pages=Math.max(1,Math.ceil((data?.total || 0)/20));
   async function add() {
-    if(!choice || addingRequest.current || disabled)return;
+    if(!choice || addingRequest.current || disabled || !current())return;
     const controller=new AbortController();addingRequest.current=controller;setAdding(true);onLoading(true);setError('');setResult('');
     try {
       const value=await request<{crew:{name:string};items:Worker[]}>(`/people/crews/${encodeURIComponent(choice.id)}/recipients`,'GET',undefined,controller.signal);
-      if(!controller.signal.aborted) {
+      if(!controller.signal.aborted && current()) {
         if(!onSelected(value.items))throw Error('Selected recipients cannot exceed 5,000. Remove recipients before adding this crew.');
         setResult(`${value.items.length} active ${value.items.length===1?'member':'members'} from ${value.crew.name} included in the selection.`);
       }
-    } catch(reason) {if(!controller.signal.aborted)setError((reason as Error).message);}
-    finally {if(!controller.signal.aborted){addingRequest.current=null;setAdding(false);onLoading(false);}}
+    } catch(reason) {if(!controller.signal.aborted && current())setError((reason as Error).message);}
+    finally {if(!controller.signal.aborted && current()){addingRequest.current=null;setAdding(false);onLoading(false);}}
   }
   return <div className="publish-crews">
     <h3>Crew recipients</h3>
@@ -52,7 +54,8 @@ function CrewRecipients({disabled,onSelected,onLoading}:{disabled:boolean;onSele
   </div>;
 }
 
-export default function PublishForm({id,revision,version,timezone:siteTimezone,scope,onPending,onChanged}:{id:string;revision:number;version:number;timezone:string;scope?:string|null;onPending:(value:PendingPublication)=>void;onChanged:()=>void}) {
+export default function PublishForm({id,revision,version,timezone:siteTimezone,scope,onPending,onChanged,authority}:{id:string;revision:number;version:number;timezone:string;scope?:string|null;onPending:(value:PendingPublication)=>void;onChanged:()=>void;authority:StaffRequestAuthority}) {
+  const {request,current:sessionCurrent,complete}=useBriefingRequest(authority),sending=useRef(false);
   const [search,setSearch]=useState(''),[language,setLanguage]=useState('all'),[page,setPage]=useState(1);
   const [data,setData]=useState<WorkerPage|null>(null),[selected,setSelected]=useState<Map<string,Worker>>(new Map());
   const [loading,setLoading]=useState(true),[busy,setBusy]=useState(false),[error,setError]=useState(''),[confirmed,setConfirmed]=useState(false);
@@ -65,15 +68,15 @@ export default function PublishForm({id,revision,version,timezone:siteTimezone,s
   const query=new URLSearchParams({search,language,status:'active',page:String(page),pageSize:'50'}).toString();
   useEffect(() => {
     let current=true;setLoading(true);setData(null);setError('');
-    request<WorkerPage>(`/people/workers?${query}`).then((value) => {if(current) setData(value);})
-      .catch((err:Error) => {if(current) setError(err.message);}).finally(() => {if(current) setLoading(false);});
+    request<WorkerPage>(`/people/workers?${query}`).then((value) => {if(current && sessionCurrent()) setData(value);})
+      .catch((err:Error) => {if(current && sessionCurrent()) setError(err.message);}).finally(() => {if(current && sessionCurrent()) setLoading(false);});
     return () => {current=false;};
-  },[query]);
+  },[query,request,sessionCurrent]);
   const pages=Math.max(1,Math.ceil((data?.total || 0)/50));
   const allPage=!!data?.items.length && data.items.every((worker) => selected.has(worker.id));
   const toggle=(workers:Worker[],checked:boolean) => {setSelected((old) => {const next=new Map(old);for(const worker of workers) checked ? next.set(worker.id,worker) : next.delete(worker.id);return next;});setConfirmed(false);};
   async function publish(event:React.FormEvent) {
-    event.preventDefault();if(!confirmed || !selected.size || busy || readingCrew || stale) return;setBusy(true);setError('');
+    event.preventDefault();if(!confirmed || !selected.size || sending.current || readingCrew || stale || !sessionCurrent()) return;sending.current=true;setBusy(true);setError('');
     let submitted=false,pending:PendingPublication|null=null,stored=false;
     try {
       const form=event.currentTarget as HTMLFormElement,fields=new FormData(form);
@@ -84,22 +87,26 @@ export default function PublishForm({id,revision,version,timezone:siteTimezone,s
       pending={briefingId:id,kind:mode==='schedule'?'schedule':'publish',body:{requestId:retry.current.requestId,revision,nextVersion:version,workerIds,dueAt,...(reminderMinutes?{reminderMinutes}:{}),...(scheduledAt ? {publishAt:scheduledAt} : {})}};
       savePendingPublication(sessionStorage,scope,pending);stored=true;submitted=true;
       const result=await request(`/briefings/${encodeURIComponent(id)}/${mode==='schedule'?'schedules':'publish'}`,'POST',pending.body);
-      checkedPublicationResult(result,pending);clearPendingPublication(sessionStorage,scope,pending);stored=false;
-      setConfirmed(false);setSelected(new Map());form.reset();retry.current=null;
-      setTimingReset(value=>value+1);setTimezone(siteTimezone);
-      onChanged();
+      const accepted=pending;
+      await complete(result,value=>checkedPublicationResult(value,accepted),()=>{
+        clearPendingPublication(sessionStorage,scope!,accepted);stored=false;
+        setConfirmed(false);setSelected(new Map());form.reset();retry.current=null;
+        setTimingReset(value=>value+1);setTimezone(siteTimezone);onChanged();
+      });
     } catch(err) {
+      if(!sessionCurrent())return;
       if(stored && pending && scope) {
-        if(!(err instanceof BriefingRequestError) || err.uncertain){onPending(pending);return;}
+        if(!(err instanceof BriefingRequestError) || err.uncertain || err.fenced){onPending(pending);return;}
         try {clearPendingPublication(sessionStorage,scope,pending);}catch {onPending(pending);return;}
       }
       const message=(err as Error).message;
       if(['Draft version changed','Draft revision changed'].includes(message)){setStale(true);setConfirmed(false);}
       setError(`${message}${submitted && mode==='schedule'?' Refresh publication schedules to check the saved outcome.':''}`);
-    } finally {setBusy(false);}
+    } finally {sending.current=false;if(sessionCurrent())setBusy(false);}
   }
   return <section className="panel"><h2>Publish v{version}</h2><form onSubmit={(event) => void publish(event)}>
-    <CrewRecipients disabled={busy || stale} onLoading={value=>{setReadingCrew(value);if(value)setConfirmed(false);}} onSelected={workers=>{
+    <CrewRecipients authority={authority} disabled={busy || stale} onLoading={value=>{if(!sessionCurrent())return;setReadingCrew(value);if(value)setConfirmed(false);}} onSelected={workers=>{
+      if(!sessionCurrent())return false;
       const next=new Map(selected);for(const worker of workers)next.set(worker.id,worker);
       if(next.size>5000)return false;
       setSelected(next);setConfirmed(false);return true;

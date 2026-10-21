@@ -1,0 +1,96 @@
+{
+  "before": {
+    "dir": "",
+    "heading": "یہ آلہ",
+    "lang": "",
+    "selected": [
+      "ur"
+    ],
+    "width": 1280
+  },
+  "expiredDesktop": {
+    "body": "Understood کارکن کا یہ سیشن مقفل ہےسیشن بدل گیا، ختم ہو گیا یا اس کی تصدیق نہیں ہو سکی۔ اس صفحے کا نہ بھیجا گیا کام مٹا دیا گیا ہے۔ پہلے بھیجی گئی درخواست مکمل ہو سکتی ہے۔اپنا رسائی کا لنک دوبارہ کھولیں، یا صفحہ دوبارہ لوڈ کر کے آگے بڑھنے سے پہلے شناخت چیک کریں۔دوبارہ لوڈ کریں",
+    "dir": "rtl",
+    "docWidth": 1265,
+    "forms": 0,
+    "heading": "کارکن کا یہ سیشن مقفل ہے",
+    "lang": "ur",
+    "recorders": 0,
+    "width": 1280
+  },
+  "expiredMobile": {
+    "dir": "rtl",
+    "docWidth": 375,
+    "forms": 0,
+    "heading": "کارکن کا یہ سیشن مقفل ہے",
+    "lang": "ur",
+    "phase": "expired-ur-mobile",
+    "recorders": 0,
+    "width": 390
+  },
+  "expiredMobileConfirmed": {
+    "dir": "rtl",
+    "docWidth": 375,
+    "forms": 0,
+    "heading": "کارکن کا یہ سیشن مقفل ہے",
+    "lang": "ur",
+    "phase": "expired-ur-mobile-settled",
+    "recorders": 0,
+    "width": 390
+  },
+  "arabicBefore": {
+    "heading": "هذا الجهاز",
+    "phase": "fresh-session-selected-ar",
+    "selected": [
+      "ar"
+    ],
+    "width": 390
+  },
+  "arabicAfter": {
+    "body": "Understood تم قفل جلسة العاملتغيّرت الجلسة أو انتهت أو تعذّر التحقق منها. تم مسح العمل غير المرسل في هذه الصفحة. قد يكتمل طلب أُرسل بالفعل.افتح رابط الوصول الخاص بك، أو أعد تحميل الصفحة وتحقق من الهوية قبل المتابعة.إعادة تحميل",
+    "dir": "rtl",
+    "docWidth": 375,
+    "forms": 0,
+    "heading": "تم قفل جلسة العامل",
+    "lang": "ar",
+    "phase": "context-lock-ar-mobile",
+    "recorders": 0,
+    "width": 390
+  },
+  "counters": {
+    "actualMicrophoneUsed": false,
+    "assignmentLanguages": [
+      {
+        "id": "answered",
+        "language": "en"
+      },
+      {
+        "id": "fresh",
+        "language": "en"
+      }
+    ],
+    "attempts": 1,
+    "cases": 1,
+    "externalCalls": 0,
+    "held": false,
+    "helpPosts": 0,
+    "messages": 1,
+    "noticeReads": 3,
+    "objects": 0,
+    "originalAttemptUnchanged": true,
+    "otherPosts": 0,
+    "playbackReads": 0,
+    "postRequestIds": [],
+    "profileLanguage": "en",
+    "receiptReads": 0,
+    "recordings": [],
+    "replyPosts": 0,
+    "simulatedMicrophoneRequests": 0,
+    "submissionReceipts": 1
+  },
+  "limits": [
+    "First mobile screenshot captured a resize-transition raster and is not accepted; confirmed screenshot is a new settled session expiry.",
+    "Initial heading wait returned early selector timeout before actual expiry; later verified screens establish expiry.",
+    "No real microphone, stored private-media playback or independent language review."
+  ]
+}

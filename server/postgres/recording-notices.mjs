@@ -12,8 +12,8 @@ async function authority(client,session,write=false){
   return session;
 }
 const current=async(client,session)=>(await client.query('SELECT * FROM recording_notices WHERE org_id=$1 AND site_id=$2',[session.org_id,session.site_id])).rows[0];
-export function getRecordingNotice(pool,session,{schema='public'}={}){
-  return domainTransaction(pool,schema,async client=>{const principal=await authority(client,session);return {...noticeView(await current(client,session),principal),...(principal.principal_type==='staff'?{recoveryScope:staffRecoveryScope(principal)}:{})};});
+export function getRecordingNotice(pool,session,{schema='public',language}={}){
+  return domainTransaction(pool,schema,async client=>{const principal=await authority(client,session);return {...noticeView(await current(client,session),principal,language),...(principal.principal_type==='staff'?{recoveryScope:staffRecoveryScope(principal)}:{})};});
 }
 export function recordingNoticeReceipt(pool,session,requestId,{schema='public'}={}){
   noticeRequestId(requestId);

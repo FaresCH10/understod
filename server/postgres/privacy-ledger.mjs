@@ -18,7 +18,7 @@ import {compareRestoreInputs} from './restore-input-lifecycle.mjs';
 import {compareSourceSnapshot,validateDatabaseInventory} from './source-inventory.mjs';
 import {validateRestoreReplayState,requireRestorePredecessor,captureRestoreReplayState} from './restore-replay-state.mjs';
 
-export const PRIVACY_LEDGER_FORMAT='understood-postgres-privacy-ledger-v7';
+export const PRIVACY_LEDGER_FORMAT='understood-postgres-privacy-ledger-v8';
 const uuid=value=>typeof value==='string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 const digest=value=>typeof value==='string' && /^[a-f0-9]{64}$/.test(value);
 const MAX_ROWS=50000,MAX_BYTES=16*1024*1024;
@@ -88,7 +88,7 @@ const definitions={
   case_followup_audio:`SELECT jsonb_build_object('id',id,'request_id',request_id,'org_id',org_id,'site_id',site_id,'job_lease',job_lease,'language',language,'text_hash',text_hash,
     'sha256',sha256,'bytes',bytes,'created_at',created_at,'state',state) AS row FROM case_followup_audio ORDER BY id COLLATE "C" LIMIT ${MAX_ROWS+1}`,
   case_voice:`SELECT jsonb_build_object('id',id,'request_id',request_id,'org_id',org_id,'site_id',site_id,'assignment_id',assignment_id,'worker_id',worker_id,'requested_case_id',requested_case_id,
-    'kind',kind,'language',language,'created_at',created_at,'sha256',sha256,'bytes',bytes,'status',status,'cleanup_state',cleanup_state,'received_at',received_at) AS row FROM case_voice ORDER BY id COLLATE "C" LIMIT ${MAX_ROWS+1}`,
+    'kind',kind,'actor_type',actor_type,'actor_id',actor_id,'actor_role',actor_role,'language',language,'created_at',created_at,'sha256',sha256,'bytes',bytes,'status',status,'cleanup_state',cleanup_state,'received_at',received_at) AS row FROM case_voice ORDER BY id COLLATE "C" LIMIT ${MAX_ROWS+1}`,
   help_requests:`SELECT jsonb_build_object('case_id',case_id,'org_id',org_id,'site_id',site_id,'assignment_id',assignment_id,'redacted',text IN ('[Deleted]','[Expired]')) AS row
     FROM help_requests ORDER BY case_id COLLATE "C" LIMIT ${MAX_ROWS+1}`,
   case_messages:`SELECT jsonb_build_object('id',id,'case_id',case_id,'org_id',org_id,'site_id',site_id,'assignment_id',assignment_id,'actor_id',actor_id,
@@ -170,6 +170,17 @@ export function validatePrivacyLedger(ledger,baseline){
     || !Number.isSafeInteger(row.access_revision) || row.access_revision<1)throw Error('Privacy staff access state unavailable');
   const sequences=new Set();
   const assignmentsById=new Map(ledger.tables.assignments.map(row=>[row.id,row]));
+  for(const row of ledger.tables.case_voice){
+    const assignment=assignmentsById.get(row.assignment_id),actor=ledger.tables.staff.find(staff=>staff.id===row.actor_id);
+    if(Object.keys(row).sort().join(',')!=='actor_id,actor_role,actor_type,assignment_id,bytes,cleanup_state,created_at,id,kind,language,org_id,received_at,request_id,requested_case_id,sha256,site_id,status,worker_id'
+      ||!assignment||assignment.org_id!==row.org_id||assignment.site_id!==row.site_id||assignment.worker_id!==row.worker_id
+      ||!['en','ar','ur'].includes(row.language)||!digest(row.sha256)||!Number.isSafeInteger(row.bytes)||row.bytes<45||row.bytes>2880044
+      ||!['storing','received','failed'].includes(row.status)||!['active','cleaning','cleaned'].includes(row.cleanup_state)
+      ||!Number.isFinite(Date.parse(row.created_at))||Date.parse(row.created_at)>Date.parse(ledger.capturedAt)
+      ||(row.status==='received'?!Number.isFinite(Date.parse(row.received_at))||Date.parse(row.received_at)<Date.parse(row.created_at)||Date.parse(row.received_at)>Date.parse(ledger.capturedAt):row.received_at!==null)
+      ||(row.actor_type==='staff'?row.kind!=='in_person'||row.bytes<8044||!['owner','supervisor'].includes(row.actor_role)||!actor||actor.org_id!==row.org_id||actor.site_id!==row.site_id
+        :row.actor_type!=='worker'||!['help','reply'].includes(row.kind)||row.actor_id!==null||row.actor_role!==null))throw Error('Original case voice authorship unavailable');
+  }
   const acceptedByKind=Object.fromEntries(['typed','audio'].map(kind=>[kind,new Map(ledger.tables[kind==='typed'?'attempts':'recordings']
     .map(row=>[JSON.stringify([row.assignment_id,row.submission_id]),row]))]));
   for(const row of ledger.tables.submission_receipts){
@@ -305,7 +316,7 @@ const bindingKeys={
   generated_audio:['bundle_id','org_id','site_id','language','text_hash','sha256','bytes'],
   case_followups:['org_id','site_id','case_id','assignment_id','actor_id','request_hash','created_at'],
   case_followup_audio:['org_id','site_id','request_id','job_lease','language','text_hash','sha256','bytes','created_at'],
-  case_voice:['org_id','site_id','request_id','assignment_id','worker_id','requested_case_id','kind','language','created_at','sha256','bytes','received_at'],
+  case_voice:['org_id','site_id','request_id','assignment_id','worker_id','requested_case_id','kind','actor_type','actor_id','actor_role','language','created_at','sha256','bytes','received_at'],
   help_requests:['org_id','site_id','assignment_id'],case_messages:['org_id','site_id','case_id','assignment_id','actor_id','request_hash','created_at'],
   case_reviews:['org_id','site_id','case_id','assignment_id','actor_id','kind','request_hash','created_at'],report_exports:['org_id','site_id','publication_id','requested_by','created_at','expires_at'],
   worker_imports:['org_id','site_id','requested_by','sha256','created_at','expires_at'],

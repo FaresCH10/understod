@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import {PGlite} from '@electric-sql/pglite';
 import {runMigrations} from '../server/postgres/migrate.mjs';
 import {provisionStaffCredential,authenticateStaff,requireSession} from '../server/postgres/auth.mjs';
@@ -9,6 +11,7 @@ import {openMail} from '../server/auth-mail.mjs';
 import {createPostgresRehearsalServer} from '../server/postgres/http.mjs';
 import {AUTH_MAIL_QUEUE_LIMIT} from '../server/auth-mail-budget.mjs';
 import {requestRecovery} from '../server/postgres/account-recovery.mjs';
+import {configureRuntimePermissions,verifyRuntimePermissions} from '../server/postgres/runtime-permissions.mjs';
 const password='Synthetic-invitation-password-123';
 const options={schema:'understood_test_invitations'};
 const mail={available:true,key:Buffer.alloc(32,7),publicOrigin:'http://127.0.0.1:3140'};
@@ -36,6 +39,31 @@ async function fixture() {
   const accept=(token,request=signup(token))=>invites.acceptInvitation(pool,null,'signup',request,'synthetic-ip',mail,options);
   return {db,pool,q,issue,update,deliver,accept,fail(action){failAction=action;}};
 }
+
+test('restricted worker prepares invitation mail without creating staff, changing credentials or rewriting invitation request receipts',async()=>{
+  const f=await fixture(),role='understood_invitation_worker';
+  try{
+    const value=input();await f.issue(value);
+    const staff=await f.q('SELECT * FROM staff ORDER BY id'),credentials=await f.q('SELECT * FROM staff_credentials ORDER BY staff_id');
+    const receipts=await f.q('SELECT * FROM staff_invitation_requests ORDER BY request_id');
+    await f.db.exec(`CREATE ROLE ${role} LOGIN`);
+    await configureRuntimePermissions(f.pool,{...options,role,profile:'worker',dedicatedDatabase:true,writersStopped:true});
+    await f.db.exec(`SET SESSION AUTHORIZATION ${role}`);
+    assert.equal((await verifyRuntimePermissions(f.pool,{...options,profile:'worker'})).profile,'worker');
+    let deliveries=0;
+    assert.equal(await invites.processOneInvitation(f.pool,mail,{...options,send:async(_config,_id,message)=>{
+      deliveries++;assert.equal(message.email,value.email);assert.match(message.text,/#accept-invitation\/[A-Za-z0-9_-]{43}/);
+      return {providerId:'synthetic-worker-invitation'};
+    }}),true);
+    assert.equal(deliveries,1);assert.equal((await f.q('SELECT count(*)::int n FROM staff_invitation_tokens'))[0].n,1);
+    assert.deepEqual(await f.q('SELECT state,payload,provider_id FROM staff_invitation_mail'),[{state:'sent',payload:null,provider_id:'synthetic-worker-invitation'}]);
+    assert.deepEqual(await f.q('SELECT * FROM staff ORDER BY id'),staff);
+    assert.deepEqual(await f.q('SELECT * FROM staff_credentials ORDER BY staff_id'),credentials);
+    assert.deepEqual(await f.q('SELECT * FROM staff_invitation_requests ORDER BY request_id'),receipts);
+    await assert.rejects(f.q('DELETE FROM staff_invitation_requests WHERE false'),error=>error.code==='42501');
+    assert.equal(await invites.processOneInvitation(f.pool,mail,{...options,send:async()=>assert.fail('Completed invitation repeated')}),false);
+  }finally{await f.db.close();}
+});
 test('PostgreSQL shared mail backlog rolls back invitation issue and reserves one-for-one resend capacity',async()=>{
   const f=await fixture();try {
     await f.q(`INSERT INTO staff_recovery_mail(id,purpose,email_hash,expires_at,state)

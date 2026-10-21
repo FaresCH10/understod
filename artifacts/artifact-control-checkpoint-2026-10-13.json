@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-13",
+  "scope": "Template and glossary captured requests and exact-intent recovery",
+  "progress": {"boundary": 85, "staffRequestFencing": 92, "overallEstimate": 60, "overallRange": [55, 65]},
+  "fullSuite": {"files": 168, "tests": 912, "passed": 908, "failed": 0, "skippedNative": 4, "exitCode": 0, "durationMs": 339208.9189, "log": "artifacts/artifact-controls-suite-2026-10-13.log", "qualification": "Precedes final one-line read-only back-button fix"},
+  "finalFocused": {"files": 7, "tests": 34, "passed": 34, "failed": 0, "skipped": 0, "exitCode": 0, "durationMs": 8334.7155},
+  "build": {"passed": true, "modules": 2048, "entryKB": 634.53, "shellFiles": 55, "hashesMatch": true},
+  "browser": {
+    "actionsAccepted": ["template:create", "template:edit", "template:archive", "template:restore", "template:duplicate", "template:use", "glossary:create", "glossary:edit", "glossary:remove", "glossary:restore", "glossary:regenerate"],
+    "explicitPosts": 14, "acceptedUiReceipts": 11, "withheldAcknowledgements": 11, "receiptOutages": 11,
+    "laterRejectedRetries": 2, "duplicateTermRejections": 1, "automaticMutationReplays": 0,
+    "templateReceiptsIncludingSeed": 7, "glossaryReceipts": 5, "publicationsUnchanged": true,
+    "freshDraft": {"state": "processing", "preparedContent": null, "finalRevisionAfterGlossaryInvalidation": 6},
+    "reloadRecovery": true, "historicalGlossaryPreserved": true, "readOnlyCreationDenied": true, "finalReadOnlyBackButton": true,
+    "viewports": [{"width": 390, "pageWidth": 375}, {"width": 320, "pageWidth": 305}],
+    "screenshots": ["artifacts/artifact-controls-mobile-2026-10-13.jpg", "artifacts/artifact-first-rejection-320-2026-10-13.jpg"],
+    "optionalQaCloseNavigation": "blocked by browser; no bypass attempted",
+    "tabsClosed": true, "viewportReset": true, "ownedFixturesTerminal": true
+  },
+  "preservation": {"originalFingerprints": 8, "allMatch": true, "integrity": "ok", "foreignKeyViolations": 0, "originalPreviewsRestarted": false, "originalMigrations": false},
+  "externalRequests": 0,
+  "notClaimed": ["Reticle verdict", "native PostgreSQL", "real phone", "full accessibility", "all-reference fidelity", "live Gemini", "real-worker privacy approval", "hosted deployment", "production readiness"]
+}

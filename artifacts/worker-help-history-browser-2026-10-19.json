@@ -1,0 +1,167 @@
+{
+  "checkedAt": "2026-10-19T14:29:18.140Z",
+  "scope": "local-built-synthetic-worker-help-history",
+  "productionReady": false,
+  "measurements": [
+    {
+      "language": "ar",
+      "buttonOverflow": 0,
+      "dir": "",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 320
+    },
+    {
+      "language": "ar",
+      "buttonOverflow": 0,
+      "dir": "",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 390
+    },
+    {
+      "language": "ar",
+      "buttonOverflow": 0,
+      "dir": "",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 768
+    },
+    {
+      "language": "ar",
+      "buttonOverflow": 0,
+      "dir": "",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 1440
+    },
+    {
+      "language": "ur",
+      "buttonOverflow": 0,
+      "direction": "rtl",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 320
+    },
+    {
+      "language": "ur",
+      "buttonOverflow": 0,
+      "direction": "rtl",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 390
+    },
+    {
+      "language": "ur",
+      "buttonOverflow": 0,
+      "direction": "rtl",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 768
+    },
+    {
+      "language": "ur",
+      "buttonOverflow": 0,
+      "direction": "rtl",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 1440
+    },
+    {
+      "language": "en",
+      "buttonOverflow": 0,
+      "direction": "ltr",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 320
+    },
+    {
+      "language": "en",
+      "buttonOverflow": 0,
+      "direction": "ltr",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 390
+    },
+    {
+      "language": "en",
+      "buttonOverflow": 0,
+      "direction": "ltr",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 768
+    },
+    {
+      "language": "en",
+      "buttonOverflow": 0,
+      "direction": "ltr",
+      "headOverflow": 0,
+      "height": 740,
+      "overflow": false,
+      "panelVisible": true,
+      "width": 1440
+    }
+  ],
+  "arabicDirectionCheck": {
+    "direction": "rtl",
+    "language": "ar"
+  },
+  "checks": [
+    "own first and second Help pages",
+    "English keyboard Enter paging",
+    "conversation region focus and expanded button",
+    "unsent conversation survives same-selection refresh",
+    "paging and case switching disabled while unsent",
+    "503 clears history rows and retains own unsent conversation",
+    "malformed response clears rows without private markers",
+    "fresh read recovers own rows",
+    "delayed prior assignment response cannot populate next assignment",
+    "mismatched Help-history context locks worker view",
+    "EN/AR/UR at actual320/390/768/1440 widths without measured horizontal/button/header overflow"
+  ],
+  "fixture": {
+    "answerPosts": 0,
+    "helpPosts": 0,
+    "otherPosts": 0,
+    "listReads": 5,
+    "detailReads": 5,
+    "historyReads": 5,
+    "helpHistoryReads": 17,
+    "attempts": 0,
+    "cases": 9,
+    "externalCalls": 0
+  },
+  "screenshots": [
+    "worker-help-history-ar-390-2026-10-19.png",
+    "worker-help-history-ur-390-2026-10-19.png"
+  ],
+  "limits": [
+    "not independent language review",
+    "not physical-device or screen-reader acceptance",
+    "not all S24 conversation mutations, voice or failure states",
+    "not native PostgreSQL or hosted acceptance"
+  ],
+  "reticle": "blocked-external-diagnostic-egress-not-authorized"
+}

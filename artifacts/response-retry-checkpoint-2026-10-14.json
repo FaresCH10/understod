@@ -1,0 +1,13 @@
+{
+  "checkedAt":"2026-10-14T15:35:00Z",
+  "scope":"S17 confirmed customer voice/check retry and immutable exact-generation recovery",
+  "overallEstimate":67,
+  "overallUncertainty":[60,73],
+  "taskEstimates":{"mixedQueue":90,"appHelpers":90,"customerResponseRetry":85,"liveSyntheticAi":45},
+  "fullSuite":{"tests":990,"pass":986,"fail":0,"skipped":4,"durationMs":297041.3484,"session":44465,"exitCode":0,"log":"response-retry-suite-2026-10-14.log"},
+  "focused":{"tests":26,"pass":26,"fail":0,"durationMs":17596.4944,"session":80318,"exitCode":0},
+  "build":{"passed":true,"modules":2065,"entryKb":660.49,"shellAssets":55,"allShellHashesMatch":true,"existingWarningsRemain":true},
+  "browser":{"fixtureSession":63254,"terminal":true,"posts":4,"lostAcknowledgements":2,"precommitOutages":1,"receiptFailures":2,"missingReceipts":1,"acceptedReceipts":3,"protectedInventoriesUnchanged":7,"externalCalls":0,"viewport":320,"documentWidth":305,"temporaryTabClosed":true,"viewportReset":true},
+  "preservation":{"originalTablesUnchanged":8,"integrity":"ok","foreignKeyViolations":0,"sourceFilesChecked":1383,"currentKeyMatches":0,"publicKeyMatches":0,"exampleKeyBlank":true,"originalPreviewsRestarted":false},
+  "limits":["Native database tests skipped","Wider authority/concurrency/device acceptance remains","Run-level provider provenance remains","No complete live voice pipeline","No Reticle verdict","No all-reference or full accessibility acceptance","No real-data/free-tier use","No cloud or release approval"]
+}

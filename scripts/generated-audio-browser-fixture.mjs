@@ -13,7 +13,7 @@ import {loadPublicBuild} from '../server/public-build.mjs';
 import {changeGlossary} from '../server/postgres/glossary.mjs';
 
 // Disposable browser evidence only: no saved database, external service or actual synthesized speech.
-const built=process.env.UNDERSTOOD_ARTIFACT_FIXTURE_BUILT==='true',history=process.env.UNDERSTOOD_HISTORY_FIXTURE==='true',port=built?3216:3160,origin='http://127.0.0.1:'+port;
+const built=process.env.UNDERSTOOD_ARTIFACT_FIXTURE_BUILT==='true',history=process.env.UNDERSTOOD_HISTORY_FIXTURE==='true',playback=process.env.UNDERSTOOD_PLAYBACK_FIXTURE==='true',port=built?3216:3160,origin='http://127.0.0.1:'+port;
 const db=new PGlite(),schema='understood_test_speech_browser',objects=new Map();
 let audioFailure=false,lostReviewAck=false,lostRegenerationAck=false,failNextSpeech=false,historyFailure='';
 let queue=Promise.resolve();
@@ -42,7 +42,7 @@ const adapter={provenance:{adapter:'synthetic-browser-fixture',dataClass:'synthe
   async checkPreparation(){return {sourceGrounded:true,questionAligned:true,ambiguous:false,factEvidence:facts.map((quote,factIndex)=>({factIndex,quote})),askedFactIndexes:[0,1],reasons:[]};},
   async translate(_source,language){return translations[language];},
   async checkTranslation(_source,target){const rejected=target.question.includes('رفض');return {faithful:!rejected,complete:true,languageCorrect:true,terminologyApplied:true,reasons:rejected ? ['unsupported_content'] : []};},
-  async speech(){if(failNextSpeech) {failNextSpeech=false;throw Error('Synthetic speech failure');}return Buffer.from(encodeWav({duration:3,sampleRate:16000,numberOfChannels:1,getChannelData:()=>Float32Array.from({length:48000},(_,n)=>Math.sin(n*Math.PI*2*440/16000)*0.2)}));}};
+  async speech(){if(failNextSpeech) {failNextSpeech=false;throw Error('Synthetic speech failure');}const duration=playback?12:3;return Buffer.from(encodeWav({duration,sampleRate:16000,numberOfChannels:1,getChannelData:()=>Float32Array.from({length:16000*duration},(_,n)=>Math.sin(n*Math.PI*2*440/16000)*0.2)}));}};
 const draft=await createDraft(pool,owner,{requestId:randomUUID(),title:'Shelf colour handover',source},options);await queuePreparation(pool,owner,draft.id,1,options);
 await rehearsalTasks(pool,storage,{schema,preparationAdapter:adapter,preparationLanguages:['en','ar','ur']}).preparation();
 const publication=await publish(pool,owner,draft.id,{requestId:randomUUID(),revision:1,nextVersion:1,workerIds:['worker-en','worker-ar','worker-ur']},{...options,storage});
@@ -56,10 +56,15 @@ await rehearsalTasks(pool,storage,{schema,preparationAdapter:adapter,preparation
 const assignments=Object.fromEntries((await db.query('SELECT worker_id,id FROM assignments WHERE publication_id=$1',[publication.id])).rows.map(row=>[row.worker_id,row.id]));
 const before=JSON.stringify(await db.query("SELECT id,prepared_json FROM briefings ORDER BY id")),publishedBefore=JSON.stringify(await db.query('SELECT * FROM publications ORDER BY id'));
 const api=createPostgresRehearsalServer(pool,{schema,storage,tier:'local',aiMode:'synthetic',accessMode:'credential',dataClass:'synthetic',publicOrigin:origin,...(built?{publicBuild:await loadPublicBuild('dist')}:{})});
-let reads=0,writes=0,historyReads=0,versionReads=0;
+let reads=0,writes=0,historyReads=0,versionReads=0,audioReads=0;
 const handler=api.listeners('request')[0];api.removeAllListeners('request');
 api.on('request',(req,res)=>{
   const url=new URL(req.url,'http://127.0.0.1');
+  if(playback&&req.method==='GET'&&url.pathname==='/api/qa-playback-control'){
+    try{requireLocalRequest(req);if(!['0','1'].includes(url.searchParams.get('audioFailure')))throw Error();audioFailure=url.searchParams.get('audioFailure')==='1';res.writeHead(200,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify({audioFailure}));}
+    catch{res.writeHead(400,{'cache-control':'no-store'});res.end('Invalid fixture control');}return;
+  }
+  if(req.method==='GET'&&/\/speech\/(body|question)$/.test(url.pathname))audioReads++;
   if(req.method==='GET' && /\/briefings\/[^/]+\/publications(?:\/[^/]+)?$/.test(url.pathname)) {
     const detail=/\/publications\/[^/]+$/.test(url.pathname);if(detail)versionReads++;else historyReads++;
     if(historyFailure===(detail?'detail':'catalog')){res.writeHead(503,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify({error:'Synthetic history read interruption'}));return;}
@@ -97,7 +102,7 @@ await new Promise((resolve,reject)=>{api.once('error',reject);api.listen(built?p
 const controller=new AbortController(),workerTask=runRehearsalWorker(pool,storage,{schema,preparationAdapter:adapter,preparationLanguages:['en','ar','ur']},{signal:controller.signal});
 const vite=built?null:spawn(process.execPath,['node_modules/vite/bin/vite.js'],{stdio:'inherit',env:{...process.env,UNDERSTOOD_WEB_PORT:'3160',UNDERSTOOD_API_PORT:'3161'}});
 let stopping=false;
-function stop(){if(stopping) return;stopping=true;clearTimeout(timeout);controller.abort();vite?.kill();api.close(async()=>{await workerTask;console.log(JSON.stringify({terminal:true,reads,historyReads,versionReads,writes,briefingContentUnchanged:before===JSON.stringify(await db.query('SELECT id,prepared_json FROM briefings ORDER BY id')),publicationsUnchanged:publishedBefore===JSON.stringify(await db.query('SELECT * FROM publications ORDER BY id')),externalCalls:0}));await db.close();process.stdin.pause();});api.closeIdleConnections();}
+function stop(){if(stopping) return;stopping=true;clearTimeout(timeout);controller.abort();vite?.kill();api.close(async()=>{await workerTask;console.log(JSON.stringify({terminal:true,reads,historyReads,versionReads,audioReads,writes,briefingContentUnchanged:before===JSON.stringify(await db.query('SELECT id,prepared_json FROM briefings ORDER BY id')),publicationsUnchanged:publishedBefore===JSON.stringify(await db.query('SELECT * FROM publications ORDER BY id')),attempts:Number((await db.query('SELECT count(*) n FROM attempts')).rows[0].n),externalCalls:0}));await db.close();process.stdin.pause();});api.closeIdleConnections();}
 const timeout=setTimeout(stop,15*60_000);process.stdin.setEncoding('utf8');process.stdin.on('data',value=>{if(value.trim()==='stop')stop();});
 process.once('SIGINT',stop);process.once('SIGTERM',stop);vite?.on('error',stop);vite?.once('exit',stop);
 console.log('Disposable generated-audio QA: '+origin+'/api/qa-bootstrap (language=en/ar/ur). Fixture tones prove playback, not speech quality. No saved data or provider calls.');

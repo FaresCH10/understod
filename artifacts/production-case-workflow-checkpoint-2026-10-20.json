@@ -1,0 +1,196 @@
+{
+  "checkedAt": "2026-10-20T12:34:37.490Z",
+  "productionReady": false,
+  "scope": "local-synthetic-case-workflow",
+  "progress": {
+    "overall": 77,
+    "range": [
+      70,
+      83
+    ],
+    "repeatReviewRecovery": 85,
+    "staffRootRecovery": 85,
+    "navigation": 89,
+    "voiceRecovery": 80,
+    "servicePermissions": 82,
+    "method": "Engineering estimate; not test pass rate or full release acceptance"
+  },
+  "clean": {
+    "id": "84afc9af-b6c6-450c-b967-8c0e6123137f",
+    "startedAt": "2026-10-20T08:08:52.349Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-20T08:08:53.416Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T08:09:03.085Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-20T08:09:03.086Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T08:09:07.601Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-20T08:09:07.601Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T08:14:59.510Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-20T08:14:59.512Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T08:15:00.173Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-20T08:15:00.174Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T08:15:03.986Z"
+      }
+    ],
+    "source": {
+      "files": 876,
+      "sha256": "a66aeb605043da1fc2a84740cc2cc934d099b5865a176851dbc141f6a95c0ed1"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-20T08:15:04.489Z",
+    "parentSession": 14833,
+    "parentExitObserved": false,
+    "parentHandleUnavailableAfterContinuation": true,
+    "tests": {
+      "total": 1265,
+      "passed": 1261,
+      "failed": 0,
+      "skipped": 4,
+      "durationMs": 351585.3563
+    },
+    "contractCases": 43,
+    "pipelineChecks": 10,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "sourceNow": {
+    "files": 876,
+    "sha256": "a66aeb605043da1fc2a84740cc2cc934d099b5865a176851dbc141f6a95c0ed1",
+    "matchesClean": true
+  },
+  "assets": {
+    "customer": "assets/customer-aWyVo-6g.js",
+    "clarifications": "assets/Clarifications-BgJqoT_H.js"
+  },
+  "browser": {
+    "method": "local CUA, not Reticle",
+    "languages": [
+      "en"
+    ],
+    "widths": [
+      320,
+      390,
+      768,
+      1440
+    ],
+    "cleanMeasurements": "artifacts/case-workflow-clean-widths-2026-10-20.json",
+    "cleanScreenshot": "artifacts/case-workflow-clean-stale-320-2026-10-20.png",
+    "contextScreenshot": "artifacts/case-workflow-clean-context-lock-2026-10-20.png",
+    "savedFoldInstants": [
+      "2026-11-01T05:30:00.000Z",
+      "2026-11-01T06:30:00.000Z"
+    ],
+    "correctedInput": {
+      "session": 40778,
+      "exitCode": 0,
+      "repeatPosts": 2,
+      "reviewPosts": 4,
+      "workflowReceipts": 2,
+      "fixtureRepeatChanges": 1,
+      "fixtureReviewChanges": 2,
+      "fixtureAnswers": 1,
+      "caseReviews": 17,
+      "caseRepeats": 15,
+      "attempts": 15,
+      "submissionReceipts": 15,
+      "originalAttemptUnchanged": true,
+      "externalCalls": 0
+    },
+    "prePolish": {
+      "session": 5754,
+      "exitCode": 0,
+      "repeatPosts": 1,
+      "reviewPosts": 1,
+      "workflowReceipts": 2,
+      "fixtureReviewChanges": 1,
+      "caseReviews": 14,
+      "caseRepeats": 14,
+      "attempts": 14,
+      "submissionReceipts": 14,
+      "originalAttemptUnchanged": true,
+      "externalCalls": 0
+    },
+    "firstClean": {
+      "session": 32171,
+      "terminalCountersCaptured": false,
+      "exitCodeObserved": false,
+      "ttlExpired": true,
+      "processAndPortLaterAbsent": true
+    },
+    "finalCleanFence": {
+      "session": 48642,
+      "exitCode": 0,
+      "repeatPosts": 0,
+      "reviewPosts": 0,
+      "workflowReads": 3,
+      "workflowReceipts": 0,
+      "caseReviews": 12,
+      "caseRepeats": 13,
+      "attempts": 14,
+      "submissionReceipts": 14,
+      "originalAttemptUnchanged": true,
+      "externalCalls": 0
+    },
+    "noMicrophoneUsed": true,
+    "noActualNetworkDisconnectClaim": true
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-560b8f87-de76-4cc3-b8a6-c86b62331d66.json",
+    "exitCode": 0,
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 56,
+    "allManifestHashesMatch": true,
+    "filesScanned": 4584,
+    "configuredSecretMatches": 0
+  },
+  "noNewMigrationOrGrants": true,
+  "currentPolicy": 93,
+  "nativePolicyAccepted": 91,
+  "remaining": [
+    "SQLite repeat/review parity",
+    "Full selected references and journeys",
+    "Full EN/AR/UR localization and independent review",
+    "Assistive technology and real-phone recording/offline/shared device",
+    "Broader held mutations and authority transitions",
+    "Further worker positive-verb/column restrictions",
+    "Current-policy native concurrency",
+    "Privacy-approved real-worker AI",
+    "Hosted operation, CI and release gates"
+  ]
+}

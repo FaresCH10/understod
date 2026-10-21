@@ -1,0 +1,1019 @@
+{
+  "uiBuild": ".tools/reports-locale-final-preview-20261021/dist",
+  "measurements": [
+    {
+      "requested": 320,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 305,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 320
+    },
+    {
+      "requested": 320,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 305,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 320
+    },
+    {
+      "requested": 320,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 305,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 320
+    },
+    {
+      "requested": 390,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 375,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 390
+    },
+    {
+      "requested": 390,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 375,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 390
+    },
+    {
+      "requested": 390,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 375,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 390
+    },
+    {
+      "requested": 768,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 753,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 768
+    },
+    {
+      "requested": 768,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 753,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 768
+    },
+    {
+      "requested": 768,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 753,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 768
+    },
+    {
+      "requested": 1440,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 1425,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 1440
+    },
+    {
+      "requested": 1440,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 1425,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 1440
+    },
+    {
+      "requested": 1440,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 1425,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 1440
+    },
+    {
+      "requested": 1586,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 1571,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 1586
+    },
+    {
+      "requested": 1586,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 1571,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 1586
+    },
+    {
+      "requested": 1586,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 1571,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 1586
+    }
+  ],
+  "recoveryMeasurements": [
+    {
+      "requested": 320,
+      "locale": "en",
+      "document": 305,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 320
+    },
+    {
+      "requested": 320,
+      "locale": "ar",
+      "document": 305,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 320
+    },
+    {
+      "requested": 320,
+      "locale": "ur",
+      "document": 305,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 320
+    },
+    {
+      "requested": 390,
+      "locale": "en",
+      "document": 375,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 390
+    },
+    {
+      "requested": 390,
+      "locale": "ar",
+      "document": 375,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 390
+    },
+    {
+      "requested": 390,
+      "locale": "ur",
+      "document": 375,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 390
+    },
+    {
+      "requested": 768,
+      "locale": "en",
+      "document": 753,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 768
+    },
+    {
+      "requested": 768,
+      "locale": "ar",
+      "document": 753,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 768
+    },
+    {
+      "requested": 768,
+      "locale": "ur",
+      "document": 753,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 768
+    },
+    {
+      "requested": 1440,
+      "locale": "en",
+      "document": 1425,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 1440
+    },
+    {
+      "requested": 1440,
+      "locale": "ar",
+      "document": 1425,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 1440
+    },
+    {
+      "requested": 1440,
+      "locale": "ur",
+      "document": 1425,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 1440
+    },
+    {
+      "requested": 1586,
+      "locale": "en",
+      "document": 1571,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 1586
+    },
+    {
+      "requested": 1586,
+      "locale": "ar",
+      "document": 1571,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 1586
+    },
+    {
+      "requested": 1586,
+      "locale": "ur",
+      "document": 1571,
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "outside": [],
+      "overflow": [],
+      "width": 1586
+    }
+  ],
+  "readFlows": [
+    {
+      "phase": "held-publication",
+      "locale": "en",
+      "active": "H2",
+      "busy": "true",
+      "rows": 0
+    },
+    {
+      "phase": "page2-publication",
+      "locale": "en",
+      "active": "H2",
+      "page": "Page 2 of 2",
+      "rows": 3
+    },
+    {
+      "phase": "held-publication",
+      "locale": "ar",
+      "active": "H2",
+      "busy": "true",
+      "rows": 0
+    },
+    {
+      "phase": "page2-publication",
+      "locale": "ar",
+      "active": "H2",
+      "page": "الصفحة 2 من 2",
+      "rows": 3
+    },
+    {
+      "phase": "held-publication",
+      "locale": "ur",
+      "active": "H2",
+      "busy": "true",
+      "rows": 0
+    },
+    {
+      "phase": "page2-publication",
+      "locale": "ur",
+      "active": "H2",
+      "page": "صفحہ 2 از 2",
+      "rows": 3
+    },
+    {
+      "phase": "search-draft-after-locale",
+      "value": null
+    },
+    {
+      "phase": "selected-historical",
+      "active": "Briefing version",
+      "header": "Briefing activitySynthetic historical 21 · العربية · اردو · Published v24Interface languageEnglishالعربيةاردوActivity historyExport CSV",
+      "historyOpen": false
+    },
+    {
+      "phase": "search-property-after-locale",
+      "value": "Shelf colour handover"
+    },
+    {
+      "phase": "held-exports-ar",
+      "rows": 0,
+      "text": "سجل التصديرجارٍ تحميل سجل التصدير..."
+    },
+    {
+      "phase": "held-exports-ur",
+      "rows": 0,
+      "text": "برآمد کی تاریخبرآمد کی تاریخ لوڈ ہو رہی ہے..."
+    },
+    {
+      "phase": "failed-exports-ur",
+      "diagnostic": false,
+      "rows": 0,
+      "text": "برآمد کی تاریخبرآمد کی تاریخ کی تصدیق نہیں ہو سکی۔"
+    },
+    {
+      "phase": "failed-publications-ur",
+      "rows": 0,
+      "text": "اشاعت کی تاریخ لوڈ نہیں ہو سکی۔ دوبارہ لوڈ کریں۔"
+    },
+    {
+      "phase": "failed-report-en",
+      "alert": [
+        "The report could not be loaded. Try again."
+      ],
+      "diagnostic": false,
+      "metrics": 0
+    },
+    {
+      "phase": "recovered-report-ar",
+      "crew": "@unassigned",
+      "metrics": [
+        "18",
+        "12",
+        "9",
+        "3",
+        "6"
+      ]
+    },
+    {
+      "phase": "captured-filters-before-create",
+      "fields": [
+        "morning",
+        "",
+        ""
+      ],
+      "metrics": [
+        "12",
+        "12",
+        "12",
+        "0",
+        "0"
+      ]
+    }
+  ],
+  "recoveryFlows": [
+    {
+      "phase": "native-date-draft-ar",
+      "fields": [
+        "morning",
+        "2026-10-21",
+        "2026-10-21"
+      ]
+    },
+    {
+      "phase": "create-unknown-with-newer-filter-ur",
+      "alerts": [
+        "برآمد کا نتیجہ غیر مصدقہ ہے۔ دوبارہ کوشش سے پہلے محفوظ درخواست چیک کریں۔"
+      ],
+      "id": "b1d75f72-6ba5-48f5-9200-fcd25b549836",
+      "pending": "برآمد کی درخواست بحال کریںاصل درخواست: b1d75f72-6ba5-48f5-9200-fcd25b549836شائع شدہ نسخہ: shelf-v3ٹیم: morning · تازہ ترین جوابات: 2026-10-21 تا 2026-10-21محفوظ درخواست چیک کریں",
+      "selectedCrew": "@unassigned"
+    },
+    {
+      "phase": "create-later-rejected",
+      "id": "b1d75f72-6ba5-48f5-9200-fcd25b549836",
+      "pending": "برآمد کی درخواست بحال کریںاصل درخواست: b1d75f72-6ba5-48f5-9200-fcd25b549836شائع شدہ نسخہ: shelf-v3ٹیم: morning · تازہ ترین جوابات: 2026-10-21 تا 2026-10-21محفوظ درخواست چیک کریں"
+    },
+    {
+      "phase": "create-recovered-after-reload-ar",
+      "pending": false,
+      "statuses": [
+        "تم قبول طلب التصدير. راجع سجل التصدير لمعرفة حالته الحالية."
+      ]
+    },
+    {
+      "phase": "retry-later-rejected",
+      "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+      "text": "برآمد کی دوبارہ کوشش بحال کریںاصل درخواست: fa7643d3-5663-4e1d-8375-473f5f53a1c7برآمد: 8b477c7a-c174-4561-87f5-5f656c1144daاصل ناکام کوشش: 1محفوظ درخواست چیک کریں"
+    },
+    {
+      "phase": "retry-recovered-after-reload-ur",
+      "pending": false,
+      "statuses": [
+        "برآمد کی دوبارہ کوشش قبول ہو گئی۔ موجودہ حالت کے لیے برآمد کی تاریخ دیکھیں۔"
+      ]
+    },
+    {
+      "phase": "auditor-read-ar",
+      "dir": "rtl",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "pending": false,
+      "role": "SaSynthetic auditorالمدقق · تسجيل الخروج"
+    }
+  ],
+  "create": {
+    "alerts": [
+      "لم تتأكد نتيجة التصدير. تحقّق من الطلب المحفوظ قبل إعادة المحاولة."
+    ],
+    "id": "b1d75f72-6ba5-48f5-9200-fcd25b549836",
+    "text": "استرداد طلب التصديرالطلب الأصلي: b1d75f72-6ba5-48f5-9200-fcd25b549836الإصدار المنشور: shelf-v3الفريق: morning · آخر الإجابات: 2026-10-21 إلى 2026-10-21التحقق من الطلب المحفوظ"
+  },
+  "retry": {
+    "id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+    "text": "استرداد إعادة محاولة التصديرالطلب الأصلي: fa7643d3-5663-4e1d-8375-473f5f53a1c7التصدير: 8b477c7a-c174-4561-87f5-5f656c1144daالمحاولة الفاشلة الأصلية: 1التحقق من الطلب المحفوظ"
+  },
+  "readOnlyCounters": {
+    "attemptsUnchanged": true,
+    "commands": [],
+    "downloads": [
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      },
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      },
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      }
+    ],
+    "exports": [
+      {
+        "attempts": 0,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "13aeb393-eae3-4b85-9ce6-4d751e7c4802",
+        "requested_by": "maya",
+        "status": "queued"
+      },
+      {
+        "attempts": 1,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "716078a8-57b9-477e-b528-72e7712bb148",
+        "requested_by": "maya",
+        "status": "processing"
+      },
+      {
+        "attempts": 1,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "72d129cc-0d3f-48f7-8286-bdbc20107b5b",
+        "requested_by": "maya",
+        "status": "failed"
+      },
+      {
+        "attempts": 1,
+        "checksum": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "requested_by": "maya",
+        "status": "ready"
+      },
+      {
+        "attempts": 0,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "8542fd92-88a4-4c01-9210-4138c93fd3a3",
+        "requested_by": "maya",
+        "status": "expired"
+      }
+    ],
+    "externalRequests": 0,
+    "faults": {
+      "create": {
+        "posts": 0,
+        "rejected": 0,
+        "stage": 0
+      },
+      "retry": {
+        "posts": 0,
+        "rejected": 0,
+        "stage": 0
+      }
+    },
+    "publicationReads": [
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "Synthetic historical 21",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "Shelf colour handover",
+        "through": ""
+      }
+    ],
+    "publicationsUnchanged": true,
+    "readHeld": false,
+    "reportReads": [
+      {
+        "crewId": "",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "",
+        "publicationId": "locale-history-21",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "",
+        "publicationId": "shelf-v3",
+        "responseFrom": "",
+        "responseThrough": ""
+      }
+    ],
+    "retryReceipts": [],
+    "seededReady": "8187aa93-ca77-48a7-91af-eb7774efa203"
+  },
+  "finalCounters": {
+    "attemptsUnchanged": true,
+    "commands": [
+      {
+        "body": {
+          "filters": {
+            "crewId": "morning",
+            "responseFrom": "2026-10-21",
+            "responseThrough": "2026-10-21"
+          },
+          "publicationId": "shelf-v3",
+          "requestId": "b1d75f72-6ba5-48f5-9200-fcd25b549836"
+        },
+        "kind": "create"
+      },
+      {
+        "body": {
+          "filters": {
+            "crewId": "morning",
+            "responseFrom": "2026-10-21",
+            "responseThrough": "2026-10-21"
+          },
+          "publicationId": "shelf-v3",
+          "requestId": "b1d75f72-6ba5-48f5-9200-fcd25b549836"
+        },
+        "kind": "create"
+      },
+      {
+        "body": {
+          "attempts": 1,
+          "requestId": "fa7643d3-5663-4e1d-8375-473f5f53a1c7"
+        },
+        "kind": "retry"
+      },
+      {
+        "body": {
+          "attempts": 1,
+          "requestId": "fa7643d3-5663-4e1d-8375-473f5f53a1c7"
+        },
+        "kind": "retry"
+      }
+    ],
+    "downloads": [],
+    "exports": [
+      {
+        "attempts": 0,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "405cab52-da8e-488f-9b25-850f42d1b1e5",
+        "requested_by": "maya",
+        "status": "expired"
+      },
+      {
+        "attempts": 2,
+        "checksum": "201f6c62ea07a8189c5fe23de77cb5fceba00f58bc94c560e5fdab7b577ac6b9",
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "8b477c7a-c174-4561-87f5-5f656c1144da",
+        "requested_by": "maya",
+        "status": "ready"
+      },
+      {
+        "attempts": 0,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"morning\",\"responseFrom\":\"2026-10-21\",\"responseThrough\":\"2026-10-21\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "b1d75f72-6ba5-48f5-9200-fcd25b549836",
+        "requested_by": "maya",
+        "status": "queued"
+      },
+      {
+        "attempts": 1,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "b44c0a31-4253-4c45-b7cb-c04ac7e11efe",
+        "requested_by": "maya",
+        "status": "processing"
+      },
+      {
+        "attempts": 1,
+        "checksum": "201f6c62ea07a8189c5fe23de77cb5fceba00f58bc94c560e5fdab7b577ac6b9",
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "c2f9bfb2-ec0a-4cd3-88f0-88499ad67109",
+        "requested_by": "maya",
+        "status": "ready"
+      },
+      {
+        "attempts": 1,
+        "checksum": "201f6c62ea07a8189c5fe23de77cb5fceba00f58bc94c560e5fdab7b577ac6b9",
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "dd9f5e32-755f-43a4-8977-f4797c106c08",
+        "requested_by": "maya",
+        "status": "ready"
+      }
+    ],
+    "externalRequests": 0,
+    "faults": {
+      "create": {
+        "posts": 2,
+        "rejected": 1,
+        "stage": 3
+      },
+      "retry": {
+        "posts": 2,
+        "rejected": 1,
+        "stage": 3
+      }
+    },
+    "publicationReads": [],
+    "publicationsUnchanged": true,
+    "readHeld": false,
+    "reportReads": [
+      {
+        "crewId": "",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "morning",
+        "responseFrom": "2026-10-21",
+        "responseThrough": "2026-10-21"
+      },
+      {
+        "crewId": "@unassigned",
+        "responseFrom": "2026-10-21",
+        "responseThrough": "2026-10-21"
+      },
+      {
+        "crewId": "",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "",
+        "responseFrom": "",
+        "responseThrough": ""
+      }
+    ],
+    "retryReceipts": [
+      {
+        "attempts": 1,
+        "export_id": "8b477c7a-c174-4561-87f5-5f656c1144da",
+        "request_id": "fa7643d3-5663-4e1d-8375-473f5f53a1c7",
+        "requested_by": "maya"
+      }
+    ],
+    "seededReady": "dd9f5e32-755f-43a4-8977-f4797c106c08"
+  },
+  "fixtures": {
+    "readAndLayout": {
+      "parent": 55452,
+      "pid": 20748,
+      "scope": "Read/layout/CSV phases accepted; first create rejected due test observer flow bug, not recovery acceptance."
+    },
+    "correctedRecovery": {
+      "parent": 96129,
+      "pid": 25284,
+      "scope": "Non-flowing push observation; actual captured create/retry, newer filter/language/reload recovery, auditor read."
+    }
+  },
+  "limits": [
+    "Not full matched-reference acceptance: five metric cards and real controls, current dates, extra export states and UUID filenames differ from selected image.",
+    "Canonical overall totals match; language responses12/10/2 differ from selected reference10/8/6.",
+    "Activity/Audit route remains English and is intentionally outside this route-scoped localization.",
+    "No independent language/AT/phone/native/hosted/live-provider or real-worker privacy acceptance.",
+    "First uncontrolled search attribute read returned null; later property and actual search request prove continuity."
+  ]
+}

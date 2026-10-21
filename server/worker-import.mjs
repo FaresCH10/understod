@@ -122,7 +122,7 @@ function revalidate(db, session, rows,filename='') {
 }
 
 export function publicImport(row, rows, errors) {
-  return { id: row.id, filename: row.filename, status: row.status,
+  return { id: row.id, filename: row.filename, sha256: row.sha256, filenameHash: row.filename_hash || importFilenameHash(row.filename), status: row.status,
     createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : row.created_at,
     expiresAt: row.expires_at instanceof Date ? row.expires_at.toISOString() : row.expires_at,
     totalRows: rows.length, validRows: rows.filter((entry) => entry.valid).length,

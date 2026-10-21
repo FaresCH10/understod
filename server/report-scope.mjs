@@ -1,13 +1,6 @@
-import {activityRow,reportPublicationFilters} from './reports.mjs';
+import {activityRow} from './reports.mjs';
 import {ensurePeopleSchema} from './people.mjs';
-
-export function reportScope(input={}) {
-  if(!input || typeof input!=='object' || Array.isArray(input) || Object.keys(input).some(key=>!['crewId','responseFrom','responseThrough'].includes(key)))throw Error('Invalid report scope');
-  const {crewId='',responseFrom='',responseThrough=''}=input;
-  if(typeof crewId!=='string' || crewId.length>100 || (crewId && crewId!=='@unassigned' && !/^[a-zA-Z0-9_-]+$/.test(crewId)))throw Error('Invalid report scope');
-  const dates=reportPublicationFilters({from:responseFrom,through:responseThrough});
-  return {crewId,responseFrom:dates.from,responseThrough:dates.through};
-}
+export {reportScope} from './report-input.mjs';
 
 export function selectReport(responses,version,filters,timezone,audience=[]) {
   const complete=responses.length>0 && audience.length===responses.length && responses.every(row=>audience.some(member=>member.assignment_id===row.assignment_id));

@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node scripts/postgres-hosted.mjs api",
     "hosted:check": "node scripts/postgres-hosted.mjs check",
+    "hosted:check-worker": "node scripts/postgres-hosted.mjs check-worker",
     "hosted:worker": "node scripts/postgres-hosted.mjs worker",
+    "hosted:operator": "node scripts/postgres-hosted.mjs operator",
+    "hosted:check-operator": "node scripts/postgres-hosted.mjs check-operator",
     "dev": "node scripts/dev.mjs",
     "api": "node server/index.mjs",
     "worker": "node server/worker.mjs",
@@ -30,7 +33,8 @@
     "lucide-react": "1.50.0",
     "pg": "8.23.1",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "wavefile": "11.0.0"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",

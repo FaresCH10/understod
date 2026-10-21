@@ -80,10 +80,20 @@ for(const pg of [false,true]) test(`${pg ? 'PostgreSQL' : 'SQLite'} credential H
   const f=await fixture(pg),config={tier:'local',aiMode:'synthetic',accessMode:'credential',dataClass:'synthetic',publicOrigin:'http://127.0.0.1:3020',...(pg ? {schema:f.options.schema} : {})};
   for(const id of ['maya','admin','reader','rami']) {const email=`${id}@example.test`,password='Synthetic-staff-password';if(pg) await provisionStaffCredential(f.pool,{staffId:id,orgId:'cedar',siteId:'beirut',email,password},f.options);else sqliteCredential(f.db,id,email,password);}
   const server=pg ? createPostgresRehearsalServer(f.pool,config) : createAppServer(f.db,config);await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-  const call=(path,cookie,body,origin=config.publicOrigin)=>fetch(`http://127.0.0.1:${server.address().port}/api${path}`,{method:body ? 'POST' : 'GET',headers:{origin,'content-type':'application/json',...(cookie ? {cookie} : {})},body:body ? JSON.stringify(body) : undefined});
-  const login=async id=>(await call('/auth/staff/login',null,{email:`${id}@example.test`,password:'Synthetic-staff-password'})).headers.get('set-cookie').split(';')[0];
+  const contexts=new Map();
+  const call=(path,cookie,body,origin=config.publicOrigin,context=contexts.get(cookie))=>fetch(`http://127.0.0.1:${server.address().port}/api${path}`,{method:body ? 'POST' : 'GET',headers:{origin,'content-type':'application/json',...(cookie ? {cookie} : {}),...(context ? {'x-client-session-context':context} : {})},body:body ? JSON.stringify(body) : undefined});
+  const login=async id=>{const cookie=(await call('/auth/staff/login',null,{email:`${id}@example.test`,password:'Synthetic-staff-password'})).headers.get('set-cookie').split(';')[0];contexts.set(cookie,(await (await call('/session',cookie)).json()).clientContext);return cookie;};
   try {
     const a=await login('admin'),o=await login('maya'),s=await login('rami'),r=await login('reader');
+    const before=(await f.sql('SELECT COUNT(*) n FROM staff_access_requests')).rows[0].n;
+    for(const context of [null,'bad',contexts.get(o)]) {
+      assert.equal((await call('/settings/staff',a,undefined,config.publicOrigin,context)).status,409);
+      assert.equal((await call('/settings/staff/rami/revoke',a,input(),config.publicOrigin,context)).status,409);
+      assert.equal((await call('/settings/staff/receipts/'+randomUUID(),a,undefined,config.publicOrigin,context)).status,409);
+    }
+    const rotated=await login('admin');
+    assert.equal((await call('/settings/staff/rami/revoke',rotated,input(),config.publicOrigin,contexts.get(a))).status,409);
+    assert.equal((await f.sql('SELECT COUNT(*) n FROM staff_access_requests')).rows[0].n,before);
     assert.equal((await call('/settings/staff')).status,401);assert.equal((await call('/settings/staff',s)).status,403);assert.equal((await call('/settings/staff',r)).status,200);
     assert.equal((await (await call('/session',a)).json()).staffRole,'administrator');
     assert.equal((await call('/recordings/missing/audio',a)).status,403);assert.equal((await call('/recordings/missing/audio',r)).status,403);

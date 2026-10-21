@@ -238,7 +238,10 @@ export function crewFilters(filters={}) {
 
 export function listCrews(db, session, filters={}) {
   const {page,pageSize,search,status}=crewFilters(filters);
-  return transaction(db,() => {
+  return transaction(db,()=>readCrewPage(db,session,{page,pageSize,search,status}));
+}
+
+export function readCrewPage(db,session,{page,pageSize,search,status}) {
     requirePeopleStaff(db,session);
     const where="c.org_id=? AND c.site_id=? AND (?='' OR instr(lower(c.name),lower(?))>0) AND (?='all' OR c.active=?)";
     const args=[session.org_id,session.site_id,search,search,status,status==='active' ? 1 : 0];
@@ -250,7 +253,6 @@ export function listCrews(db, session, filters={}) {
       FROM crews c WHERE ${where} ORDER BY c.name COLLATE NOCASE,c.id LIMIT ? OFFSET ?`)
       .all(...args,pageSize,(page-1)*pageSize).map((row) => ({...row,active:!!row.active}));
     return {items,total,page,pageSize};
-  });
 }
 
 export function crewRecipientId(id,filters={}) {

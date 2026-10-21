@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-10-21T05:43:29.398Z",
+  "fixtureSession": 41049,
+  "counters": {
+    "audioPosts": 1,
+    "receiptReads": 0,
+    "listReads": 2,
+    "noticeReads": 3,
+    "playbackReads": 0,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 2,
+    "seededRecordings": 0,
+    "externalCalls": 0,
+    "actualMicrophoneUsed": false,
+    "held": false,
+    "objects": 1,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "caseMessages": 0,
+    "caseStatus": "open",
+    "recordings": [
+      {
+        "request_id": "49f5021a-c221-41b6-9028-d31eedff63d2",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:42:51.107Z"
+      }
+    ]
+  },
+  "checks": {
+    "oneClickRestart": true,
+    "oneControlledClearButton": true,
+    "confirmedClearStopsUnsentCapture": true,
+    "viewport320ControlContainment": true
+  },
+  "knownCorrections": [
+    "Sticky header padding exposes scrolling text above it",
+    "Focus fallback after confirmed nonpending clear"
+  ],
+  "accepted": false
+}

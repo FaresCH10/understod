@@ -61,20 +61,37 @@ test('a cached session is not authentication: same-tab lease required, changed/e
 function network(change){
   const calls=[],value={id:scope.assignmentId,publicationId:scope.publicationId,version:scope.version,language:'en',state:'published',dueAt:new Date(time+3600000).toISOString(),content:{title:'Title',text:'Instructions',question:'Question'},speechUrls:{body:`/api/worker/briefings/${scope.assignmentId}/speech/body`,question:`/api/worker/briefings/${scope.assignmentId}/speech/question`}};
   let details=0;const send=async(path,options)=>{calls.push({path,options});assert.equal(options.credentials,'include');assert.equal(options.cache,'no-store');assert.equal(options.headers['x-client-session-context'],session.clientContext);assert.equal(options.method,undefined);
-    let data=path==='/api/session'?session:path==='/api/privacy/recording-notice'?notice:structuredClone(value);if(path.endsWith('/speech/body') || path.endsWith('/speech/question'))return new Response(wav(),{headers:{'content-type':'audio/wav'}});
+    let data=path==='/api/session'?session:path==='/api/privacy/recording-notice?language=en'?notice:structuredClone(value);if(path.endsWith('/speech/body') || path.endsWith('/speech/question'))return new Response(wav(),{headers:{'content-type':'audio/wav'}});
     if(path.includes('/briefings/'))details++;data=change?.(path,data,details) ?? data;return data instanceof Response?data:Response.json(data);
   };return {send,calls};
 }
 test('online snapshot captures only its exact authorized version/notice/audio and rechecks identity before local commit',async()=>{
   const {send,calls}=network();const result=await fetchOfflineBriefing(send,session,scope,()=>true,now);assert.equal(result.title,'Title');assert.deepEqual(result.notice,notice);assert.equal(result.canRecord,true);assert.equal(result.expiresAt,new Date(time+86400000).toISOString());
-  assert.deepEqual(offlineAudioBytes(result.audio.body),wav());assert.deepEqual(calls.map(value=>value.path),['/api/session',`/api/worker/briefings/${scope.assignmentId}`,`/api/worker/briefings/${scope.assignmentId}/speech/body`,`/api/worker/briefings/${scope.assignmentId}/speech/question`,'/api/privacy/recording-notice',`/api/worker/briefings/${scope.assignmentId}`,'/api/session']);
+  assert.deepEqual(offlineAudioBytes(result.audio.body),wav());assert.deepEqual(calls.map(value=>value.path),['/api/session',`/api/worker/briefings/${scope.assignmentId}`,`/api/worker/briefings/${scope.assignmentId}/speech/body`,`/api/worker/briefings/${scope.assignmentId}/speech/question`,'/api/privacy/recording-notice?language=en',`/api/worker/briefings/${scope.assignmentId}`,'/api/session']);
   for(const change of [
     (path,data)=>path==='/api/session'?{...data,workerId:'other'}:data,
     (path,data,n)=>n===2?{...data,state:'withdrawn'}:data,
     (path,data,n)=>n===2?{...data,content:{...data.content,text:'changed'}}:data,
-    (path,data)=>path.endsWith('/recording-notice')?{...data,language:'ar'}:data,
+    (path,data)=>path.startsWith('/api/privacy/recording-notice')?{...data,language:'ar'}:data,
     (path,data)=>path===`/api/worker/briefings/${scope.assignmentId}`?{...data,speechUrls:{body:'https://outside.invalid/audio'}}:data,
   ])await assert.rejects(fetchOfflineBriefing(network(change).send,session,scope,()=>true,now),error=>error instanceof OfflineError);
+});
+
+test('offline snapshot explicitly requests the frozen notice language independently of profile language',async()=>{
+  const frozen={...scope,language:'ur'},calls=[];
+  const send=async(path,options)=>{
+    calls.push(path);assert.equal(options.headers['x-client-session-context'],session.clientContext);
+    if(path==='/api/session')return Response.json(session);
+    if(path==='/api/privacy/recording-notice?language=ur')return Response.json({...notice,language:'ur'});
+    assert.equal(path,`/api/worker/briefings/${scope.assignmentId}`);
+    return Response.json({id:scope.assignmentId,publicationId:scope.publicationId,version:scope.version,language:'ur',state:'published',content:{title:'Title',text:'Instructions',question:'Question'}});
+  };
+  const result=await fetchOfflineBriefing(send,session,frozen,()=>true,now);
+  assert.equal(result.notice.language,'ur');assert.equal(result.scope.language,'ur');assert.equal(session.language,'en');assert.ok(calls.includes('/api/privacy/recording-notice?language=ur'));
+  const store=memory();await saveOfflineBriefing(session,result,true,()=>true,store,now);
+  assert.equal((await readOfflineBundle(store,()=>true,now)).briefings[0].scope.language,'ur');
+  await assert.rejects(saveOfflineBriefing(session,{...result,notice:{...result.notice,language:'en'}},true,()=>true,store,now),fails('invalid'));
+  await assert.rejects(saveOfflineBriefing({...session,language:'ur'},result,true,()=>true,store,now),fails('session'));
 });
 test('offline fallback is allowed only for transport/5xx, never denied authority or invalid successful session JSON',async()=>{
   const signal=new AbortController().signal;

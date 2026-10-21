@@ -1,0 +1,16 @@
+{
+  "dateUtc":"2026-10-13 17:06 UTC",
+  "scope":"Organization/site settings metadata, contacts, actor receipts, saved-intent recovery, site catalog/create/access/lifecycle and parent callbacks",
+  "focusedRegression":{"testFiles":6,"passed":42,"failed":0,"skipped":0,"exitCode":0,"durationMs":9416.1013},
+  "fullSyntheticSuite":{"testFiles":167,"tests":898,"passed":894,"failed":0,"skipped":4,"exitCode":0,"durationMs":259101.095,"log":"artifacts/workspace-controls-suite-2026-10-13.log","externalDatabaseTestUrlsRemoved":true,"qualification":"After all functional changes, before the final two-line responsive CSS fix; CSS subsequently rebuilt and browser checked"},
+  "build":{"exitCode":0,"modules":2044,"entryKb":632.92,"shellFiles":55,"shellMismatches":0,"existingWarningsRemain":true},
+  "browser":{"method":"Cua built UI, disposable SQLite fixtures","organizationReloadAndRejectedRetry":true,"siteRejectedRetryAndDefaults":true,"siteCreationRecovered":true,"workerAccessReloadRecovered":true,"otherSiteArchiveRestore":true,"signedInSiteArchiveRestore":true,"restoredWorkerAccess":"paused","settingsPosts":{"organization":2,"site":2},"settingsAcceptedReceipts":2,"siteCreationPosts":1,"newSiteCreationReceipts":1,"preseededSiteCreationReceipts":1,"workerAccessPosts":1,"workerAccessReceipts":1,"lifecyclePosts":4,"lifecycleReceipts":4,"responsive":{"width":390,"height":844,"tableWidth":700,"pageWidth":375,"statusWhiteSpace":"nowrap","viewportReset":true},"finalCssSmokeMutationPosts":0,"externalRequests":0,"reticleVerdict":false,"realDeviceAcceptance":false,"externalDiagnosticsSent":false},
+  "protectedDatabase":{"matchingFingerprints":8,"integrity":"ok","foreignKeyViolations":0,"readOnlyVerification":true,"checkedAfterFullSuite":true},
+  "allOwnedCommandsTerminal":true,
+  "originalDatabaseMigrated":false,
+  "originalPreviewRestarted":false,
+  "externalRolloutPerformed":false,
+  "progressEstimates":{"workspaceSiteBoundary":85,"wholeStaffRequestFencing":90,"staffSessionGuard":65,"overall":60,"overallRange":[55,65]},
+  "productionReady":false,
+  "realDataAllowed":false
+}

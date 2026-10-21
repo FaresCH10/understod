@@ -1,0 +1,35 @@
+{
+  "startedAt": "2026-10-14T16:57:42.518Z",
+  "updatedAt": "2026-10-14T16:58:43.277Z",
+  "runId": "e208ca21-ca30-46d5-8f85-d8c65502efd9",
+  "schema": "understood_neon_test_e208ca21ca3046d58f85d8c65502efd9",
+  "kind": "isolated-synthetic-database",
+  "state": "passed",
+  "checks": [
+    "verified-tls-empty-target",
+    "migration-checksums-and-exact-replay",
+    "concurrent-publication-exactly-once",
+    "concurrent-submission-exactly-once",
+    "concurrent-claimed-assessment-exactly-once",
+    "cross-tenant-foreign-key-and-reader-denial",
+    "immutable-publication-and-audit",
+    "exact-publication-provider-history-without-invented-journal"
+  ],
+  "cleanup": "verified-removed",
+  "productionVerdict": false,
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "phase": "finished",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "migrationsApplied": 86,
+  "committedCounts": {
+    "publications": 1,
+    "publication_requests": 1,
+    "assignments": 1,
+    "attempts": 1,
+    "submission_receipts": 1,
+    "assessment_jobs": 1
+  },
+  "outsideCatalogIdentitiesUnchanged": true
+}

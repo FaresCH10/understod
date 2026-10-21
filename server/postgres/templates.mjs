@@ -30,7 +30,7 @@ export async function templateReceipt(pool,session,requestId,{schema='public'}={
   templateRequestId(requestId);
   return domainTransaction(pool,schema,async client=>{
     await requirePrincipal(client,session,'staff');
-    const row=(await client.query('SELECT request_json AS request,result_json AS result FROM template_requests WHERE request_id=$1 AND org_id=$2 AND site_id=$3',[requestId,session.org_id,session.site_id])).rows[0];
+    const row=(await client.query('SELECT request_json AS request,result_json AS result FROM template_requests WHERE request_id=$1 AND org_id=$2 AND site_id=$3 AND created_by=$4',[requestId,session.org_id,session.site_id,session.principal_id])).rows[0];
     return row ? {found:true,...row} : {found:false};
   });
 }
@@ -39,8 +39,8 @@ export async function changeTemplate(pool,session,kind,id,input,{schema='public'
   return domainTransaction(pool,schema,async client=>{
     await requirePrincipal(client,session,'staff');
     await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[`understood:template:${schema}:${session.org_id}:${session.site_id}:${input.requestId}`]);
-    const old=(await client.query('SELECT request_json,result_json FROM template_requests WHERE request_id=$1 AND org_id=$2 AND site_id=$3',[input.requestId,session.org_id,session.site_id])).rows[0];
-    if(old) {if(templateSignature(old.request_json)!==templateSignature(change)) throw new Error('Template request conflict');return {...old.result_json,duplicate:true};}
+    const old=(await client.query('SELECT request_json,result_json,created_by FROM template_requests WHERE request_id=$1 AND org_id=$2 AND site_id=$3',[input.requestId,session.org_id,session.site_id])).rows[0];
+    if(old) {if(old.created_by!==session.principal_id || templateSignature(old.request_json)!==templateSignature(change)) throw new Error('Template request conflict');return {...old.result_json,duplicate:true};}
     const current=kind==='create' ? null : (await client.query('SELECT * FROM templates WHERE id=$1 AND org_id=$2 AND site_id=$3 FOR UPDATE',[id,session.org_id,session.site_id])).rows[0];
     if(kind!=='create' && !current) throw new Error('Template unavailable');
     if(current && current.revision!==change.revision) throw new Error('Template revision changed');

@@ -59,15 +59,15 @@ export function getTemplate(db,session,id,input={}) {
 }
 export function templateReceipt(db,session,requestId) {
   templateRequestId(requestId);briefingAuthority(db,session);
-  const row=db.prepare('SELECT request_json,result_json FROM template_requests WHERE request_id=? AND org_id=? AND site_id=?').get(requestId,session.org_id,session.site_id);
+  const row=db.prepare('SELECT request_json,result_json FROM template_requests WHERE request_id=? AND org_id=? AND site_id=? AND created_by=?').get(requestId,session.org_id,session.site_id,session.principal_id);
   return row ? {found:true,request:JSON.parse(row.request_json),result:JSON.parse(row.result_json)} : {found:false};
 }
 export function changeTemplate(db,session,kind,id,input) {
   const change=templateInput(kind,id,input);
   return transaction(db,()=>{
     briefingAuthority(db,session);
-    const old=db.prepare('SELECT request_json,result_json FROM template_requests WHERE request_id=? AND org_id=? AND site_id=?').get(input.requestId,session.org_id,session.site_id);
-    if(old) {if(templateSignature(JSON.parse(old.request_json))!==templateSignature(change)) throw new Error('Template request conflict');return {...JSON.parse(old.result_json),duplicate:true};}
+    const old=db.prepare('SELECT request_json,result_json,created_by FROM template_requests WHERE request_id=? AND org_id=? AND site_id=?').get(input.requestId,session.org_id,session.site_id);
+    if(old) {if(old.created_by!==session.principal_id || templateSignature(JSON.parse(old.request_json))!==templateSignature(change)) throw new Error('Template request conflict');return {...JSON.parse(old.result_json),duplicate:true};}
     const current=kind==='create' ? null : db.prepare('SELECT t.*,v.content_json FROM templates t JOIN template_versions v ON v.template_id=t.id AND v.revision=t.revision WHERE t.id=? AND t.org_id=? AND t.site_id=?').get(id,session.org_id,session.site_id);
     if(kind!=='create' && !current) throw new Error('Template unavailable');
     if(current && current.revision!==change.revision) throw new Error('Template revision changed');

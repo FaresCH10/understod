@@ -60,7 +60,10 @@ test('credential usage request HTTP checks origin, page session, receipt and rev
     const headers={'x-client-session-context':session.clientContext};const saved=await post(headers);assert.equal(saved.status,201);assert.equal(saved.headers.get('cache-control'),'no-store');assert.equal((await post(headers)).status,200);
     assert.equal((await post(headers,{...value,message:'Other'})).status,409);assert.equal((await post(headers,{...input(),extra:true})).status,400);
     const found=await fetch(`${base}/usage/requests/${value.requestId}`,{headers:{cookie,...headers}});assert.equal(found.status,200);assert.equal((await found.json()).found,true);
-    assert.equal((await fetch(`${base}/usage/requests?org_id=foreign`,{headers:{cookie}})).status,400);
+    for(const path of ['/usage','/usage/requests',`/usage/requests/${value.requestId}`])for(const context of [undefined,'invalid','b'.repeat(64)]){
+      assert.equal((await fetch(base+path,{headers:{cookie,...(context!==undefined?{'x-client-session-context':context}:{})}})).status,409,path);
+    }
+    assert.equal((await fetch(`${base}/usage/requests?org_id=foreign`,{headers:{cookie,...headers}})).status,400);
     await f.db.exec("UPDATE sessions SET revoked_at=clock_timestamp() WHERE principal_id='owner'");assert.equal((await post(headers)).status,401);
   }finally{if(server.listening)await new Promise(resolve=>server.close(resolve));await f.db.close();}
 });

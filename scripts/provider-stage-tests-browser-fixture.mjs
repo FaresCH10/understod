@@ -26,7 +26,7 @@ const env={UNDERSTOOD_TIER:'local',UNDERSTOOD_AI_MODE:'synthetic',UNDERSTOOD_ACC
 function wav(){const b=Buffer.alloc(32044);b.write('RIFF');b.writeUInt32LE(b.length-8,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(16000,24);b.writeUInt32LE(32000,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(32000,40);b.writeInt16LE(1000,44);return b;}
 const config={...rehearsalConfig(env),providerVerification:resolveProviderVerification(env,{fetchImpl:async(url,options)=>{
   mockCalls++;const body=JSON.parse(options.body);let parts;
-  if(body.generationConfig.responseModalities)parts=[{inlineData:{mimeType:'audio/wav',data:wav().toString('base64')}}];
+  if(body.response_format?.type==='audio')return Response.json({status:'completed',model:body.model,steps:[{type:'model_output',content:[{type:'audio',mime_type:'audio/wav',data:wav().toString('base64')}]}]});
   else {
     const schema=body.generationConfig.responseFormat.text.schema,language=body.systemInstruction.parts[0].text.includes('into Urdu')?'ur':'ar';
     const {title,text,question}=syntheticPrepare(CANONICAL_SOURCE).languages[language];

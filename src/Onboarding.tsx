@@ -1,40 +1,41 @@
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useMemo,useRef,useState} from 'react';
 import {ArrowRight,Building2,CheckCircle2,Clock3,FileText,Globe2,KeyRound,RefreshCw,Save,Settings,Sparkles,Users} from 'lucide-react';
-import type {WorkspaceContext} from './WorkspaceSettings';
+import {useStaffRequest,type StaffRequestAuthority} from './useStaffRequest';
+import {completeStaffRequest} from './staff-request';
+import {useArtifactMutation} from './useArtifactMutation';
+import type {ArtifactDefinition} from './useArtifactRequest';
+import {readSetupChange,saveSetupChange,clearSetupChange,checkedSetupResult,checkedSetupReceipt,checkedSetupModel,checkedSetupOptions,type SetupModel,type SetupChange} from './onboarding-recovery';
 import './onboarding.css';
 const steps=[{id:'organization',label:'Organization & site',icon:Building2},{id:'team',label:'Supervisor',icon:Users},{id:'languages',label:'Languages',icon:Globe2},{id:'provider',label:'AI connection',icon:Sparkles},{id:'access',label:'Worker access',icon:KeyRound},{id:'briefing',label:'First briefing',icon:FileText}];
-type Model={revision:number;step:string;firstBriefingId:string|null;organization:WorkspaceContext['organization'];site:WorkspaceContext['site'];resources:{workers:number;activeGrants:number;firstBriefing:{id:string;title:string;state:string;publicationState:string|null}|null};technical:{processing:string;liveReady:boolean;realDataAllowed:boolean;reason:string};checks:Record<string,boolean>;canWrite:boolean};
-type Session={clientContext:string;expiresAt:string};
-type Body={requestId:string;revision:number;step:string;firstBriefingId:string|null;confirmed:true};
-type Pending={expiresAt:string;body:Body};
-function pendingValue(value:unknown):value is Pending {
-  const p=value as Pending,b=p?.body;
-  return !!p && Object.keys(p).length===2 && typeof p.expiresAt==='string' && Date.parse(p.expiresAt)>Date.now() && !!b && Object.keys(b).length===5 && b.confirmed===true
-    && /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(b.requestId) && Number.isSafeInteger(b.revision) && b.revision>=0 && steps.some(s=>s.id===b.step)
-    && (b.firstBriefingId===null || typeof b.firstBriefingId==='string' && b.firstBriefingId.length>0 && b.firstBriefingId.length<=100);
-}
-export default function Onboarding({session,navigate}:{session:Session;navigate:(path:string)=>void}) {
-  const key=`understood:onboarding:${session.clientContext}`;
-  const [data,setData]=useState<Model|null>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false),[pending,setPending]=useState<Pending|null>(null),[missing,setMissing]=useState(false),[corrupt,setCorrupt]=useState(false);
+export default function Onboarding({authority,navigate:onNavigate}:{authority:StaffRequestAuthority;navigate:(path:string)=>void}) {
+  const session=useMemo(()=>({clientContext:authority.session.clientContext!,expiresAt:authority.session.expiresAt!}),[authority.session.clientContext,authority.session.expiresAt]),scope=authority.session.staffScope;
+  const {request,current}=useStaffRequest(authority);
+  const [recovery]=useState(()=>{try{return {pending:readSetupChange(sessionStorage,session),error:''};}catch(reason){return {pending:null,error:(reason as Error).message};}});
+  const [data,setData]=useState<SetupModel|null>(null),[loadError,setLoadError]=useState('');
   const [first,setFirst]=useState(''),[options,setOptions]=useState<{id:string;title:string}[]>([]),[search,setSearch]=useState(''),[refresh,setRefresh]=useState(0),[message,setMessage]=useState('');
-  const sending=useRef(false),mounted=useRef(true),heading=useRef<HTMLHeadingElement>(null);
-  async function request(path:string,body?:Body){if(Date.parse(session.expiresAt)<=Date.now())throw Error('Session expired. Sign in again before continuing.');const response=await fetch(`/api${path}`,{credentials:'include',cache:'no-store',signal:AbortSignal.timeout(15000),headers:{'content-type':'application/json','x-client-session-context':session.clientContext},...(body?{method:'POST',body:JSON.stringify(body)}:{})});const result=await response.json();if(!response.ok)throw Error(result.error || 'Setup request unavailable');return result;}
-  function remove(value:Pending){if(sessionStorage.getItem(key)!==JSON.stringify(value))throw Error('The saved change was replaced. Reload before continuing.');sessionStorage.removeItem(key);setPending(null);setMissing(false);}
-  async function check(value:Pending){if(sending.current)return;sending.current=true;setBusy(true);setError('');try{const result=await request(`/settings/onboarding/receipts/${value.body.requestId}`);if(!mounted.current)return;
-    if(result.found===false && Object.keys(result).length===1){setMissing(true);return;}
-    if(result.found!==true || result.revision!==value.body.revision+1 || !result.request || Object.keys(result.request).length!==4 || ['revision','step','firstBriefingId','confirmed'].some(k=>result.request[k]!==value.body[k as keyof Body]))throw Error('Setup receipt could not be verified');
-    remove(value);setMessage('Setup progress saved.');setRefresh(n=>n+1);
-  }catch(e){if(mounted.current)setError((e as Error).message);}finally{sending.current=false;if(mounted.current)setBusy(false);}}
-  async function send(value:Pending){if(sending.current)return;sending.current=true;setBusy(true);setError('');setMissing(false);try{if(sessionStorage.getItem(key)!==JSON.stringify(value))throw Error('The saved change was replaced. Reload before continuing.');await request('/settings/onboarding',value.body);}catch(e){if(mounted.current)setError((e as Error).message);}finally{sending.current=false;if(mounted.current){setBusy(false);void check(value);}}}
-  function save(step:string){if(!data?.canWrite || sending.current || pending || corrupt)return;const value:Pending={expiresAt:session.expiresAt,body:{requestId:crypto.randomUUID(),revision:data.revision,step,firstBriefingId:first || null,confirmed:true}};
-    try{if(sessionStorage.getItem(key))throw Error('An earlier setup change needs checking');sessionStorage.setItem(key,JSON.stringify(value));if(sessionStorage.getItem(key)!==JSON.stringify(value))throw Error('Setup change could not be saved');setPending(value);void send(value);}catch(e){setError((e as Error).message);}}
-  useEffect(()=>{mounted.current=true;heading.current?.focus();try{const raw=sessionStorage.getItem(key);if(raw){if(raw.length>2048)throw Error();const value:unknown=JSON.parse(raw);if(!pendingValue(value) || value.expiresAt!==session.expiresAt)throw Error();setPending(value);void check(value);}}catch{setCorrupt(true);setError('The saved setup change could not be read. Reload or sign in again before making another change.');}return()=>{mounted.current=false;};},[key]);
-  useEffect(()=>{let current=true;request('/settings/onboarding').then((value:Model)=>{if(current){setData(value);setFirst(value.firstBriefingId || '');}}).catch(e=>{if(current)setError(e.message);});return()=>{current=false;};},[key,refresh]);
-  useEffect(()=>{if(!data?.canWrite)return;let current=true;const timer=setTimeout(()=>{request(`/briefings?${new URLSearchParams({search,pageSize:'20',archiveStatus:'active'})}`).then(value=>{if(current)setOptions(value.items);}).catch(()=>{if(current)setOptions([]);});},250);return()=>{current=false;clearTimeout(timer);};},[key,data?.canWrite,search]);
+  const heading=useRef<HTMLHeadingElement>(null);
+  const definition=useMemo<ArtifactDefinition<SetupChange,number>>(()=>({endpoint:'/api/settings/onboarding',path:()=>'',roles:['owner'],
+    result:checkedSetupResult,receipt:checkedSetupReceipt,clear:(storage,_scope,id,value)=>clearSetupChange(storage,session,id,value)
+  }),[session]);
+  const mutation=useArtifactMutation(authority,scope,definition,(storage,_scope,value)=>saveSetupChange(storage,session,value),!!data?.canWrite && !recovery.error,()=>{setMessage('Setup progress saved.');setRefresh(n=>n+1);},recovery.pending);
+  const pending=mutation.pending.current,busy=mutation.busy,corrupt=!!recovery.error,error=mutation.error || recovery.error || loadError;
+  function save(step:string){if(!data?.canWrite || busy || pending || corrupt || !current())return;setMessage('');void mutation.write({requestId:crypto.randomUUID(),expiresAt:session.expiresAt,body:{revision:data.revision,step,firstBriefingId:first || null,confirmed:true}});}
+  const navigate=(path:string)=>{if(current())onNavigate(path);};
+  useEffect(()=>{heading.current?.focus();},[]);
+  useEffect(()=>{if(!recovery.pending)return;const controller=new AbortController();queueMicrotask(()=>{if(!controller.signal.aborted)void mutation.check(controller.signal);});return()=>controller.abort();},[mutation.api,recovery.pending]);
+  useEffect(()=>{const controller=new AbortController(),live=()=>current() && !controller.signal.aborted;setLoadError('');
+    request('/api/settings/onboarding',undefined,controller.signal).then(value=>completeStaffRequest(value,row=>checkedSetupModel(row,scope!),result=>{setData(result);setFirst(result.firstBriefingId || '');},live))
+      .catch(reason=>{if(live()){setData(null);setLoadError((reason as Error).message);}});return()=>controller.abort();
+  },[refresh,request,current,scope]);
+  useEffect(()=>{if(!data?.canWrite)return;const controller=new AbortController(),live=()=>current() && !controller.signal.aborted;
+    const timer=setTimeout(()=>{request(`/api/briefings?${new URLSearchParams({search,page:'1',pageSize:'20',archiveStatus:'active'})}`,undefined,controller.signal)
+      .then(value=>completeStaffRequest(value,checkedSetupOptions,setOptions,live)).catch(()=>{if(live())setOptions([]);});},250);
+    return()=>{controller.abort();clearTimeout(timer);};
+  },[data?.canWrite,search,request,current]);
   const locked=busy || !!pending || corrupt,step=data?.step ?? 'organization',index=steps.findIndex(s=>s.id===step),checks=data?.checks;
-  return <div className="onboarding"><div className="page-header"><div><h1 ref={heading} tabIndex={-1}>Pilot setup</h1><p>{data?`${data.organization.name} · ${data.site.name}`:'Loading setup...'}</p></div><button className="icon-button" title="Refresh setup" aria-label="Refresh setup" disabled={locked} onClick={()=>{setError('');setRefresh(n=>n+1);}}><RefreshCw size={20}/></button></div>
+  return <div className="onboarding"><div className="page-header"><div><h1 ref={heading} tabIndex={-1}>Pilot setup</h1><p>{data?`${data.organization.name} · ${data.site.name}`:'Loading setup...'}</p></div><button className="icon-button" title="Refresh setup" aria-label="Refresh setup" disabled={locked} onClick={()=>{mutation.clearError();setRefresh(n=>n+1);}}><RefreshCw size={20}/></button></div>
     {message && <p role="status">{message}</p>}{error && <p role="alert" className="record-error">{error}</p>}
-    {pending && <section className="notice notice-amber"><Clock3 size={22}/><div><strong>One setup change needs checking.</strong><p>Checking the receipt never saves another change.</p><div className="actions"><button className="button outline" disabled={busy} onClick={()=>void check(pending)}><RefreshCw size={18}/>Check receipt</button>{missing && <><button className="button primary" disabled={busy} onClick={()=>void send(pending)}><Save size={18}/>Retry unchanged change</button><button className="button outline" disabled={busy} onClick={()=>{try{remove(pending);}catch(e){setError((e as Error).message);}}}>Cancel unsaved change</button></>}</div></div></section>}
+    {pending && <section className="notice notice-amber"><Clock3 size={22}/><div><strong>One setup change needs checking.</strong><p>Original step: {steps.find(step=>step.id===pending.body.step)?.label} · revision {pending.body.revision}</p><div className="actions"><button className="button outline" disabled={busy} onClick={()=>void mutation.check()}><RefreshCw size={18}/>Check receipt</button>{mutation.checked && <button className="button primary" disabled={busy} onClick={()=>void mutation.write(pending)}><Save size={18}/>Retry unchanged change</button>}</div></div></section>}
     {data && <><nav className="onboarding-steps" aria-label="Pilot setup steps">{steps.map(({id,label,icon:Icon})=><button key={id} className={step===id?'active':''} aria-current={step===id?'step':undefined} disabled={locked || !data.canWrite} onClick={()=>save(id)}><Icon size={20}/><span>{label}</span>{checks?.[id==='team'?'supervisor':id] && <CheckCircle2 size={16} className="onboarding-check"/>}</button>)}</nav><section className="onboarding-stage"><span className="muted">Step {index+1} of {steps.length} · saved revision {data.revision}</span>
       {step==='organization' && <><h2>Organization, site & support</h2><dl className="billing-details"><dt>Organization</dt><dd>{data.organization.name}</dd><dt>Site</dt><dd>{data.site.name}</dd><dt>Timezone</dt><dd>{data.site.timezone}</dd><dt>Support contact</dt><dd>{data.organization.supportEmail || 'Not configured'}</dd></dl><button className="button outline" disabled={locked} onClick={()=>navigate('settings')}><Settings size={18}/>Edit organization & site</button></>}
       {step==='team' && <><h2>Site supervisor</h2><p>{data.site.primaryContact?.available?data.site.primaryContact.name:'No available primary contact selected.'}</p><p className="muted">A primary contact handles operational follow-up. This is not a translation reviewer or approval gate.</p><div className="actions"><button className="button outline" disabled={locked} onClick={()=>navigate('settings')}><Users size={18}/>Choose site contacts</button><button className="button outline" disabled={locked} onClick={()=>navigate('settings/staff')}><Users size={18}/>Manage staff access</button></div></>}

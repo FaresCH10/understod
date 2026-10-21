@@ -4,6 +4,7 @@ import {ensureDeletionRedactionSchema} from './deletion-redactions.mjs';
 import {audioStore} from './private-storage.mjs';
 import {DEFAULT_AUDIO_ROOT} from './recordings.mjs';
 import {deletionSnapshotsClear} from './deletion-verification.mjs';
+import {ensureStaffCaseRecordingSchema} from './staff-case-recording-schema.mjs';
 
 const candidate=`SELECT d.*,p.code_hash FROM worker_deletion_requests d JOIN worker_deletion_pseudonyms p ON p.request_id=d.id
   JOIN worker_deletion_redactions rd ON rd.request_id=d.id JOIN workers w ON w.id=d.worker_id AND w.active=0 AND w.code=p.pseudonym
@@ -11,6 +12,7 @@ const candidate=`SELECT d.*,p.code_hash FROM worker_deletion_requests d JOIN wor
   AND NOT EXISTS(SELECT 1 FROM worker_grants g WHERE g.worker_id=d.worker_id AND g.revoked_at IS NULL)
   AND NOT EXISTS(SELECT 1 FROM sessions s WHERE s.principal_type='worker' AND s.principal_id=d.worker_id AND s.revoked_at IS NULL)
   AND NOT EXISTS(SELECT 1 FROM crew_memberships cm WHERE cm.worker_id=d.worker_id)
+  AND NOT EXISTS(SELECT 1 FROM case_voice v WHERE v.worker_id=d.worker_id AND v.cleanup_state<>'cleaned')
   AND NOT EXISTS(SELECT 1 FROM recordings rec JOIN assignments a ON a.id=rec.assignment_id WHERE a.worker_id=d.worker_id
     AND (rec.status<>'failed' OR rec.transcript IS NOT NULL OR rec.lease_token IS NOT NULL OR rec.lease_until IS NOT NULL OR rec.retry_at IS NOT NULL
       OR NOT EXISTS(SELECT 1 FROM recording_purges pur WHERE pur.recording_id=rec.id AND pur.status='complete')))
@@ -23,7 +25,8 @@ const candidate=`SELECT d.*,p.code_hash FROM worker_deletion_requests d JOIN wor
   AND NOT EXISTS(SELECT 1 FROM report_exports e JOIN assignments a ON a.publication_id=e.publication_id WHERE a.worker_id=d.worker_id
     AND e.created_at<=d.created_at AND (e.status<>'expired' OR e.snapshot_json IS NOT NULL OR e.csv IS NOT NULL OR e.checksum IS NOT NULL OR e.lease_token IS NOT NULL))`;
 
-const recordings=(db,id)=>db.prepare('SELECT rec.* FROM recordings rec JOIN assignments a ON a.id=rec.assignment_id WHERE a.worker_id=? ORDER BY rec.id').all(id);
+const recordings=(db,id)=>db.prepare(`SELECT rec.id,rec.org_id,rec.site_id FROM recordings rec JOIN assignments a ON a.id=rec.assignment_id WHERE a.worker_id=?
+  UNION ALL SELECT id,org_id,site_id FROM case_voice WHERE worker_id=? ORDER BY id`).all(id,id);
 const recordingKeys=(rows)=>JSON.stringify(rows.map(row=>[row.id,row.org_id,row.site_id]));
 
 function snapshotsClear(db,row){
@@ -35,6 +38,7 @@ function snapshotsClear(db,row){
 
 export async function processOneDeletionCompletion(db,storage=DEFAULT_AUDIO_ROOT){
   ensureDeletionRedactionSchema(db);
+  ensureStaffCaseRecordingSchema(db);
   const row=db.prepare(`${candidate} ORDER BY d.created_at,d.id LIMIT 1`).get();
   if(!row || !snapshotsClear(db,row))return false;
   const objects=recordings(db,row.worker_id),store=audioStore(storage);

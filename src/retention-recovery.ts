@@ -13,12 +13,15 @@ export function storePendingRetention(storage:Storage,scope:string,value:Retenti
   const raw=JSON.stringify(value);storage.setItem(key(scope),raw);
   if(storage.getItem(key(scope))!==raw)throw new Error('Retention recovery storage is unavailable. No request was sent.');
 }
-export function clearPendingRetention(storage:Storage,scope:string,requestId:string){
-  if(readPendingRetention(storage,scope)?.requestId!==requestId)throw new Error('Pending retention policy changed.');
+export function clearPendingRetention(storage:Storage,scope:string,requestId:string,expected?:RetentionChange){
+  const pending=readPendingRetention(storage,scope);
+  if(pending?.requestId!==requestId || expected && (!pending || pending.revision!==expected.revision || pending.audioDays!==expected.audioDays || pending.confirmed!==expected.confirmed))throw new Error('Pending retention policy changed.');
   storage.removeItem(key(scope));if(storage.getItem(key(scope))!==null)throw new Error('Retention recovery storage could not be cleared.');
 }
 export function verifyRetentionReceipt(value:unknown,pending:RetentionChange){
   const row=value as {requestId?:string;request?:RetentionChange;revision?:number};
-  if(!row || row.requestId!==pending.requestId || row.revision!==pending.revision+1 || !row.request
+  if(!row || typeof row!=='object' || Array.isArray(row) || Object.keys(row).sort().join(',')!=='request,requestId,revision'
+    || row.requestId!==pending.requestId || row.revision!==pending.revision+1 || !row.request
+    || Object.keys(row.request).sort().join(',')!=='audioDays,confirmed,revision'
     || row.request.revision!==pending.revision || row.request.audioDays!==pending.audioDays || row.request.confirmed!==true)throw new Error('Retention receipt cannot be verified.');
 }

@@ -1,0 +1,58 @@
+{
+  "startedAt": "2026-10-15T06:35:03.362Z",
+  "updatedAt": "2026-10-15T06:40:12.906Z",
+  "runId": "1ee4833f-f3bb-4e52-a40b-db7e1d64d010",
+  "database": "understood_login_db_1ee4833ff3bb4e52a40bdb7e1d64d010",
+  "role": "understood_login_rt_1ee4833ff3bb4e52a40bdb7e1d64d010",
+  "schema": "understood_test_login_1ee4833ff3bb4e52a40bdb7e1d64d010",
+  "workerRole": "understood_login_wk_1ee4833ff3bb4e52a40bdb7e1d64d010",
+  "kind": "isolated-api-worker-login-rehearsal",
+  "state": "passed",
+  "checks": [
+    "two-independent-verified-tls-application-connections",
+    "actual-application-runtime-permission-gate",
+    "two-independent-verified-tls-worker-connections",
+    "actual-worker-runtime-permission-gate",
+    "separate-api-worker-runtime-profile-admission",
+    "wrong-role-startup-rejected-before-heartbeat",
+    "api-publication-submission-and-worker-assessment",
+    "read-only-api-startup-health-and-auth-denials",
+    "worker-billing-operator-and-policy-denials",
+    "runtime-ddl-and-future-object-denials",
+    "mixed-profile-source-fence-with-unchanged-business-inventory"
+  ],
+  "cleanupDatabase": "verified-removed",
+  "cleanupRole": "verified-removed",
+  "cleanupWorkerRole": "verified-removed",
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "productionVerdict": false,
+  "phase": "finished",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "migrationsApplied": 87,
+  "runtime": {
+    "passed": true,
+    "checks": [
+      "separate-api-worker-runtime-profile-admission",
+      "wrong-role-startup-rejected-before-heartbeat",
+      "api-publication-submission-and-worker-assessment",
+      "read-only-api-startup-health-and-auth-denials",
+      "worker-billing-operator-and-policy-denials",
+      "runtime-ddl-and-future-object-denials",
+      "mixed-profile-source-fence-with-unchanged-business-inventory"
+    ],
+    "deniedStatements": 13,
+    "providerCalls": 0,
+    "runtimeProfiles": [
+      "application",
+      "worker"
+    ],
+    "runtimeWriteFenceVerified": true,
+    "activationAllowed": false,
+    "productionReady": false
+  },
+  "existingCatalogAndAclUnchanged": true,
+  "temporaryLoginDisabled": true,
+  "temporaryWorkerLoginDisabled": true
+}

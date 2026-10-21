@@ -13,13 +13,15 @@ export function storePendingTextRetention(storage:Storage,scope:string,value:Tex
   const raw=JSON.stringify(value);storage.setItem(key(scope),raw);
   if(storage.getItem(key(scope))!==raw)throw Error('Text retention recovery storage is unavailable. No request was sent.');
 }
-export function clearPendingTextRetention(storage:Storage,scope:string,requestId:string) {
-  if(readPendingTextRetention(storage,scope)?.requestId!==requestId)throw Error('Pending text retention policy changed.');
+export function clearPendingTextRetention(storage:Storage,scope:string,requestId:string,expected?:TextRetentionChange) {
+  const pending=readPendingTextRetention(storage,scope);
+  if(pending?.requestId!==requestId || expected && (!pending || pending.revision!==expected.revision || pending.days!==expected.days || pending.confirmed!==expected.confirmed))throw Error('Pending text retention policy changed.');
   storage.removeItem(key(scope));if(storage.getItem(key(scope))!==null)throw Error('Text retention recovery storage could not be cleared.');
 }
 export function verifyTextRetentionReceipt(value:unknown,pending:TextRetentionChange) {
   const row=value as {requestId?:string;request?:Omit<TextRetentionChange,'requestId'>;revision?:number};
-  if(!row || row.requestId!==pending.requestId || row.revision!==pending.revision+1 || !row.request
+  if(!row || typeof row!=='object' || Array.isArray(row) || Object.keys(row).sort().join(',')!=='request,requestId,revision'
+    || row.requestId!==pending.requestId || row.revision!==pending.revision+1 || !row.request
     || Object.keys(row.request).sort().join(',')!=='confirmed,days,revision' || row.request.revision!==pending.revision
     || row.request.days!==pending.days || row.request.confirmed!==true)throw Error('Text retention receipt cannot be verified.');
 }

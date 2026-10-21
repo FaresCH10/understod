@@ -1,0 +1,38 @@
+{
+  "runId": "2e42b143-fa5e-4164-b257-9d8697dcd380",
+  "startedAt": "2026-10-16T05:46:20.990Z",
+  "scope": "freshly-authorized-four-inspected-resources-only",
+  "state": "passed",
+  "originalRunOutsideAclVerified": false,
+  "database": {
+    "name": "understood_login_db_2e42b143fa5e4164b2579d8697dcd380",
+    "oid": 106496,
+    "cleanup": "verified-removed",
+    "closedToNewConnections": true
+  },
+  "roles": [
+    {
+      "name": "understood_login_rt_2e42b143fa5e4164b2579d8697dcd380",
+      "oid": 106497,
+      "disabled": true,
+      "cleanup": "verified-removed"
+    },
+    {
+      "name": "understood_login_wk_2e42b143fa5e4164b2579d8697dcd380",
+      "oid": 106499,
+      "disabled": true,
+      "cleanup": "verified-removed"
+    },
+    {
+      "name": "understood_login_op_2e42b143fa5e4164b2579d8697dcd380",
+      "oid": 106501,
+      "disabled": true,
+      "cleanup": "verified-removed"
+    }
+  ],
+  "productionReady": false,
+  "cleanupOutsideAclBefore": "a58095ce27284a2bac2b9361d37c1d43765e3d26af90dc8451115adef15265c3",
+  "cleanupOutsideAclAfter": "a58095ce27284a2bac2b9361d37c1d43765e3d26af90dc8451115adef15265c3",
+  "cleanupOutsideAclUnchanged": true,
+  "finishedAt": "2026-10-16T05:46:30.176Z"
+}

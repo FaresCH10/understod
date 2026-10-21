@@ -19,6 +19,7 @@ export function scriptedProvider() {
         assert.equal(options.method,'POST');const body=JSON.parse(options.body);
         assert.deepEqual(JSON.parse(body.contents[0].parts[0].text),expected);
         assert.ok(body.generationConfig.responseFormat.text.schema.properties[schemaKey]);
+        assert.equal(body.generationConfig.responseFormat.text.mimeType,'APPLICATION_JSON');assert.equal(body.store,false);
         assert.equal(typeof body.systemInstruction.parts[0].text,'string');
         return {inputHash:bundleHash(expected),model:GEMINI_MODELS.text};
       },()=>reply(output));
@@ -26,12 +27,12 @@ export function scriptedProvider() {
     speech(stage,text,bytes) {
       const output=Buffer.from(bytes);
       add(stage,(url,options)=>{
-        assert.equal(url,`${API}/v1beta/models/${GEMINI_MODELS.speech}:generateContent`);
+        assert.equal(url,`${API}/v1beta/interactions`);
         assert.equal(options.method,'POST');const body=JSON.parse(options.body);
-        assert.deepEqual(body.contents,[{role:'user',parts:[{text}]}]);
-        assert.deepEqual(body.generationConfig.responseModalities,['AUDIO']);
+        assert.deepEqual(body,{model:GEMINI_MODELS.speech,store:false,input:[{type:'user_input',content:[{type:'text',text}]}],
+          response_format:{type:'audio',mime_type:'audio/wav',sample_rate:16000},generation_config:{speech_config:[{voice:'Kore'}]}});
         return {inputHash:bundleHash(text),model:GEMINI_MODELS.speech};
-      },()=>Response.json({candidates:[{finishReason:'STOP',content:{parts:[{inlineData:{mimeType:'audio/wav',data:output.toString('base64')}}]}}]}));
+      },()=>Response.json({status:'completed',model:GEMINI_MODELS.speech,steps:[{type:'model_output',content:[{type:'audio',mime_type:'audio/wav',data:output.toString('base64')}]}]}));
     },
     transcription(stage,bytes,text) {
       const expected=Buffer.from(bytes),name=`files/synthetic-${++fileSequence}`,uri=`${API}/v1beta/${name}`,upload=`${API}/upload/synthetic-${fileSequence}`;

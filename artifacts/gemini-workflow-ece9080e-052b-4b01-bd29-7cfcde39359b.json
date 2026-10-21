@@ -1,0 +1,63 @@
+{
+  "runId": "70acb8ef-958f-4be9-bc1d-372be4582ea7",
+  "startedAt": "2026-10-14T10:11:58.769Z",
+  "state": "failed",
+  "dataClass": "synthetic",
+  "realDataAllowed": false,
+  "productionReady": false,
+  "models": {
+    "text": "gemini-3.5-flash-lite",
+    "transcription": "gemini-3.5-transcribe",
+    "speech": "gemini-3.8-flash-lite-tts"
+  },
+  "maxExternalRequests": 15,
+  "externalRequests": 9,
+  "checks": [
+    {
+      "name": "credential_bootstrap_and_private_grants",
+      "state": "passed"
+    },
+    {
+      "name": "metered_automatic_preparation_translation_private_speech",
+      "state": "passed"
+    },
+    {
+      "name": "publication_frozen_rubric_and_scoped_private_playback",
+      "state": "passed"
+    }
+  ],
+  "fixtureRequests": [
+    {
+      "id": "df027495-1ca7-4e76-8ee1-be0ea8310d6f",
+      "state": "rejected",
+      "httpStatus": 429
+    }
+  ],
+  "activeStage": "fixed_synthetic_voice_fixture_generation",
+  "groundingEnvelope": {
+    "expectedFacts": 3,
+    "expectedAskedFacts": 2,
+    "evidenceCount": 3,
+    "askedIndexCount": 2,
+    "booleansValid": true,
+    "fieldsValid": true,
+    "reasonsRecognized": true,
+    "sourceGrounded": true,
+    "questionAligned": true,
+    "ambiguous": false
+  },
+  "publication": {
+    "version": 1,
+    "assigned": 3,
+    "snapshotHash": "0179b639ccedaa2bfa4cdb8621f480ad47adc1e122753614de13e0ff67fe6cb7"
+  },
+  "diagnosticCode": "workflow_gate_failed",
+  "jobStates": {
+    "preparation": [
+      "ready"
+    ],
+    "recording": [],
+    "assessment": []
+  },
+  "completedAt": "2026-10-14T10:13:01.254Z"
+}

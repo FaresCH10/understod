@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-13",
+  "scope": "Captured reports, export history, exact creation recovery and immutable retry acceptance",
+  "requirements": ["S16", "S43", "A05", "A15"],
+  "progress": {"boundary": 85, "staffRequestFencing": 94, "overallEstimate": 60, "overallRange": [55, 65]},
+  "fullSuite": {"files": 169, "tests": 919, "passed": 915, "failed": 0, "skippedNative": 4, "exitCode": 0, "durationMs": 220951.1115, "log": "artifacts/report-controls-final-suite-2026-10-13.log"},
+  "previousFullRun": {"passed": 912, "failed": 3, "cause": "Explicit migration expectations stopped at 83; expectations now include 084 without weakening drift/read-only checks", "log": "artifacts/report-controls-suite-2026-10-13.log"},
+  "finalFocused": {"files": 6, "tests": 31, "passed": 31, "failed": 0, "skipped": 0, "exitCode": 0, "durationMs": 6669.1076},
+  "additionalEvidence": {"domainPermissionsRegressionPassed": 72, "httpImportRegressionPassed": 34, "pureRecoveryPassed": 4, "populatedRetryImportPreserved": true},
+  "build": {"passed": true, "modules": 2050, "entryKB": 634.60, "shellFiles": 55, "hashesMatch": true},
+  "browser": {
+    "primaryFixturePosts": 5, "primaryAcceptedExports": 2, "primaryAcceptedRetryReceipts": 1,
+    "withheldAcknowledgements": 2, "receiptOutages": 2, "falseMissingResults": 2, "laterRejectedRepeats": 2,
+    "reloadRecovery": true, "originalFilters": {"crewId": "", "responseFrom": "2026-10-01", "responseThrough": "2026-10-30", "timezone": "Asia/Beirut"},
+    "auditorOwnExportAccepted": true, "automaticMutationReplay": false, "publicationsUnchanged": true,
+    "nativeDownloadedCsv": {"path": "C:/Users/Fares/Downloads/briefing-activity-92d8cf5e-3d50-4d1e-be58-e9492564c332.csv", "rowsIncludingHeader": 25, "columns": 6, "windowRespected": true, "privateAnswerRubricAbsent": true},
+    "finalMobileFixture": {"posts": 2, "retryReceipts": 1, "rejectedRepeats": 1, "originalAttempt": 1, "currentReadyAttempt": 2, "recoveryResolved": true},
+    "viewports": [{"width": 390, "pageWidth": 375, "recoveryClientWidth": 339, "recoveryScrollWidth": 339}, {"width": 320, "pageWidth": 305, "recoveryClientWidth": 269, "recoveryScrollWidth": 269}],
+    "screenshot": "artifacts/report-retry-mobile-2026-10-13.jpg",
+    "ownedFixturesTerminal": true, "tabsClosed": true, "viewportReset": true
+  },
+  "schema": {"postgresMigration": "084_export_retry_receipts.sql", "runtimeAllowlistUpdated": true, "sqliteImportUpdated": true, "originalDatabaseMigrated": false},
+  "preservation": {"originalFingerprints": 8, "allMatch": true, "integrity": "ok", "foreignKeyViolations": 0, "newRetryTableAbsent": true, "originalPreviewsRestarted": false},
+  "externalRequests": 0,
+  "notClaimed": ["Reticle verdict", "native PostgreSQL/TLS/concurrency", "full native restore", "real devices", "full accessibility/localization", "live model", "real-worker privacy approval", "hosted deployment", "production readiness"]
+}

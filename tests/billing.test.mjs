@@ -1,10 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {randomUUID} from 'node:crypto';
+import {createHash,randomUUID} from 'node:crypto';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import {openDatabase} from '../server/db.mjs';
 import {seed} from '../server/seed.mjs';
 import {ensureBillingSchema,createInvoice,recordPayment,voidInvoice,getInvoice,listInvoices,billingReceipt} from '../server/billing.mjs';
-import {moneyCents,invoiceInput,paymentInput,voidInput,invoiceTotals,invoiceFilters} from '../server/billing-input.mjs';
+import {moneyCents,invoiceInput,paymentInput,voidInput,invoiceTotals,invoiceFilters,billingRequestSignature} from '../server/billing-input.mjs';
 import {createAppServer} from '../server/index.mjs';
 const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 const invoice=()=>({requestId:randomUUID(),number:'INV-001',description:'Synthetic pilot service',issueDate:'2026-10-01',dueDate:'2026-10-10',amount:'25.00',confirmed:true});
@@ -35,7 +37,7 @@ test('SQLite unpaid voids retain original totals and immutable evidence with exa
     assert.throws(()=>voidInvoice(db,owner,created.id,{...input,requestId:randomUUID()}),/voided/);
     const detail=getInvoice(db,owner,created.id);assert.equal(detail.amountCents,2500);assert.equal(detail.paidCents,0);assert.equal(detail.voidedCents,2500);assert.equal(detail.balanceCents,0);assert.equal(detail.status,'void');assert.equal(detail.voidRecord.reason,input.reason);
     assert.equal(listInvoices(db,owner,{status:'void'}).total,1);assert.equal(listInvoices(db,owner,{status:'unpaid'}).total,0);assert.equal(listInvoices(db,owner,{status:'paid'}).total,0);
-    assert.deepEqual(billingReceipt(db,owner,'void',input.requestId),{found:true,kind:'void',id:input.requestId,invoiceId:created.id});
+    assert.deepEqual(billingReceipt(db,owner,'void',input.requestId),{found:true,kind:'void',id:input.requestId,invoiceId:created.id,requestHash:createHash('sha256').update(billingRequestSignature('void',input.requestId,created.id,voidInput(input))).digest('hex')});
     assert.throws(()=>recordPayment(db,owner,created.id,payment()),/voided/);
     assert.throws(()=>db.prepare('INSERT INTO invoice_payments VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(randomUUID(),'cedar','beirut',created.id,1,'2026-10-01','Synthetic','','{}','maya','2026-10-01'),/voided/);
     for(const sql of ["UPDATE invoice_voids SET reason='changed'",'DELETE FROM invoice_voids']) assert.throws(()=>db.exec(sql),/immutable/);
@@ -54,8 +56,8 @@ test('SQLite manual invoices and partial payments replay exactly, preserve balan
     assert.throws(()=>createInvoice(db,owner,{...request,description:'Changed'}),/conflict/);
     assert.throws(()=>createInvoice(db,owner,{...request,requestId:randomUUID()}),/number already/);
     const first=payment(),recorded=recordPayment(db,owner,created.id,first);
-    assert.deepEqual(billingReceipt(db,owner,'invoice',created.id),{found:true,kind:'invoice',id:created.id,invoiceId:created.id});
-    assert.deepEqual(billingReceipt(db,owner,'payment',recorded.id),{found:true,kind:'payment',id:recorded.id,invoiceId:created.id});assert.equal(billingReceipt(db,owner,'payment',randomUUID()).found,false);
+    assert.deepEqual(billingReceipt(db,owner,'invoice',created.id),{found:true,kind:'invoice',id:created.id,invoiceId:created.id,requestHash:createHash('sha256').update(billingRequestSignature('invoice',created.id,created.id,invoiceInput(request))).digest('hex')});
+    assert.deepEqual(billingReceipt(db,owner,'payment',recorded.id),{found:true,kind:'payment',id:recorded.id,invoiceId:created.id,requestHash:createHash('sha256').update(billingRequestSignature('payment',recorded.id,created.id,paymentInput(first))).digest('hex')});assert.equal(billingReceipt(db,owner,'payment',randomUUID()).found,false);
     assert.deepEqual(recordPayment(db,owner,created.id,first),{...recorded,duplicate:true});
     let detail=getInvoice(db,owner,created.id);assert.equal(detail.amountCents,2500);assert.equal(detail.paidCents,1010);assert.equal(detail.balanceCents,1490);assert.equal(detail.status,'partial');assert.equal(detail.payments.length,1);
     assert.throws(()=>recordPayment(db,owner,created.id,{...first,amount:'10.11'}),/conflict/);

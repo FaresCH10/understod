@@ -1,4 +1,9 @@
 export type RecordingLanguage = 'en' | 'ar' | 'ur';
+export const conversationRecorderText={
+  en:{permission:'Microphone access is unavailable. Check browser permission or type a message when available.',format:'This voice message could not be prepared. Record again or type a message when available.',error:'Voice message receipt is unconfirmed. Keep this preview and check the voice message receipt.',failed:'Voice recording is unavailable. Unsent audio may be lost. Use the message field when available, or reload this page.'},
+  ar:{permission:'الميكروفون غير متاح. تحقق من إذن المتصفح أو اكتب رسالة عند توفر الحقل.',format:'تعذر تجهيز الرسالة الصوتية. سجّل مرة أخرى أو اكتب رسالة عند توفر الحقل.',error:'استلام الرسالة الصوتية غير مؤكد. احتفظ بهذه المعاينة وتحقق من استلام الرسالة الصوتية.',failed:'التسجيل الصوتي غير متاح. قد يُفقد الصوت غير المرسل. استخدم حقل الرسالة عند توفره أو أعد تحميل هذه الصفحة.'},
+  ur:{permission:'مائیکروفون دستیاب نہیں۔ براؤزر کی اجازت چیک کریں یا دستیاب ہونے پر پیغام لکھیں۔',format:'صوتی پیغام تیار نہیں ہو سکا۔ دوبارہ ریکارڈ کریں یا دستیاب ہونے پر پیغام لکھیں۔',error:'صوتی پیغام کی وصولی کی تصدیق نہیں ہو سکی۔ یہ پیش نظارہ برقرار رکھیں اور صوتی پیغام کی وصولی چیک کریں۔',failed:'صوتی ریکارڈنگ دستیاب نہیں۔ نہ بھیجی گئی آڈیو ضائع ہو سکتی ہے۔ دستیاب ہونے پر پیغام کا خانہ استعمال کریں یا یہ صفحہ دوبارہ لوڈ کریں۔'},
+};
 export const siteNoticeText={
   en:{title:'Site recording notice',loading:'Checking the site recording notice...',error:'The site recording notice could not be verified. Recording is unavailable until it can be checked.',retry:'Check recording notice'},
   ar:{title:'إشعار التسجيل الخاص بالموقع',loading:'جارٍ التحقق من إشعار التسجيل الخاص بالموقع...',error:'تعذّر التحقق من إشعار التسجيل الخاص بالموقع. التسجيل غير متاح حتى يتم التحقق منه.',retry:'تحقق من إشعار التسجيل'},
@@ -43,4 +48,13 @@ export function conversationRecordingNotice(language:RecordingLanguage) {
     ar:{local:'يبقى الصوت غير المرسل في هذه الصفحة. قد تفقد المعاينة عند المغادرة أو إعادة التحميل. الإرسال يتطلب إجراءً منفصلًا.',processing:'لا تُقدم الرسائل الصوتية كإجابات ولا تُرسل إلى مزود ذكاء اصطناعي.'},
     ur:{local:'نہ بھیجی گئی آڈیو اسی صفحے پر رہتی ہے۔ چھوڑنے یا دوبارہ لوڈ کرنے سے پیش نظارہ ضائع ہو سکتا ہے۔ بھیجنے کے لیے الگ عمل ضروری ہے۔',processing:'صوتی پیغامات جواب کے طور پر جمع نہیں ہوتے اور کسی مصنوعی ذہانت فراہم کنندہ کو نہیں بھیجے جاتے۔'}}[language];
   return {title:value.title,local:voice.local,access:value.access,processing:voice.processing,retention:value.retention};
+}
+
+export function staffCaseRecordingNotice(language:RecordingLanguage){
+  const value=copy[language],staff={
+    en:{local:'Unsent audio stays on this page. Leaving or reloading can lose the preview. Saving requires a separate action.',access:'Saved audio is private to authorized site owners and supervisors.',processing:'This is a staff record, not a worker answer. It is not sent to AI and does not resolve the case automatically.'},
+    ar:{local:'يبقى الصوت غير المرسل في هذه الصفحة. قد تفقد المعاينة عند المغادرة أو إعادة التحميل. يتطلب الحفظ إجراءً منفصلًا.',access:'الصوت المحفوظ خاص بمالكي الموقع والمشرفين المخولين.',processing:'هذا سجل للموظف وليس إجابة عامل. لا يُرسل إلى الذكاء الاصطناعي ولا يحل الحالة تلقائيًا.'},
+    ur:{local:'نہ بھیجی گئی آڈیو اسی صفحے پر رہتی ہے۔ چھوڑنے یا دوبارہ لوڈ کرنے سے پیش نظارہ ضائع ہو سکتا ہے۔ محفوظ کرنے کے لیے الگ عمل ضروری ہے۔',access:'محفوظ آڈیو صرف مجاز سائٹ مالکان اور نگرانوں کے لیے نجی ہے۔',processing:'یہ عملے کا ریکارڈ ہے، کارکن کا جواب نہیں۔ اسے مصنوعی ذہانت کو نہیں بھیجا جاتا اور معاملہ خودکار طور پر حل نہیں ہوتا۔'},
+  }[language];
+  return {title:value.title,...staff,retention:value.retention};
 }

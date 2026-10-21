@@ -1,0 +1,40 @@
+{
+  "startedAt": "2026-10-15T04:38:39.911Z",
+  "updatedAt": "2026-10-15T04:40:06.099Z",
+  "runId": "2f94d92b-ffa0-4eaf-ab0f-a3adeb3324bc",
+  "database": "understood_login_db_2f94d92bffa04eafab0fa3adeb3324bc",
+  "role": "understood_login_rt_2f94d92bffa04eafab0fa3adeb3324bc",
+  "schema": "understood_test_login_2f94d92bffa04eafab0fa3adeb3324bc",
+  "kind": "isolated-direct-login-rehearsal",
+  "state": "passed",
+  "checks": [
+    "two-independent-verified-tls-direct-login-connections",
+    "actual-production-runtime-permission-gate",
+    "restricted-publication-submission-and-scheduled-assessment",
+    "read-only-api-startup-health-and-auth-denials",
+    "runtime-ddl-temporary-truncate-maintenance-denials",
+    "future-objects-not-automatically-granted"
+  ],
+  "cleanupDatabase": "verified-removed",
+  "cleanupRole": "verified-removed",
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "productionVerdict": false,
+  "phase": "finished",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "migrationsApplied": 86,
+  "runtime": {
+    "passed": true,
+    "checks": [
+      "restricted-publication-submission-and-scheduled-assessment",
+      "read-only-api-startup-health-and-auth-denials",
+      "runtime-ddl-temporary-truncate-maintenance-denials",
+      "future-objects-not-automatically-granted"
+    ],
+    "deniedStatements": 6,
+    "providerCalls": 0
+  },
+  "existingCatalogAndAclUnchanged": true,
+  "temporaryLoginDisabled": true
+}

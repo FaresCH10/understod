@@ -1,0 +1,26 @@
+{
+  "runId": "e7a7a4ba-e74d-4e2a-a916-235808dd1278",
+  "startedAt": "2026-10-14T06:50:55.432Z",
+  "dataClass": "synthetic",
+  "realDataAllowed": false,
+  "models": {
+    "text": "gemini-3.5-flash-lite",
+    "transcription": "gemini-3.5-transcribe",
+    "speech": "gemini-3.8-flash-lite-tts"
+  },
+  "fixtureVersion": "provider-stage-fixture-v3",
+  "mode": "assessment",
+  "maxRequests": 4,
+  "requests": [
+    {
+      "id": "a538d6d4-4b69-43fc-ae26-5a9c2fafa92f",
+      "state": "accepted",
+      "httpStatus": 200
+    }
+  ],
+  "results": [],
+  "productionReady": false,
+  "state": "failed",
+  "diagnosticCode": "invalid_output",
+  "completedAt": "2026-10-14T06:50:56.536Z"
+}

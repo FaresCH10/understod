@@ -1,12 +1,11 @@
 import { createHash,randomUUID } from 'node:crypto';
 import { publicExport,exportCsv,deletionExportExpiry } from '../exports.mjs';
 import {reportActivity} from './reports.mjs';
-import {reportScope} from '../report-scope.mjs';
+import {reportScope,exportInput,exportRetryInput,exportRequestId} from '../report-input.mjs';
 import { domainTransaction,requirePrincipal,domainAudit } from './domain.mjs';
 import {dispatchAllowed,dispatchPredicate} from './operations-gates.mjs';
 
 const roles=['owner','supervisor','auditor'];
-const uuid=(value) => typeof value==='string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 const system=(row) => ({...row,principal_type:'system',principal_id:'export-worker'});
 
 async function expireRow(client,row) {
@@ -36,8 +35,7 @@ export async function expireExports(pool,{schema='public'}={}) {
 }
 
 export async function requestExport(pool,session,body,{schema='public'}={}) {
-  if (!body || !uuid(body.requestId) || typeof body.publicationId!=='string' || !body.publicationId || body.publicationId.length>100
-    || Object.keys(body).some((key) => !['requestId','publicationId','filters'].includes(key))) throw new Error('Invalid export request');
+  body=exportInput(body);
   const filters=reportScope(body.filters);
   return domainTransaction(pool,schema,async (client) => {
     await requirePrincipal(client,session,'staff',roles);
@@ -82,14 +80,36 @@ export async function listExports(pool,session,{schema='public'}={}) {
   });
 }
 
-export async function retryExport(pool,session,id,{schema='public'}={}) {
+const retryResult=row=>({requestId:row.request_id,id:row.export_id,attempts:row.attempts,acceptedAt:row.created_at instanceof Date?row.created_at.toISOString():row.created_at});
+export async function exportReceipt(pool,session,kind,requestId,{schema='public'}={}) {
+  if(!['create','retry'].includes(kind))throw Error('Invalid export request');exportRequestId(requestId);
+  return domainTransaction(pool,schema,async client=>{
+    await requirePrincipal(client,session,'staff',roles);
+    if(kind==='retry') {
+      const row=(await client.query('SELECT * FROM report_export_retries WHERE request_id=$1 AND org_id=$2 AND site_id=$3 AND requested_by=$4',[requestId,session.org_id,session.site_id,session.principal_id])).rows[0];
+      return row?{found:true,request:{requestId:row.request_id,exportId:row.export_id,attempts:row.attempts},result:retryResult(row)}:{found:false};
+    }
+    const row=(await client.query('SELECT * FROM report_exports WHERE id=$1 AND org_id=$2 AND site_id=$3 AND requested_by=$4',[requestId,session.org_id,session.site_id,session.principal_id])).rows[0];
+    if(!row)return {found:false};const {timezone,...filters}=row.filters_json;
+    return {found:true,request:{requestId:row.id,publicationId:row.publication_id,filters:reportScope(filters)},result:publicExport(row)};
+  });
+}
+export async function retryExport(pool,session,id,body,{schema='public'}={}) {
+  const input=exportRetryInput(id,body);
   const result=await domainTransaction(pool,schema,async (client) => {
     await requirePrincipal(client,session,'staff',roles);
+    await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[`export-retry:${input.requestId}`]);
+    const old=(await client.query('SELECT * FROM report_export_retries WHERE request_id=$1',[input.requestId])).rows[0];
+    if(old) {
+      if(old.org_id!==session.org_id || old.site_id!==session.site_id || old.requested_by!==session.principal_id || old.export_id!==id || old.attempts!==input.attempts)throw Error('Export request ID conflict');
+      return {...retryResult(old),duplicate:true};
+    }
     const row=await scopedExport(client,session,id);
-    if (row.status!=='failed' || row.attempts>=3 || !row.snapshot_json) return {error:'Export cannot be retried'};
-    const updated=(await client.query("UPDATE report_exports SET status='queued',error=NULL WHERE id=$1 RETURNING *",[id])).rows[0];
+    if (row.status!=='failed' || row.attempts!==input.attempts || row.attempts>=3 || !row.snapshot_json) return {error:'Export cannot be retried'};
+    await client.query("UPDATE report_exports SET status='queued',error=NULL WHERE id=$1",[id]);
+    const accepted=(await client.query('INSERT INTO report_export_retries(request_id,org_id,site_id,export_id,requested_by,attempts) VALUES($1,$2,$3,$4,$5,$6) RETURNING *',[input.requestId,session.org_id,session.site_id,id,session.principal_id,input.attempts])).rows[0];
     await domainAudit(client,session,'export.retried',id);
-    return publicExport(updated);
+    return {...retryResult(accepted),duplicate:false};
   });
   if (result.error && !result.id) throw new Error(result.error);
   return result;

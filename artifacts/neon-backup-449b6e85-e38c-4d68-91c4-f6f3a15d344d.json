@@ -1,0 +1,26 @@
+{
+  "startedAt": "2026-10-15T05:12:44.490Z",
+  "finishedAt": "2026-10-15T05:18:46.831Z",
+  "runId": "449b6e85-e38c-4d68-91c4-f6f3a15d344d",
+  "source": "understood_backup_src_449b6e85e38c4d6891c4f6f3a15d344d",
+  "target": "understood_backup_dst_449b6e85e38c4d6891c4f6f3a15d344d",
+  "state": "failed",
+  "checks": [],
+  "cleanup": {
+    "source": "verified-removed",
+    "target": "verified-removed"
+  },
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "productionVerdict": false,
+  "phase": "finished",
+  "dumpMajor": 18,
+  "restoreMajor": 18,
+  "postgresMajor": 18,
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "failedPhase": "native-encrypted-round-trip",
+  "error": "Native synthetic backup drill did not pass.",
+  "existingCatalogAndAclUnchanged": true,
+  "passfilesRemoved": true,
+  "archiveSha256": "e2246ba91d22345bc3d017586c09ede52d9df180b1eeb480f050445f1cad84e2"
+}

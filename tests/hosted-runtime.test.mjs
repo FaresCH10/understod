@@ -26,6 +26,11 @@ function proxyRequest(url,options={}) {
 }
 test('hosted configuration rejects real/production/demo/insecure/untrusted configurations without any connection',()=>{
   const config=hostedSyntheticConfig(env);assert.equal(config.port,10000);assert.equal(config.storageChecks,false);assert.equal(config.mail.available,false);
+  assert.equal(config.runtimeRoleProfile,'application');
+  assert.equal(config.service,'api');assert.equal(config.operatorAccess,false);
+  for(const service of ['api','worker'])assert.throws(()=>hostedSyntheticConfig({...env,UNDERSTOOD_OPERATOR_ACCESS:'true'},{service}),/separate operator service/);
+  assert.equal(hostedSyntheticConfig({...env,UNDERSTOOD_POSTGRES_ROLE_PROFILE:'application'},{service:'worker'}).runtimeRoleProfile,'worker');
+  assert.throws(()=>hostedSyntheticConfig(env,{service:'unknown'}),/service/);
   assert.equal(pilotDestination(config.pilotDestination),null);
   assert.equal(config.requestAddress({socket:{remoteAddress:'::ffff:127.0.0.1'},headers:proxyHeaders}),'198.51.100.20');
   for(const patch of [{UNDERSTOOD_TIER:'production'},{UNDERSTOOD_DATA_CLASS:'real'},{UNDERSTOOD_ACCESS_MODE:'demo'},{UNDERSTOOD_AI_MODE:'live'},
@@ -44,6 +49,34 @@ test('host-prefixed session cookies are Secure, HttpOnly, host-only and cleared 
   assert.match(clearSessionCookie({name,secure:true}),/Max-Age=0; Secure$/);
   assert.throws(()=>sessionCookie('x',60,{name}),/require Secure/);assert.throws(()=>sessionCookie('x',60,{name:123}),/Invalid session cookie/);
 });
+
+test('fixed synthetic verification is default-off and provider credentials are admitted only by the hosted worker',()=>{
+  const disabled=hostedSyntheticConfig(env,{service:'worker'});assert.equal(disabled.providerVerification.metadata.testEnabled,false);
+  const input={...env,UNDERSTOOD_PROVIDER_TESTS:'gemini-free',GEMINI_API_KEY:'synthetic-worker-only-key'};
+  const worker=hostedSyntheticConfig(input,{service:'worker'});assert.equal(worker.runtimeRoleProfile,'worker');
+  assert.equal(worker.providerVerification.metadata.realDataAllowed,false);assert.equal(worker.providerVerification.metadata.testEnabled,true);
+  assert.equal(typeof worker.providerVerification.run,'function');assert.equal(typeof worker.providerVerification.runStage,'function');
+  assert.doesNotMatch(JSON.stringify(worker.providerVerification),/synthetic-worker-only-key/);
+  for(const patch of [{GEMINI_API_KEY:''},{UNDERSTOOD_TIER:'local'},{UNDERSTOOD_TIER:'production'},{UNDERSTOOD_DATA_CLASS:'real'},
+    {UNDERSTOOD_AI_MODE:'live'},{UNDERSTOOD_PROVIDER_TESTS:'unknown'}])assert.throws(()=>hostedSyntheticConfig({...input,...patch},{service:'worker'}));
+  assert.throws(()=>hostedSyntheticConfig(input,{service:'api'}));
+  assert.throws(()=>hostedSyntheticConfig({...env,GEMINI_API_KEY:'synthetic-worker-only-key'},{service:'api'}));
+  assert.equal(hostedSyntheticConfig(env,{service:'api'}).providerVerification,undefined);
+});
+
+test('hosted Neon storage is explicit, server-only and synthetic; standard AWS or test keys never auto-select it',()=>{
+  const input={...env,UNDERSTOOD_STORAGE_ADAPTER:'neon',UNDERSTOOD_NEON_STORAGE_ENDPOINT:'https://br-fixture.storage.c-1.eu-central-1.aws.neon.tech',
+    UNDERSTOOD_NEON_STORAGE_REGION:'eu-central-1',UNDERSTOOD_NEON_STORAGE_BUCKET:'synthetic-fixture',
+    UNDERSTOOD_NEON_STORAGE_ACCESS_KEY_ID:'private-fixture-access',UNDERSTOOD_NEON_STORAGE_SECRET_ACCESS_KEY:'private-fixture-secret'};
+  const config=hostedSyntheticConfig(input);
+  assert.equal(config.storageAdapter,'neon');assert.equal(config.storageConfig.region,'eu-central-1');
+  assert.equal(config.storageConfig.accountId,undefined);assert.ok(Object.isFrozen(config.storageConfig));
+  assert.equal(hostedSyntheticConfig({...env,AWS_ENDPOINT_URL_S3:input.UNDERSTOOD_NEON_STORAGE_ENDPOINT}).storageAdapter,'r2');
+  for(const patch of [{UNDERSTOOD_STORAGE_ADAPTER:'s3'},{UNDERSTOOD_NEON_STORAGE_ENDPOINT:'http://foreign.invalid'},
+    {UNDERSTOOD_NEON_STORAGE_REGION:'us-east-1'},{UNDERSTOOD_NEON_STORAGE_BUCKET:'../other'},
+    {UNDERSTOOD_NEON_STORAGE_ACCESS_KEY_ID:''},{UNDERSTOOD_NEON_STORAGE_SECRET_ACCESS_KEY:''},
+    {UNDERSTOOD_DATA_CLASS:'real'},{UNDERSTOOD_TIER:'production'}])assert.throws(()=>hostedSyntheticConfig({...input,...patch}));
+});
 test('hosted API serves built public files and the real scoped credential routes with strict proxy/origin cookies',async()=>{
   const db=new PGlite(),commands=[],pool={async connect(){return {async query(sql,values){commands.push(sql);return values?.length?db.query(sql,values):(await db.exec(sql)).at(-1)??{rows:[]};},release(){}};}};
   const config={...hostedSyntheticConfig(env),port:0};let server;
@@ -54,6 +87,13 @@ test('hosted API serves built public files and the real scoped credential routes
     await assert.rejects(startHostedApi(pool,{},config),/unprivileged/);
     await db.exec('CREATE ROLE hosted_runtime LOGIN');
     await configureRuntimePermissions(pool,{schema:config.schema,role:'hosted_runtime',dedicatedDatabase:true,writersStopped:true});
+    await db.exec('CREATE ROLE hosted_worker LOGIN');
+    await configureRuntimePermissions(pool,{schema:config.schema,role:'hosted_worker',profile:'worker',dedicatedDatabase:true,writersStopped:true});
+    await db.exec('SET SESSION AUTHORIZATION hosted_worker');
+    commands.length=0;
+    await assert.rejects(startHostedApi(pool,{}, {...config,runtimeRoleProfile:'worker'}),/Invalid hosted API service/);
+    assert.equal(commands.length,0);
+    await db.exec('SET SESSION AUTHORIZATION postgres;RESET ROLE');
     await db.exec('SET SESSION AUTHORIZATION hosted_runtime');commands.length=0;
     server=await startHostedApi(pool,{},config);assert.equal(commands.some(sql=>/^\s*(CREATE|ALTER|INSERT|UPDATE|DELETE|GRANT|REVOKE)\b/.test(sql)),false);
     const base=`http://127.0.0.1:${server.address().port}`,request=(path,options={})=>proxyRequest(base+path,options);
@@ -69,7 +109,8 @@ test('hosted API serves built public files and the real scoped credential routes
     assert.equal((await request('/api/auth/staff/login',{...credentials,headers:{...credentials.headers,origin:'https://forged.example.test'}})).status,403);
     const login=await request('/api/auth/staff/login',credentials);assert.equal(login.status,200);const setCookie=login.headers.get('set-cookie');assert.match(setCookie,/^__Host-understood_session=.*; Secure$/);
     const cookie=setCookie.split(';')[0],session=await (await request('/api/session',{headers:{cookie}})).json();assert.equal(session.authenticated,true);assert.equal(session.mode,'synthetic-credential');
-    assert.equal((await request('/api/overview',{headers:{cookie}})).status,200);
+    assert.equal((await request('/api/overview',{headers:{cookie}})).status,409);
+    assert.equal((await request('/api/overview',{headers:{cookie,'x-client-session-context':session.clientContext}})).status,200);
     assert.equal((await request('/api/overview',{headers:{cookie:cookie.replace('__Host-understood_session','understood_pg_rehearsal')}})).status,401);
     assert.equal((await request('/api/ops/session')).status,200);assert.equal((await (await request('/api/ops/session')).json()).available,false);
     const invalid=await request('/api/auth/staff/login',{...credentials,body:JSON.stringify({email:'unknown@example.test',password:'invalid'})});assert.equal(invalid.status,401);

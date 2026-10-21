@@ -11,6 +11,8 @@ import {processOneCaseEscalation,routeNewCase} from '../server/postgres/case-rou
 import {listCaseMessages} from '../server/postgres/case-messages.mjs';
 import {requestWorkerDeletion} from '../server/postgres/deletions.mjs';
 import {processOneDeletionRedaction} from '../server/postgres/deletion-redactions.mjs';
+import {caseReviewPage,caseWorkflowPageInput} from '../server/postgres/case-workflow-pages.mjs';
+import {checkedReviewPage} from '../src/case-workflow-contract.ts';
 
 const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 const worker={principal_type:'worker',principal_id:'worker-14',org_id:'cedar',site_id:'beirut'};
@@ -103,5 +105,25 @@ test('worker deletion fences new reviews and redacts private disagreement while 
     await assert.rejects(f.db.exec('UPDATE case_reviews SET reason=NULL'),/immutable/);
     const receipt=await caseReviewReceipt(f.pool,owner,f.caseId,input.requestId);assert.equal(receipt.reason,'[Deleted]');assert.equal(receipt.attemptId,f.original.id);
     assert.equal((await f.db.query('SELECT count(*)::int n FROM submission_receipts')).rows[0].n,1);
+  }finally{await f.close();}
+});
+
+test('review history pages preserve all entries and expose coherent current deadlines and role capabilities',async()=>{
+  const f=await fixture();try{
+    const original=(await f.db.query('SELECT * FROM attempts')).rows;
+    for(let n=1;n<=23;n++)await f.save({...disagree(),reason:'Synthetic paged private disagreement '+n});
+    const changed=await f.deadline();await f.save(changed);const ids=new Set(),context='a'.repeat(64);
+    for(let page=1;page<=3;page++){
+      const result={...await caseReviewPage(f.pool,owner,f.caseId,{page,pageSize:10}),clientContext:context};checkedReviewPage(result,f.caseId,page,10,context);
+      assert.equal(result.total,24);assert.equal(result.effectiveDueAt,changed.dueAt);assert.equal(result.canChangeDeadline,true);assert.equal(result.canDisagree,true);
+      for(const row of result.items){assert.equal(ids.has(row.id),false);ids.add(row.id);}
+    }
+    assert.equal(ids.size,24);assert.deepEqual((await f.db.query('SELECT * FROM attempts')).rows,original);
+    const audit=await caseReviewPage(f.pool,{...owner,principal_id:'audit',role:'auditor'},f.caseId);assert.equal(audit.blockedReason,'read_only');assert.equal(audit.canDisagree,false);
+    await resolveClarification(f.pool,owner,f.caseId,{notes:'Synthetic case closure'});
+    const closed=await caseReviewPage(f.pool,owner,f.caseId);assert.equal(closed.canChangeDeadline,false);assert.equal(closed.canDisagree,true);
+    const emptyPage=await caseReviewPage(f.pool,owner,f.caseId,{page:5,pageSize:10});assert.equal(emptyPage.items.length,0);assert.equal(emptyPage.total,24);
+    for(const input of [{page:0},{page:'1.0'},{page:5001},{pageSize:100},{pageSize:true},{extra:1}])assert.throws(()=>caseWorkflowPageInput(f.caseId,input));
+    await assert.rejects(caseReviewPage(f.pool,worker,f.caseId),/Forbidden/);
   }finally{await f.close();}
 });

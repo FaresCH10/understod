@@ -3,7 +3,8 @@ import { responseColumns,isCurrentRecording } from '../recordings.mjs';
 import { metricsFromResponses } from '../domain.mjs';
 import { publicationResponses } from './reports.mjs';
 import { briefingFilters } from '../briefing-input.mjs';
-import { processingFilters,processingJob } from '../processing.mjs';
+import { processingFilters,processingJob,processingJobId } from '../processing.mjs';
+import {processingRowsSql} from '../processing-rows.mjs';
 import { workerInboxFilters,workerInboxPage,workerFollowupPredicate } from '../responses.mjs';
 import { responseRead } from './responses.mjs';
 import {billingRecoveryScope} from '../billing-input.mjs';
@@ -105,33 +106,28 @@ export async function staffOverview(pool,session,{schema='public'}={}) {
 }
 
 export async function listProcessing(pool,session,input={},{schema='public'}={}) {
-  const {search,status,sort,page,pageSize}=processingFilters(input);
+  const {search,status,kind,sort,page,pageSize}=processingFilters(input);
   const order=sort==='newest' ? 'created_at DESC,id' : 'created_at,id';
   const aggregateOrder=sort==='newest' ? 'result.created_at DESC,result.id' : 'result.created_at,result.id';
   return domainTransaction(pool,schema,async (client) => {
     await requirePrincipal(client,session,'staff',readRoles);
-    const row=(await client.query(`WITH filtered AS (SELECT j.id,j.kind,j.status,j.attempts,j.error,j.created_at,j.due_at,b.title,b.id AS briefing_id,j.revision,
-      b.revision AS draft_revision,b.state AS draft_state,a.occurred_at AS archived_at
-      FROM jobs j JOIN briefings b ON b.id=j.briefing_id AND b.org_id=j.org_id AND b.site_id=j.site_id
-      LEFT JOIN briefing_archives a ON a.briefing_id=b.id AND a.org_id=b.org_id AND a.site_id=b.site_id
-      WHERE j.org_id=$1 AND j.site_id=$2 AND ($3='' OR strpos(lower(b.title),lower($3))>0) AND ($4='all' OR j.status=$4))
+    const row=(await client.query(`${processingRowsSql('postgres')},filtered AS (SELECT * FROM processing_rows
+      WHERE org_id=$1 AND site_id=$2 AND ($4='' OR strpos(lower(title),lower($4))>0) AND ($5='all' OR status=$5) AND ($6='all' OR kind=$6))
       SELECT (SELECT COUNT(*)::int FROM filtered) AS total,
-        (SELECT COALESCE(jsonb_agg(result ORDER BY ${aggregateOrder}),'[]') FROM (SELECT * FROM filtered ORDER BY ${order} LIMIT $5 OFFSET $6) result) AS items`,
-      [session.org_id,session.site_id,search,status,pageSize,(page-1)*pageSize])).rows[0];
+        (SELECT COALESCE(jsonb_agg(result ORDER BY ${aggregateOrder}),'[]') FROM (SELECT * FROM filtered ORDER BY ${order} LIMIT $7 OFFSET $8) result) AS items`,
+      [session.org_id,session.site_id,session.principal_id,search,status,kind,pageSize,(page-1)*pageSize])).rows[0];
     return {items:row.items.map(processingJob),total:row.total,page,pageSize};
   });
 }
 
 export async function getProcessing(pool,session,id,{schema='public'}={}) {
+  processingJobId(id);
   return domainTransaction(pool,schema,async client=>{
     await requirePrincipal(client,session,'staff',readRoles);
-    const row=(await client.query(`SELECT j.id,j.kind,j.status,j.attempts,j.error,j.created_at,j.due_at,j.revision,j.lease_token,b.title,b.id AS briefing_id,
-      b.revision AS draft_revision,b.state AS draft_state,a.occurred_at AS archived_at
-      FROM jobs j JOIN briefings b ON b.id=j.briefing_id AND b.org_id=j.org_id AND b.site_id=j.site_id
-      LEFT JOIN briefing_archives a ON a.briefing_id=b.id AND a.org_id=b.org_id AND a.site_id=b.site_id
-      WHERE j.id=$1 AND j.org_id=$2 AND j.site_id=$3`,[id,session.org_id,session.site_id])).rows[0];
+    const row=(await client.query(`${processingRowsSql('postgres')} SELECT * FROM processing_rows
+      WHERE org_id=$1 AND site_id=$2 AND id=$4`,[session.org_id,session.site_id,session.principal_id,id])).rows[0];
     if(!row) throw new Error('Processing job unavailable');
-    return {...processingJob(row),progress:await preparationProgress(client,session,row)};
+    return {...processingJob(row),...(row.kind==='prepare'?{progress:await preparationProgress(client,session,row)}:{})};
   });
 }
 

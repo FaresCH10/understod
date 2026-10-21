@@ -9,6 +9,7 @@ import {rehearsalTasks,runWorkerCycle} from '../server/postgres/runtime.mjs';
 import {tokenHash,passwordMatches} from '../server/auth-crypto.mjs';
 import {openMail} from '../server/auth-mail.mjs';
 import {AUTH_MAIL_QUEUE_LIMIT} from '../server/auth-mail-budget.mjs';
+import {configureRuntimePermissions,verifyRuntimePermissions} from '../server/postgres/runtime-permissions.mjs';
 
 const options={schema:'understood_test_recovery'},password='Synthetic-recovery-password-123';
 const mail={available:true,key:Buffer.alloc(32,7),publicOrigin:'http://127.0.0.1:3031'};
@@ -44,6 +45,30 @@ async function fixture() {
   };
   return {db,pool,count,deliver,failAudit:value=>{failAudit=value;},loseCommit:()=>{lostCommit=true;}};
 }
+
+test('restricted worker prepares and journals recovery mail under account locks without changing credentials or sending externally',async()=>{
+  const f=await fixture(),role='understood_recovery_worker';
+  try{
+    const credentials=(await f.db.query('SELECT * FROM staff_credentials ORDER BY staff_id')).rows;
+    await requestRecovery(f.pool,{email:'a@example.test'},'worker-profile-fixture',mail,options);
+    await f.db.exec(`CREATE ROLE ${role} LOGIN`);
+    await configureRuntimePermissions(f.pool,{...options,role,profile:'worker',dedicatedDatabase:true,writersStopped:true});
+    await f.db.exec(`SET SESSION AUTHORIZATION ${role}`);
+    assert.equal((await verifyRuntimePermissions(f.pool,{...options,profile:'worker'})).profile,'worker');
+    let deliveries=0;
+    assert.equal(await processOneRecovery(f.pool,mail,{...options,send:async(_config,_id,message)=>{
+      deliveries++;assert.equal(message.email,'a@example.test');assert.match(message.text,/#reset-password\/[A-Za-z0-9_-]{43}/);
+      return {providerId:'synthetic-worker-delivery'};
+    }}),true);
+    assert.equal(deliveries,1);assert.equal(await f.count('staff_recovery_tokens'),1);
+    const journal=(await f.db.query('SELECT state,payload,provider_id FROM staff_recovery_mail')).rows[0];
+    assert.deepEqual(journal,{state:'sent',payload:null,provider_id:'synthetic-worker-delivery'});
+    assert.deepEqual((await f.db.query('SELECT * FROM staff_credentials ORDER BY staff_id')).rows,credentials);
+    assert.equal((await f.db.query("SELECT count(*)::int n FROM audit WHERE action='credential.recovery_queued'")).rows[0].n,1);
+    await assert.rejects(f.db.query('SELECT * FROM operator_sessions'),error=>error.code==='42501');
+    assert.equal(await processOneRecovery(f.pool,mail,{...options,send:async()=>assert.fail('Completed mail repeated')}),false);
+  }finally{await f.db.close();}
+});
 
 test('PostgreSQL full recovery outbox preserves credential, token and audit until notice capacity is available',async()=>{
   const {db,pool,deliver}=await fixture();try {

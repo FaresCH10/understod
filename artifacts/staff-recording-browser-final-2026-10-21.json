@@ -1,0 +1,356 @@
+{
+  "checkedAt": "2026-10-21T05:58:33.640Z",
+  "scope": "local-built-staff-inperson-recording",
+  "productionReady": false,
+  "fixturePort": 3236,
+  "sourceSha256": "a74f05915c9e392d6bbfe9b708c933a372e69955b9d18343ba9507f95ae4656c",
+  "viewports": [
+    {
+      "locale": "en",
+      "requestedWidth": 320,
+      "dialogClient": 264,
+      "dialogScroll": 264,
+      "dialogTop": 16,
+      "dialogWidth": 281,
+      "document": 305,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 320
+    },
+    {
+      "locale": "en",
+      "requestedWidth": 390,
+      "dialogClient": 334,
+      "dialogScroll": 334,
+      "dialogTop": 16,
+      "dialogWidth": 351,
+      "document": 375,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 390
+    },
+    {
+      "locale": "en",
+      "requestedWidth": 768,
+      "dialogClient": 703,
+      "dialogScroll": 703,
+      "dialogTop": 16,
+      "dialogWidth": 720,
+      "document": 753,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 768
+    },
+    {
+      "locale": "en",
+      "requestedWidth": 1440,
+      "dialogClient": 703,
+      "dialogScroll": 703,
+      "dialogTop": 16,
+      "dialogWidth": 720,
+      "document": 1425,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 1440
+    },
+    {
+      "locale": "ar",
+      "requestedWidth": 320,
+      "dialogClient": 264,
+      "dialogScroll": 264,
+      "dialogTop": 16,
+      "dialogWidth": 281,
+      "document": 305,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 320
+    },
+    {
+      "locale": "ar",
+      "requestedWidth": 390,
+      "dialogClient": 334,
+      "dialogScroll": 334,
+      "dialogTop": 16,
+      "dialogWidth": 351,
+      "document": 375,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 390
+    },
+    {
+      "locale": "ar",
+      "requestedWidth": 768,
+      "dialogClient": 703,
+      "dialogScroll": 703,
+      "dialogTop": 16,
+      "dialogWidth": 720,
+      "document": 753,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 768
+    },
+    {
+      "locale": "ar",
+      "requestedWidth": 1440,
+      "dialogClient": 703,
+      "dialogScroll": 703,
+      "dialogTop": 16,
+      "dialogWidth": 720,
+      "document": 1425,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 1440
+    },
+    {
+      "locale": "ur",
+      "requestedWidth": 320,
+      "dialogClient": 264,
+      "dialogScroll": 264,
+      "dialogTop": 16,
+      "dialogWidth": 281,
+      "document": 305,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 320
+    },
+    {
+      "locale": "ur",
+      "requestedWidth": 390,
+      "dialogClient": 334,
+      "dialogScroll": 334,
+      "dialogTop": 16,
+      "dialogWidth": 351,
+      "document": 375,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 390
+    },
+    {
+      "locale": "ur",
+      "requestedWidth": 768,
+      "dialogClient": 703,
+      "dialogScroll": 703,
+      "dialogTop": 16,
+      "dialogWidth": 720,
+      "document": 753,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 768
+    },
+    {
+      "locale": "ur",
+      "requestedWidth": 1440,
+      "dialogClient": 703,
+      "dialogScroll": 703,
+      "dialogTop": 16,
+      "dialogWidth": 720,
+      "document": 1425,
+      "headerTop": 17,
+      "outsideControls": [],
+      "overflowingButtons": [],
+      "width": 1440
+    }
+  ],
+  "samePreviewAcrossInterfaceLanguages": true,
+  "declaredLanguageDuringCapture": "ur",
+  "saveFocus": "Close recordings",
+  "confirmedClearFocus": "Close recordings",
+  "clearPendingFocus": "Check recording receipt",
+  "cancelKeptExactPreview": true,
+  "actualPageReloadVerified": true,
+  "recoveredWithoutAnotherUpload": true,
+  "privatePlayback": {
+    "readyState": 4,
+    "duration": 1,
+    "failed": false
+  },
+  "integrityFailureTruthfullyRejected": true,
+  "unavailableAndMalformedHistoryFailClosed": true,
+  "privateDiagnosticShown": false,
+  "contextMismatchLocked": true,
+  "manualSessionRecheckAndReturnVerified": true,
+  "history": {
+    "page1": {
+      "pagination": "Page 1 of 2",
+      "privatePlayers": 10,
+      "rows": 10
+    },
+    "page2": {
+      "pagination": "Page 2 of 2",
+      "privatePlayers": 4,
+      "rows": 5
+    }
+  },
+  "keyboardTabRemainedInModal": true,
+  "counters": {
+    "audioPosts": 3,
+    "receiptReads": 1,
+    "listReads": 13,
+    "noticeReads": 8,
+    "playbackReads": 1,
+    "otherPosts": 0,
+    "simulatedMicrophoneRequests": 4,
+    "seededRecordings": 12,
+    "externalCalls": 0,
+    "actualMicrophoneUsed": false,
+    "held": false,
+    "objects": 15,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "caseMessages": 0,
+    "caseStatus": "open",
+    "recordings": [
+      {
+        "request_id": "b8ad2f0d-a4bd-4456-8181-2a9e3c9c2e20",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:45:56.466Z"
+      },
+      {
+        "request_id": "6f1b5573-83cb-40e9-af7a-90a863759bb1",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:48:54.519Z"
+      },
+      {
+        "request_id": "cc4717df-b1b4-4eb2-866c-caf1a052f6a0",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "failed",
+        "received_at": null
+      },
+      {
+        "request_id": "8ff92d36-44a9-4468-9c01-00f536188e93",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.265Z"
+      },
+      {
+        "request_id": "39ba27fb-b3fc-4294-af99-ba7a67bd7a8e",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.282Z"
+      },
+      {
+        "request_id": "5c88aac5-73e1-4822-bf85-d56580127a87",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.297Z"
+      },
+      {
+        "request_id": "d030f660-03df-45f8-8cff-a0ec7046cb41",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.312Z"
+      },
+      {
+        "request_id": "5a6247c6-e32c-4b71-99d9-8ded1bb4084c",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.326Z"
+      },
+      {
+        "request_id": "c2a69263-7959-48fe-85e1-ae975a99dbb2",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.340Z"
+      },
+      {
+        "request_id": "81be1015-7900-4556-863f-db4dac1c4711",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.354Z"
+      },
+      {
+        "request_id": "c4e0dc97-c82e-4cf0-9e05-0552c13e0624",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.369Z"
+      },
+      {
+        "request_id": "c1fcd242-c878-43b4-8767-db3859c080d8",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.383Z"
+      },
+      {
+        "request_id": "0d4bed82-a326-4b99-be20-bf9332859e4e",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.397Z"
+      },
+      {
+        "request_id": "300210c1-7912-48f4-8ca7-38750d6f3c95",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "ur",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.410Z"
+      },
+      {
+        "request_id": "0834fe7f-1751-4a84-86e3-4bf71df5f6c1",
+        "actor_id": "owner",
+        "actor_role": "owner",
+        "language": "en",
+        "status": "received",
+        "received_at": "2026-10-21T05:53:48.422Z"
+      }
+    ]
+  },
+  "priorCandidateEvidence": "artifacts/staff-recording-browser-preliminary-2026-10-21.json",
+  "knownLimits": [
+    "Synthetic fixed-tone simulator only, not physical microphone, codec or phone acceptance",
+    "Pagination loading removes the focused page button; the next Tab remains inside the modal; explicit page-change focus is still to improve",
+    "Record action is inside the follow-up panel, not yet the exact side-by-side reference composition",
+    "No independent language or assistive-technology acceptance",
+    "No current migration095 native or hosted acceptance"
+  ],
+  "screenshots": [
+    "artifacts/staff-recording-final-en-desktop-2026-10-21.png",
+    "artifacts/staff-recording-final-ar-390-2026-10-21.png",
+    "artifacts/staff-recording-final-ur-320-2026-10-21.png"
+  ],
+  "fixtureLifecycle": {
+    "pid": 6752,
+    "creationTimeBeirut": "2026-10-21 08:44:03",
+    "shutdownRequested": true,
+    "exitCodeObserved": false
+  }
+}

@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import {PGlite} from '@electric-sql/pglite';
 import {openDatabase} from '../server/db.mjs';
 import {seed} from '../server/seed.mjs';

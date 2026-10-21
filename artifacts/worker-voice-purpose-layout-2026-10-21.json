@@ -1,0 +1,281 @@
+{
+  "noticeGates": [
+    {
+      "mode": "fail-notice",
+      "recordingDisabled": true,
+      "privateDiagnosticShown": false
+    },
+    {
+      "mode": "invalid-notice",
+      "recordingDisabled": true,
+      "privateDiagnosticShown": false
+    },
+    {
+      "mode": "wrong-notice-language",
+      "recordingDisabled": true,
+      "privateDiagnosticShown": false
+    }
+  ],
+  "permissionCopy": [
+    {
+      "locale": "en",
+      "purpose": "help",
+      "verified": true
+    },
+    {
+      "locale": "ar",
+      "purpose": "reply",
+      "verified": true
+    },
+    {
+      "locale": "ur",
+      "purpose": "reply",
+      "verified": true
+    }
+  ],
+  "measurements": [
+    {
+      "document": 305,
+      "locale": "en",
+      "recorders": [
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        },
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        }
+      ],
+      "requestedWidth": 320,
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "en",
+      "recorders": [
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        },
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        }
+      ],
+      "requestedWidth": 390,
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "en",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 768,
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "en",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 1440,
+      "width": 1440
+    },
+    {
+      "document": 305,
+      "locale": "ar",
+      "recorders": [
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        },
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        }
+      ],
+      "requestedWidth": 320,
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "ar",
+      "recorders": [
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        },
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        }
+      ],
+      "requestedWidth": 390,
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "ar",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 768,
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "ar",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 1440,
+      "width": 1440
+    },
+    {
+      "document": 305,
+      "locale": "ur",
+      "recorders": [
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        },
+        {
+          "client": 233,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 233
+        }
+      ],
+      "requestedWidth": 320,
+      "width": 320
+    },
+    {
+      "document": 375,
+      "locale": "ur",
+      "recorders": [
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        },
+        {
+          "client": 303,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 303
+        }
+      ],
+      "requestedWidth": 390,
+      "width": 390
+    },
+    {
+      "document": 753,
+      "locale": "ur",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 768,
+      "width": 768
+    },
+    {
+      "document": 1425,
+      "locale": "ur",
+      "recorders": [
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        },
+        {
+          "client": 616,
+          "outsideButtons": [],
+          "overflowingButtons": [],
+          "scroll": 616
+        }
+      ],
+      "requestedWidth": 1440,
+      "width": 1440
+    }
+  ],
+  "screenshots": [
+    "D:/understod/artifacts/worker-voice-purpose-ur-390-2026-10-21.png"
+  ]
+}

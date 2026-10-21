@@ -15,6 +15,8 @@ import {readPreparationFingerprint} from '../server/postgres/preparation-fingerp
 import {resolveAssessmentAdapter,assessmentInputHash} from '../server/ai/assessment-config.mjs';
 import {bundleHash} from '../server/ai/prepared-bundle.mjs';
 import {regenerateDraftTarget} from '../server/postgres/regeneration.mjs';
+import {getProcessingProvenance} from '../server/postgres/processing-provenance.mjs';
+import {checkedProviderHistory} from '../src/processing-provenance.ts';
 
 const env={UNDERSTOOD_PREPARATION_ADAPTER:'gemini-free',UNDERSTOOD_TIER:'local',UNDERSTOOD_AI_MODE:'synthetic',UNDERSTOOD_ACCESS_MODE:'credential',UNDERSTOOD_DATA_CLASS:'synthetic',GEMINI_API_KEY:'test-only'};
 const source='Finished items go on blue. Unfinished items go on yellow.',facts=['Finished items go on blue.','Unfinished items go on yellow.'];
@@ -38,7 +40,7 @@ function adapterFor(input,calls,onCall=async()=>{},content={title:'Shelves',fact
   translation:{title:'تعليمات الرفوف',text:'ضع العناصر المكتملة على الرف الأزرق وغير المكتملة على الرف الأصفر.',question:'أين ستضع العناصر المكتملة وغير المكتملة؟'}}) {
   return resolvePreparationAdapter({...env,UNDERSTOOD_SYNTHETIC_PREPARATION_HASHES:JSON.stringify([preparationInputHash(input)])},{fetchImpl:async(url,options)=>{
     const body=JSON.parse(options.body);calls.push({url,body});await onCall(calls.length);
-    if(url.includes(GEMINI_MODELS.speech))return Response.json({candidates:[{finishReason:'STOP',content:{parts:[{inlineData:{mimeType:'audio/wav',data:audio.toString('base64')}}]}}]});
+    if(body.model===GEMINI_MODELS.speech)return Response.json({status:'completed',model:GEMINI_MODELS.speech,steps:[{type:'model_output',content:[{type:'audio',mime_type:'audio/wav',data:audio.toString('base64')}]}]});
     const fields=body.generationConfig.responseFormat.text.schema.properties;
     const result=fields.askedFacts?{title:content.title,facts:content.facts,question:content.question,askedFacts:content.askedFacts}
       :fields.factEvidence?{sourceGrounded:true,questionAligned:true,ambiguous:false,factEvidence:content.facts.map((quote,factIndex)=>({factIndex,quote})),askedFactIndexes:content.askedFacts.map(fact=>content.facts.indexOf(fact)),reasons:[]}
@@ -121,6 +123,10 @@ test('scheduled English/Arabic generation meters all stages and publishes exact 
     const bundle=(await f.db.query('SELECT * FROM generated_bundles')).rows[0];assert.equal(bundle.provider_operation_count,8);
     const links=(await f.db.query('SELECT operation_id FROM generated_bundle_operations WHERE bundle_id=$1',[bundle.id])).rows;
     assert.deepEqual(links.map(row=>row.operation_id).sort(),operations.map(row=>row.id).sort());
+    const history=await getProcessingProvenance(f.pool,owner,f.queued.id);assert.equal(history.total,8);assert.equal(new Set(history.items.map(row=>row.runId)).size,1);
+    assert.ok(history.items.every(row=>row.resultReference==='bundle' && row.provenance && row.stage && row.requests.length===1));
+    checkedProviderHistory(history,{id:f.queued.id,kind:'prepare',publication_id:null,publication_version:null,assignment_id:null},1);
+    assert.doesNotMatch(JSON.stringify(history),/rootHash|argumentsHash|providerHash|input_hash|claim_token|Finished items|askedFacts/);
     await assert.rejects(f.db.query('UPDATE generated_bundles SET provider_operation_count=NULL WHERE id=$1',[bundle.id]),/immutable/);
     await assert.rejects(f.db.exec('DELETE FROM generated_bundle_operations'),/append-only/);
     await assert.rejects(f.db.query('UPDATE provider_operations SET preparation_context_json=$2 WHERE id=$1',[operations[0].id,'{}']),/append-only|immutable/);

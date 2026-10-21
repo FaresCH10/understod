@@ -10,7 +10,7 @@ function probeBytes() {
   return bytes;
 }
 export async function processStorageProbe(pool,storage,{schema='public',adapter='local',enabled=false}={}) {
-  if(typeof enabled!=='boolean' || !['local','r2'].includes(adapter))throw Error('Invalid storage health configuration');
+  if(typeof enabled!=='boolean' || !['local','r2','neon'].includes(adapter))throw Error('Invalid storage health configuration');
   const run=fn=>domainTransaction(pool,schema,fn);
   const claim=await run(async client=>{
     // Serialize only admission; no database transaction stays open during storage I/O.

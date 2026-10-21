@@ -6,7 +6,8 @@ import { mkdtemp,rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { inspectWav } from '../server/audio.mjs';
-import { r2AudioStore,localAudioStore } from '../server/private-storage.mjs';
+import { r2AudioStore,localAudioStore,neonAudioStore,hostedPrivateAudioStore } from '../server/private-storage.mjs';
+import {createHash} from 'node:crypto';
 
 function wav() {
   const bytes = Buffer.alloc(32044);
@@ -99,4 +100,50 @@ test('R2 adapter rejects configuration, corrupt/oversize data and redacts provid
   await assert.rejects(() => huge.read(row), /integrity/);
   const failure = r2AudioStore(config, { client: { async send() { throw new Error(config.secretAccessKey); } } });
   await assert.rejects(() => failure.read(row), { message: 'Private storage operation failed' });
+});
+
+const neonConfig={endpoint:'https://br-synthetic-fixture.storage.c-1.eu-central-1.aws.neon.tech',
+  region:'eu-central-1',bucket:'understood-synthetic-test',accessKeyId:'fixture-access',secretAccessKey:'fixture-private-secret'};
+
+test('Neon adapter retains scoped WAV/source integrity, conditional creation, definite absence and redacted failures',async()=>{
+  const objects=new Map(),commands=[],bytes=wav(),original=Buffer.from('Synthetic original source bytes');
+  const row={id:randomUUID(),org_id:'synthetic',site_id:'test',...inspectWav(bytes)};
+  const source={...row,bytes:original.length,sha256:createHash('sha256').update(original).digest('hex')};
+  let destroyed=0;
+  const client={async send(command,options){
+    commands.push(command);assert.ok(options.abortSignal);const {Key,Body,Metadata}=command.input;
+    assert.equal(command.input.Bucket,neonConfig.bucket);
+    if(command.constructor.name==='ListObjectsV2Command')return {KeyCount:objects.size?1:0,IsTruncated:false,Contents:objects.size?[{Key:[...objects.keys()][0]}]:[]};
+    if(command.constructor.name==='PutObjectCommand'){
+      assert.equal(command.input.IfNoneMatch,'*');assert.equal(command.input.ACL,undefined);
+      assert.equal(command.input.CacheControl,'private, no-store');
+      if(objects.has(Key))throw Object.assign(Error('fixture-private-secret'),{$metadata:{httpStatusCode:412}});
+      objects.set(Key,{bytes:Buffer.from(Body),metadata:Metadata});return {};
+    }
+    if(command.constructor.name==='DeleteObjectCommand'){objects.delete(Key);return {};}
+    const object=objects.get(Key);if(!object)throw Object.assign(Error('fixture-private-secret'),{$metadata:{httpStatusCode:404}});
+    if(command.constructor.name==='HeadObjectCommand')return {ContentLength:object.bytes.length};
+    if(command.constructor.name==='GetObjectCommand')return {ContentLength:object.bytes.length,Body:Readable.from([object.bytes])};
+    throw Error('Unexpected storage command');
+  },destroy(){destroyed++;}};
+  const store=hostedPrivateAudioStore({storageAdapter:'neon',storageConfig:neonConfig},{client});
+  assert.equal(await store.isEmpty(),true);assert.equal(await store.exists(row),false);assert.equal(await store.existsOriginal(source),false);
+  await store.save(row,bytes);await store.saveOriginal(source,original);
+  assert.equal(await store.isEmpty(),false);assert.equal(await store.exists(row),true);assert.equal(await store.existsOriginal(source),true);
+  assert.deepEqual(await store.read(row),bytes);assert.deepEqual(await store.readOriginal(source),original);
+  await assert.rejects(store.save(row,bytes),{message:'Private storage operation failed'});
+  await assert.rejects(store.saveOriginal(source,original),{message:'Private storage operation failed'});
+  await assert.rejects(store.read({...row,org_id:'../other'}),/Invalid private/);
+  await assert.rejects(store.read({...row,sha256:'wrong'}),/integrity/);
+  await assert.rejects(store.readOriginal({...source,sha256:'wrong'}),/integrity/);
+  await store.remove(row);await store.removeOriginal(source);
+  assert.equal(await store.exists(row),false);assert.equal(await store.existsOriginal(source),false);assert.equal(await store.isEmpty(),true);
+  assert.ok(commands.some(command=>command.input.Key?.endsWith('.source-original')));
+  store.close();assert.equal(destroyed,1);
+  assert.throws(()=>neonAudioStore({...neonConfig,endpoint:'https://foreign.invalid'},{client}),/configuration/);
+  assert.throws(()=>hostedPrivateAudioStore({storageAdapter:'unknown',storageConfig:neonConfig},{client}),/adapter/);
+  for(const method of ['read','readOriginal','exists','existsOriginal']){
+    const failure=neonAudioStore(neonConfig,{client:{async send(){throw Object.assign(Error('fixture-private-secret'),{$metadata:{httpStatusCode:403}});}}});
+    await assert.rejects(failure[method](method.endsWith('Original')?source:row),{message:'Private storage operation failed'});
+  }
 });

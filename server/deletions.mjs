@@ -1,6 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import {NOW,transaction} from './db.mjs';
 import {deletionInput,deletionFilters} from './deletion-input.mjs';
+import {applicationCleanupEvidence} from './deletion-scope.mjs';
 import {ensureRecordingSchema} from './recordings.mjs';
 import {ensureDeletionRedactionSchema} from './deletion-redactions.mjs';
 
@@ -74,7 +75,7 @@ export function listPrivacyWorkers(db,session,filters={}){
     const total=db.prepare(`SELECT count(*) AS count ${from} ${where}`).get(...values).count;
     const items=db.prepare(`SELECT w.id,w.code,w.active,${state} AS deletion_status,d.created_at AS requested_at,c.completed_at
       ${from} ${where} ORDER BY w.code COLLATE NOCASE,w.id LIMIT ? OFFSET ?`).all(...values,pageSize,(page-1)*pageSize)
-      .map(row=>({...row,active:!!row.active}));
+      .map(row=>({...row,active:!!row.active,cleanupEvidence:applicationCleanupEvidence()}));
     return {items,total,page,pageSize};
   });
 }
@@ -88,7 +89,7 @@ export function getWorkerDeletion(db,session,workerId){
     LEFT JOIN worker_deletion_pseudonyms p ON p.request_id=d.id LEFT JOIN worker_deletion_completions c ON c.request_id=d.id
     WHERE d.worker_id=? AND d.org_id=? AND d.site_id=?`).get(workerId,session.org_id,session.site_id);
   return row?{id:row.id,workerId:row.worker_id,reason:row.reason,createdAt:row.created_at,completedAt:row.completed_at,
-    status:row.completed_at?'complete':'queued',contentRedactedAt:row.redacted_at,identityPseudonymizedAt:row.pseudonymized_at}:null;
+      status:row.completed_at?'complete':'queued',contentRedactedAt:row.redacted_at,identityPseudonymizedAt:row.pseudonymized_at,cleanupEvidence:applicationCleanupEvidence()}:null;
 }
 
 export function requestWorkerDeletion(db,session,workerId,input){
@@ -99,7 +100,7 @@ export function requestWorkerDeletion(db,session,workerId,input){
     if(old){
       if(old.org_id!==session.org_id || old.site_id!==session.site_id || old.actor_id!==session.principal_id
         || old.worker_id!==workerId || old.fingerprint!==fingerprint)throw new Error('Deletion request conflict');
-      return {id:old.id,status:db.prepare('SELECT 1 FROM worker_deletion_completions WHERE request_id=?').get(old.id)?'complete':'queued',duplicate:true};
+      return {id:old.id,status:db.prepare('SELECT 1 FROM worker_deletion_completions WHERE request_id=?').get(old.id)?'complete':'queued',duplicate:true,cleanupEvidence:applicationCleanupEvidence()};
     }
     const worker=db.prepare('SELECT * FROM workers WHERE id=? AND org_id=? AND site_id=?').get(workerId,session.org_id,session.site_id);
     if(!worker)throw new Error('Worker unavailable');
@@ -113,6 +114,6 @@ export function requestWorkerDeletion(db,session,workerId,input){
     db.prepare(`UPDATE recordings SET status='failed',transcript=NULL,lease_token=NULL,lease_until=NULL,retry_at=NULL,error='Worker deletion pending'
       WHERE status<>'storing' AND assignment_id IN (SELECT id FROM assignments WHERE worker_id=?)`).run(workerId);
     db.prepare('INSERT INTO audit VALUES(?,?,?,?,?,?,?,?)').run(randomUUID(),session.org_id,session.site_id,'staff',session.principal_id,'worker.deletion.requested',workerId,now);
-    return {id:input.requestId,status:'queued',duplicate:false};
+    return {id:input.requestId,status:'queued',duplicate:false,cleanupEvidence:applicationCleanupEvidence()};
   });
 }

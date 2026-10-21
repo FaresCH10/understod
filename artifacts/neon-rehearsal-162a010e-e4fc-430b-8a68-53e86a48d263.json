@@ -1,0 +1,41 @@
+{
+  "startedAt": "2026-10-14T17:11:35.667Z",
+  "updatedAt": "2026-10-14T17:12:35.010Z",
+  "runId": "162a010e-e4fc-430b-8a68-53e86a48d263",
+  "schema": "understood_neon_test_162a010ee4fc430b8a6853e86a48d263",
+  "kind": "isolated-synthetic-database",
+  "state": "passed",
+  "checks": [
+    "verified-tls-empty-target",
+    "migration-checksums-and-exact-replay",
+    "concurrent-publication-exactly-once",
+    "concurrent-submission-exactly-once",
+    "concurrent-claimed-assessment-exactly-once",
+    "cross-tenant-foreign-key-and-reader-denial",
+    "immutable-publication-and-audit",
+    "exact-publication-provider-history-without-invented-journal"
+  ],
+  "cleanup": "verified-removed",
+  "productionVerdict": false,
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "phase": "finished",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "migrationsApplied": 86,
+  "committedCounts": {
+    "publications": 1,
+    "publication_requests": 1,
+    "assignments": 1,
+    "attempts": 1,
+    "submission_receipts": 1,
+    "assessment_jobs": 1
+  },
+  "denials": {
+    "foreignKey": "23503",
+    "publication": "23514",
+    "audit": "23514",
+    "foreignReader": "unavailable"
+  },
+  "outsideCatalogIdentitiesUnchanged": true
+}

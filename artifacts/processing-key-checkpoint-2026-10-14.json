@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-14T10:18:11Z",
+  "overallEstimate": 65,
+  "uncertaintyRange": [58,71],
+  "appHelpersEstimate": 80,
+  "processingRecoveryEstimate": 80,
+  "liveSyntheticAiEstimate": 45,
+  "productionReady": false,
+  "realDataAllowed": false,
+  "finalSuite": {"tests":967,"pass":963,"fail":0,"skip":4,"durationMs":255519.1153,"exitCode":0,"evidence":"artifacts/processing-key-verified-suite-2026-10-14.log"},
+  "build": {"passed":true,"modules":2060,"entryKb":638.79,"existingWarnings":true},
+  "originalPreservation": {"matchingTables":8,"integrity":"ok","foreignKeyViolations":0,"migrated":false,"previewsRestarted":false},
+  "secretContainment": {"scannedFiles":1353,"currentKeyMatches":0,"publicKeyMatches":0,"exampleBlank":true},
+  "liveTypedAssessment": {"passedCases":4,"maxRequests":4,"actualRequests":4,"evidence":"artifacts/gemini-synthetic-assessment-1791972360409.json"},
+  "liveWorkflow": {"complete":false,"passedStages":3,"externalRequests":9,"maxRequests":15,"lastStatus":429,"preparationReady":true,"publicationAssigned":3,"voiceTranscriptionTested":false,"evidence":"artifacts/gemini-workflow-ece9080e-052b-4b01-bd29-7cfcde39359b.json"},
+  "browserFixture": {"terminal":true,"posts":5,"newReceipts":3,"processingAuditsIncludingSeed":4,"protectedTablesUnchanged":7,"externalCalls":0,"tabClosed":true,"viewportReset":true},
+  "neededOwnedCommandsTerminal": true,
+  "goalAchieved": false
+}

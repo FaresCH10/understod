@@ -53,15 +53,15 @@ export function getGlossaryTerm(db,session,id,input={}) {
 }
 export function glossaryReceipt(db,session,requestId) {
   glossaryRequestId(requestId);briefingAuthority(db,session);
-  const row=db.prepare('SELECT request_json,result_json FROM glossary_requests WHERE request_id=? AND org_id=? AND site_id=?').get(requestId,session.org_id,session.site_id);
+  const row=db.prepare('SELECT request_json,result_json FROM glossary_requests WHERE request_id=? AND org_id=? AND site_id=? AND created_by=?').get(requestId,session.org_id,session.site_id,session.principal_id);
   return row ? {found:true,request:JSON.parse(row.request_json),result:JSON.parse(row.result_json)} : {found:false};
 }
 export function changeGlossary(db,session,kind,id,input) {
   const change=glossaryInput(kind,id,input);
   return transaction(db,()=>{
     briefingAuthority(db,session);
-    const old=db.prepare('SELECT request_json,result_json FROM glossary_requests WHERE request_id=? AND org_id=? AND site_id=?').get(input.requestId,session.org_id,session.site_id);
-    if(old) {if(glossarySignature(JSON.parse(old.request_json))!==glossarySignature(change)) throw new Error('Glossary request conflict');return {...JSON.parse(old.result_json),duplicate:true};}
+    const old=db.prepare('SELECT request_json,result_json,created_by FROM glossary_requests WHERE request_id=? AND org_id=? AND site_id=?').get(input.requestId,session.org_id,session.site_id);
+    if(old) {if(old.created_by!==session.principal_id || glossarySignature(JSON.parse(old.request_json))!==glossarySignature(change)) throw new Error('Glossary request conflict');return {...JSON.parse(old.result_json),duplicate:true};}
     const current=kind==='create' ? null : db.prepare('SELECT t.*,v.content_json FROM glossary_terms t JOIN glossary_versions v ON v.term_id=t.id AND v.revision=t.revision WHERE t.id=? AND t.org_id=? AND t.site_id=?').get(id,session.org_id,session.site_id);
     if(kind!=='create' && !current) throw new Error('Glossary term unavailable');
     if(current && current.revision!==change.revision) throw new Error('Glossary revision changed');

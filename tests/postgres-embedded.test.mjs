@@ -40,6 +40,8 @@ test('embedded PostgreSQL executes migration and protects tenant, site, receipt 
       '081_briefing_expiry_origins.sql',
       '082_restore_briefing_redactions.sql',
       '083_restore_cleanup_transitions.sql',
+      '084_export_retry_receipts.sql', '085_preparation_request_receipts.sql', '086_processing_retry_receipts.sql', '087_neon_storage_health.sql', '088_operator_column_boundary.sql', '089_provider_verification_authorities.sql', '090_provider_verification_jobs.sql', '091_provider_verification_workers.sql', '092_worker_identity_locks.sql', '093_clarification_action_receipts.sql',
+      '094_staff_clarification_creations.sql', '095_staff_inperson_recordings.sql',
     ]);
     assert.deepEqual(await runMigrations(pool), []);
     await db.query("INSERT INTO organizations(id,name) VALUES ('org-a','A'),('org-b','B')");

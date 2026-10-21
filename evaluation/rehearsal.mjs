@@ -9,11 +9,13 @@ import {createWorker} from '../server/postgres/people.mjs';
 import {receiveSourceAudio,getSourceAudioReceipt,getSourceAudio} from '../server/postgres/source-audio.mjs';
 import {queuePreparation,editDraft} from '../server/postgres/preparation.mjs';
 import {readGlossarySnapshot} from '../server/postgres/glossary.mjs';
-import {publish,submitAnswer} from '../server/postgres/domain.mjs';
+import {domainTransaction,publish,submitAnswer} from '../server/postgres/domain.mjs';
 import {getAssignmentSpeech} from '../server/postgres/generated-audio.mjs';
 import {receiveRecording} from '../server/postgres/recordings.mjs';
 import {requestHelp} from '../server/postgres/clarifications.mjs';
 import {queueCaseFollowup,followupReceipt,getCaseFollowupAudio} from '../server/postgres/case-followups.mjs';
+import {receiveCaseVoice,caseVoiceReceipt,getCaseVoiceAudio} from '../server/postgres/case-voice.mjs';
+import {privateObjectInventory} from '../server/postgres/backup.mjs';
 import {readPublicationReport} from '../server/postgres/reports.mjs';
 import {rehearsalTasks} from '../server/postgres/runtime.mjs';
 import {resolveSourceTranscription} from '../server/ai/source-transcription-config.mjs';
@@ -30,10 +32,12 @@ import {encodeWav} from '../src/audio.ts';
 import {sourceTranscriptionInputHash,recordingTranscriptionInputHash} from '../server/ai/audio-provenance.mjs';
 import {caseFollowupInputHash} from '../server/ai/case-followup-bundle.mjs';
 import {preparationBundleOperations} from '../server/postgres/preparation-evidence.mjs';
+import {configureRuntimePermissions,verifyRuntimePermissions} from '../server/postgres/runtime-permissions.mjs';
 
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const wav=amplitude=>Buffer.from(encodeWav({duration:1,sampleRate:16000,numberOfChannels:1,
   getChannelData:()=>Float32Array.from({length:16000},(_,i)=>Math.sin(i/10)*amplitude)}));
+export const PIPELINE_AUDIO_HASHES=Object.freeze([.2,.15,.25,.18].map(amplitude=>hash(wav(amplitude))));
 const faithful={faithful:true,complete:true,languageCorrect:true,terminologyApplied:true,reasons:[]};
 const freeze=value=>{if(value && typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};
 export const PIPELINE_DATASET=evaluationDataset(JSON.parse(readFileSync(new URL('./pipeline-v1.json',import.meta.url),'utf8')));
@@ -50,26 +54,70 @@ function privateMemoryStore() {
 
 // No caller-supplied connection, credential, provider transport or fixture content.
 export async function runPipelineRehearsal({onStage=()=>{}}={}) {
+  return runSyntheticPipeline({onStage,storage:privateMemoryStore(),storageAdapter:'scoped-in-memory-fixture'});
+}
+
+// Only the storage transport varies: data, in-memory DB and provider responses
+// remain fixed. Live use belongs to the explicitly confirmed Neon test runner.
+export async function runPrivateStorageApplicationRehearsal(storage,{onStage=()=>{},onInventory=()=>{}}={}) {
+  if(!['save','read','remove','exists','saveOriginal','readOriginal','removeOriginal','existsOriginal']
+    .every(method=>typeof storage?.[method]==='function'))throw Error('Complete private test storage is required');
+  return runSyntheticPipeline({onStage,onInventory,storage,storageAdapter:'explicit-private-test-adapter'});
+}
+
+async function runSyntheticPipeline({onStage,storage,storageAdapter,onInventory=()=>{}}) {
   const startedAt=new Date().toISOString(),schema=`understood_test_pipeline_${randomUUID().replaceAll('-','')}`;
   const db=new PGlite(),pool={async connect(){return {query:async(sql,args)=>args?.length ? db.query(sql,args) : (await db.exec(sql)).at(-1) ?? {rows:[]},release(){}};}};
-  const options={schema},checks=[],storage=privateMemoryStore(),mock=scriptedProvider();
-  const check=async(name,operation)=>{await onStage(name);await operation();checks.push({name,status:'passed'});};
+  const options={schema},checks=[],mock=scriptedProvider();
   const env={UNDERSTOOD_TIER:'local',UNDERSTOOD_AI_MODE:'synthetic',UNDERSTOOD_ACCESS_MODE:'credential',UNDERSTOOD_DATA_CLASS:'synthetic',GEMINI_API_KEY:'scripted-provider-only-not-a-key'};
   const config={...options,tier:'local',aiMode:'synthetic',accessMode:'credential',integrationMode:'synthetic',dataClass:'synthetic'};
+  const apiRole='understood_pipeline_api',workerRole='understood_pipeline_worker',workerStages=new Set(),apiStages=new Set(),maintenanceStages=[];
+  let workerTaskActive=false,apiTaskActive=false,workerTaskExecutions=0,apiTaskExecutions=0,workerPolicy,apiPolicy;
+  const identity=async()=>{
+    const row=(await db.query('SELECT current_user AS current,session_user AS session')).rows[0];
+    assert.equal(row.current,row.session);assert.ok(['postgres',apiRole,workerRole].includes(row.session));return row.session;
+  };
+  // PGlite has one SQL session: switch only around a whole awaited operation,
+  // and restore its caller's identity after nested worker/maintenance work.
+  const inRole=async(role,operation)=>{
+    const previous=await identity();if(previous!==role)await db.exec(`SET SESSION AUTHORIZATION ${role}`);
+    try{assert.equal(await identity(),role);return await operation();}
+    finally{
+      try{assert.equal(await identity(),role);}
+      finally{if(previous!==role)await db.exec(`SET SESSION AUTHORIZATION ${previous}`);assert.equal(await identity(),previous);}
+    }
+  };
+  const maintenance=async(name,operation)=>inRole('postgres',async()=>{const result=await operation();maintenanceStages.push(name);return result;});
+  const check=async(name,operation)=>{
+    await onStage(name);assert.equal(apiTaskActive,false);apiTaskActive=true;
+    try{await inRole(apiRole,operation);apiTaskExecutions++;apiStages.add(name);checks.push({name,status:'passed'});}
+    finally{apiTaskActive=false;}
+  };
+  const pipelineTasks=stageConfig=>Object.fromEntries(Object.entries(rehearsalTasks(pool,storage,stageConfig)).map(([name,task])=>[name,async()=>{
+    assert.equal(workerTaskActive,false,'Pipeline worker tasks must stay serialized');workerTaskActive=true;
+    try {
+      const result=await inRole(workerRole,task);workerTaskExecutions++;workerStages.add(name);return result;
+    }finally{workerTaskActive=false;}
+  }]));
   const session=token=>requireSession(pool,{headers:{cookie:`understood_session=${token}`}},options);
   const publication=PIPELINE_DATASET.publications[0],content={title:'Carton handover',facts:publication.askedFacts,question:publication.question,askedFacts:publication.askedFacts};
   const english={title:content.title,text:publication.source,question:publication.question};
   const arabic={title:'تسليم الصناديق',text:'ضع 12 صندوقاً في المنطقة 4. أبق المخرج خالياً.',question:publication.languageQuestions.ar};
-  const sourceBytes=wav(.2),answerBytes=wav(.15),speechBytes=wav(.25);
-  let owner,scope,draftId,pub,snapshot,typedEvaluation,recordedEvaluation,sourceEvidence,preparationEvidence,followupEvidence,metrics;
+  const sourceBytes=wav(.2),answerBytes=wav(.15),speechBytes=wav(.25),voiceBytes=wav(.18);
+  let owner,scope,draftId,pub,snapshot,typedEvaluation,recordedEvaluation,sourceEvidence,preparationEvidence,followupEvidence,metrics,voice;
   const workers=[],bindings=[];
   try {
     await db.exec(`CREATE SCHEMA ${schema};SET search_path TO ${schema},pg_catalog`);await runMigrations(pool,options);
+    await db.exec(`CREATE ROLE ${apiRole} LOGIN;CREATE ROLE ${workerRole} LOGIN`);
+    await configureRuntimePermissions(pool,{...options,role:apiRole,profile:'application',dedicatedDatabase:true,writersStopped:true});
+    await configureRuntimePermissions(pool,{...options,role:workerRole,profile:'worker',dedicatedDatabase:true,writersStopped:true});
+    await inRole(apiRole,async()=>{apiPolicy=await verifyRuntimePermissions(pool,{...options,role:apiRole,profile:'application'});});
+    await inRole(workerRole,async()=>{workerPolicy=await verifyRuntimePermissions(pool,{...options,role:workerRole,profile:'worker'});});
     await check('credential_bootstrap_and_worker_grants',async()=>{
       const input={requestId:randomUUID(),synthetic:true,confirmed:true,organizationName:'Synthetic pipeline workshop',siteName:'Synthetic Beirut site',
         timezone:'Asia/Beirut',generationLanguages:['en','ar'],supportEmail:'support@example.test',
         owner:{name:'Synthetic owner',email:'pipeline-owner@example.test',password:`Synthetic-${randomBytes(20).toString('hex')}`}};
-      scope=await bootstrapWorkspace(pool,input,config);assert.equal((await bootstrapWorkspace(pool,input,config)).duplicate,true);
+      await maintenance('workspace-bootstrap',async()=>{scope=await bootstrapWorkspace(pool,input,config);assert.equal((await bootstrapWorkspace(pool,input,config)).duplicate,true);});
       const login=await authenticateStaff(pool,input.owner.email,input.owner.password,'synthetic-pipeline',options);owner=await session(login.session.token);
       assert.equal(owner.principal_id,scope.ownerId);
       for(const [index,language] of [...PIPELINE_DATASET.samples.map(item=>item.language),'ar'].entries()) {
@@ -79,23 +127,25 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
         workers.push({id:worker.id,grantId:grant.id,token:redeemed.token,session:await session(redeemed.token)});
       }
       // Maintenance policies in this fresh disposable schema, not fabricated business results.
-      await db.query(`INSERT INTO provider_policies(scope_key,org_id,revision,enabled,max_daily_requests)
+      await maintenance('provider-policy-fixture',async()=>{await db.query(`INSERT INTO provider_policies(scope_key,org_id,revision,enabled,max_daily_requests)
         VALUES('global',NULL,1,true,24),($1,$2,1,true,24)`,[`tenant:${scope.orgId}`,scope.orgId]);
-      await db.exec("INSERT INTO system_controls(id,revision,jobs_paused,provider_paused) VALUES('global',1,false,false)");
+      await db.exec("INSERT INTO system_controls(id,revision,jobs_paused,provider_paused) VALUES('global',1,false,false)");});
     });
     await check('private_source_upload_transcription_and_replay',async()=>{
       const input={requestId:randomUUID(),title:'Synthetic carton source',originalType:'audio/wav',generationLanguages:['en','ar']};
       const receipt=await receiveSourceAudio(pool,owner,input,sourceBytes,sourceBytes,storage,options);draftId=input.requestId;
       assert.equal(receipt.status,'received');assert.equal((await receiveSourceAudio(pool,owner,input,sourceBytes,sourceBytes,storage,options)).duplicate,true);
       assert.deepEqual(await getSourceAudio(pool,owner,draftId,storage,'canonical',options),sourceBytes);
+      assert.deepEqual(await getSourceAudio(pool,owner,draftId,storage,'original',options),sourceBytes);
       await assert.rejects(getSourceAudio(pool,workers[0].session,draftId,storage,'canonical',options),/Forbidden/);
+      await assert.rejects(getSourceAudio(pool,workers[0].session,draftId,storage,'original',options),/Forbidden/);
       mock.transcription('source',sourceBytes,publication.source);
       const sourceAdapter=resolveSourceTranscription({...env,UNDERSTOOD_SOURCE_TRANSCRIPTION:'gemini-free',
         UNDERSTOOD_SYNTHETIC_AUDIO_HASHES:JSON.stringify([hash(sourceBytes)])},{fetchImpl:mock.fetchImpl});
-      const tasks=rehearsalTasks(pool,storage,{...config,sourceAdapter});
-      await db.exec("UPDATE system_controls SET provider_paused=true WHERE id='global'");
+      const tasks=pipelineTasks({...config,sourceAdapter});
+      await maintenance('pause-provider',()=>db.exec("UPDATE system_controls SET provider_paused=true WHERE id='global'"));
       assert.equal(await tasks.sourceTranscription(),false);assert.equal(mock.requestCount,0);
-      await db.exec("UPDATE system_controls SET provider_paused=false WHERE id='global'");
+      await maintenance('resume-provider',()=>db.exec("UPDATE system_controls SET provider_paused=false WHERE id='global'"));
       assert.equal(await tasks.sourceTranscription(),true);assert.equal(await tasks.sourceTranscription(),false);
       const completed=await getSourceAudioReceipt(pool,owner,draftId,options);assert.equal(completed.status,'transcribed');assert.equal(completed.briefingId,draftId);
       assert.equal((await db.query('SELECT source FROM briefings WHERE id=$1',[draftId])).rows[0].source,publication.source);
@@ -117,7 +167,7 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
       const preparationAdapter=resolvePreparationAdapter({...env,UNDERSTOOD_PREPARATION_ADAPTER:'gemini-free',
         UNDERSTOOD_SYNTHETIC_PREPARATION_HASHES:JSON.stringify([preparationInputHash(input)])},{fetchImpl:mock.fetchImpl});
       await queuePreparation(pool,owner,draftId,1,options);
-      const tasks=rehearsalTasks(pool,storage,{...config,preparationAdapter});assert.equal(await tasks.preparation(),true);assert.equal(await tasks.preparation(),false);
+      const tasks=pipelineTasks({...config,preparationAdapter});assert.equal(await tasks.preparation(),true);assert.equal(await tasks.preparation(),false);
       assert.equal((await db.query('SELECT state FROM briefings WHERE id=$1',[draftId])).rows[0].state,'ready');assert.equal(mock.requestCount,12);
       const bundle=(await db.query("SELECT * FROM generated_bundles WHERE briefing_id=$1 AND revision=1 AND state='attached'",[draftId])).rows[0];
       const operations=(await preparationBundleOperations(db,bundle)).sort((a,b)=>a.preparation_context_json.step-b.preparation_context_json.step);
@@ -162,7 +212,7 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
       }
       const assessmentAdapter=resolveAssessmentAdapter({...env,UNDERSTOOD_ASSESSMENT_ADAPTER:'gemini-free',
         UNDERSTOOD_SYNTHETIC_ASSESSMENT_HASHES:JSON.stringify(inputs.map(assessmentInputHash))},{fetchImpl:mock.fetchImpl});
-      const tasks=rehearsalTasks(pool,storage,{...config,assessmentAdapter});for(const _ of inputs)assert.equal(await tasks.assessment(),true);assert.equal(await tasks.assessment(),false);
+      const tasks=pipelineTasks({...config,assessmentAdapter});for(const _ of inputs)assert.equal(await tasks.assessment(),true);assert.equal(await tasks.assessment(),false);
       const before=bundleHash((await db.query('SELECT * FROM provider_requests ORDER BY id')).rows);
       const observations=await readEvaluationObservations(pool,PIPELINE_DATASET,{orgId:scope.orgId,siteId:scope.siteId,bindings,confirmedSynthetic:true},options);
       typedEvaluation=await evaluateDataset(PIPELINE_DATASET,{mode:'observed-runtime',provenance:UNKNOWN_EVALUATION_PROVENANCE,evaluate:observedEvaluator(observations)});
@@ -178,7 +228,7 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
         {outcome:'matched',reasons:['asked_facts_present'],evidence:publication.askedFacts.map((_,factIndex)=>({factIndex,quote:answer}))},'outcome');
       const recordingAdapter=resolveRecordingAdapter({...env,UNDERSTOOD_RECORDING_ADAPTER:'gemini-free',
         UNDERSTOOD_SYNTHETIC_AUDIO_HASHES:JSON.stringify([hash(answerBytes)])},{fetchImpl:mock.fetchImpl});
-      const tasks=rehearsalTasks(pool,storage,{...config,recordingAdapter});assert.equal(await tasks.recording(),true);assert.equal(await tasks.recording(),false);
+      const tasks=pipelineTasks({...config,recordingAdapter});assert.equal(await tasks.recording(),true);assert.equal(await tasks.recording(),false);
       assert.equal((await db.query('SELECT status FROM recordings WHERE id=$1',[receipt.id])).rows[0].status,'transcribed');
       const attempt=(await db.query('SELECT id,outcome FROM attempts WHERE assignment_id=$1',[worker.assignmentId])).rows[0];assert.equal(attempt.outcome,'matched');
       const row=(await db.query('SELECT * FROM recordings WHERE id=$1',[receipt.id])).rows[0];
@@ -206,7 +256,7 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
       mock.structured('followup.check',{content:source,translation:target,language:'ar',terms:[]},faithful,'faithful');mock.speech('followup.speech',target.text,speechBytes);
       const adapter=resolveCaseFollowup({...env,UNDERSTOOD_CASE_FOLLOWUP_ADAPTER:'gemini'},{fetchImpl:mock.fetchImpl});
       await queueCaseFollowup(pool,owner,help.id,followup,{...options,adapter,dataClass:'synthetic'});
-      const tasks=rehearsalTasks(pool,storage,{...config,caseFollowupAdapter:adapter});assert.equal(await tasks.caseFollowup(),true);assert.equal(await tasks.caseFollowup(),false);
+      const tasks=pipelineTasks({...config,caseFollowupAdapter:adapter});assert.equal(await tasks.caseFollowup(),true);assert.equal(await tasks.caseFollowup(),false);
       assert.equal((await followupReceipt(pool,owner,help.id,followup.requestId,options)).status,'delivered');
       assert.equal((await queueCaseFollowup(pool,owner,help.id,followup,{...options,adapter,dataClass:'synthetic'})).status,'delivered');
       assert.deepEqual(await getCaseFollowupAudio(pool,worker.session,help.id,followup.requestId,storage,options),speechBytes);
@@ -222,6 +272,22 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
       assert.deepEqual(metrics,{assigned:5,responses:5,matches:3,clarifications:2,unassessed:0,pending:0,completion:100});
       assert.equal((await db.query('SELECT count(*)::int AS n FROM attempts')).rows[0].n,5);
       assert.equal((await db.query('SELECT count(*)::int AS n FROM clarifications')).rows[0].n,3);
+      voice={caseId:help.id,worker,requestId:randomUUID()};
+    });
+    await check('private_case_voice_reply_receipt_playback_and_scope',async()=>{
+      const {worker,caseId,requestId}=voice;
+      const received=await receiveCaseVoice(pool,worker.session,worker.assignmentId,'reply',caseId,requestId,voiceBytes,storage,options);
+      assert.equal(received.status,'received');assert.equal(received.sha256,hash(voiceBytes));
+      assert.equal((await receiveCaseVoice(pool,worker.session,worker.assignmentId,'reply',caseId,requestId,voiceBytes,storage,options)).id,requestId);
+      assert.equal((await caseVoiceReceipt(pool,worker.session,worker.assignmentId,'reply',caseId,requestId,options)).id,requestId);
+      assert.deepEqual(await getCaseVoiceAudio(pool,worker.session,caseId,requestId,storage,options),voiceBytes);
+      assert.deepEqual(await getCaseVoiceAudio(pool,owner,caseId,requestId,storage,options),voiceBytes);
+      await assert.rejects(getCaseVoiceAudio(pool,workers[0].session,caseId,requestId,storage,options),/unavailable|Forbidden/);
+      await assert.rejects(getCaseVoiceAudio(pool,{...owner,role:'auditor'},caseId,requestId,storage,options),/Forbidden/);
+      await assert.rejects(receiveCaseVoice(pool,worker.session,worker.assignmentId,'reply',caseId,requestId,answerBytes,storage,options),/conflict/);
+      assert.equal((await db.query('SELECT count(*)::int AS n FROM case_voice')).rows[0].n,1);
+      assert.equal((await db.query('SELECT count(*)::int AS n FROM attempts')).rows[0].n,5);
+      assert.deepEqual((await readPublicationReport(pool,owner,{...options,publicationId:pub.id})).metrics,metrics);
     });
     await check('exhausted_provider_budget_denies_next_generation',async()=>{
       const draft=(await db.query('SELECT b.source,b.revision,c.generation_languages_json FROM briefings b JOIN draft_creations c ON c.briefing_id=b.id WHERE b.id=$1',[draftId])).rows[0];
@@ -230,7 +296,7 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
       const preparationAdapter=resolvePreparationAdapter({...env,UNDERSTOOD_PREPARATION_ADAPTER:'gemini-free',
         UNDERSTOOD_SYNTHETIC_PREPARATION_HASHES:JSON.stringify([preparationInputHash(input)])},{fetchImpl:mock.fetchImpl});
       await queuePreparation(pool,owner,draftId,draft.revision,options);
-      assert.equal(await rehearsalTasks(pool,storage,{...config,preparationAdapter}).preparation(),true);
+      assert.equal(await pipelineTasks({...config,preparationAdapter}).preparation(),true);
       assert.equal((await db.query('SELECT state FROM briefings WHERE id=$1',[draftId])).rows[0].state,'failed');
       assert.equal(mock.requestCount,24);
       assert.equal((await db.query('SELECT count(*)::int AS n FROM provider_operations')).rows[0].n,16);
@@ -241,7 +307,15 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
       const worker=workers[0];await revokeWorkerGrant(pool,owner,worker.grantId,options);
       await assert.rejects(session(worker.token),/Sign in required/);
       await assert.rejects(getAssignmentSpeech(pool,worker.session,worker.assignmentId,'body',storage,options),/Sign in required/);
+      await revokeWorkerGrant(pool,owner,voice.worker.grantId,options);
+      await assert.rejects(getCaseVoiceAudio(pool,voice.worker.session,voice.caseId,voice.requestId,storage,options),/Sign in required/);
     });
+    return await inRole(apiRole,async()=>{
+    const objects=await domainTransaction(pool,schema,privateObjectInventory);
+    assert.equal(objects.length,9);assert.ok(objects.every(row=>row.retained));
+    const families=objects.reduce((counts,row)=>({...counts,[row.family]:(counts[row.family]??0)+1}),{});
+    assert.deepEqual(families,{'case-followup':1,'case-voice':1,generated:4,recording:1,source:1,'source-original':1});
+    await onInventory(objects.map(row=>Object.freeze({...row})));
     const trace=mock.finish(),operations=(await db.query('SELECT kind,model,reserved_requests,input_hash,provenance_json FROM provider_operations ORDER BY created_at,id')).rows;
     const requests=(await db.query('SELECT state,count(*)::int AS count FROM provider_requests GROUP BY state ORDER BY state')).rows;
     assert.equal(trace.length,24);assert.deepEqual(requests,[{state:'accepted',count:24}]);assert.equal(operations.length,16);
@@ -250,14 +324,22 @@ export async function runPipelineRehearsal({onStage=()=>{}}={}) {
     assert.ok(policies.length===2 && policies.every(row=>row.max_daily_requests===24));
     return freeze({schemaVersion:'pipeline-rehearsal-report-v1',datasetVersion:PIPELINE_DATASET.version,datasetHash:bundleHash(PIPELINE_DATASET),
       mode:'isolated-pglite-scripted-provider',dataClass:'synthetic',startedAt,finishedAt:new Date().toISOString(),checks,
+      workerPermissions:{profile:workerPolicy.profile,verified:workerPolicy.restricted,writableTables:workerPolicy.writableTables,
+        readOnlyTables:workerPolicy.readOnlyTables,hiddenTables:workerPolicy.hiddenTables,taskExecutions:workerTaskExecutions,
+        stages:[...workerStages].sort(),identity:'embedded-session-authorization',nativeAuthentication:'not-tested',apiIdentity:'embedded-application-role'},
+      apiPermissions:{profile:apiPolicy.profile,verified:apiPolicy.restricted,writableTables:apiPolicy.writableTables,
+        readOnlyTables:apiPolicy.readOnlyTables,hiddenTables:apiPolicy.hiddenTables,taskExecutions:apiTaskExecutions,
+        stages:[...apiStages].sort(),identity:'embedded-session-authorization',nativeAuthentication:'not-tested',
+        maintenanceStages:[...maintenanceStages],schemaOwnerUsedForCustomerOperations:false,roleRestoredAfterNestedWork:true},
       metrics,typedEvaluation,recordedEvaluation,sourceEvidence,preparationEvidence,followupEvidence,providerEvidence:{externalRequests:0,scriptedRequests:trace.length,acceptedRequests:24,reservedRequests:24,operations:16,
         byKind:operations.reduce((map,row)=>({...map,[row.kind]:(map[row.kind] ?? 0)+1}),{}),trace},
-      privateStorage:{adapter:'scoped-in-memory-fixture',objects:storage.count,sourceAudioHash:hash(sourceBytes),answerAudioHash:hash(answerBytes),generatedAudioHash:hash(speechBytes)},
+      privateStorage:{adapter:storageAdapter,objects:objects.length,families,sourceAudioHash:hash(sourceBytes),answerAudioHash:hash(answerBytes),generatedAudioHash:hash(speechBytes),caseVoiceHash:hash(voiceBytes)},
       frozenPublication:{version:pub.version,snapshotHash:bundleHash(snapshot)},
       evidenceLimits:{productionReady:false,liveProviderTransport:'not_verified',semanticAccuracyClaim:false,independentLanguageQa:'not_provided',
         audio:'Synthetic tones, not spoken audio; transcripts and provider outputs scripted',hardwareAudio:'not_tested',browserWorkflow:'not_tested',
-        hostedPostgres:'not_tested',privateCloudStorage:'not_tested',recordedInputModelPromptProvenance:'verified-synthetic-operation-links',
+        hostedPostgres:'not_tested',privateCloudStorage:storageAdapter==='scoped-in-memory-fixture'?'not_tested':'requires-external-runner-evidence',recordedInputModelPromptProvenance:'verified-synthetic-operation-links',
         sourceInputModelPromptProvenance:'verified-synthetic-operation-link',preparationInputModelPromptProvenance:'verified-synthetic-stage-operation-links',
         followupInputModelPromptProvenance:'verified-synthetic-operation-link',pilotAcceptance:'not_evaluated'}});
+    });
   }finally{await db.close();}
 }

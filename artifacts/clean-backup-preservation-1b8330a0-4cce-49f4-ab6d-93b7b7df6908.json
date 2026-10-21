@@ -1,0 +1,80 @@
+{
+  "checkedAt": "2026-10-15T07:02:52.370Z",
+  "tables": [
+    {
+      "table": "organizations",
+      "count": 2,
+      "sha256": "fc143569ccb971f2b50bb396435ae20c9ba5a4ac743d0a29ae2628bba7c3705d"
+    },
+    {
+      "table": "sites",
+      "count": 2,
+      "sha256": "2429427353c2a1a906734ece41e11733549fe5ef8bc86b66ef8fb4e9a1e5473f"
+    },
+    {
+      "table": "workers",
+      "count": 34,
+      "sha256": "aed045cb0eea14429a29c68b01e7d0073383ea444e02cd64d590ddfe46fad20c"
+    },
+    {
+      "table": "briefings",
+      "count": 2,
+      "sha256": "896bf0de5940547a3e6d17e1e6a75ae2ce96b5728d95f530df3ed4c4356bd0fb"
+    },
+    {
+      "table": "publications",
+      "count": 1,
+      "sha256": "874eef858781b0fbf7819261803b0576a1e18436625ca4e8be5d615236b1defe"
+    },
+    {
+      "table": "assignments",
+      "count": 30,
+      "sha256": "b93ccad5b050f03c7cee960bf4bc96011c4cd2e5a8a612f3998edcf51db80d4b"
+    },
+    {
+      "table": "attempts",
+      "count": 26,
+      "sha256": "068bd2b0788338771ef489b84ba26d34b0ea9b54855c23978a9042cdf09d3900"
+    },
+    {
+      "table": "clarifications",
+      "count": 4,
+      "sha256": "84189766ffbcaec111e4223d93afb038b385ac61d72e212840eb0847be3ca1bb"
+    }
+  ],
+  "integrityOk": true,
+  "foreignKeyViolations": 0,
+  "shells": [
+    {
+      "directory": "dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/bc0bfa2a-4ba4-4ab6-8d36-62073d5f658e/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/e40616ec-6d21-4ee4-abe7-bb80e27dbe3b/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/747d3395-92dc-4e8e-a66b-d2ae0a9c1a1e/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    },
+    {
+      "directory": ".clean-check/99f90eb2-717a-4e05-ba7a-14af3522d0bc/workspace/dist",
+      "files": 55,
+      "hashesMatch": true
+    }
+  ],
+  "filesScanned": 1276,
+  "secretMatches": 0,
+  "envIgnored": true,
+  "privateStorageEnvIgnored": true,
+  "exampleGeminiBlank": true,
+  "productionVerdict": false
+}

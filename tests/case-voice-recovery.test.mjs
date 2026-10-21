@@ -9,7 +9,7 @@ test('voice recovery keeps only context-bound metadata and requires the exact re
   const session={clientContext:'d'.repeat(64),expiresAt:new Date(Date.now()+60000).toISOString()},scope={kind:'help',id:'assignment-14'},bytes=new Uint8Array(8044).fill(10),id=randomUUID();
   const pending=await retainVoice(storage,session,scope,id,bytes);assert.deepEqual(readVoicePending(storage,session,scope),pending);assert.deepEqual(await retainVoice(storage,session,scope,id,bytes),pending);
   assert.equal(JSON.stringify([...values]).includes('bytes'),false);assert.equal(readVoicePending(storage,{...session,clientContext:'e'.repeat(64)},scope),null);
-  assert.equal(readVoicePending(storage,session,{kind:'reply',id:scope.id}),null);
+  assert.equal(readVoicePending(storage,session,{kind:'reply',id:scope.id,assignmentId:scope.id}),null);
   await assert.rejects(retainVoice(storage,session,scope,randomUUID(),bytes),/pending/);await assert.rejects(retainVoice(storage,session,scope,id,new Uint8Array(8044)),/pending/);
   const receipt={id,caseId:id,assignmentId:scope.id,kind:'help',sha256:pending.hash,status:'received',createdAt:new Date().toISOString(),receivedAt:new Date().toISOString()};
   assert.deepEqual(checkedVoiceReceipt(receipt,scope,pending),receipt);
@@ -23,4 +23,15 @@ test('conversation recording notices disclose private storage and explicitly exc
   for(const language of ['en','ar','ur']){const notice=conversationRecordingNotice(language);assert.equal(Object.keys(notice).length,5);for(const text of Object.values(notice))assert.ok(text.trim());}
   assert.match(conversationRecordingNotice('en').processing,/not submitted as answers or sent to an AI provider/);
   assert.doesNotMatch(conversationRecordingNotice('en').local,/save a copy/);
+});
+
+test('voice recovery cannot write a new namespace after hashing-time scope, context or authority changes',async()=>{
+  const values=new Map(),store={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)},bytes=new Uint8Array(8044);
+  for(const changed of ['scope','assignment','context','expiry','authority']){
+    const session={clientContext:'f'.repeat(64),expiresAt:new Date(Date.now()+60000).toISOString()},scope={kind:'reply',id:'case-14',assignmentId:'assignment-14'};let current=true;
+    const retained=retainVoice(store,session,scope,randomUUID(),bytes,()=>current);
+    if(changed==='scope')scope.id='other';if(changed==='assignment')scope.assignmentId='other';if(changed==='context')session.clientContext='e'.repeat(64);
+    if(changed==='expiry')session.expiresAt='2000-01-01T00:00:00.000Z';if(changed==='authority')current=false;
+    await assert.rejects(retained,/session unavailable/);assert.equal(values.size,0);
+  }
 });

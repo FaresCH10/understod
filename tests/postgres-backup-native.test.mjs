@@ -15,7 +15,8 @@ import {createPostgresBackup,restorePostgresBackup} from '../scripts/postgres-ba
 const enabled=process.env.UNDERSTOOD_BACKUP_TEST_ISOLATED==='true'
   && process.env.UNDERSTOOD_BACKUP_TEST_SOURCE_URL && process.env.UNDERSTOOD_BACKUP_TEST_RESTORE_URL;
 test('native pg_dump/pg_restore use synchronized full relational archive and isolated private object readback',
-  {skip:!enabled?'Requires explicitly isolated source/empty-target PostgreSQL databases and installed native tools':false,timeout:180000},async()=>{
+  // Native remote restores and repeated full inventories need a bounded network-I/O budget, not the embedded-test deadline.
+  {skip:!enabled?'Requires explicitly isolated source/empty-target PostgreSQL databases and installed native tools':false,timeout:540000},async()=>{
     const config=prefix=>({connectionString:process.env[`${prefix}_URL`],tls:process.env.UNDERSTOOD_BACKUP_TEST_TLS==='true',caFile:process.env.UNDERSTOOD_BACKUP_TEST_CA_FILE});
     const connection=config('UNDERSTOOD_BACKUP_TEST_SOURCE'),targetConnection=config('UNDERSTOOD_BACKUP_TEST_RESTORE');
     assert.notEqual(connection.connectionString,targetConnection.connectionString);

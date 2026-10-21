@@ -12,7 +12,7 @@ test('pending template requests are validated, tab-scoped, immutable and receipt
   assert.throws(()=>savePendingTemplate(storage,'staff/site',{...one,body:{...one.body,title:'Changed request'}}),/Recover/);
   assert.throws(()=>clearPendingTemplate(storage,'staff/site',randomUUID()),/Another/);
   const canonical=templateInput(one.kind,one.templateId,{...one.body,requestId:one.requestId});
-  assert.equal(checkedTemplateResult({id:one.requestId,revision:1},one).id,one.requestId);
+  assert.equal(checkedTemplateResult({id:one.requestId,revision:1,status:'active'},one).id,one.requestId);
   for(const result of [null,{}, {id:'foreign',revision:1},{id:one.requestId,revision:99}]) assert.throws(()=>checkedTemplateResult(result,one),/acknowledgement/);
   assert.equal(pendingTemplateSignature(one),templateSignature(Object.fromEntries(Object.entries(canonical).reverse())));
   clearPendingTemplate(storage,'staff/site',one.requestId);assert.equal(readPendingTemplate(storage,'staff/site'),null);

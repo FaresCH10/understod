@@ -1,0 +1,216 @@
+{
+  "checkedAt": "2026-10-21T12:21:17.092Z",
+  "scope": "staff-followup-action-placement-and-private-history-focus",
+  "productionReady": false,
+  "progress": {
+    "overall": 81,
+    "range": [
+      74,
+      87
+    ],
+    "staffRecording": 90,
+    "previousStaffRecording": 85,
+    "staffCaseDetailAndRecovery": 92,
+    "previousStaffCaseDetailAndRecovery": 90,
+    "method": "Engineering estimates, not test pass rates or production acceptance."
+  },
+  "clean": {
+    "id": "4b338be1-726a-48df-a1a0-46c45527b0ce",
+    "startedAt": "2026-10-21T12:10:37.103Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:10:38.580Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:10:45.724Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:10:45.725Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:10:49.868Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:10:49.868Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:15:43.709Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:15:43.709Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:15:44.311Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:15:44.312Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:15:48.137Z"
+      }
+    ],
+    "source": {
+      "files": 913,
+      "sha256": "6012cb5cfebcf10f1b115248b1775fab514aa1474f4a2a0005c6292fd7b6f407"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-21T12:15:48.552Z",
+    "parentSession": 9027,
+    "parentExitObserved": true,
+    "parentExitCode": 0,
+    "summary": {
+      "tests": 1333,
+      "pass": 1329,
+      "fail": 0,
+      "skipped": 4
+    },
+    "durationMs": 293596.5054
+  },
+  "sourceNow": {
+    "files": 913,
+    "sha256": "6012cb5cfebcf10f1b115248b1775fab514aa1474f4a2a0005c6292fd7b6f407",
+    "matchesClean": true
+  },
+  "rejectedClean": {
+    "id": "5285225b-349e-4f40-bf98-469a5391ce71",
+    "startedAt": "2026-10-21T12:02:30.134Z",
+    "state": "failed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:02:31.545Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:02:38.827Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:02:38.828Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:02:43.024Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:02:43.025Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:07:32.619Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:07:32.620Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:07:33.312Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:07:33.313Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:07:37.141Z"
+      }
+    ],
+    "source": {
+      "files": 913,
+      "sha256": "34d95574353bf73d54880ba6fb976076f7b8dfd6293b4d18c1a6ee112200eec0"
+    },
+    "sourceUnchanged": false,
+    "finishedAt": "2026-10-21T12:07:37.614Z",
+    "parentSession": 69003,
+    "parentExitObserved": true,
+    "parentExitCode": 1,
+    "accepted": false,
+    "reason": "Source drift after correcting observed16px action margin; all snapshot tests/evaluations passed but snapshot is not current."
+  },
+  "browser": {
+    "path": "artifacts/staff-actions-aligned-browser-final-2026-10-21.json",
+    "assetsMatchClean": true,
+    "rawMeasurements": 13,
+    "fixtureTerminal": {
+      "parentSession": 66584,
+      "pid": 11316,
+      "exitCodeObserved": true,
+      "exitCode": 0,
+      "explicitOwnedStop": true
+    },
+    "knownLimits": [
+      "Synthetic fixed tone, not physical microphone or speech-quality acceptance",
+      "Follow-up is queued only; no generation worker/provider or delivered follow-up is claimed",
+      "Reference action placement was inspected qualitatively, not full matched-reference acceptance",
+      "Existing draft interlocks intentionally retain history-only access while another case draft is active",
+      "Independent language/AT, full references, native95, hosted and privacy gates remain"
+    ]
+  },
+  "worker": {
+    "path": "artifacts/worker-conversation-external-submit-2026-10-21.json",
+    "fixtureTerminal": {
+      "parentSession": 50461,
+      "pid": 9856,
+      "exitCodeObserved": true,
+      "exitCode": 0,
+      "explicitOwnedStop": true
+    }
+  },
+  "evaluations": {
+    "contractCases": 43,
+    "pipelineChecks": 10,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-979b0750-f527-4c8f-9791-a8b482e5793c.json",
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 85,
+    "filesScanned": 6493,
+    "configuredSecretMatches": 0
+  },
+  "negativeEvidence": {
+    "initialSourceRegressions": 3,
+    "marginRegression": 1,
+    "preliminary": "artifacts/staff-actions-preliminary-2026-10-21.json",
+    "wrongViewportAccepted": false,
+    "unconfiguredFixture": "Original fixture correctly hid follow-up generation; configured variant is synthetic queue-only, not live readiness"
+  },
+  "referenceLimits": [
+    "S15 action placement inspected qualitatively, not full matched-reference acceptance",
+    "Reference500-character generated-follow-up counter differs from existing1000-character message contract; reconcile new drafts and legacy receipt recovery without truncating private text",
+    "Dates, worker language, original-audio absence, seeded history and draft interlocks differ from the source"
+  ],
+  "cloudDatabaseStorageChanged": false,
+  "realWorkerDataUsed": false,
+  "actualMicrophoneUsed": false,
+  "liveProviderMailCalls": 0,
+  "billingChanged": false,
+  "deployment": false,
+  "nextTask": "Reconcile the500-character staff generated-follow-up reference limit with the1000-character message/legacy receipt contract, then wider interface states and required release gates."
+}

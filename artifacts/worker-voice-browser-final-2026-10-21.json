@@ -1,0 +1,45 @@
+{
+  "scope": "local synthetic worker Help and reply capture/recovery",
+  "productionReady": false,
+  "sourceSha256": "c5d0ccaaed809e61bdcadab615376078a97b05a1653dbbe99fb769a6f48213eb",
+  "candidate": ".tools/worker-voice-guarded-preview-20261021/dist",
+  "fixture": {"port":3240,"pid":9448,"parentSession":2313,"terminalObserved":true,"exitCode":0,"shutdown":"20-minute fixture TTL"},
+  "counters": {
+    "terminal":true,"helpPosts":1,"replyPosts":4,"receiptReads":2,"playbackReads":1,"noticeReads":21,"otherPosts":0,"simulatedMicrophoneRequests":8,
+    "postRequestIds":["0957960b-5c42-425f-83ca-fc089c95570b","e3698530-862a-4fef-9296-8c34085e7808","e3698530-862a-4fef-9296-8c34085e7808","f645019d-1299-477f-ab7b-4c27dd3416d0","90e6a79b-1dfc-4c16-8661-21f3c83f24fd"],
+    "actualMicrophoneUsed":false,"externalCalls":0,"held":false,"objects":4,"originalAttemptUnchanged":true,"attempts":1,"submissionReceipts":1,"cases":2,"messages":5,
+    "recordings":[
+      {"request_id":"0957960b-5c42-425f-83ca-fc089c95570b","kind":"help","assignment_id":"fresh","status":"received","received_at":"2026-10-21T06:54:38.067Z"},
+      {"request_id":"e3698530-862a-4fef-9296-8c34085e7808","kind":"reply","assignment_id":"answered","status":"received","received_at":"2026-10-21T06:57:18.245Z"},
+      {"request_id":"f645019d-1299-477f-ab7b-4c27dd3416d0","kind":"reply","assignment_id":"answered","status":"received","received_at":"2026-10-21T06:58:39.167Z"},
+      {"request_id":"90e6a79b-1dfc-4c16-8661-21f3c83f24fd","kind":"reply","assignment_id":"answered","status":"received","received_at":"2026-10-21T07:00:43.774Z"}
+    ],
+    "assignmentLanguages":[{"id":"answered","language":"en"},{"id":"fresh","language":"en"}],"profileLanguage":"en"
+  },
+  "observations": {
+    "preAnswerHelpDidNotSubmitAnswer":true,
+    "answerHelpAndConversationDraftInterlocks":true,
+    "cancelFirstClearPreservedPreview":true,
+    "confirmedClearPreservedPendingMetadata":true,
+    "actualReloadAndGetOnlyHelpRecovery":true,
+    "explicitReplyRetrySameIdAndBytes":true,
+    "receivedReplyStatusSurvivedRefresh":true,
+    "receivedModeOneClickRestart":true,
+    "arabicAndUrduInterfaceCaptureWithEnglishProfileAndAssignment":true,
+    "closedCaseGetOnlyReceiptRecoveryWithNewCaptureDisabled":true,
+    "closedCaseWasResolvedExplicitlyByFixtureOwner":true,
+    "deniedEmptyInterruptedCaptureMadeNoPosts":true,
+    "privatePlayback":{"readyState":4,"duration":1,"failed":false},
+    "localeWidthChecks":{"countObserved":12,"locales":["en","ar","ur"],"widths":[320,390,768,1440],"documentAndNestedControlsContained":true,"rawMeasurementArrayRetained":false,"basis":"Interactive DOM observations before the browser REPL context reset; not independently replayed by the checkpoint writer"}
+  },
+  "screenshots":["artifacts/worker-voice-final-en-320-2026-10-21.png","artifacts/worker-voice-final-ar-390-2026-10-21.png","artifacts/worker-voice-final-ur-320-2026-10-21.png"],
+  "knownLimits":[
+    "Fixed one-second tone replaces microphone input; no actual microphone, speech, codec or physical-phone acceptance",
+    "Notice retry attempted after fixture/session expiry reached the session lock; not counted as a notice-failure browser test",
+    "Strict notice failure and context behavior have client and actual HTTP tests, but the full rendered notice-fault matrix remains",
+    "Final worker storing/integrity-failed upload browser matrix remains; prior staff/preliminary checks are not substituted",
+    "Help/reply microphone and format fallback copy still refers to an answer and requires purpose-specific wording",
+    "Raw twelve-width measurement array was lost with the REPL context; observations and three screenshots remain",
+    "No independent language, assistive-technology, full-reference, native-current-policy or hosted acceptance"
+  ]
+}

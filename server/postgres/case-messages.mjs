@@ -1,6 +1,7 @@
 import {domainTransaction,requirePrincipal,domainAudit} from './domain.mjs';
 import {requireSiteOperational} from './site-lifecycle.mjs';
 import {caseMessageId,caseMessageInput,caseMessageFilters,caseMessageReceipt,caseMessageRow} from '../case-message-input.mjs';
+import {responseRead} from './responses.mjs';
 
 export async function scopedCase(client,session,id,write=false) {
   caseMessageId(id);const type=session?.principal_type;
@@ -24,7 +25,7 @@ export function caseMessageReceiptLookup(pool,session,caseId,id,{schema='public'
 }
 export function listCaseMessages(pool,session,caseId,filters={}, {schema='public'}={}) {
   const {page,pageSize}=caseMessageFilters(filters);
-  return domainTransaction(pool,schema,async client=>{
+  return responseRead(pool,schema,async client=>{
     const thread=await scopedCase(client,session,caseId);
     const total=(await client.query('SELECT count(*)::int n FROM case_messages WHERE case_id=$1 AND org_id=$2 AND site_id=$3',[caseId,session.org_id,session.site_id])).rows[0].n;
     const rows=(await client.query(`SELECT m.*,s.name AS author_name FROM case_messages m LEFT JOIN staff s ON s.id=m.actor_id AND m.actor_type='staff'
@@ -33,7 +34,7 @@ export function listCaseMessages(pool,session,caseId,filters={}, {schema='public
     const audio=(await client.query(`SELECT f.id FROM case_followups f JOIN case_followup_audio a ON a.request_id=f.id AND a.state='attached'
       WHERE f.id=ANY($1::text[]) AND f.status='delivered'`,[rows.map(row=>row.id)])).rows;
     const voices=(await client.query(`SELECT v.request_id FROM case_voice v LEFT JOIN retention_policies p ON p.org_id=v.org_id AND p.site_id=v.site_id
-      WHERE v.request_id=ANY($1::text[]) AND v.case_id=$2 AND v.org_id=$3 AND v.site_id=$4 AND v.status='received' AND v.cleanup_state='active'
+      WHERE v.request_id=ANY($1::text[]) AND v.case_id=$2 AND v.org_id=$3 AND v.site_id=$4 AND v.actor_type='worker' AND v.status='received' AND v.cleanup_state='active'
       AND NOT EXISTS(SELECT 1 FROM worker_deletion_requests WHERE worker_id=v.worker_id)
       AND NOT EXISTS(SELECT 1 FROM case_content_purges WHERE case_id=v.requested_case_id)
       AND (p.audio_days IS NULL OR v.received_at>clock_timestamp()-p.audio_days*interval '1 day')`,[rows.map(row=>row.id),caseId,session.org_id,session.site_id])).rows;

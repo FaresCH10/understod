@@ -1,5 +1,9 @@
 import { createServer } from 'node:http';
+import {sendPrivateWav} from '../audio-response.mjs';
+import {withPostgresClient} from './db.mjs';
 import {handleOperationsRoute} from './operations-http.mjs';
+import {siteCrewOverview} from './site-crews.mjs';
+import {crewOverviewHttpError} from '../crew-overview.mjs';
 import {pipelineStatus} from '../ai/pipeline-status.mjs';
 import { send,readJson } from '../http.mjs';
 import {savePilot,readPilot} from './pilot.mjs';
@@ -23,11 +27,15 @@ import {requestRecovery,resetPassword} from './account-recovery.mjs';
 import {listAccountSites,switchAccountSite} from './accounts.mjs';
 import {issueInvitation,changeInvitation,listInvitations,invitationReceipt,previewInvitation,acceptInvitation} from './invitations.mjs';
 import { sessionContext,listBriefings,getBriefing,workerBriefings,workerBriefing,staffOverview,listProcessing,getProcessing } from './read-models.mjs';
+import {getProcessingRetryContext,getProcessingRetryReceipt,retryProcessing} from './processing-retry.mjs';
+import {handleProcessingRetryRoute} from '../processing-retry-http.mjs';
+import {handleProcessingProvenanceRoute} from '../processing-provenance-http.mjs';
+import {getProcessingProvenance} from './processing-provenance.mjs';
 import {listPublicationHistory,getPublicationHistoryDetail} from './publication-history.mjs';
 import {publicationHistoryQuery} from '../publication-history-input.mjs';
 import {searchSite} from './search.mjs';
 import {searchQuery} from '../search-input.mjs';
-import { createDraft,editDraft,queuePreparation,copyDraft,archiveBriefing } from './preparation.mjs';
+import { createDraft,editDraft,queuePreparation,copyDraft,archiveBriefing,getPreparationRequestContext,getPreparationRequestReceipt,requestPreparation } from './preparation.mjs';
 import { publish,submitAnswer,withdrawPublication,domainTransaction } from './domain.mjs';
 import {createSchedule,listSchedules,cancelSchedule} from './schedules.mjs';
 import {scheduleHttpError} from '../schedule-input.mjs';
@@ -35,24 +43,30 @@ import {publicationReceipt} from './publication-receipts.mjs';
 import {draftCreationReceipt} from './draft-creations.mjs';
 import {draftCreationHttpError} from '../draft-creations.mjs';
 import {publicationReceiptHttpError} from '../publication-receipts.mjs';
-import { listPublicationResponses,getPublicationResponse,workerSubmissions,staffWorkerAssignments,workerRequestReceipt } from './responses.mjs';
+import { listPublicationResponses,getPublicationResponse,workerSubmissions,workerSubmission,staffWorkerAssignments,workerRequestReceipt } from './responses.mjs';
 import { receiveRecording,getRecording,getRecordingAudio } from './recordings.mjs';
 import { readPublicationReport,listReportPublications } from './reports.mjs';
 import { listWorkers,createWorker,updateWorker,disableWorker,reenableWorker,listCrews,getCrew,listCrewRecipients,createCrew,moveWorkerToCrew,renameCrew,archiveCrew,restoreCrew } from './people.mjs';
 import { listAuditEvents,getAuditEvent,exportAuditEvents } from './audit.mjs';
-import {listNotifications,readNotification} from './notifications.mjs';
-import { requestHelp,listClarifications,getClarification,resolveClarification,assignClarification,workerHelpCases } from './clarifications.mjs';
+import {listNotifications,readNotification,notificationReceipt} from './notifications.mjs';
+import { requestHelp,listClarifications,getClarification,resolveClarification,assignClarification,clarificationActionReceipt,workerHelpCases,workerHelpHistory } from './clarifications.mjs';
+import {listClarificationSubjects,getClarificationSubject,createStaffClarification,staffClarificationCreationReceipt} from './clarification-create.mjs';
+import {clarificationPageView,clarificationDetailView,clarificationHttpError} from '../clarification-view.mjs';
+import {listCaseTimeline} from './case-timeline.mjs';
+import {listStaffCaseRecordings,staffCaseRecordingReceipt,receiveStaffCaseRecording,getStaffCaseRecordingAudio} from './staff-case-recordings.mjs';
+import {handleStaffCaseRecordingRoute} from '../staff-case-recording-http.mjs';
 import {listCaseMessages,sendCaseMessage,caseMessageReceiptLookup,scopedCase} from './case-messages.mjs';
 import {receiveCaseVoice,caseVoiceReceipt,getCaseVoiceAudio} from './case-voice.mjs';
 import {queueCaseFollowup,followupReceipt,getCaseFollowupAudio} from './case-followups.mjs';
 import {requestCaseRepeat,caseRepeatReceipt,listCaseRepeats} from './case-repeats.mjs';
 import {saveCaseReview,caseReviewReceipt,listCaseReviews} from './case-reviews.mjs';
+import {caseRepeatPage,caseReviewPage} from './case-workflow-pages.mjs';
 import { readImportBytes } from '../worker-import.mjs';
 import { previewWorkerImport,getWorkerImport,confirmWorkerImport,workerImportErrorsCsv } from './worker-import.mjs';
-import { requestExport,listExports,retryExport,downloadExport } from './exports.mjs';
+import { requestExport,listExports,retryExport,downloadExport,exportReceipt } from './exports.mjs';
 import {sendInvoiceDownload} from '../invoice-download.mjs';
 import {listInvoices,getInvoice,createInvoice,recordPayment,voidInvoice,billingReceipt} from './billing.mjs';
-import {getSettings,updateSettings,listSiteContacts} from './settings.mjs';
+import {getSettings,updateSettings,settingsReceipt,listSiteContacts} from './settings.mjs';
 import {saveDraftLanguages,draftLanguagesReceipt} from './draft-languages.mjs';
 import {listStaff,changeStaff,staffReceipt} from './staff.mjs';
 import {saveDraftReview,draftReviewReceipt,verifyDraftReviewReceipt} from './draft-review.mjs';
@@ -71,6 +85,7 @@ import {getCaseRetention,saveCaseRetention,caseRetentionReceipt} from './case-re
 import {getGeneratedRetention,saveGeneratedRetention,generatedRetentionReceipt} from './generated-retention.mjs';
 import {getWorkerDeletion,requestWorkerDeletion,listPrivacyWorkers} from './deletions.mjs';
 import {getRecordingNotice,saveRecordingNotice,recordingNoticeReceipt} from './recording-notices.mjs';
+import {recordingNoticeLanguage} from '../recording-notice-input.mjs';
 
 const unavailable = new Set(['Briefing unavailable','Assignment unavailable','Worker unavailable','Grant unavailable','Recording unavailable','Publication unavailable','Crew unavailable','Event unavailable','Clarification unavailable','Clarification owner unavailable','Import unavailable','Export unavailable','Response unavailable']);
 unavailable.add('Notification unavailable');
@@ -172,7 +187,8 @@ export function createPostgresRehearsalServer(pool,{storage,dataClass,schema,...
   return createServer(postgresHandler(pool,{...options,storage,schema,config:{...config,dataClass,caseFollowupAdapter:options.caseFollowupAdapter},cookieName:'understood_pg_rehearsal',backend:'postgres-rehearsal',requestAddress:req=>{requireLocalRequest(req);return req.socket.remoteAddress;}}));
 }
 export function createPostgresHostedServer(pool,{config,storage,publicBuild}={}) {
-  if(config?.tier!=='staging' || config.dataClass!=='synthetic' || config.integrationMode!=='synthetic' || config.accessMode!=='credential'
+  if(config?.service!=='api' || config.operatorAccess!==false || config.runtimeRoleProfile!=='application' || config.providerVerification!==undefined
+    || config.tier!=='staging' || config.dataClass!=='synthetic' || config.integrationMode!=='synthetic' || config.accessMode!=='credential'
     || typeof config.requestAddress!=='function' || typeof publicBuild!=='function' || typeof pool?.connect!=='function')throw Error('Invalid hosted synthetic runtime');
   return createServer(postgresHandler(pool,{...config,config,storage,publicBuild,secure:true,cookieName:'__Host-understood_session',backend:'postgres-hosted-synthetic'}));
 }
@@ -188,7 +204,7 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
     try {
       // Health exposes no tenant data and also serves a private load-balancer check.
       if(secure && req.url==='/api/health' && req.method==='GET' && req.headers['x-forwarded-proto']===undefined) {
-        const client=await pool.connect();try{await client.query('SELECT 1');}finally{client.release();}
+        await withPostgresClient(pool,client=>client.query('SELECT 1'));
         return send(res,200,{status:'ok',mode:'synthetic-credential',backend});
       }
       const address=requestAddress(req);
@@ -196,8 +212,7 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
       const url=new URL(req.url || '/','http://127.0.0.1'),path=url.pathname;
       requestPath=path;
       if (path==='/api/health' && req.method==='GET') {
-        const client=await pool.connect();
-        try {await client.query('SELECT 1');} finally {client.release();}
+        await withPostgresClient(pool,client=>client.query('SELECT 1'));
         return send(res,200,{status:'ok',mode:'synthetic-credential',backend});
       }
       if(!path.startsWith('/api/') && publicBuild)return publicBuild(req,res,url);
@@ -341,6 +356,8 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
       if(path==='/api/settings/contacts' && req.method==='GET')return send(res,200,await listSiteContacts(pool,session,Object.fromEntries(url.searchParams),repository));
       if(path==='/api/settings' && req.method==='GET') {if(url.search) throw new Error('Invalid settings request');return send(res,200,await getSettings(pool,session,repository));}
       const settingsMatch=path.match(/^\/api\/settings\/(organization|site)$/);
+      const settingsReceiptMatch=path.match(/^\/api\/settings\/(organization|site)\/receipts\/([^/]+)$/);
+      if(settingsReceiptMatch && req.method==='GET'){if(url.search)throw Error('Invalid settings request');return send(res,200,await settingsReceipt(pool,session,settingsReceiptMatch[1],settingsReceiptMatch[2],repository));}
       if(settingsMatch && req.method==='POST') {if(url.search) throw new Error('Invalid settings request');return send(res,200,await updateSettings(pool,session,settingsMatch[1],await readJson(req),repository));}
       if(path==='/api/invoices' && req.method==='GET') return send(res,200,await listInvoices(pool,session,Object.fromEntries(url.searchParams),repository));
       if(path==='/api/invoices' && req.method==='POST') {const result=await createInvoice(pool,session,await readJson(req),repository);return send(res,result.duplicate ? 200 : 201,result);}
@@ -351,9 +368,18 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
       if(invoiceMatch && invoiceMatch[2]==='download' && req.method==='GET') return sendInvoiceDownload(res,await getInvoice(pool,session,invoiceMatch[1],Object.fromEntries(url.searchParams),repository));
       if(invoiceMatch && invoiceMatch[2]==='payments' && req.method==='POST') {const result=await recordPayment(pool,session,invoiceMatch[1],await readJson(req),repository);return send(res,result.duplicate ? 200 : 201,result);}
       if(invoiceMatch && invoiceMatch[2]==='void' && req.method==='POST') {const result=await voidInvoice(pool,session,invoiceMatch[1],await readJson(req),repository);return send(res,result.duplicate ? 200 : 201,result);}
+      const preparationRequestMatch=path.match(/^\/api\/briefings\/([^/]+)\/preparation-requests(?:\/([^/]+))?$/);
+      if(preparationRequestMatch) {
+        if(url.search)throw Error('Invalid preparation request');
+        const [,id,requestId]=preparationRequestMatch;
+        if(req.method==='GET')return send(res,200,requestId?await getPreparationRequestReceipt(pool,session,id,requestId,repository):await getPreparationRequestContext(pool,session,id,repository));
+        if(req.method==='POST' && !requestId)return send(res,202,await requestPreparation(pool,session,id,await readJson(req),repository));
+      }
+      if(await handleProcessingProvenanceRoute(req,res,session,url,(actor,id,filters)=>getProcessingProvenance(pool,actor,id,filters,repository)))return;
+      if(await handleProcessingRetryRoute(req,res,session,url,{context:(actor,id)=>getProcessingRetryContext(pool,actor,id,repository),receipt:(actor,id,requestId)=>getProcessingRetryReceipt(pool,actor,id,requestId,repository),retry:(actor,id,input)=>retryProcessing(pool,actor,id,input,repository)}))return;
       if (path==='/api/processing' && req.method==='GET') return send(res,200,await listProcessing(pool,session,Object.fromEntries(url.searchParams),repository));
       const processingMatch=path.match(/^\/api\/processing\/([^/]+)$/);
-      if(processingMatch && req.method==='GET') return send(res,200,await getProcessing(pool,session,processingMatch[1],repository));
+      if(processingMatch && req.method==='GET') return send(res,200,await getProcessing(pool,session,decodeURIComponent(processingMatch[1]),repository));
       if(path==='/api/language-readiness' && req.method==='GET') {if(url.search) throw new Error('Invalid language readiness request');return send(res,200,await getLanguageReadiness(pool,session,repository));}
       if(path==='/api/language-readiness/test' && req.method==='POST') {if(url.search) throw new Error('Invalid language readiness request');return send(res,200,await runLanguageReadiness(pool,session,await readJson(req),repository));}
       if(path==='/api/usage' && req.method==='GET') {if(url.search) throw new Error('Invalid usage request');return send(res,200,await getUsage(pool,session,repository));}
@@ -364,8 +390,8 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
       const usageReceipt=/^\/api\/usage\/requests\/([^/]+)$/.exec(path);
       if(usageReceipt && req.method==='GET'){if(url.search)throw Error('Invalid usage change request');return send(res,200,await usageRequestReceipt(pool,session,usageReceipt[1],repository));}
       if(path==='/api/privacy/recording-notice' && ['GET','POST'].includes(req.method)){
-        if(url.search)throw Error('Invalid recording notice request');
-        return send(res,200,req.method==='GET'?await getRecordingNotice(pool,session,repository):await saveRecordingNotice(pool,session,await readJson(req),repository));
+        const language=recordingNoticeLanguage(url.searchParams,session,req.method);
+        return send(res,200,req.method==='GET'?await getRecordingNotice(pool,session,{...repository,language}):await saveRecordingNotice(pool,session,await readJson(req),repository));
       }
       const noticeRequest=path.match(/^\/api\/privacy\/recording-notice\/requests\/([^/]+)$/);
       if(noticeRequest && req.method==='GET'){
@@ -405,6 +431,10 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
         await revokeWorkerGrant(pool,session,grant[1],repository); return send(res,200,{ok:true});
       }
       if(path==='/api/notifications' && req.method==='GET')return send(res,200,await listNotifications(pool,session,Object.fromEntries(url.searchParams),repository));
+      const notificationReceiptMatch=path.match(/^\/api\/notifications\/([^/]+)\/receipt$/);
+      if(notificationReceiptMatch && req.method==='GET') {
+        if(url.search)throw Error('Invalid notification request');return send(res,200,await notificationReceipt(pool,session,notificationReceiptMatch[1],repository));
+      }
       const notificationMatch=path.match(/^\/api\/notifications\/([^/]+)\/read$/);
       if(notificationMatch && req.method==='POST') {
         if(url.search || Object.keys(await readJson(req)).length)throw Error('Invalid notification request');
@@ -418,26 +448,53 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
       }
       const audit=path.match(/^\/api\/audit\/([^/]+)$/);
       if (audit && req.method==='GET') return send(res,200,await getAuditEvent(pool,session,audit[1],repository));
-      if (path==='/api/clarifications' && req.method==='GET') return send(res,200,await listClarifications(pool,session,Object.fromEntries(url.searchParams),repository));
+      if(path==='/api/clarification-creations/subjects'&&req.method==='GET'){
+        if(new Set(url.searchParams.keys()).size!==[...url.searchParams.keys()].length)throw Error('Invalid clarification subject filter');
+        return send(res,200,{...await listClarificationSubjects(pool,session,Object.fromEntries(url.searchParams),repository),clientContext:clientSessionContext(session).clientContext});
+      }
+      const creationSubject=path.match(/^\/api\/clarification-creations\/subjects\/([^/]+)$/);
+      if(creationSubject&&req.method==='GET'){if(url.search)throw Error('Invalid clarification subject');return send(res,200,{...await getClarificationSubject(pool,session,creationSubject[1],repository),clientContext:clientSessionContext(session).clientContext});}
+      if(path==='/api/clarification-creations'&&req.method==='POST'){if(url.search)throw Error('Invalid clarification creation');return send(res,200,{...await createStaffClarification(pool,session,await readJson(req),repository),clientContext:clientSessionContext(session).clientContext});}
+      const creationReceipt=path.match(/^\/api\/clarification-creations\/([^/]+)$/);
+      if(creationReceipt&&req.method==='GET'){if(url.search)throw Error('Invalid clarification creation');return send(res,200,{...await staffClarificationCreationReceipt(pool,session,creationReceipt[1],repository),clientContext:clientSessionContext(session).clientContext});}
+      if (path==='/api/clarifications' && req.method==='GET') {
+        if(new Set(url.searchParams.keys()).size!==[...url.searchParams.keys()].length)throw Error('Invalid clarification filter');
+        return send(res,200,clarificationPageView(await listClarifications(pool,session,Object.fromEntries(url.searchParams),repository),clientSessionContext(session).clientContext));
+      }
+      if(await handleStaffCaseRecordingRoute(req,res,session,path,url.searchParams,{
+        list:(s,id,input)=>listStaffCaseRecordings(pool,s,id,input,repository),receipt:(s,id,requestId)=>staffCaseRecordingReceipt(pool,s,id,requestId,repository),
+        receive:(s,id,requestId,language,bytes)=>receiveStaffCaseRecording(pool,s,id,requestId,language,bytes,storage,repository),
+        audio:(s,id,requestId)=>getStaffCaseRecordingAudio(pool,s,id,requestId,storage,repository),
+      }))return;
+      const timeline=path.match(/^\/api\/clarifications\/([^/]+)\/timeline$/);
+      if(timeline&&req.method==='GET'){
+        if(new Set(url.searchParams.keys()).size!==[...url.searchParams.keys()].length)throw Error('Invalid case timeline page');
+        return send(res,200,{...await listCaseTimeline(pool,session,timeline[1],Object.fromEntries(url.searchParams),repository),clientContext:clientSessionContext(session).clientContext});
+      }
+      const caseAction=path.match(/^\/api\/clarifications\/([^/]+)\/actions\/([^/]+)$/);
+      if(caseAction&&req.method==='GET'){
+        if(url.search)throw Error('Invalid clarification action');
+        return send(res,200,{...await clarificationActionReceipt(pool,session,caseAction[1],caseAction[2],repository),clientContext:clientSessionContext(session).clientContext});
+      }
       const review=path.match(/^\/api\/clarifications\/([^/]+)\/reviews(?:\/([^/]+))?$/);
       if(review) {
-        const [,id,requestId]=review;if(url.search)throw Error('Invalid case review');
-        if(requestId && req.method==='GET')return send(res,200,await caseReviewReceipt(pool,session,id,requestId,repository));
-        if(!requestId && req.method==='GET')return send(res,200,await listCaseReviews(pool,session,id,repository));
-        if(!requestId && req.method==='POST')return send(res,200,await saveCaseReview(pool,session,id,await readJson(req),repository));
+        const [,id,requestId]=review,context=clientSessionContext(session).clientContext;
+        if(requestId && req.method==='GET'){if(url.search)throw Error('Invalid case review');return send(res,200,{...await caseReviewReceipt(pool,session,id,requestId,repository),clientContext:context});}
+        if(!requestId && req.method==='GET'){if(!url.search)return send(res,200,await listCaseReviews(pool,session,id,repository));if(new Set(url.searchParams.keys()).size!==[...url.searchParams.keys()].length)throw Error('Invalid case workflow page');return send(res,200,{...await caseReviewPage(pool,session,id,Object.fromEntries(url.searchParams),repository),clientContext:context});}
+        if(!requestId && req.method==='POST'){if(url.search)throw Error('Invalid case review');return send(res,200,{...await saveCaseReview(pool,session,id,await readJson(req),repository),clientContext:context});}
       }
       const repeat=path.match(/^\/api\/clarifications\/([^/]+)\/repeats(?:\/([^/]+))?$/);
       if(repeat) {
-        const [,id,requestId]=repeat;if(url.search)throw Error('Invalid repeat request');
-        if(requestId && req.method==='GET')return send(res,200,await caseRepeatReceipt(pool,session,id,requestId,repository));
-        if(!requestId && req.method==='GET')return send(res,200,await listCaseRepeats(pool,session,id,repository));
-        if(!requestId && req.method==='POST')return send(res,200,await requestCaseRepeat(pool,session,id,await readJson(req),repository));
+        const [,id,requestId]=repeat,context=clientSessionContext(session).clientContext;
+        if(requestId && req.method==='GET'){if(url.search)throw Error('Invalid repeat request');return send(res,200,{...await caseRepeatReceipt(pool,session,id,requestId,repository),clientContext:context});}
+        if(!requestId && req.method==='GET'){if(!url.search)return send(res,200,await listCaseRepeats(pool,session,id,repository));if(new Set(url.searchParams.keys()).size!==[...url.searchParams.keys()].length)throw Error('Invalid case workflow page');return send(res,200,{...await caseRepeatPage(pool,session,id,Object.fromEntries(url.searchParams),repository),clientContext:context});}
+        if(!requestId && req.method==='POST'){if(url.search)throw Error('Invalid repeat request');return send(res,200,{...await requestCaseRepeat(pool,session,id,await readJson(req),repository),clientContext:context});}
       }
       const followup=path.match(/^\/api\/clarifications\/([^/]+)\/followups(?:\/([^/]+))?$/);
       if(followup) {
         const [,id,receiptId]=followup;if(url.search)throw Error('Invalid conversation request');
-        if(receiptId && req.method==='GET')return send(res,200,await followupReceipt(pool,session,id,receiptId,repository));
-        if(!receiptId && req.method==='POST')return send(res,202,await queueCaseFollowup(pool,session,id,await readJson(req),{...repository,adapter:config.caseFollowupAdapter,dataClass:config.dataClass}));
+        if(receiptId && req.method==='GET')return send(res,200,{...await followupReceipt(pool,session,id,receiptId,repository),clientContext:clientSessionContext(session).clientContext});
+        if(!receiptId && req.method==='POST')return send(res,202,{...await queueCaseFollowup(pool,session,id,await readJson(req),{...repository,adapter:config.caseFollowupAdapter,dataClass:config.dataClass}),clientContext:clientSessionContext(session).clientContext});
       }
       const followupAudio=path.match(/^\/api\/clarifications\/([^/]+)\/messages\/([^/]+)\/audio$/);
       if(followupAudio && req.method==='GET') {
@@ -456,28 +513,36 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
         if(url.search)throw Error('Invalid voice request');
         if(session.principal_type!=='worker')throw Error('Forbidden');
         const thread=await domainTransaction(pool,schema ?? 'public',client=>scopedCase(client,session,voiceReply[1]));
-        return send(res,200,req.method==='GET'
+        const receipt=req.method==='GET'
           ?await caseVoiceReceipt(pool,session,thread.assignment_id,'reply',voiceReply[1],voiceReply[2],repository)
-          :await receiveCaseVoice(pool,session,thread.assignment_id,'reply',voiceReply[1],voiceReply[2],await readAudio(req),storage,repository));
+          :await receiveCaseVoice(pool,session,thread.assignment_id,'reply',voiceReply[1],voiceReply[2],await readAudio(req),storage,repository);
+        return send(res,200,{...receipt,clientContext:clientSessionContext(session).clientContext});
       }
       const conversation=path.match(/^\/api\/clarifications\/([^/]+)\/messages(?:\/([^/]+))?$/);
       if(conversation) {
         const [,id,receiptId]=conversation;
-        if(receiptId && req.method==='GET'){if(url.search)throw Error('Invalid conversation request');return send(res,200,await caseMessageReceiptLookup(pool,session,id,receiptId,repository));}
+        if(receiptId && req.method==='GET'){if(url.search)throw Error('Invalid conversation request');return send(res,200,{...await caseMessageReceiptLookup(pool,session,id,receiptId,repository),clientContext:clientSessionContext(session).clientContext});}
         if(!receiptId && req.method==='GET') {
           const thread=await listCaseMessages(pool,session,id,Object.fromEntries(url.searchParams),repository);
-          return send(res,200,{...thread,canVoice:session.principal_type==='worker' && voiceAvailable && thread.canReply,canGenerate:session.principal_type==='staff' && config.dataClass==='synthetic'
+          return send(res,200,{...thread,caseId:id,clientContext:clientSessionContext(session).clientContext,canVoice:session.principal_type==='worker' && voiceAvailable && thread.canReply,canGenerate:session.principal_type==='staff' && config.dataClass==='synthetic'
             && config.caseFollowupAdapter?.provenance?.dataClass==='synthetic'
             && !!config.caseFollowupAdapter?.capabilities?.speechLanguages.includes(thread.language)});
         }
-        if(!receiptId && req.method==='POST'){if(url.search)throw Error('Invalid conversation request');return send(res,200,await sendCaseMessage(pool,session,id,await readJson(req),repository));}
+        if(!receiptId && req.method==='POST'){if(url.search)throw Error('Invalid conversation request');return send(res,200,{...await sendCaseMessage(pool,session,id,await readJson(req),repository),clientContext:clientSessionContext(session).clientContext});}
       }
       const clarification=path.match(/^\/api\/clarifications\/([^/]+)(?:\/(resolve|assign))?$/);
       if (clarification) {
         const [,id,action]=clarification;
-        if (!action && req.method==='GET') return send(res,200,await getClarification(pool,session,id,repository));
-        if (action==='resolve' && req.method==='POST') return send(res,200,await resolveClarification(pool,session,id,await readJson(req),repository));
-        if (action==='assign' && req.method==='POST') return send(res,200,await assignClarification(pool,session,id,await readJson(req),repository));
+        if(url.search)throw Error('Invalid clarification filter');
+        if (!action && req.method==='GET') return send(res,200,clarificationDetailView(await getClarification(pool,session,id,repository),clientSessionContext(session).clientContext));
+        if (action==='resolve' && req.method==='POST') return send(res,200,{...await resolveClarification(pool,session,id,await readJson(req),repository),clientContext:clientSessionContext(session).clientContext});
+        if (action==='assign' && req.method==='POST') return send(res,200,{...await assignClarification(pool,session,id,await readJson(req),repository),clientContext:clientSessionContext(session).clientContext});
+      }
+      if(path==='/api/people/crew-overview' && req.method==='GET') {
+        try {
+          if(new Set(url.searchParams.keys()).size!==[...url.searchParams.keys()].length)throw Error('Invalid crew overview request');
+          return send(res,200,await siteCrewOverview(pool,session,Object.fromEntries(url.searchParams),repository));
+        }catch(error){const failure=crewOverviewHttpError(error);return send(res,failure.status,{error:failure.message});}
       }
       if (path==='/api/people/workers') {
         if (req.method==='GET') return send(res,200,await listWorkers(pool,session,Object.fromEntries(url.searchParams),repository));
@@ -617,13 +682,18 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
         return send(res,200,await readPublicationReport(pool,session,{...repository,...(publicationId!==undefined?{publicationId}:{}),filters}));
       }
       if (path==='/api/reports/exports') {
+        if(url.search)throw Error('Invalid export request');
         if (req.method==='GET') return send(res,200,await listExports(pool,session,repository));
         if (req.method==='POST') return send(res,202,await requestExport(pool,session,await readJson(req),repository));
+      }
+      const exportReceiptMatch=path.match(/^\/api\/reports\/exports\/receipts\/(create|retry)\/([^/]+)$/);
+      if(exportReceiptMatch && req.method==='GET') {
+        if(url.search)throw Error('Invalid export request');return send(res,200,await exportReceipt(pool,session,exportReceiptMatch[1],exportReceiptMatch[2],repository));
       }
       const reportExport=path.match(/^\/api\/reports\/exports\/([^/]+)\/(download|retry)$/);
       if (reportExport) {
         const [,id,action]=reportExport;
-        if (action==='retry' && req.method==='POST') return send(res,202,await retryExport(pool,session,id,repository));
+        if (action==='retry' && req.method==='POST') {if(url.search)throw Error('Invalid export request');return send(res,202,await retryExport(pool,session,id,await readJson(req),repository));}
         if (action==='download' && req.method==='GET') {
           const file=await downloadExport(pool,session,id,repository);
           res.writeHead(200,{'content-type':'text/csv; charset=utf-8','content-disposition':`attachment; filename="${file.filename}"`,'cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'no-referrer'});
@@ -636,8 +706,7 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
       if(speech && req.method==='GET') {
         if(url.searchParams.size) throw Error('Assignment unavailable');
         const bytes=await getAssignmentSpeech(pool,session,speech[1],speech[2],storage,repository);
-        res.writeHead(200,{'content-type':'audio/wav','content-length':bytes.length,'cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'no-referrer'});
-        res.end(bytes);return;
+        sendPrivateWav(req,res,bytes);return;
       }
       const receiptMatch=path.match(/^\/api\/worker\/briefings\/([^/]+)\/receipts\/([^/]+)\/([^/]+)$/);
       if(receiptMatch && req.method==='GET'){
@@ -648,14 +717,19 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
       const voiceHelp=path.match(/^\/api\/worker\/briefings\/([^/]+)\/help-audio\/([^/]+)$/);
       if(voiceHelp && ['GET','POST'].includes(req.method)) {
         if(url.search)throw Error('Invalid voice request');
-        return send(res,200,req.method==='GET'
+        const receipt=req.method==='GET'
           ?await caseVoiceReceipt(pool,session,voiceHelp[1],'help',voiceHelp[2],voiceHelp[2],repository)
-          :await receiveCaseVoice(pool,session,voiceHelp[1],'help',voiceHelp[2],voiceHelp[2],await readAudio(req),storage,repository));
+          :await receiveCaseVoice(pool,session,voiceHelp[1],'help',voiceHelp[2],voiceHelp[2],await readAudio(req),storage,repository);
+        return send(res,200,{...receipt,clientContext:clientSessionContext(session).clientContext});
       }
+      const helpHistory=path.match(/^\/api\/worker\/briefings\/([^/]+)\/help-history$/);
+      if(helpHistory&&req.method==='GET')return send(res,200,{...await workerHelpHistory(pool,session,helpHistory[1],Object.fromEntries(url.searchParams),repository),clientContext:clientSessionContext(session).clientContext});
+      const exactSubmission=path.match(/^\/api\/worker\/briefings\/([^/]+)\/submissions\/([^/]+)$/);
+      if(exactSubmission&&req.method==='GET')return send(res,200,{...await workerSubmission(pool,session,exactSubmission[1],exactSubmission[2],Object.fromEntries(url.searchParams),repository),clientContext:clientSessionContext(session).clientContext});
       const assignment=path.match(/^\/api\/worker\/briefings\/([^/]+)(?:\/(answers|audio|help|submissions))?$/);
       if (assignment) {
         const [,id,action]=assignment;
-        if(action==='submissions' && req.method==='GET') return send(res,200,await workerSubmissions(pool,session,id,Object.fromEntries(url.searchParams),repository));
+        if(action==='submissions' && req.method==='GET') return send(res,200,{...await workerSubmissions(pool,session,id,Object.fromEntries(url.searchParams),repository),clientContext:clientSessionContext(session).clientContext});
         if (!action && req.method==='GET') return send(res,200,{...await workerBriefing(pool,session,id,repository),canVoiceHelp:voiceAvailable});
         if (action==='help' && req.method==='GET') return send(res,200,await workerHelpCases(pool,session,id,repository));
         if (action==='help' && req.method==='POST') {
@@ -676,13 +750,15 @@ function postgresHandler(pool,{storage,schema,config,cookieName,backend,requestA
       if (recording && req.method==='GET') {
         if (recording[2]) {
           const bytes=await getRecordingAudio(pool,session,recording[1],storage,repository);
-          res.writeHead(200,{'content-type':'audio/wav','content-length':bytes.length,'cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'no-referrer'});
-          res.end(bytes); return;
+          sendPrivateWav(req,res,bytes);return;
         }
         return send(res,200,await getRecording(pool,session,recording[1],repository));
       }
       return send(res,404,{error:'Not found'});
     } catch (error) {
+      if(requestPath.startsWith('/api/clarification-creations')||/^\/api\/clarifications(?:\/[^/]+(?:\/(?:timeline|resolve|assign|actions\/[^/]+))?)?$/.test(requestPath)){if(res.headersSent){res.destroy();return;}const result=clarificationHttpError(error);return send(res,result.status,{error:result.error});}
+      if(error?.message==='Invalid help history request' || error?.message==='Invalid case workflow page')return send(res,400,{error:error.message});
+      if(error?.message==='Session context changed'){if(res.headersSent){res.destroy();return;}return send(res,409,{error:error.message});}
       if(['Worker access paused','Site archived'].includes(error?.message))return send(res,403,{error:error.message});
       if(requestPath.startsWith('/api/settings/sites')) {const result=siteHttpError(error);return send(res,result.status,{error:result.error});}
       if(/\/draft-creation-receipts\//.test(requestPath)) {const {status,error:message}=draftCreationHttpError(error);return send(res,status,{error:message});}

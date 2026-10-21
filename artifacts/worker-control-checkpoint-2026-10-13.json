@@ -1,0 +1,16 @@
+{
+  "dateUtc":"2026-10-13 13:42 UTC",
+  "scope":"Private worker grant/clipboard/deletion/privacy/response captured authority; parent retention policy operations excluded",
+  "initialFocusedRegression":{"files":["briefing-session-context","worker-access-state","deletion-state","auth","deletion-http","responses","session-http","staff-request"],"passed":33,"failed":0,"skipped":0,"exitCode":0,"durationMs":4844.1197,"qualification":"Before final submitted-vs-review intent and immutable clipboard snapshot adjustments"},
+  "finalAffectedRegression":{"files":["deletion-state","worker-access-state","briefing-session-context","staff-request"],"passed":18,"failed":0,"skipped":0,"exitCode":0,"durationMs":3720.048},
+  "fullSyntheticSuite":{"testFiles":165,"tests":883,"passed":879,"failed":0,"skipped":4,"exitCode":0,"durationMs":326512.5017,"qualification":"After all final source changes","externalDatabaseTestUrlsRemoved":true,"log":"artifacts/worker-controls-suite-2026-10-13.log"},
+  "build":{"exitCode":0,"modules":2041,"entryKb":592.26,"shellFiles":69,"shellMismatches":0,"existingWarningsRemain":true},
+  "protectedDatabase":{"matchingFingerprints":8,"integrity":"ok","foreignKeyViolations":0,"readOnlyVerification":true,"checkedAfterFullSuite":true},
+  "browser":{"newVerdict":false,"passed":false,"reason":"Current inventory failed at Windows CreateProcessSecurityEnvironment startup, 0x80070020","externalDiagnosticsSent":false},
+  "allOwnedCommandsTerminal":true,
+  "originalPreviewRestarted":false,
+  "originalDatabaseMigrated":false,
+  "externalRolloutPerformed":false,
+  "progressEstimates":{"privateWorkerResponseBoundary":75,"wholeStaffRequestFencing":80,"staffSessionGuard":65,"overall":60,"overallRange":[55,65]},
+  "productionReady":false
+}

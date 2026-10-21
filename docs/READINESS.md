@@ -1,5 +1,579 @@
 # Readiness
 
+Current local Reports checkpoint: [REPORT_LOCALIZATION.md](REPORT_LOCALIZATION.md).
+EN/AR/UR controls/states, exact create/retry recovery, preserved CSV bytes and30
+locale-width checks pass. Cleana16e0668:1,338 pass/four native skips/zero fail,
+offline build/evaluations and915 stable source files. Overall82%; not production
+readiness. Wider reference/language/AT/phone/native/hosted/privacy gates remain.
+
+Current local delta/evidence: [composer limits and lock locale](CONVERSATION_COMPOSER_LIMITS.md).
+The500-character generated-draft gap and profile-only lock-language bug are now
+repaired locally; this does not change the1000-character legacy API/receipt policy.
+Overall81%; broader readiness gates remain open. Earlier notes are historical.
+
+Current21 October 2026 staff action/focus checkpoint: overall81% unchanged,
+staff recording90%, case detail/recovery92%. Clean4b338be1 parent9027 exits0:
+1,333 tests/1,329 pass/zero fail/four native skips,913 stable source files,
+offline install/build/evaluations. Adjacent staff actions, linked message counter,
+stable history loading/failure/paging focus, three-language drafts and13 retained
+width checks pass. Actual external keyboard submit queues one synthetic follow-up;
+separate private save preserves it and original evidence. Worker submit saves
+one reply, no answer/audio. This is not live generation or full matched-reference
+acceptance: the reference500-character staff limit vs current1000 contract needs
+reconciliation. Independent language/AT/phone/native95/hosted/privacy gates remain.
+No real mic/data or cloud/provider/mail/billing/deployment. See
+STAFF_CASE_RECORDINGS.md; older notes below are historical.
+
+
+Latest21 October 2026 follow-up: overall81% unchanged, worker voice recovery90%.
+Purpose-specific Help/reply fallback copy, rendered notice gates/manual retry,
+three-language denied-mic wording, storing/received and corrupt/failed GET-only
+recovery, context lock and twelve retained raw width checks pass locally.
+Clean9db95d02 parent67671 exits0:1,329 tests/1,325 pass/zero fail/four native
+skips,912 stable source files and optimized build/evaluations. Failed private
+bytes await cleanup; session-lock fallback still English. Physical-device,
+independent language/AT/full refs/native95/hosted/privacy gates remain.
+No real mic/data or cloud/provider/mail/billing/deploy. See current BUILD_STATUS.md
+and VOICE_CONVERSATION_CONTRACT.md. Earlier entries are historical.
+
+
+21 October 2026 current worker-voice checkpoint: overall81% (74-87 uncertainty),
+voice recovery88%, navigation/Help90%. Captured EN/AR/UR notices, mixed-language
+privately saved bundles, draft interlocks, actual preview/clear/reload/GET-only
+recovery, exact replay and closed-case receipts pass locally. Clean77bbf986
+parent80848 exits0:1,327 tests/1,323 pass/zero fail/four native-only skips,
+912 stable source files, offline install/build and mocked/scripted evaluations.
+Candidate assets match clean; original data/79 saved manifests preserved.
+Terminal QA2313 exits0 with four received objects and unchanged original answer.
+Twelve width checks observed, raw array lost; three screenshots remain. Expired-
+session notice retry is not accepted notice-fault coverage. Next: purpose-specific
+Help/reply fallback copy, rendered notice/storing/failed states and reference/
+keyboard controls. Physical devices, independent language/AT, full44 references,
+current95 native, hosted and privacy/release gates remain. No real mic/data or
+external services/billing/deploy. See VOICE_CONVERSATION_CONTRACT.md and
+artifacts/production-worker-voice-recovery-2026-10-21.json. Not production ready.
+Earlier summaries below are historical, not current source/preview liveness.
+
+
+21 October2026 local staff-audio checkpoint: overall80% (73-86 uncertainty),
+staff in-person recording85% (was0%), case detail/recovery90% (was88%). Both-
+engine private staff-author audio, notice/capture/preview/explicit save, exact
+metadata-only recovery, cleanup/import/backup/privacy-v8 and worker cleanup ACLs
+pass locally. Clean f4dfba7f, parent3879 observedexit0:1,316 tests/1,312 pass/
+zero fail/four native-only skips, offline install/build and scripted evaluations,
+909 unchanged source files. Built12 locale-width checks, actual reload/GET-only
+recovery, playback, integrity/read/context faults and bounded history pass.
+Physical microphone access was denied; only fixed synthetic tones were used.
+History-pagination focus and exact action placement remain, as do all broader
+reference/independent-language/AT/phone/current95 native/hosted/privacy/release
+gates. Original data and saved builds are checked by the checkpoint preservation
+report. No cloud/provider/mail/real-worker/mic/billing/deployment action. See
+STAFF_CASE_RECORDINGS.md. Not production ready. Earlier entries are historical.
+
+20 October2026 current local timeline checkpoint: overall79% unchanged,case
+detail/recovery88% (was85%). Real staff-only metadata timeline, both engines,
+captured HTTP/strict DTOs, chronological paging, actual audit routing clock,
+private-text/other-case exclusion and audit expiry pass. Browser five pages,
+owner attribution,drafts/read faults/context lock/keyboard and EN/AR/UR four
+widths pass; candidate assets match clean. Initial historical-routing regression
+fails twice as expected then corrected focused17pass. Initial snapshoted248d49
+correctly rejects source drift despite zero test failures. Corrected cleand1ed
+exec97723 observedexit0:1,296 tests/1,292 pass/zero failed/four native-only skips,
+offline build/evaluations,896 unchanged source files. Original data/68 saved
+manifests preserved. In-person recorder,full refs/independent languages/AT/
+phones/native94/hosted/privacy/release remain. No cloud/provider/mail/mic/
+billing/deployment. See CASE_TIMELINE.md. Not production ready.
+
+20 October2026 local staff-case language checkpoint: overall79% (72-85
+uncertainty), S14 queue/creation80%, application-wide localization60%.
+EN/AR/UR case queue/create/detail and action/repeat/review/deadline/dialog
+copy, unchanged private intent, captured receipt recovery and scoped RTL shell
+pass locally. Clean50987288 exec40194 observedexit0:1,290 tests/1,286 pass/
+zero fail/four native-only skips,offline build/evaluations,890 unchanged source
+files. Candidate/clean browser asset manifests match. Actual synthetic saves,
+DST second occurrence, malformed owner reply/GET recovery, draft continuity,
+Cancel/focus and four-width containment pass. Original data/63 saved manifests
+preserved, no configured-secret matches. S15 timeline/in-person recorder and
+independent languages/AT/phones/current94 native/hosted/privacy/release remain.
+No cloud/provider/mail/mic/billing/deployment. See STAFF_CASE_LOCALIZATION.md.
+Not production ready. Earlier checkpoints below are historical.
+
+20 October2026 staff-creation checkpoint: overall78% (71-84 uncertainty), S14
+creation/queue70%. Real independent/linked staff cases, truthful provenance,
+immutable exact receipts, private browser recovery and populated import pass
+locally. Clean8be48ec7 exec28389 observedexit0:1,284 tests/1,280 pass/zero fail/
+four native-only skips, offline build and scripted evaluations; all886 source
+files unchanged. Built interruption/reload, original assessment, clear/focus,
+context lock and four-width controls pass. Original data/60 saved manifests
+preserved, no configured-secret matches. No cloud/native/live-provider/mail/
+microphone/billing/deployment action. Schema94 has no native acceptance yet.
+Full S14/S15 reference composition/localization and wider release gates remain.
+See STAFF_CLARIFICATION_CREATION.md. Not production ready. Earlier checkpoints
+below are historical, not current source or deployment acceptance.
+
+20 October2026 worker case-permission checkpoint: overall77% unchanged,
+service-permission task83%. Two tables now have only the worker cleanup columns,
+with review sequences denied and exact guard/ACL startup checks. Separate local
+API/worker typed/recorded repeat, audio cleanup, deletion, retention and fence
+checks pass. Fresh clean b187180f exec26533 observedexit0:1,269 tests/1,265
+passed/zero fail/four native skips; offline install/build/evaluations pass and
+877 source files unchanged. Initial8773ed18 Windows backup-metadata failure and
+unchanged focused/full rechecks are preserved. Original data/58 manifests pass
+preservation. UI assets unchanged. No native/cloud/provider/mail/mic/billing/
+deployment action. Status lifecycle remains trusted; complete worker isolation
+is not achieved. See WORKER_CASE_WORKFLOW_PERMISSIONS.md. Next: missing S14
+staff-created clarification workflow and full queue/localization controls.
+Not production ready. Earlier checkpoint summaries below are historical.
+
+20 October2026 repeat/review checkpoint: overall77%, not production ready.
+Strict captured paged reads, v2/legacy exact receipts, unsent deadline guards,
+newer/unrelated draft preservation, site-timezone/DST input and competing-change
+rebase pass locally. Clean84afc9af completed all steps exit0:1,265 tests/1,261
+passed/zero failed/four native-only skips,offline build/evaluations and876
+unchanged source files. Parent exec handle expired; terminal report and child
+exits are present. Exact clean-built responsive/context-lock evidence is saved.
+Original eight table fingerprints and56 saved manifests verified; no configured
+secret matches. No cloud/provider/mail/microphone/billing/deployment action.
+SQLite repeat/review parity,current93 native acceptance,all refs/languages/AT/
+phones,real-worker privacy and hosted/release gates remain. See
+CASE_WORKFLOW_RECOVERY.md. The prior clarification checkpoint below is historical.
+
+20 October2026 clarification checkpoint: overall76%, not production ready.
+Staff scoped reads, owner/resolution receipts and unsent draft recovery pass
+SQLite/PGlite, HTTP and built English browser checks. Current clean99969805
+exec72400 exit0:1,254 tests/1,250 passed/zero failures/four native-only skips,
+offline install/build/evaluations and869 unchanged source files. Tested UI
+matches clean; original data and52 saved manifests remain intact. No real
+worker, cloud, provider, mail, microphone, billing or deployment action.
+Current93 database policy is not native accepted; native91 evidence remains
+historical. Repeat/review recovery, recorded voice, all references/languages/
+AT/phones, privacy-approved real-worker AI and hosted/release gates remain.
+See CLARIFICATION_ACTION_RECOVERY.md. Next work continues locally.
+
+## Previous Voice Checkpoint
+
+Current voice checkpoint,19 October2026: overall75%, not production ready.
+Captured voice receipts/byte snapshots and hashing-time identity/authority guards
+pass client and actual local PGlite/HTTP tests. Browser EN/AR/UR control/notice/
+text-interlock checks fit320/390/768/1440 without microphone use or audio upload.
+Clean f35bb4ae exec34947 actually exited0:1,237 tests/1,233 passed/zero failures/
+four native-only skips,43 contract/ten pipeline checks,859 unchanged source
+files. Original data and47 saved manifests preserved. Full recorded-preview/
+unknown-upload/discard browser acceptance, wider capture, whole staff
+clarification migration, repeat/review and prior release gates remain open.
+See VOICE_CONVERSATION_CONTRACT.md. Local-only work continues.
+
+## Previous Text Checkpoint
+
+Current checkpoint,19 October2026: overall estimate75%, not production ready.
+Conversation text/receipt captured-context contracts and exact-intent recovery
+pass both local backends and built browser checks. Drafts survive read failure
+and closure, different drafts survive receipt recovery, and clearing local text
+does not cancel pending server work. Final EN/AR/UR responsive, keyboard/focus,
+malformed DTO/delayed case/context lock checks pass. Clean e8244a1c exec77750
+actually exited0:1,231 tests/1,227 passed/zero failures/four native-only skips,
+43 contract/ten pipeline checks;857 unchanged source files. Original data and
+45 saved build manifests remain intact. See CASE_CONVERSATION_RECOVERY.md.
+Voice/repeat/resolution/review, whole-staff clarification migration, full
+reference/localization/AT/phone/native-current-policy/privacy/live-quality and
+hosted gates remain open. User requests local work only; no cloud/billing action.
+
+## Previous Help-History Checkpoint
+
+19 October2026: overall estimate74%, not production ready.
+Local S24 Help history now has bounded dual-backend paging and strict captured
+worker-session/version/language reads. Built EN/AR/UR at320/390/768/1440,
+fault recovery, delayed navigation, session lock, unsent conversation continuity
+and one explicit long-text Help case/reload pass. Clean57a2adc2 exec42035 exit0:
+1,222 tests/1,218 passed/zero failed/four native-only skipped; offline build,
+43 contract/ten pipeline checks;855 unchanged source files. All42 saved build
+manifests and original data remain intact. See WORKER_HELP_HISTORY.md.
+Native current-policy, full conversation/localization/AT/phone/reference,
+live quality, privacy and hosted release gates remain open. User requests local
+work only for now; no cloud or billing action is authorized.
+
+## Earlier Checkpoints
+
+Latestlocal checkpoint056ee876:1201tests/1197pass/zero fail/four native skips,
+offline lockedinstall/build/evaluations and847unchangedsourcefiles. S23history
+current-session/version/language guards andtruthful receipt stages passSQLite/
+PGHTTP-reader acceptance;browserattachment failedtwice,notarenderedpass. No
+neededtestprocessrunning;originaldata/34savedbuilds preserved. Overall73%,not
+productionready. See WORKER_SUBMISSION_HISTORY.md.
+
+Current checkpoint: overall73%,not production ready. S20Help/navigation andS21
+native-media controls locallyverified. Browser-discovered zero seek range is
+repaired with authenticated exact bytes aftercurrent scope/integrity checks.
+Clean5b3c6dbb passes1191tests/four native skips/zero fail,offline install/build
+andboth evaluations; actual three-language320/390/768/1440 playbackcontrols fit.
+Fixture24792 terminal0,zero writes/attempts/externalcalls. Primary-first layout
+also locallyverified:clean947bfe0f1192pass/four skips/zero fail,explicit synthetic
+textsave/reload/restore andthree-language layout pass. Full-reference,independent
+language/AT/phone/native/hosted acceptance remain.
+See WORKER_NAVIGATION_HELP.md andWORKER_PLAYBACK.md. Current91 native three-role
+retry6a30573b passed20 runtime checks/23 SQL denials,heartbeat fault/drain/recovery
+and exact cleanup; independent read-only postcheck confirms all four absences and
+original outside baseline. Original process exit code unavailable,not invented.
+Local clean2c9bdda4 passes1184tests/four native skips/zero fail,offline build and
+both evaluations. S19 welcome/language/recovery controls pass built local browser
+checks; its fixture exited0 with one redemption per scenario and no external calls.
+Broader native failures,hosted/privacy/storage/backup/device/language/CI/release
+gates remain. See NEON_THREE_ROLE_ACCEPTANCE.md and WORKER_ENTRY_WELCOME.md.
+
+## Historical Checkpoints
+
+Current three-role runnable rehearsal preparation75%,overall71%,not production
+ready. Exact CLI/default current91 exercise/v2 evidence and normal heartbeat/
+SQL-fault/restart/drain plus ambiguous-ack/active-session cleanup pass locally.
+Clean d6b611b6 passes1173tests1169pass/zero fail/four native skips,offline install/
+build,both evaluations and832unchanged source files. Preservation e7b2fb18 verifies
+original eight fingerprints/integrity/FK,27manifests andzero configured-secret
+matches. Fresh Neon authorization pending;no cloud/provider/mail/realdata/billing/
+deploy change. Native network/lock/process/processing-expiry/hosted gates remain.
+
+Current three-role preparation55%,overall71%,not production ready. Local
+orchestration and embedded API/worker/operator permission/queue/revocation/
+fence exercise pass; CLI unavailable and native91/concurrency/TLS remains open.
+Clean140abc11 passes1170tests1166pass/zero fail/four native skips,offline install/
+build,both evaluations and831unchanged source files. No external resource or
+provider/mail/realdata/billing/deployment change. NATIVE_THREE_ROLE_PREPARATION.md
+records remaining acceptance before any new cloud authorization is requested.
+
+Current independent-heartbeat checkpoint:overall71%,delegated75%,operator80%,
+not production ready. WORKER_HEARTBEAT.md documents serialized atomic five-second
+publication during awaited work,failure fencing and stopped-write ordering.
+Clean650e1447 passes1163tests1159pass/zero fail/four native skips,locked offline
+install/build,both synthetic evaluations,831unchanged source files. Original
+eight fingerprints/integrity/FK and25saved manifests unchanged;zero configured
+secret matches. No cloud resource,external provider/mail,real data,billing or
+deployment changed. Native91/three-role,network stalls and release gates remain.
+
+Previous capability/keyless HTTP checkpoint:
+
+Current capability/keyless HTTP checkpoint:overall71%,not production ready;
+delegated70%,operator isolation80%. Migration91 hashes-only worker capability,
+freshness/conflict/stop guards and configuration-bound original queue receipts
+pass actual local roles/HTTP/built browser loss/outage/reload/completion/stop
+checks. Final bfbca555 offline install/build1153tests1149pass/zero fail/four
+native skips,both evaluations and829unchanged source files pass. This does not
+prove independent heartbeat during long awaits,native91/three-role concurrent
+claims,hosted transport/live quality or the broader privacy/device/release gates.
+API/operator reject Gemini keys/adapters;fixed synthetic staging-worker tests
+remain default-off and none was enabled/deployed/live-tested here. No real data.
+See VERIFICATION_WORKER_CAPABILITIES.md and current BUILD_STATUS.md.
+
+Previous durable queue checkpoint:
+
+Current durable provider-verification queue:overall71%,not production ready;
+delegated task45%. Local exact queue/claims/results/original quota/receipts,
+actual restricted roles, source fence and in-flight shutdown pass33focused tests.
+Corrected-source7ba8b703 full verification passes:locked offline install/build,
+1146tests1142pass/zero fail/four native skips,both synthetic evaluations and827
+unchanged source files. The original1145-test full run
+retains one legacy application-scheduler integration failure. The fix skips the
+worker-only stage for application profiles, retaining the SQL denial. Worker
+capabilities, dedicated operator HTTP/built receipt flows, native90/concurrency
+and hosted/live acceptance remain open. No new cloud or real-worker processing.
+See DELEGATED_PROVIDER_VERIFICATION.md/current BUILD_STATUS.md.
+
+Previous provider-worker authorization foundation:overall71%,not production ready;
+delegated verification20%. Migration89 introduces only a minimal worker-readable,
+monotonically revoked permit;no hosted queue/worker dispatch is enabled.34focused
+checks pass. Full1130baseline:1124pass/two stale migration-list failures/four
+native skips;both exact lists updated and their two upgrade tests now pass.
+Application code unchanged from full snapshot;separate evaluations pass. No new
+unchanged full-verifier/native89/concurrency/hosted/real-data claim. See
+DELEGATED_PROVIDER_VERIFICATION.md/current BUILD_STATUS.md.
+
+Current standalone operator entry:operator isolation75%,overall71%,not production
+ready. Default / uses an independent frontend and validated asset graph without
+customer bootstrap/PWA;local login/reload/logout and320/1440rendering observed.
+Offline build/1118tests1114pass/four skips/43contractchecks pass;interrupted final
+pipeline separately resumed with ten checks and unchanged818source hashes.
+No uninterrupted verifier,hosted TLS/cookie/native-login/prior-worker-clearance
+or deployment claim. OPERATOR_ENTRY.md and current BUILD_STATUS.md record limits.
+
+2026-10-15 current:overall71%,not production ready. Customer control tables are
+read-only,operator audit is hidden from API/worker,and the ten-stage scripted
+pipeline uses actual application ACLs. Full d95947b4 run:1115total/1111pass/four
+native-prerequisite skips/zero fail,offline build and both evaluations pass.
+Crew layout corrections and real built synthetic creation/membership/lifecycle/
+keyboard-paging were observed at scoped widths;frozen publication counts stay
+unchanged. Current UI source has a separate subsequent clean run;consult current
+BUILD_STATUS.md for its result. Native88/three-role,actual hosting/private-storage
+backup/real devices/independent languages/live quality/privacy/release remain
+unproven. No production rollout or real-worker data processing is authorized.
+
+Earlier2026-10-15 dedicated operator runtime:overall71%,not production ready. Positive
+column ACLs,isolated throttle state,guarded mutations and separately verified
+startup implemented;local three-profile fence removes column writes. Full
+baseline1114tests/1110pass/zero fail/four skips,locked offline build/install and
+both evaluations pass. Final five-file28tests pass after a reproduced/fixed CR
+normalization defect;exactly two files differ from that baseline. No unchanged
+final-full-run/native88/hosted/browser/live/CI claim. Broader application/worker
+control authority,provider-test delegation and previous release/privacy/reference/
+language/device gates remain open. See OPERATOR_COLUMN_PROFILE.md and current
+BUILD_STATUS.md. Older entries below are historical.
+
+Earlier2026-10-15 operator HTTP/credential boundary:overall71%,not production ready.
+New hosted customer/worker operations refusal and internal separate operator
+HTTP/cookie/customer-route/secret-isolation checks pass locally. Application
+SQL role now cannot access operator identities/sessions;old broader grants fail
+admission pending explicit maintenance reconfiguration. Expanded61tests pass,
+but operator DB profile/launcher,native new-policy and deployed isolation remain
+open. No cloud resources or runtime credentials changed. Fresh clean1106tests/
+1102pass/zero fail/four skips,locked offline install/build,both evaluations and
+811stable source hashes pass;original eight hashes/twelve manifests preserved.
+Exact evidence in current BUILD_STATUS.md;older regressions below are historical.
+See OPERATOR_SERVICE_BOUNDARY.md.
+
+2026-10-15 12:12UTC:overall71%,not production ready. Team-first S27 source and
+scoped dual-backend API implemented;25focused/type/build and fresh1101-test
+regression pass1097/four skips/zero fail,both scripted evaluations pass,809source
+hashes stable. Browser kernel cannot start after one supported reset;rendered
+team-first/reference/keyboard/four-width acceptance remains open. No raw browser
+or external diagnostic workaround. Original eight table hashes and eleven shell
+manifests preserved. No cloud/realdata/mail/billing/deploy. See
+SITE_CREWS_OVERVIEW.md and current BUILD_STATUS.md. Earlier checkpoints historical.
+
+2026-10-15 08:06UTC:overall71%,localization57%,not production ready. Existing
+directory/crew Arabic presentation and scoped RTL shell now have local built
+workflow/four-width/keyboard/unsent-edit evidence. Full S27 team-first composition,
+English subpanels/destinations,independent language/AT/real-device acceptance remain.
+Fresh clean1092tests/1088pass/zero fail/four skips,offline install/build,43mocked
+contract/ten scripted pipeline checks,802stable source hashes. Original data and
+nine shell manifests preserved;no cloud/realdata/mail/billing/deployment. Reticle
+possible external metadata transmission blocked,no pass or bypass. See
+STAFF_DIRECTORY_ARABIC.md,current BUILD_STATUS.md and PROGRESS_BOARD.md.
+
+2026-10-15 07:39UTC:overall71%,not production ready. Application cleanup-scope
+DTO/UI task locally complete;broader provider/history/backup erasure accounting
+25%. Both backends expose current application scope and four unverified external
+categories without changing receipts/IDs/times;strict browser DTOs,built1440/320
+scope/dialog keyboard/zeroPOST checks pass. Final clean1086tests/1082pass/zero
+fail/four skips,offline locked install/build,43mocked contract/ten scripted
+pipeline checks,800stable source hashes. No realdata/cloud/mail/billing/deploy.
+Prior failed exact-response test/interrupted verifier remain preserved. Original
+eight hashes match,integrityOK/FK0;seven55-file manifests match,selected credential
+scan clean. Reticle disconnected,no verdict;IAB fixture checks used instead.
+Storage55%,native82%,backup75%,hosted20%,release40%;external erasure/restore,
+fine-grained/operator separation,full language/reference/a11y/devices/live quality,
+actual CI and hosted release remain open. See DELETION_CLEANUP_SCOPE.md and
+NEON_STORAGE_PRIVACY_GATE.md. Older dated entries below are historical.
+
+2026-10-15 07:02UTC: overall71% (64-77% uncertainty),not production ready.
+Authorized live six-family Neon application adapter test passes ten backend
+checks/nine fixed tone objects,private reads/anonymous denial/conditional
+rejection/original bytes and exact owned branch cleanup. Final branch listing
+empty. Database PGlite/provider scripted;not combined native cloud/hosted proof.
+Storage55%,native82%,service-role55%,backup75%,hosted20%,release40%. Fresh clean
+1084tests/1080pass/zero fail/four skips,locked offline install/build,43mocked
+contract/ten scripted pipeline checks,798stable source hashes. No realdata,
+external AI/mail,cloud DB writes,billing,application switch or deployment.
+Current-branch absence versus final/history/backup erasure is an explicit open
+privacy release gate;hosted mode remains synthetic-only. See
+NEON_APPLICATION_STORAGE_REHEARSAL.md,NEON_STORAGE_PRIVACY_GATE.md,
+CLEAN_VERIFICATION.md and PROGRESS_BOARD.md. Earlier dated notes historical.
+
+2026-10-15 06:42UTC: overall70% (63-76% uncertainty),not production ready.
+Actual Neon87migration/two-service test passes with verified TLS,correct/wrong
+profile admission,API publication/submission,worker assessment,13 SQL denials
+and mixed-role fencing/full inventory equality. DB/both logins removed,outside
+catalog/ACL unchanged. Service-role hardening55%,native82%; broad worker DML,
+fine column/verb/operator isolation remain open. Fresh clean1074tests:
+1070pass/zero fail/four skips,locked offline install/build,43mocked contract/
+nine scripted pipeline checks,795stable source hashes. Explicit Neon app adapter
+and live compatibility probe pass;storage40%,backup75%,hosted20%,release40%.
+All-family cloud application/backup/permanent-erasure/custody/cutoff,hosted,
+physical devices,full refs/languages/a11y/live quality,privacy-approved real AI
+and actual CI/release remain open. See NEON_LOGIN_REHEARSAL.md,
+NEON_PRIVATE_STORAGE_TEST_SETUP.md,CLEAN_VERIFICATION.md and PROGRESS_BOARD.md.
+Older dated notes below are historical,not current blockers or readiness claims.
+
+2026-10-15 05:26UTC: overall70% (63-76% uncertainty),not production ready.
+Native80%,backup75%,fresh-setup/release40%. Real encrypted native Neon round trip
+passes with full inventory/guard parity, recording readback and access quarantine;
+both test DBs/passfiles removed, outside catalog/ACL matched. Fresh source/locked
+offline install/build/full1036tests:1032pass/zero fail/four prerequisite skips;
+43mocked contract/nine scripted pipeline checks pass. Later backup additions have
+separate focused19pass/native1pass evidence, not an invented new full-suite count.
+Original hashes05:22/05:26 match, integrityOK/FK0, two55-file manifests match,
+selected credential scan clean. NEON_BACKUP_REHEARSAL.md and CLEAN_VERIFICATION.md
+record exact scopes and failures. PrivateR2/cutoff/activation,other crash matrices,
+service separation,full refs/languages/a11y/devices/live quality,real-worker privacy,
+hosted and actual GitHub/Linux CI remain open. Older dated notes are historical.
+
+Final2026-10-15 04:52UTC: full stable-build regression1026tests/1022pass/zero
+fail/four explicit local-native prerequisite skips,220764.8971ms,terminal0.
+Build2068modules/670.23KB passes with existing warnings. Original eight table
+fingerprints/integrity/FKs,55shell hashes and1504-file current-credential scan
+pass;zero secret matches. All needed owned sessions terminal and test cloud
+resources removed. Earlier build/test race remains a failed run; focused hosted
+and full rerun passed unchanged. Evidence:neon-stable-build-suite-110bc507-d1d1-
+425b-9426-a511da3068fa and neon-login-preservation-ec988671-ca59-401e-909f-
+7052cca65599 under artifacts. Overall69%,native75%,goal active,not ready.
+
+2026-10-15 native LOGIN checkpoint: explicitly authorized temporary database
+and expiring SQL-created LOGIN role passed two independent verified-TLS direct
+connections,unchanged production permission gate,restricted publication/submission/
+scheduled assessment,loopback API/auth denials,and SQL maintenance/DDL/future-object
+denials. Database/role removed,outside catalog/ACL unchanged. Extended Neon auth/
+retry/lease/billing/withdrawal and actual owned-worker crash/recovery also passed,
+with owned schema removed. No realdata,provider/mail calls or public deployment.
+Nine focused LOGIN tests pass; final full regression running,not yet credited.
+Two interrupted full-suite attempts are not passes; last completed1010/1006pass/
+four skips predates extensions. Overallabout69% (62-75% uncertainty),native75%,
+read-key85%; live45%/hosted20% and device/reference/language estimates unchanged.
+See NEON_LOGIN_REHEARSAL.md and NEON_SYNTHETIC_REHEARSAL.md. Broader native/private
+backup/restore,other crashes,separate service profiles,hosted/a11y/device/reference/
+independent AI quality and complete release remain open. Older notes historical.
+
+2026-10-14 native checkpoint: isolated Neon Free PostgreSQL18 preflight,
+86 migrations/checksum/replay,concurrent publication/submission/assessment and
+scope/immutable guards passed. Explicitly authorized temporary NOLOGIN roles
+passed complete scoped runtime policy,CRUD/row-lock and negative permission
+checks; both roles and the owned schema removed, outside ACL/roles/catalog
+identities unchanged. Direct LOGIN/database-wide/service-separation/privateR2/
+backup/process-death/deployment/release gates remain open. No real data or
+provider/mail calls. See NEON_SYNTHETIC_REHEARSAL.md and saved role-run evidence.
+Current-build read-key delayed refresh/page-switch/error recovery and paused
+editor acceptance pass with zero mutations and unchanged protected inventories;
+read-key85%,native65%,overallabout68% (61-74% uncertainty). Prior full1007/1003
+pass/zero fail/four native skips/build passes; post-role final suite is running,
+not yet credited. Older dated notes below are historical.
+
+2026-10-14 16:35 UTC latest: shared artifact result display now uses exact
+captured authority/path/query/refresh keys before effects. Same-selection provider
+history refresh keeps only verified metadata; changed page/scope/error clears it.
+Focused31 pass; full998/994 pass/zero fail/four native skips,340949.8093ms;54530
+terminal0. Build2068/670.23KB passes; existing warnings remain. Browser creation
+failed webview attachment twice: no latest-build visual verdict or new screenshot
+claim. Both owned disposable fixtures terminal with zero mutations/external calls
+and unchanged protected inventories/publication. Read-key acceptance70%,overall67%.
+User requests Neon Free setup steps; dedicated cloud rehearsal must not weaken
+current localhost-only native test guards. See ARTIFACT_READ_KEYS.md and
+NEON_FREE_TEST_SETUP.md. Earlier entries below are historical.
+
+2026-10-14 16:23 UTC latest: staff-session browser acceptance80% (was65%).
+Built cross-tab/expiry/identity/revocation/timeout and localized keyboard/320px
+checks pass. Pending session verification hides/inerts the shell while retaining
+exact unsent editor; same-session release restores it unchanged. Final disposable
+fixture17 GETs/zero appPOSTs/two held reads, business/audit unchanged,terminal0.
+Focused23 pass; production application/build/full996/992 suite unchanged. Earlier
+fixture required checked-process stop; no final inventory verdict for that run.
+Overallabout67%,broader authority/held mutation/native/device/release gates remain.
+Next: strict read-key continuity and provider-history polling display stability.
+See STAFF_SESSION_GUARD.md; entries below are historical checkpoints.
+
+2026-10-14 16:09 UTC latest: S17 bounded read-only provider history now covers
+preparation/source/voice/check reservations, HTTP receipts and recorded result
+references. Private inputs/claims/hashes/secrets stay server-side; HTTP acceptance
+is not completed validation. SQLite absence is honest. Focused27 pass; full996
+/992 pass/zero fail/four native skips,strict build/preservation pass. Built paging,
+keyboard,outage/recovery,320px and auditor reads verified; both ten-table fixture
+inventories unchanged,zero mutations/external calls;all owned sessions terminal.
+Overallabout67%,provider-history85%,queue/App helpers90%; broader polling/authority,
+native/reference/language/device/live/privacy/hosted/release gates remain open.
+See PROCESSING_PROVIDER_HISTORY.md. Earlier checkpoint entries are historical.
+
+2026-10-14 15:35 UTC latest: S17 customer voice/check recovery is locally verified,
+not a production verdict. Exact immutable retry receipts include frozen binding
+and generation; original replay never requeues a later failed/completed run.
+Expiry/deletion/role/pending/dispatch boundaries remain. Full990 tests/986 pass/
+zero fail/four native skips, terminal exit0; build2065/660.49KB,55 shell hashes and
+eight original fingerprints/integrity/FKs pass. Built outage/read-only recovery/
+missing-receipt explicit retry/reload/keyboard/320px/auditor journeys pass. Final
+fixture terminal,four POSTs/three receipts,seven inventories unchanged,no external
+calls;tab closed/viewport reset. Overallabout67%,queue/App helpers90%,newresponse
+retry85%. Native concurrency, wider authority/device/all-reference/a11y, per-run
+provenance, complete live voice/quality/privacy and hosted/release gates remain.
+See RESPONSE_PROCESSING_RETRY.md and the root ledger.
+
+2026-10-14 11:26 UTC latest: mixed S17 customer queue now covers actual accepted
+source transcription, voice transcription and checks, plus preparation. Both
+backends retain exact publication bindings and hide private text/rubric/lease data.
+Captured source JSON/retry guards preserve native cookie-only private downloads.
+Full 974 tests/970 pass/zero fail/four native skips, terminal exit 0; strict build,
+55 shell hashes and eight original fingerprints/integrity/FKs pass. Desktop/320px
+filters/pagination/voice history/explicit retry/reload/keyboard verified locally.
+Final fixture terminal, seven inventories unchanged, one retry, no external calls;
+temporary tab closed, viewport reset. Overall about66%, queue/App helpers85%.
+Failed response/check customer recovery, broader authority/native/browser/device/
+reference acceptance still OPEN. All prior live-AI/privacy/cloud/release gates
+remain OPEN. PROCESSING_JOB_KINDS.md records exact scope and evidence.
+
+2026-10-14 10:18 UTC latest: processing intent/receipts/generation/replay and
+captured dual-backend endpoints plus shared draft/job UI recovery are locally
+verified, including populated import, built lost ACK/reload/explicit retry/320px/
+keyboard. New Gemini auth-key compatibility corrected; key works and stays private.
+Four live synthetic typed assessment cases pass; actual metered generation/four
+speech tracks/private publication pass. Ninth workflow request returned speech
+429 before voice transcription, so complete live pipeline remains OPEN.
+Final full suite 967 tests/963 pass/zero fail/four native skips, terminal exit 0,
+255519.1153 ms. Strict build/56 shell hashes/eight protected fingerprints/integrity/
+FKs pass. Fixture and needed commands terminal, temporary tab closed/viewport reset.
+Overall about 65%, App helpers/processing recovery 80%, live synthetic AI45%.
+No native/cloud/Urdu speech/independent quality/real-data/all-reference/a11y/device/
+release promotion. PROCESSING_REQUEST_RECOVERY.md and root ledger give details.
+
+## Earlier Gemini Evidence
+
+2026-10-14 06:23 UTC latest: Gemini Free fixed synthetic preparation, Arabic/Urdu
+translation comparisons and normalized English/Arabic speech pass with the locally
+configured key. Real API protocol and audio-container incompatibilities repaired;
+key absent from tracked files/public assets. No real worker data, diagnostic upload,
+paid service activation, original migration/restart or cloud rollout.
+Final full suite: 954 tests, 950 passes, zero failures, four native skips, exit 0
+(220901.3975 ms). Final focused 29-pass rehearsal, strict build, 56 shell hashes
+and eight original fingerprints/integrity/FKs pass. Overall about 64%, live AI40%,
+not production ready: complete live pipeline, independent quality, Urdu speech,
+privacy-approved real data and other release gates remain open. See
+`GEMINI_LIVE_CHECKPOINT_2026-10-14.md` and the progress board.
+
+## Earlier App Evidence
+
+2026-10-14 05:41 UTC latest: App captured transport continuation passes focused
+48/27 regressions and the corrected full suite: 940 tests, 936 passes, zero
+failures, four native skips, terminal exit 0. Build/56 shell hashes/eight original
+fingerprints/integrity/FKs pass. Built retry/lost ACK/read/activity native CSV/
+readiness/auditor/sign-out evidence recorded in `APP_REQUEST_FENCING.md`.
+Overall estimate is about 62%, not production ready; see the dated
+`PROGRESS_REASSESSMENT_2026-10-14.md`. Broader DTO/process recovery/account,
+reference/localization/accessibility/device/native/live/hosted gates remain open.
+All owned commands terminal; original previews/data preserved; no external calls.
+
+## Earlier Evidence
+
+2026-10-13 10:54 UTC latest: optional edit/regeneration captured-context and recovery
+completion gates are implemented. Full synthetic 862 pass/zero failed/four native
+skips before final retention-policy repair; final affected 14-pass regression and
+strict build/68 hashes/original preservation pass afterward. Browser remains
+unverified; broader staff/native/live/cloud/reference/a11y/device/release gates
+remain open. No original restart/migration or external operation. Whole staff
+request-fencing estimate 50%, overall about 60%, not readiness. OPTIONAL_EDIT_FENCING.md.
+
+2026-10-13 10:34 UTC latest: core briefing-family captured-context requests and
+asynchronous completion guards are locally verified. Final 163-file/866-test suite
+862 passed/zero failed/four native prerequisite skips, terminal 0; final related
+49 pass and strict build/68 shell hashes/eight original fingerprints/integrity/FKs
+pass. Initial four fixture failures repaired with intact assertions; PostgreSQL
+schedule mismatch now truthfully returns context 409. No browser acceptance added
+while its trusted runtime is unavailable. Review/regeneration and remaining staff
+helpers, native/live/cloud/complete references/a11y/devices/release remain unfinished.
+No original restart/migration or external operation. Overall still about 60%, not
+production ready. BRIEFING_REQUEST_FENCING.md and PROGRESS_BOARD.md.
+
+2026-10-13 latest: staff lock/recovery plus captured Staff & Access requests are
+implemented with focused helper and actual local/embedded-PostgreSQL HTTP proof.
+Full suite 860 tests/856 passed/zero failed/four native prerequisite skips, terminal
+0, before final pending-completion adjustment; final affected 28-pass regression
+and strict 2038-module build/68 shell hashes/original preservation pass afterward.
+Browser runtime exits at startup, so rendered stale-tab/Strict Mode/expiry/RTL/
+keyboard/device evidence remains absent. Broader briefing/billing/invitation/etc.
+staff-helper migration is still open. No original preview restart/migration or
+external rollout. Overall about 60% full scope, not production ready. See
+STAFF_REQUEST_FENCING.md, STAFF_SESSION_GUARD.md and PROGRESS_BOARD.md.
+
 2026-10-12 latest: bounded S13/S18 publication history/exact-version views are
 locally synthetic-verified. Full suite 840 passes/zero failures/four native skips
 before final UI/expiry assertion adjustments; final affected 22-pass regression

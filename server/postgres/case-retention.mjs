@@ -9,8 +9,9 @@ export function getCaseRetention(pool,session,{schema='public'}={}) {
     await requirePrincipal(client,session,'staff',['owner','administrator','supervisor','auditor']);
     const policy=(await client.query('SELECT revision,days FROM case_retention_policies WHERE org_id=$1 AND site_id=$2',[session.org_id,session.site_id])).rows[0];
     const count=(await client.query('SELECT count(*)::integer AS n FROM case_content_purges WHERE org_id=$1 AND site_id=$2',[session.org_id,session.site_id])).rows[0].n;
+    const scope=staffRecoveryScope(session);
     return {revision:policy?.revision ?? 0,days:policy?.days ?? null,canWrite:['owner','administrator'].includes(session.role),
-      recoveryScope:`case:${staffRecoveryScope(session)}`,options:textRetentionDays,completed:{case:count},
+      recoveryScope:scope?`case:${scope}`:null,options:textRetentionDays,completed:{case:count},
       limitations:'Scheduled cleanup redacts resolved case reasons, notes, help text, messages, follow-up source/translation and disagreement reasons after resolution and all later case activity expire. Open cases are preserved. Related voice objects are retired through retryable cleanup. Outcomes, receipt hashes and audit metadata remain; answers, briefing content, backups and device copies have separate lifecycles. Historical cases start their resolution clock when this policy capability is installed.'};
   });
 }

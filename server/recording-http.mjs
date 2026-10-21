@@ -1,5 +1,6 @@
 import { DEFAULT_AUDIO_ROOT, receiveRecording, getRecording, getRecordingAudio } from './recordings.mjs';
 import {clientSessionContext} from './session-context.mjs';
+import {sendPrivateWav} from './audio-response.mjs';
 
 async function readWav(req) {
   if (req.headers['content-type'] !== 'audio/wav') throw new Error('Expected WAV audio');
@@ -33,9 +34,7 @@ export async function handleRecordingRoute(req, res, db, session, path, audioRoo
     const [, id, audio] = recording;
     if (audio) {
       const bytes = await getRecordingAudio(db, session, id, audioRoot);
-      res.writeHead(200, { 'content-type': 'audio/wav', 'content-length': bytes.length,
-        'cache-control': 'no-store', 'x-content-type-options': 'nosniff', 'referrer-policy': 'no-referrer' });
-      res.end(bytes);
+      sendPrivateWav(req,res,bytes);
     } else {
       const row = getRecording(db, session, id);
       if (!row) throw new Error('Recording unavailable');

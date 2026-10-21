@@ -26,11 +26,16 @@ function verifyDatabase(db) {
 }
 
 function recordings(db) {
-  if (!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='recordings'").get()) return [];
-  if(db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='recording_purges'").get())
-    return db.prepare(`SELECT r.id,r.sha256,r.bytes FROM recordings r WHERE r.received_at IS NOT NULL
-      AND NOT EXISTS(SELECT 1 FROM recording_purges p WHERE p.recording_id=r.id) ORDER BY r.id`).all();
-  return db.prepare('SELECT id,sha256,bytes FROM recordings WHERE received_at IS NOT NULL ORDER BY id').all();
+  const rows=[];
+  if(hasTable(db,'recordings')){
+    const live=hasTable(db,'recording_purges')?' AND NOT EXISTS(SELECT 1 FROM recording_purges p WHERE p.recording_id=r.id)':'';
+    rows.push(...db.prepare(`SELECT r.id,r.sha256,r.bytes FROM recordings r WHERE r.received_at IS NOT NULL${live}`).all());
+  }
+  if(hasTable(db,'case_voice'))rows.push(...db.prepare(`SELECT v.id,v.sha256,v.bytes FROM case_voice v WHERE v.status='received' AND v.cleanup_state='active'
+    AND NOT EXISTS(SELECT 1 FROM worker_deletion_requests d WHERE d.worker_id=v.worker_id)
+    AND NOT EXISTS(SELECT 1 FROM clarifications c WHERE c.id=v.requested_case_id AND c.reason IN ('[Deleted]','[Expired]'))`).all());
+  if(new Set(rows.map(row=>row.id)).size!==rows.length)throw Error('Duplicate private recording reference');
+  return rows.sort((a,b)=>a.id<b.id?-1:a.id>b.id?1:0);
 }
 
 async function verifyAudio(path, row) {

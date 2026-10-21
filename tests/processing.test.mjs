@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import {openDatabase} from '../server/db.mjs';
@@ -11,8 +13,8 @@ import {createAppServer} from '../server/index.mjs';
 
 const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 test('processing filters are bounded and reject unknown scope or invalid options',()=>{
-  assert.deepEqual(processingFilters(),{search:'',status:'all',sort:'newest',page:1,pageSize:20});
-  for(const input of [null,[],{org_id:'cedar'},{search:'x'.repeat(81)},{status:'complete'},{sort:'title'},{page:0},{page:5001},{page:1.5},{pageSize:101},{pageSize:0}]) assert.throws(()=>processingFilters(input),/Invalid processing filter/);
+  assert.deepEqual(processingFilters(),{search:'',status:'all',kind:'all',sort:'newest',page:1,pageSize:20});
+  for(const input of [null,[],{org_id:'cedar'},{search:'x'.repeat(81)},{status:'matched'},{sort:'title'},{page:0},{page:5001},{page:1.5},{pageSize:101},{pageSize:0}]) assert.throws(()=>processingFilters(input),/Invalid processing filter/);
 });
 
 test('SQLite processing pages and details are scoped, redact internal errors and fence old/archived retries',()=>{
@@ -22,12 +24,13 @@ test('SQLite processing pages and details are scoped, redact internal errors and
       const id=`job-${String(index).padStart(3,'0')}`;
       db.prepare("INSERT INTO jobs VALUES(?,?,?,?,?,'prepare',?,0,?,NULL,?,?)").run(id,'cedar','beirut','shelf',index+1,index%2 ? 'failed' : 'ready','2026-10-01T00:00:00.000Z','provider-secret https://private.invalid/key','2026-10-01T00:00:00.000Z');
     }
-    const first=listProcessing(db,owner,{pageSize:100}),last=listProcessing(db,owner,{page:2,pageSize:100});
+    const first=listProcessing(db,owner,{kind:'prepare',pageSize:100}),last=listProcessing(db,owner,{kind:'prepare',page:2,pageSize:100});
     assert.equal(first.total,125);assert.equal(first.items.length,100);assert.equal(last.items.length,25);
     assert.equal(new Set([...first.items,...last.items].map(row=>row.id)).size,125);
     assert.equal(first.items[0].id,'job-000');assert.equal(listProcessing(db,owner,{status:'failed'}).total,62);
-    assert.equal(listProcessing(db,owner,{search:'colour'}).total,125);assert.equal(listProcessing(db,owner,{search:'%'}).total,0);
-    assert.equal(listProcessing(db,owner,{page:20}).total,125);assert.deepEqual(listProcessing(db,owner,{page:20}).items,[]);
+    assert.equal(listProcessing(db,owner,{kind:'prepare',search:'colour'}).total,125);assert.equal(listProcessing(db,owner,{search:'%'}).total,0);
+    assert.equal(listProcessing(db,owner).total,149);assert.equal(listProcessing(db,owner,{kind:'answer_check'}).total,24);
+    assert.equal(listProcessing(db,owner,{kind:'prepare',page:20}).total,125);assert.deepEqual(listProcessing(db,owner,{page:20}).items,[]);
     assert.ok(!JSON.stringify(first).includes('provider-secret'));assert.ok(!JSON.stringify(last).includes('lease_until'));assert.equal(last.items.every(row=>!row.retryAvailable),true);
     for(const session of [{...owner,role:'supervisor'},{...owner,principal_id:'missing'},{...owner,site_id:'harbor-yard'},{principal_type:'worker'}]) assert.throws(()=>getProcessing(db,session,'job-000'),/Forbidden/);
     const foreign={...owner,principal_id:'harbor-owner',org_id:'harbor',site_id:'harbor-yard'};
@@ -64,5 +67,9 @@ test('SQLite processing HTTP lists and details are private and unavailable to wo
     }
     assert.equal((await read('/processing?pageSize=101',staff)).status,400);assert.equal((await read('/processing/not-here',staff)).status,404);
     assert.equal((await (await read(`/processing/${job.id}`,staff)).json()).revision,1);
+    const checks=await (await read('/processing?kind=answer_check',staff)).json();assert.equal(checks.total,24);
+    const encoded=encodeURIComponent(checks.items[0].id),detail=await read(`/processing/${encoded}`,staff);assert.equal(detail.status,200);
+    assert.equal((await detail.json()).id,checks.items[0].id);
+    assert.equal((await read(`/processing/${encoded}`,worker)).status,403);
   } finally {await new Promise(resolve=>server.close(resolve));db.close();}
 });

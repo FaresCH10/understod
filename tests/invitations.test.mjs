@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import {openDatabase} from '../server/db.mjs';
 import {seed} from '../server/seed.mjs';
 import {provisionStaffCredential,authenticateStaff,createSession,requireSession} from '../server/auth.mjs';

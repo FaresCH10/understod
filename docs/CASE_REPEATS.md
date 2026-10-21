@@ -1,5 +1,10 @@
 # Supervisor-Requested Repeat Answers
 
+20 October 2026 continuation: captured paged contracts, exact receipt recovery,
+unsent deadline navigation guards and site-timezone/DST input are implemented
+locally. See CASE_WORKFLOW_RECOVERY.md for current evidence and limits. The
+device-timezone UI description and build statistics below are historical.
+
 2026-10-10 checkpoint, migration 060. PostgreSQL implementation; SQLite parity
 remains pending. This is not a production-readiness declaration.
 

@@ -13,6 +13,8 @@ import {receiveRecording} from '../server/postgres/recordings.mjs';
 import {processOneRecording} from '../server/postgres/recording-worker.mjs';
 import {requestWorkerDeletion} from '../server/postgres/deletions.mjs';
 import {encodeWav} from '../src/audio.ts';
+import {caseRepeatPage} from '../server/postgres/case-workflow-pages.mjs';
+import {checkedRepeatPage} from '../src/case-workflow-contract.ts';
 
 const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 const worker={principal_type:'worker',principal_id:'worker-14',org_id:'cedar',site_id:'beirut'};
@@ -115,5 +117,26 @@ test('worker deletion immediately fences a pending repeat without erasing origin
     await requestWorkerDeletion(f.pool,owner,'worker-14',{requestId:randomUUID(),expectedCode:'Worker 014',reason:'worker_request',confirmed:true});
     await assert.rejects(submitAnswer(f.pool,worker,'assignment-14',randomUUID(),'New answer'),/Forbidden/);
     await assert.rejects(f.request(command()),/unavailable/);assert.equal((await f.db.query('SELECT count(*)::int n FROM submission_receipts')).rows[0].n,1);
+  }finally{await f.close();}
+});
+
+test('repeat pages include every preserved request and prevent an inert request control before an earlier answer',async()=>{
+  const f=await fixture();try{
+    const original=(await f.db.query('SELECT * FROM attempts WHERE id=$1',[f.original.id])).rows[0],context='a'.repeat(64);
+    for(let n=0;n<13;n++){await f.request(command());await submitAnswer(f.pool,worker,'assignment-14',randomUUID(),'Synthetic deliberate repeat '+n);}
+    const active=await f.request(command()),ids=new Set();
+    for(let page=1;page<=3;page++){
+      const result={...await caseRepeatPage(f.pool,owner,f.caseId,{page,pageSize:5}),clientContext:context};checkedRepeatPage(result,f.caseId,page,5,context);
+      assert.equal(result.total,14);assert.equal(result.canRequest,false);assert.equal(result.blockedReason,'active_repeat');
+      for(const row of result.items){assert.equal(ids.has(row.id),false);ids.add(row.id);}
+    }
+    assert.equal(ids.size,14);assert.equal((await caseRepeatPage(f.pool,owner,f.caseId)).items[0].id,active.id);
+    assert.deepEqual((await f.db.query('SELECT * FROM attempts WHERE id=$1',[f.original.id])).rows[0],original);
+    await f.db.exec("INSERT INTO assignments(id,org_id,site_id,publication_id,worker_id,language) VALUES('no-answer','cedar','beirut','shelf-v3','worker-2','en')");
+    const id=randomUUID();await requestHelp(f.pool,{...worker,principal_id:'worker-2'},'no-answer',{requestId:id,text:'Synthetic independent help'});
+    const independent=await caseRepeatPage(f.pool,owner,id);assert.equal(independent.canRequest,false);assert.equal(independent.blockedReason,'no_answer');
+    const audit=await caseRepeatPage(f.pool,{...owner,principal_id:'audit',role:'auditor'},f.caseId);assert.equal(audit.blockedReason,'read_only');
+    await resolveClarification(f.pool,owner,f.caseId,{notes:'Synthetic closed repeat case'});assert.equal((await caseRepeatPage(f.pool,owner,f.caseId)).blockedReason,'case_resolved');
+    await assert.rejects(caseRepeatPage(f.pool,worker,f.caseId),/Forbidden/);
   }finally{await f.close();}
 });

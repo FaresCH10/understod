@@ -24,7 +24,7 @@ function wav(){const b=Buffer.alloc(32044);b.write('RIFF');b.writeUInt32LE(b.len
 function mockProvider(calls,{comparison=true,audio=wav(),afterResponse}={}) {
   return async(url,options)=>{
     const body=JSON.parse(options.body);calls.push({url,body});let response;
-    if(body.generationConfig.responseModalities)response=Response.json({candidates:[{finishReason:'STOP',content:{parts:[{inlineData:{mimeType:'audio/wav',data:audio.toString('base64')}}]}}]});
+    if(body.response_format?.type==='audio')response=Response.json({status:'completed',model:GEMINI_MODELS.speech,steps:[{type:'model_output',content:[{type:'audio',mime_type:'audio/wav',data:audio.toString('base64')}]}]});
     else if(body.generationConfig.responseFormat.text.schema.properties.faithful)response=json({faithful:comparison,complete:true,languageCorrect:true,terminologyApplied:true,reasons:comparison?[]:['incomplete_translation']});
     else {
       const language=body.systemInstruction.parts[0].text.includes('into Urdu')?'ur':'ar';
@@ -50,7 +50,7 @@ test('stage commands are fixed, exact-budget and cannot carry worker content or 
   assert.throws(()=>providerStageVerificationInput({...command('translation','ar'),maxRequests:1}),/Invalid/);
   assert.throws(()=>providerStageVerificationInput(command('speech','ur')),/Unsupported/);
   assert.throws(()=>providerStageVerificationInput({...command('speech','en'),confirmed:false}),/Invalid/);
-  const evidence={fixtureVersion:'provider-stage-fixture-v1',language:'en',requestCount:1,capability:'synthetic-speech',model:GEMINI_MODELS.speech,checks:['mono_pcm16_wav','nonempty_audio'],outputHash:'ab'.repeat(32),bytes:32044,durationSeconds:1};
+  const evidence={fixtureVersion:'provider-stage-fixture-v3',language:'en',requestCount:1,capability:'synthetic-speech',model:GEMINI_MODELS.speech,checks:['mono_pcm16_wav','nonempty_audio'],outputHash:'ab'.repeat(32),bytes:32044,durationSeconds:1};
   assert.deepEqual(checkedStageResult(evidence,STAGE_TESTS[2],GEMINI_MODELS.speech),evidence);
   assert.throws(()=>checkedStageResult({...evidence,bytes:32045},STAGE_TESTS[2],GEMINI_MODELS.speech),/evidence/);
   assert.throws(()=>checkedStageResult({...evidence,privateAudio:'secret'},STAGE_TESTS[2],GEMINI_MODELS.speech),/evidence/);

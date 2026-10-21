@@ -1,5 +1,2135 @@
 # Understood build status
 
+## Current Reports Checkpoint
+
+21 October 2026: EN/AR/UR Reports/publication history/export recovery and scoped
+shell are implemented.30 built locale-width checks, keyboard held-read focus,
+localized failures, byte-identical CSVs and exact interrupted create/retry
+recovery pass locally. Corrected cleana16e0668 parent71025 observedexit0:
+1,342 tests/1,338 pass/zero fail/four native-only skips, offline build/evaluations,
+915 stable source files. Overall82% (was81%), report/export90% (was85%), broader
+localization63% (was60%). Full reference/independent language/AT/phone/native/
+hosted/privacy gates remain; see docs/REPORT_LOCALIZATION.md. Earlier notes below
+are historical. Original data/root dist remain untouched; no cloud/live provider.
+
+## Previous Composer And Worker Lock Delta
+
+21 October 2026: new generated staff drafts now use500 characters; ordinary
+messages and captured requests retain1000. Over-limit mode changes preserve text
+and block sending with EN/AR/UR errors. Actual expiry locks in selected Urdu;
+identity mismatch locks in selected Arabic, removing private controls. Focused30
+checks and isolated build pass. Clean326a25fd parent47743 exits0:1,335 tests,
+1,331 pass/zero fail/four native skips; offline build/evaluations and913 stable
+source files. Guarded evidence writer passes; original data/87 saved manifests
+preserved. Current report: artifacts/production-conversation-policy-2026-10-21.json.
+Overall81% unchanged; detailed evidence/limits: docs/CONVERSATION_COMPOSER_LIMITS.md.
+Earlier checkpoint notes below are historical. No cloud/live provider/real mic.
+
+Fresh user preview: http://localhost:3250/api/qa-staff, hiddenPID19556,
+started21 October15:44:14 Beirut,20-minute TTL. Accepted clean326 assets,
+memory-only synthetic data/fixed tones, queue-only follow-up; no live speech.
+CUA tab33 verifies0/500 and is retained. Screenshot:
+artifacts/conversation-policy-user-preview-2026-10-21.png. Recheck after TTL;
+original3020/data/root dist unchanged. Next large local task: EN/AR/UR Reports,
+publication history and export-recovery UI; preserve exact command/CSV semantics.
+
+## Previous Staff Action And Focus Checkpoint
+
+21 October 2026: inspected selected S15 JPEG#15 again. Generate/send and private
+recording now share an action row, with a unique explicit message form owner;
+recording dialogs stay outside the form. The existing1000-character limit now
+has a linked visible counter. Private-history paging/manual refresh focuses a
+persistent heading before removing controls; a stable status announces loading/
+page counts without retaining unverified private rows. Three source regressions
+failed before the repair; focused17 checks and an isolated optimized build pass.
+This is newer than clean9db95d02; current acceptance is recorded below.
+Overall remains81%; broader release gates remain open.
+QA will use localhost on3243 so it does not replace the live127.0.0.1 worker
+preview's cookie. No original data, cloud, real mic, provider or billing changes.
+
+Preliminary findings retained: shared panel styles gave the submit group a16px
+top margin; a new regression failed before the margin reset, then focused18
+checks pass. Preliminary viewport commands resized the control tab, leaving the
+app at1280; those measurements and the misleadingly named1585 image are not
+accepted. Configured final fixture3245 exposes synthetic queue-only generation,
+not a running provider. Corrected built13 actual viewport measurements pass;
+three-language history focus, failed-read/recovery, draft continuity and exact
+keyboard form submission pass. Clean5285225b parent69003 exits1 solely because
+source changed:1,332 tests/1,328 pass/zero fail/four skips and evaluations pass,
+but sourceUnchanged=false. It is not accepted.
+
+Corrected clean4b338be1 parent9027 observed exit0:1,333 tests/1,329 pass/zero
+fail/four native-only skips, offline install/build, mocked/scripted evaluations,
+913 stable source files, SHA6012cb5cfebcf10f1b115248b1775fab514aa1474f4a2a0005c6292fd7b6f407.
+The corrected action row passes13 retained locale-width measurements, including
+1585x992 desktop; it wraps without overlap at320/390. Keyboard paging focuses
+the persistent history heading through held/failed/recovered reads. Arabic/Urdu
+paging and cross-language draft/counter continuity pass. External form keyboard
+submit creates one queued synthetic follow-up; a separate private save preserves
+that job, original attempt/receipt and open status. Worker external submit also
+creates exactly one reply, no answer/audio. Staff66584 and worker50461 fixture
+parents actually exit0 after owned stop; viewport reset and QA tabs closed.
+Source/build/evidence: artifacts/staff-actions-aligned-browser-final-2026-10-21.json,
+worker-conversation-external-submit-2026-10-21.json and the current clean result.
+Follow-up fixture is queue-only, not provider or delivered-speech acceptance.
+Overall81% unchanged, staff recording90% (was85%), case detail/recovery92%
+(was90%). No full matched-reference/independent language/AT/phone/current95
+native/hosted/privacy release claim. Prior user preview3242 has reached its TTL;
+do not report its old URL as live without rechecking.
+
+Guarded checkpoint writer observed exit0: current913-source digest and corrected
+candidate/clean manifests match, all13 staff/four worker layout readings plus
+focus/form/terminal evidence checked. Preservation979b0750 exits0: original eight
+hashes match, integrityOK/FK0,85 saved manifests valid,6,493 selected files and
+zero configured-secret matches. See artifacts/production-staff-actions-focus-
+2026-10-21.json. Next reference gap: distinguish the reference500-character
+generated-follow-up input from the existing1000-character message/legacy receipt
+contract without truncating private drafts or preventing exact receipt recovery.
+
+Fresh user-facing staff-flow preview is separate from terminal QA: hiddenPID16736,
+started21 October15:22:43 Beirut, localhost:3247,20-minute TTL, accepted clean4b
+assets, disposable memory data/fixed-tone microphone only. Follow-up capability
+is synthetic queue-only, not live generation. CUA tab29 verifies the controls and
+is retained. URL: http://localhost:3247/api/qa-staff. Screenshot:
+artifacts/staff-actions-user-preview-2026-10-21.png. Recheck liveness after TTL.
+Next QA should use127.0.0.1 while this localhost preview is live, to preserve
+its host-scoped rehearsal cookie. Original3020/data/root dist remain unchanged.
+
+## Current Purpose And Failure-State Checkpoint
+
+After the accepted81% checkpoint below, Help/reply permission, conversion,
+uncertain-receipt and lazy-render fallback copy is now purpose-specific in all
+three interface languages. Answer and staff-purpose copy remain separate.
+This four-source-file follow-up passes focused9 checks and clean9db95d02,
+parent67671 observed exit0:1,329 tests/1,325 pass/zero fail/four native-only
+skips, offline install/build/evaluations and912 stable source files,
+SHAee2bbd4e90783ce3b5628278d056a3ba9fbcea2a42902edaf7e0129ec51191f2.
+Actual built unavailable/malformed/wrong-language notice gates, manual recovery,
+three-language permission errors, held storage/timeout/GET storing then received,
+corrupt storage/GET failed and context lock pass. Twelve fresh locale-width raw
+measurements are now retained. Only one received message and one failed recording
+are added; original attempt and submission-receipt count remain unchanged.
+Failed private bytes remain pending cleanup; no physical-erasure claim.
+Fixture13456 observed exit0 after owned stop; initial inaccessible sandbox fixture
+79027 was identity-checked and stopped with exit1, not accepted browser evidence.
+No security protection was weakened: the replacement loopback fixture runs on the
+host under the normal reviewed local-server execution path.
+Overall81% unchanged; voice recovery90% (was88%), navigation/Help90%.
+Current browser/layout evidence: artifacts/worker-voice-purpose-browser-final-
+2026-10-21.json and worker-voice-purpose-layout-2026-10-21.json. Permission copy
+was rendered; format/lazy-error copy has dictionary/wiring tests, not injected
+render crashes. Session-lock fallback still renders English. Wider language/AT/
+reference/phone/current95 native/hosted/privacy/release gates remain open.
+Preservation35bc3ecd exits0: original eight hashes unchanged,81 saved manifests
+valid,6,229 selected files/zero configured-secret matches. Older checkpoints below
+remain historical evidence, not the current selected-source digest.
+
+Guarded purpose-checkpoint writer observed exit0; source and candidate/clean
+manifests match. See artifacts/production-worker-voice-purpose-2026-10-21.json.
+Fresh user-facing worker-flow preview is separate from terminal QA: hidden
+PID2540, started21 October14:47:44 Beirut, port3242,20-minute TTL, accepted
+clean9db95d02 assets, disposable in-memory synthetic data and labelled fixed
+tones only. This is not production data or physical-microphone validation.
+URL: http://127.0.0.1:3242/api/qa-worker-voice. Liveness must be rechecked after
+TTL; original3020/data/dist remain unchanged.
+
+## Current Worker Voice Checkpoint
+
+21 October 2026 accepted local checkpoint: explicit EN/AR/UR worker notice projections remain
+separate from profile/frozen assignment languages. Both backends and the actual
+HTTP client require the captured worker context; all online recorders use the
+bounded strict notice reader. Offline snapshots explicitly select their frozen
+notice language and allow authorized mixed-language assignments without relaxing
+worker/session identity or notice/scope checks. Two language regressions failed
+before the fix and pass afterward; the new offline test exposed and corrected
+the old profile-equals-assignment restriction. Focused18/14/22 checks pass.
+
+Reply capture survives transient reads and closed-conversation receipt recovery;
+new captures remain disabled when unavailable. Answer/Help/conversation drafts
+interlock without blocking their own continuation. One-click restart is verified
+after an actual received reply. Final built pre-answer Help/clear/reload/GET-only
+recovery, exact reply retry, Arabic/Urdu capture/notices, supervisor closure and
+exact closed-case GET recovery pass with unchanged original worker evidence.
+All12 nested recorder/viewport checks pass after repairing the preliminary320px
+Help-label overflow. Three isolated builds and preliminary failures are retained.
+All browser audio uses a labelled fixed tone with native microphone access denied.
+No real worker, cloud/provider/mail/billing/deployment action. Clean77bbf986,
+parent80848 observed exit0:1,327 tests/1,323 pass/zero fail/four native-only
+skips, offline install/build,43 mocked contracts/ten scripted pipeline checks,
+912 unchanged source files. Candidate/clean asset manifests match.
+Preservationfc762ea7 parent55947 exits0: original eight hashes unchanged,
+integrityOK/FK0,79 saved manifests valid,6,097 files/zero configured-secret matches.
+Guarded checkpoint writer exits0. See
+artifacts/production-worker-voice-recovery-2026-10-21.json.
+
+Overall81% (74-87 uncertainty), voice recovery88% (was80%), navigation/Help90%
+(was89%). Not production ready. Fixture2313 actually exits0: four received
+objects/five POSTs (one exact replay), two receipt GETs, one private playback,
+one unchanged original attempt and one submission receipt. Its owner deliberately
+resolved the case; voice did not resolve it. Native mic remained denied.
+Twelve width checks were observed but their raw array was lost at REPL reset;
+three screenshots remain, not an independently replayed layout artifact.
+A later notice-retry attempt occurred after session/fixture expiry and is not
+accepted notice-fault coverage. Purpose-specific Help/reply fallback copy,
+rendered notice/storing/failed states, full refs/independent language/AT/phones/
+current95 native/hosted/privacy gates remain. Older entries below are historical.
+
+## Current Staff Audio Checkpoint
+
+21 October2026 accepted local checkpoint: the staff-purpose capture, preview, explicit
+private save and exact receipt-recovery UI are now implemented, with declared
+recording language independent of EN/AR/UR interface language. Focused client/
+HTTP contracts18pass; typecheck and isolated optimized builds pass. Final UI
+candidate passes all12 locale/width containment checks (320/390/768/1440),
+retains the same preview across language changes, and fixes narrow sticky-header
+overlap, one-click restart and save/clear focus. Browser testing uses an explicitly
+labelled synthetic microphone simulator with native microphone access denied.
+Unknown-ack/actual reload/GET-only recovery, native private playback, integrity-
+rejected save, read faults, context lock/manual return and10/5-row history pass.
+Cleanf4dfba7f-0f7e-44a1-83c7-b4428e49b897, parent3879 observedexit0, finished
+2026-10-21T05:53:54.547Z: offline install/build,1,316 tests/1,312 pass/zero
+fail/four native-only skips, mocked/scripted evaluations,909 unchanged source
+files. Overall80% (73-86 uncertainty), staff recorder85% (was0%), case detail/
+recovery90% (was88%). History pagination focus and exact reference action
+placement remain; not physical-device, independent language/AT, current95 native,
+hosted or production acceptance. See docs/STAFF_CASE_RECORDINGS.md and
+artifacts/production-staff-inperson-recording-2026-10-21.json. Original data,
+saved builds and configured-secret absence are guarded by its preservation
+report. Earlier in-progress observations below are historical, not current status.
+
+Checkpoint writer observedexit0 and verifies the current source plus candidate/
+clean asset manifests. Preservationb4d23492, parent64537 observedexit0: original
+eight table fingerprints unchanged, integrityOK/FK0,75 saved manifests valid,
+5,841 selected files/zero configured-secret matches. Both owned QA fixtures are
+absent; their lost final parent handle is not reported as exit0. CUA tabs are
+closed and viewport reset; original3020/root dist remain untouched. No cloud,
+provider, mail, real worker data, actual mic, billing or deployment action.
+
+Fresh user preview is intentionally separate from terminal QA: hiddenPID7016,
+started21 October09:12:27 Beirut, port3237,20-minute TTL, accepted clean-built
+UI, isolated in-memory synthetic data and labelled fixed-tone microphone only.
+CUA tab8 verifies the loaded staff notice/recording controls and is retained.
+URL: http://127.0.0.1:3237/api/qa-staff. Preview proof/status are
+artifacts/staff-recording-user-preview-2026-10-21.png and the matching.json.
+This is not persistent production data or real microphone validation. Liveness
+must be rechecked after its TTL; original3020/data/dist remain untouched.
+
+Earlier21 October2026 resume in D:\understod: S15 staff-audio backend is implemented
+in the dirty working tree, not yet a completed recorder feature. Focused both-
+engine/HTTP tests11pass, privacy/import/timeline39pass, separate-role checks3pass
+and ledger author-binding1pass were observed. Original worker evidence is not
+replaced. Migration095, privacy ledgerv8, private receipts/reads, cleanup, local
+backup/restore/import and worker cleanup-column ACLs are in progress. See
+docs/STAFF_CASE_RECORDINGS.md. Last fully accepted overall estimate remains79%;
+the capture UI and browser recovery are not implemented yet.
+
+First clean1dd4ebcb finished exit1:1,309 tests/1,302 pass/three failed/four
+native-only skips. Two remaining094 migration-count assertions were corrected.
+The worker-freshness test passed unchanged alone; its150ms completion assumption
+was removed by accelerating only intentional staleness and using the unchanged
+production30s window for admission/recovery. All three focused repairs passed.
+Fresh clean488a9862-c757-4979-a0a6-ce7531d36d45 installed/built successfully,
+but was interrupted during tests. Handle51919 is now missing; result.json still
+says running and the log has no terminal summary. It is NOT accepted or blindly
+restarted. Saved905-file snapshot remains intact. Preservation1a057320 exit0:
+original eight table fingerprints unchanged, integrityOK/FK0,69 manifests valid,
+5,461 selected files/zero configured-secret matches. No cloud/provider/mail/mic/
+billing/deployment action. Old preview TTLs have not been revalidated; no current
+preview liveness is claimed. Next concrete task: real staff-purpose capture/
+preview/save UI, immutable declared language, exact browser receipt recovery and
+case-action/navigation interlocks, then fresh combined verification. Historical
+accepted checkpoints below are retained, not current-source acceptance.
+
+## Current Timeline Checkpoint
+
+20 October2026: real paged S15 timeline implemented for both engines, with
+staff-only captured-session HTTP/strict client projection, chronological real
+events, no private message/note/reason text, no unrelated-case repeat answers,
+and audit-identity expiry respected. Browser attribution/paging/draft continuity,
+read faults/recovery/context lock and EN/AR/UR four-width containment pass.
+Fixtures88439/87668 exit0; tabs closed/viewport reset. Full in-person recorder
+is still absent. Overall79% (72-85 uncertainty), case detail/recovery88% (was85%).
+The local timeline slice is accepted; this is not full S15/release acceptance.
+
+Review caught initial-route clock copied from historical case creation. Added
+SQLite/PG regression fails twice as intended; query now uses the actual scoped
+clarification.routed audit timestamp. Corrected focused17tests pass/zero fail.
+Cleaned248d49 exec74180 finished exit1: all five steps pass,1,296 tests/1,292
+pass/zero fail/four skips, but source-change guard correctly rejects the prior
+snapshot. Fresh cleand1edbaef-824b-4f4b-841a-12fa19904971,exec97723, observed
+exit0, finishes2026-10-20T18:19:51.060Z: offline install/build,1,296 tests/1,292
+pass/zero failed/four native-only skips,300785.0291ms;43 mocked contract cases,
+ten scripted pipeline checks,24 scripted/zero external requests. Corrected
+source896files unchanged/SHAea9d234fd38886eac83cab9bf8b65d4b431f1e57908ba45482a9e0ae1628e64c.
+Browser candidate assets exactly match the corrected clean build; the server-
+only clock repair is covered by the both-engine late-routing regression.
+Preservation62dab9f0 exec82051 exit0: original fingerprints unchanged,68 saved
+manifests valid,5,381 selected files/zero configured-secret matches.
+No cloud/provider/mail/microphone/billing/deployment. See docs/CASE_TIMELINE.md
+and artifacts/production-case-timeline-2026-10-20.json. Earlier checkpoints
+below predate this work. Next: actual private staff in-person audio and its
+authorized receipts/recovery, original-evidence preservation and privacy/
+retention/backup integration on both engines. Real worker AI stays off Free.
+
+Fresh user preview: hiddenPID18612,started20 October2026 21:20:15 Beirut,
+port3233,20-minute TTL,.tools/start-case-timeline-user-preview.mjs. Exact
+cleand1ed built UI/current source. CUA tab17 verifies timeline chronology and
+actor labels; one detail/one timeline/two workflow reads,zero mutations/external
+calls, original attempt unchanged. User tab retained; original3020 untouched.
+Evidence: artifacts/case-timeline-preview-status-2026-10-20.json and
+case-timeline-user-preview-2026-10-20.png. This intentional user preview is
+running, not an unfinished required QA session. Prior language preview expired.
+
+## Current Local Case Language Checkpoint
+
+20 October2026: EN/AR/UR clarification queue/create/detail and action/repeat/
+review/deadline/dialog interfaces are implemented and locally browser-checked.
+Private content, captured authority, request intent and receipt recovery remain
+unchanged across UI language switches. Repeated-hour deadline, actual synthetic
+case/review saves and uncertain owner-save GET recovery pass. Queue composition
+follows inspected S14. S15 timeline and staff in-person audio remain unfinished.
+Clean50987288-24b1-47b0-8f98-c60a50af566d, exec40194 observedexit0, finishes
+2026-10-20T17:51:41.730Z: offline locked install/build,1,290 tests/1,286 pass/
+zero fail/four native-only skips,304943.0671ms;43 mocked contract cases,ten
+scripted pipeline checks,24 scripted/zero external requests. All890 source
+files unchanged, SHA ee2b833090b166848bbd53eb3f128639e3bc3604f88578f264fbadffd8fb777a.
+The browser candidate asset manifest exactly matches this clean build.
+
+Required synthetic browser fixtures4638/4794 exited0; tabs closed and viewport
+reset. Corrected GMT offsets, actual independent creation/disagreement/deadline,
+uncertain owner save and GET-only recovery, locale draft continuity, Cancel/
+editor focus and responsive containment pass. Narrow table scrolling is
+intentional. Independent languages/AT/phones and complete reference acceptance
+are not claimed. Preservation523d7e94, exec19725 exit0: original eight table
+fingerprints unchanged, integrityOK/FK0,63 saved manifests valid,5,054 selected
+files/zero configured-secret matches. Schema94 unchanged; no native/cloud/
+provider/mail/microphone/billing/deployment action.
+
+Overall estimate79% (72-85 uncertainty), S14 queue/creation80%, application-wide
+localization60%. Not production ready. See docs/STAFF_CASE_LOCALIZATION.md and
+artifacts/production-staff-case-localization-2026-10-20.json. Next substantial
+local task: S15 timestamped case timeline and real staff in-person clarification
+recording, preserving original response/evidence and recovery boundaries.
+Earlier accepted source hashes below predate this checkpoint.
+
+Fresh user preview: hidden PID1052 started20 October2026 20:52:10 Beirut,
+port3233,20-minute TTL,.tools/start-case-localization-preview.mjs, exact clean
+50987288 build. CUA verifies current queue/locale control; one list read,zero
+mutations/provider calls,one seeded case/help/attempt and unchanged original
+attempt. User-facing tab7 retained. Evidence: staff-case-localization-preview-
+2026-10-20.json and clarification-localization-user-preview-2026-10-20.png.
+Original3020 application untouched. This preview is intentionally running for
+the user, not an incomplete required QA session.
+
+## Current Staff Creation Checkpoint
+
+20 October 2026: the real S14 New clarification workflow is implemented locally
+for owners/supervisors on both SQLite and PostgreSQL. Scoped SQL paging, exact
+publication/version/latest-completed-answer selection, independent follow-up,
+truthful staff provenance, atomic routing/audit/immutable receipts and hash-only
+browser recovery preserve original answers and assessments. Worker help and
+conversation messages are not fabricated. Queue received/due times, versions
+and reason legend are visible. See docs/STAFF_CLARIFICATION_CREATION.md.
+
+Clean8be48ec7-0bd8-41ad-a1a2-833ecf85c2c9, exec28389 observed exit0, finished
+2026-10-20T13:43:19.592Z: locked offline install/build, 1,284 tests/1,280 passed/
+zero failed/four native-only skips, 374877.4711ms; 43 mocked contract cases,
+ten scripted pipeline checks, 24 scripted/zero external requests. All886 source
+files unchanged, SHA d130b8b26e06936eee14e072498549f2bccd6ba72cd8aa223853f8c29feb9754.
+Initial1708d139 failed three explicit schema-upgrade expected lists missing094;
+the fourteen-test focused recheck and full rerun pass. Initial evidence remains.
+
+Final clean-built browser checks cover linked and independent cases, original
+matched assessment, existing-case navigation, post-commit malformed reply,
+GET-only receipt recovery after local clearing/reload, session-context lock,
+Cancel-first clearing and corrected editor focus, plus320/390/768/1440 control
+containment. Preliminary checks cover changed-intent retry denial, newer draft
+preservation, malformed selected reads and navigation guard. Two final creation
+POSTs produce two cases; original attempt hash is unchanged, no extra help/
+messages/answers, zero external calls. Both required fixtures exited0 and tabs
+are closed; viewport restored. This is local CUA evidence, not Reticle/native/AT.
+
+Preservation986edabb, exec70990 exit0: original eight table fingerprints match
+priorf6981c31, integrityOK/FK0, all60 saved manifests valid,4,857 selected files/
+zero configured-secret matches. Root database/dist and prior builds remain intact.
+Schema094 and new journal permissions are local only. Historical native91 does
+not accept94. No cloud, live provider/mail/microphone, billing or deployment.
+
+Overall estimate78% (71-84 uncertainty); S14 staff-created cases/queue70% (was20%).
+Not production ready. Full S14/S15 reference composition and EN/AR/UR staff
+localization remain next, followed by wider AT/phone/native/hosted/privacy/release
+gates. Evidence: artifacts/production-staff-clarification-creation-2026-10-20.json.
+
+Fresh user preview: hidden PID29780, started20 October2026 16:46:26 Beirut,
+port3233,20-minute TTL,.tools/start-staff-creation-preview.mjs. Verified exact
+accepted clean-built UI and expanded reason legend; one list read and zero
+creation/action/repeat/review POSTs, zero external calls, unchanged seeded
+attempt hash. One synthetic help case/answer only; no original data used.
+URL http://127.0.0.1:3233/api/qa-clarifications is a fresh-session entry.
+The preview tab is kept for the user; all required QA tabs/commands are terminal.
+This is an intentional temporary preview, not a production service.
+
+## Previous Worker Case-Permission Checkpoint
+
+20 October2026: worker SQL case_reviews now permits SELECT/UPDATE(reason) only;
+case_repeats permits SELECT/UPDATE(status) only; review sequence authority is
+removed. Exact existing evidence guards and all current/future column grants
+are checked at startup/configuration. API/operator grants and schema093 are
+unchanged. Worker policy:85 ordinary-DML/nine column-restricted/34 read-only/
+ten hidden tables. Trusted status operations and wider worker read/row authority
+remain limitations,not complete compromise isolation. See
+docs/WORKER_CASE_WORKFLOW_PERMISSIONS.md.
+
+Fresh clean b187180f-c7f2-4543-86bf-5da2735f421b,exec26533 observedexit0,
+finished2026-10-20T12:57:42.245Z: offline locked install/build,1,269 tests/
+1,265 passed/zero failed/four native-only skips,341306.9823ms,43 mocked
+contract checks/ten scripted pipeline checks,24 scripted/zero external requests.
+All877 source files unchanged,SHA
+f2a5a4d74c4535eb593b93b5f51a3a0647b3821c964aa67d6356fbd0509a877f.
+At that checkpoint the source matched the snapshot. Frontend manifest was byte-identical
+to accepted84afc9af; no new browser or native pass is inferred from backend tests.
+
+Focused41 regression checks and five final guard/fence checks pass. Actual
+separate API/worker identities complete typed and private recorded repeats,
+transcription/assessment, verified private-audio removal, deletion redaction
+and populated resolved-case retention. Receipts/hashes and assessment identity/
+outcomes remain intact. Worker creation/deletion/evidence-column/sequence writes
+are denied; broad/delegated/PUBLIC/future-column/sequence/guard drift is rejected;
+preceding broad-grant reconfiguration and post-fence cleanup denials pass.
+
+Initial clean8773ed18,exec81472 observedexit1,had one Windows UNKNOWN lstat
+error on a temporary backup manifest:1,264 passed/one failed/four skipped.
+Its exact unchanged backup test passed alone,then the unchanged full source
+passed fresh clean b187180f. Cause is not proven; safety checks were not weakened.
+Both snapshots and the focused-recheck log remain preserved.
+
+Preservation f6981c31-a726-46e0-9971-28f664d03bab,exec86787 observedexit0:
+original eight table fingerprints match prior560b8f87,integrityOK/FK0,58 saved
+manifests valid,4,714 selected files/zero configured-secret matches. Root data/
+dist preserved. Required verification sessions terminal. No cloud/native ACL,
+provider/mail/microphone/billing/deployment action. Native91 does not cover
+this newer schema93 worker policy. Reticle refusal remains respected.
+
+Overall77% unchanged (70-83 uncertainty); service permissions83% (was82%).
+Not production ready. Reference reinspection confirms S14 New clarification
+is missing and received/due fields are not displayed. Next major local task:
+real staff-created scoped cases with truthful provenance and durable recovery,
+queue metadata/reason legend and complete interface localization. See
+artifacts/production-worker-case-permissions-2026-10-20.json and progress board.
+
+Fresh user-facing synthetic preview: hidden PID19556,started20 October2026
+15:59:43 Beirut,port3231,.tools/start-worker-case-preview.mjs,20-minute expiry.
+HTTP200/exact accepted customer-aWyVo-6g asset and fresh zero user POSTs/receipt
+reads/external calls verified. Seeded14 attempts/12 reviews/13 repeats remain
+memory-only synthetic records. URL http://127.0.0.1:3231/api/qa-clarifications
+queued in Codex. It is an intentional temporary preview,not native-role/browser
+security proof,a required QA command or a production service. Older preview
+addresses/PIDs below are historical; check actual liveness before reuse.
+
+## Previous Repeat And Review Checkpoint
+
+20 October 2026: captured repeat-answer and supervisor-review contracts, paged
+histories, exact-intent recovery, unsent draft continuity and explicit site-civil
+deadline handling are locally implemented and verified. Pending unknown outcomes
+are never automatically resent; GET-only receipt recovery preserves newer and
+unrelated drafts. Legacy review metadata remains recoverable without persisting
+private reasons. See docs/CASE_WORKFLOW_RECOVERY.md.
+
+Clean84afc9af-b6c6-450c-b967-8c0e6123137f completed at
+2026-10-20T08:15:04.489Z: all five steps exit0, locked offline install/build,
+1,265 tests/1,261 passed/zero failures/four native-only skips,351585.3563ms;
+43 mocked contract cases/ten scripted pipeline checks,24 scripted provider
+requests/zero external calls. All876 source files unchanged, SHA
+a66aeb605043da1fc2a84740cc2cc934d099b5865a176851dbc141f6a95c0ed1.
+The original command handle14833 was unavailable after continuation; terminal
+result.json and every child exit are present, not an observed parent exit code.
+The exact clean-built customer-aWyVo-6g / Clarifications-BgJqoT_H was tested.
+
+Focused22 client/domain and three actual HTTP/session tests pass. Built English
+QA covers both history pages, malformed/failing reads, changed-draft retry denial,
+malformed post-commit replies, GET-only recovery, newer/unrelated text preservation,
+competing repeat rejection, stale deadline/rebase and local Cancel/focus clearing.
+The two repeated-hour deadlines persist as05:30Z/06:30Z with visible GMT-4/GMT-5.
+Unsent repeat dates block navigation. Current-session mismatch locks the view.
+Initial native-date input synchronization and320/390 notice overflow defects were
+fixed; exact clean assets fit320/390/768/1440, including shorter occurrence labels
+and separated forms. This is not complete localization/AT/phone or Reticle proof.
+
+Corrected-input fixture40778 exited0:two repeat/four review POSTs,two workflow
+receipt GETs,one competing repeat/two fixture deadline changes/one typed answer;
+17 reviews/15 repeats/15 attempts,original attempt unchanged,zero external calls.
+Pre-polish final5754 exited0:one repeat/one review POST,two GET receipts,one fixture
+deadline change;14 reviews/14 repeats/14 attempts,original unchanged,zero external.
+First clean-build fixture32171 expired while its handle was unavailable; its final
+counters/exit code were not captured. Saved UI measurements prove its layout and
+distinct saved deadlines, not terminal inventory. Fresh clean-build48642 exited0:
+zero POSTs/three workflow reads,unchanged seeded12 reviews/13 repeats/14 attempts,
+original unchanged,zero external. Temporary QA tabs closed/default viewport restored.
+
+Preservation560b8f87-de76-4cc3-b8a6-c86b62331d66,exec6079 observedexit0: original
+eight table fingerprints match prioraf456a93,integrityOK/FK0,56 saved manifests
+valid,4,584 selected files/zero configured-secret matches. Root data/dist preserved.
+No new migration/grants: current93 remains local-only; native91 is historical.
+No cloud/provider/mail/microphone/billing/deployment action. Reticle refusal respected.
+
+Overall77% (was76%;70-83 uncertainty),repeat/review task85% (was40%). Staff root
+recovery85%,S20/S24 navigation89%,voice80%,service permissions82% unchanged.
+Not production ready. Next local work: further worker positive-verb/column
+permissions and remaining full-reference/localization/accessibility/device gates.
+
+User-facing synthetic preview: hidden PID29016,started20 October2026 15:34:55
+Beirut,port3230,.tools/start-case-workflow-user-preview.mjs,automatic20-minute
+expiry. HTTP200/exact clean customer-aWyVo-6g and zero user POSTs/receipt reads/
+external calls verified before handoff. Seeded14 attempts/12 reviews/13 repeats
+are synthetic fixture records,not original worker data. URL
+http://127.0.0.1:3230/api/qa-clarifications queued in the Codex browser panel.
+It is an intentional temporary preview,not a required QA session or production
+service. Earlier preview addresses/PIDs below are historical; check liveness
+and ownership rather than killing a reused PID.
+
+## Previous Clarification Checkpoint
+
+2026-10-20T07:21:40.183Z: staff S14/S15 list/detail/owner/resolution contracts
+and A13 recovery slice implemented and locally verified. Strict scoped DTOs,
+captured context, owner compare-and-set, immutable applied/unchanged/rejected
+receipts and audit-atomic exact replay work on both backends. Historical SQLite
+recorded-assessment reasons/evidence remain readable without wrapper metadata.
+Drafts survive same-case refresh/failure and older receipt recovery; confirmed
+local reset restores focus and never cancels pending work. Resolved root cases
+disable a stale new-message composer. See docs/CLARIFICATION_ACTION_RECOVERY.md.
+
+Clean99969805-3771-4838-9131-d16934390367, exec72400 actualexit0: locked offline
+install/build,1,254 tests/1,250 passed/zero failures/four native-only skips,
+342820.8153ms;43 mocked contract cases/ten scripted pipeline checks,24 scripted
+provider requests/zero external calls. All869 source files unchanged, SHA
+11c2518e3887ee591570047baf83e54a006a375375f847697f618acf9ee3b170.
+Final customer-CFO7RqBu UI manifest/shell matches clean. Focused16 contract/
+domain tests, populated historical import, HTTP session fences and policy checks
+pass. Initial clean4eb1109e failed three stale count assertions; corrected
+clean d5a69f1e passed before the final SQLite compatibility fix. Both preserved.
+
+Built English staff QA covers failed/malformed reads, unsent navigation guard,
+owner conflict/rebase, pre-commit failure, malformed post-commit replies,
+GET-only recovery, changed-draft retry denial and preservation of newer notes.
+Final320/390/768/1440 fit, Cancel/focus/reset, child conversation continuity,
+delayed selection and returned-context lock pass. Initial fixture90410 exit0:
+four action POSTs/three receipt GETs/three receipts/one fixture owner change;
+final77316 exit0:one action POST/one receipt GET/one receipt. Both:two cases,
+zero other POSTs/attempts/messages/reviews/repeats/external calls. Tabs closed
+and viewport reset. Not full staff localization, independent AT/phone or native.
+
+Preservation af456a93 exec1458 actualexit0: original eight table fingerprints
+unchanged, integrity OK/FK0,52 saved manifests valid,4,330 selected files/zero
+configured-secret matches. Original root data/dist preserved. No cloud,
+provider, mail, microphone, billing or deployment action. Prior Reticle egress
+refusal remains respected; local CUA evidence is not Reticle proof.
+
+Overall76% (was75%;69-82 uncertainty), staff clarification recovery85%,
+S20/S24 navigation89%, voice recovery80%, service permissions82% unchanged.
+Not production ready. Current93 migration/role policy has local evidence only;
+preceding native91 acceptance does not cover92/93. Next local work: captured
+repeat-answer and supervisor-review requests, draft continuity and recovery.
+
+User-facing local preview: hidden background PID30608, started20 October2026
+10:25:50 Beirut, port3224, .tools/start-clarification-preview.mjs; automatic
+20-minute expiry. HTTP200/exact customer-CFO7RqBu and fresh zero-action/zero-
+external counters verified before handoff. URL
+http://127.0.0.1:3224/api/qa-clarifications opens the synthetic staff workspace.
+This intentionally running preview is not a required verification command or
+production service. Older preview PIDs/URLs below are historical; do not kill
+reused PIDs and check actual liveness before reuse.
+
+## Previous Voice Checkpoint
+
+2026-10-19T15:32:58.975Z: captured voice Help/reply contract and recovery,
+S15/S24 and A05/A06/A09/A13/A17/A18 slices. Strict session/assignment/case/digest/
+stage checks, immutable WAV snapshots, GET-only receipt recovery and localized
+failures implemented. Hash-time scope/authority changes cannot retain metadata
+or send audio. Confirmed local preview discard preserves pending metadata and
+does not cancel uploads/delete server audio. Full recorded-audio discard and
+unknown-upload browser journeys are NOT verified; no microphone permission or
+capture was used. See docs/VOICE_CONVERSATION_CONTRACT.md.
+Clean f35bb4ae-dfcd-4823-bbaf-6e3d7cb2d2ca, exec34947 actualexit0: locked offline
+install/build,1,237 tests/1,233 passed/zero failures/four native-only skips,
+344968.801ms;43 contract/ten pipeline checks,24 scripted/zero external requests.
+All859 source files unchanged, SHA
+31d39f8509a4f028a4b28871c8ef847a5e1e6dbb09d9d0ededd98b5c3548d7bf.
+Final customer-Bw9Eqzxd preview matches clean. Eight client/recovery and six
+actual PGlite/HTTP voice tests pass; combined18 client/recovery pass. Built
+EN/AR/UR320/390/768/1440 control/notice and text/voice interlock checks pass.
+Fixture41878 actualexit0:zero business POSTs/private objects/attempts/external
+requests,23 seeded messages/nine cases unchanged; tab closed/viewport reset.
+Preservation f56a3179 actualexit0: original eight table fingerprints unchanged,
+integrity OK/FK0;47 saved build manifests valid,4,026 selected files/zero
+configured-secret matches. Root data/dist preserved. All verification sessions
+terminal. Existing Reticle external-egress refusal remains respected.
+Overall75% (68-81 uncertainty), S20/S24 Help/navigation89% (was88%), voice
+contract/recovery task80%, service permissions82% unchanged. Not production
+ready. No cloud/provider/mail/microphone/billing/deployment actions. Next local
+work: staff clarification list/detail/ownership/resolution captured requests
+and draft continuity, then repeat/review recovery and remaining release gates.
+
+Latest user-facing synthetic preview: background PID25512, started18:35:33
+Beirut, port3221, wrapper .tools/start-voice-contract-preview.mjs;20-minute
+automatic expiry. HTTP200/exact accepted customer-Bw9Eqzxd verified, fresh
+memory-only data/storage with zero business calls/objects before handoff. URL
+http://127.0.0.1:3221/api/qa-navigation?language=en queued in the Codex browser
+panel. This intentionally running preview is not a verification command or
+production server. Earlier preview URLs below are historical and may have
+expired. Recheck actual liveness before reuse; do not kill a reused PID.
+
+## Previous Conversation-Text Checkpoint
+
+2026-10-19T15:08:52.347Z: local conversation text/recovery checkpoint,
+S15/S24/S44 and A05/A06/A09/A13/A17/A18 slices. Strict captured-context pages,
+message/follow-up receipts, bounded transport and PostgreSQL repeatable-read
+lists implemented. Drafts survive unavailable/closed reads; exact GET receipt
+recovery preserves different drafts. Local text clearing confirms intent and
+does not cancel server work or remove pending metadata. EN/AR/UR notices,
+directional paging, isolated names and site-zone timestamps are implemented.
+See docs/CASE_CONVERSATION_RECOVERY.md and the conversation browser artifacts.
+Clean e8244a1c-bea9-4325-8280-75013d359f83, exec77750 actualexit0: locked offline
+install/build,1,231 tests/1,227 passed/zero failures/four native-only skips,
+509459.1198ms;43 contract/ten pipeline checks,24 scripted/zero external requests.
+All857 source files unchanged, SHA
+08d3c375860702a240b52a1758b640ee360cc07a04ae1953ccae4eda52c5c8ae.
+Final customer-DWAFuK0s preview matches the clean build. Loaded20-message
+EN/AR/UR at actual320/390/768/1440, AR/UR keyboard paging, clear/Escape/focus
+fallbacks, localized read failure, malformed DTO recovery, delayed case change
+and context lock pass. Initial English QA recovered two explicit uncertain
+messages using two receipt GETs, without another POST; closed drafts stayed
+visible. Final QA made zero business POSTs; both fixtures exited0 and their
+tabs closed/viewport reset. Two initial final-tab attachment timeouts recovered;
+two premature screenshot captures are retained but not accepted modal proof.
+Preservation dcb6b4ee exec exit0: original eight table fingerprints unchanged,
+integrity OK/FK0;45 build manifests valid,3,902 selected files/zero configured
+secret matches. Original root data/dist preserved. All verification sessions
+terminal; Reticle remains unavailable under the prior external-egress refusal.
+Overall75% (was74%;uncertainty68-81), S20/S24 Help/navigation88% (was85%),
+service permissions82% unchanged. Not production ready: voice-reply recovery,
+repeat/resolution/review and remaining staff clarification migration, full
+reference/localization/AT/phone/native-current-policy/privacy/live-quality/
+hosted gates remain. Continue locally only; no cloud/provider/mail/billing/
+deployment actions. Next: captured voice-reply requests and recovery.
+
+Current user-facing preview: hidden background PID25556, started18:14:03 Beirut,
+port3219, wrapper .tools/start-conversation-preview.mjs,20-minute automatic
+expiry. HTTP200/exact accepted customer-DWAFuK0s verified; fresh memory-only
+23-message/nine-case fixture,zero business/provider calls before handoff. URL
+http://127.0.0.1:3219/api/qa-navigation?language=en queued in the Codex browser
+panel. This is an intentionally running synthetic preview, not an outstanding
+verification command or a production server. Recheck liveness before reuse.
+
+## Previous Help-History Checkpoint
+
+2026-10-19T14:33:37.530Z: local worker Help-history checkpoint, S24 and slices of
+A05/A06/A09/A13/A17/A18. Captured-session/exact-version/language envelope,
+strict DTOs, bounded five-row paging on both backends and localized directional
+controls implemented. Own108-case paging preserves evidence; private notes stay
+out. Built first/second/keyboard pages, focus, unsent conversation refresh,
+503/malformed recovery, delayed assignment selection and context lock pass.
+EN/AR/UR actual320/390/768/1440 fit; separate long mixed-text Help POST/reload
+creates one case and no answer. See docs/WORKER_HELP_HISTORY.md and browser JSONs.
+Clean57a2adc2-8d30-4829-97c4-708c22b0f687, exec42035 actualexit0: locked offline
+install/build,1,222 tests/1,218 passed/zero failed/four native-only skips,
+329915.6314ms;43 contract/ten pipeline checks,24 scripted/zero external requests.
+All855 source files unchanged, SHA
+5c57f663a7c297e919f96dfbde835705f1191f6cf0b053f72d830489ca1e9c65.
+Preview UI manifest matches accepted clean. Preservationc114dd1c: original eight
+fingerprints unchanged/integrity OK/FK0;42 saved manifests valid,3,722 selected
+files/zero configured-secret matches. Original root data/dist unchanged.
+Browser59717 exit0:0 business POSTs/nine seeded cases; separate92872 exit0:
+1 Help POST/zero answers/ten cases. Tabs closed/viewport reset. All owned checks
+terminal, including preservation88534. Premature cleanb76d74fc exec97274 was
+stopped after focused SQLite404 mismatch, exit1; retained interrupted.json makes
+its old running result state non-authoritative. Initial strip-only TS/fixture
+assertion errors and the real HTTP mismatch were corrected before final clean.
+Reticle source verification blocked by auto-review due possible external egress;
+no diagnostics sent or workaround used. Local browser proof is not Reticle proof.
+Overall estimate74% (was73%;uncertainty67-80), S20/S24 Help85% (was80%), service
+permissions82% unchanged. Full conversation DTO/captured-read/localized-error,
+voice/repeat/resolution, all refs, independent language/AT/phone, native current
+permissions, privacy/live-quality and hosted gates remain. Latest user decision:
+continue locally for now; no Oracle/payment/account/cloud/provider/mail/billing/
+deployment actions. Next local work: CaseConversation read/error and recovery
+contracts, followed by remaining worker-facing localization and reference gaps.
+
+User-facing synthetic preview intentionally left running: background PID18452,
+port3216, wrapper .tools/start-help-history-preview.mjs;20-minute automatic expiry
+after startup. HTTP200 and exact customer-D3HrF3FK asset verified, fresh in-memory
+DB only. Open http://127.0.0.1:3216/api/qa-navigation?language=en, then the first
+assignment's Help history. This is a temporary UI preview, not a production
+server or an outstanding verification process. Recheck actual liveness before
+reuse; do not restart a different process or interrupt the user's preview blindly.
+The saved original database and old root dist are not used by this preview.
+
+## Previous Identity Checkpoint
+
+2026-10-19T09:32:56.405Z: worker direct identity-write restrictions locally verified.
+Migration092 adds four immutable lock guards; worker account memberships are
+read-only. Actual separate-role recovery/invitation delivery, API reset/signup,
+populated upgrade, schedules/retention and source fencing pass. Clean
+b8ad7ba7-38a4-41b3-8800-1be5b67ef396, exec63134 exit0: locked offline install/build,
+1,215 tests /1,211 passed /zero failed /four native-only skips,302056.8915ms;
+43 contract/ten pipeline checks,24 scripted/zero external requests. All853 source
+files unchanged, SHA e838db8a08edcfaa2487f8bf619a28b01d5ba1f39c215d97a21698eeb75dddcc.
+Worker policy:87 ordinary-DML, seven column-restricted,34 read-only,nine hidden.
+Application/operator grants and original data unchanged; no Neon migrations/ACLs
+changed. Historical native91 evidence does not cover the current92 policy.
+Preservation22992542: original eight fingerprints unchanged/integrity OK/FK0;
+all39 saved manifests valid,3,538 files/zero configured-secret matches.
+Built UI shell unchanged from preceding clean. All owned checks terminal.
+Identity-write task100% local; broader service permissions82% (was80%);
+overall73% unchanged. Credential read minimization, broader permissions,
+native/hosted and other release gates remain open. No real-data/provider/mail,
+billing or deployment calls. Free-host setup request answered in
+docs/FREE_HOST_SETUP.md; Oracle candidate is unprovisioned, card verification,
+free capacity/reclamation and no-SLA limits disclosed. No account connection or
+public activation authorized. Continue independent local work after checkpoint.
+
+## Previous Checkpoint
+
+2026-10-19T09:16:56.169UTC worker organization/site lock-column boundary locally
+verified. Clean6c284a4b-7245-44b5-b023-74c7f08e7975,exec46855 actualexit0:
+locked offlineinstall/build,1211tests/1207pass/zero fail/four native-only skips,
+321135.2848ms,43contract/10pipeline checks,24scripted/zeroexternal requests.
+All851sourcefiles unchanged,SHA
+74dec3372dbac06bd0e87a3641f9f033841f598365fe955147c27d95880b1c7e.
+Fresh operator startup/HTTP test passed9272.9346ms;earlier rootdist ENOENT
+remainsrecorded,notrecastaspass. Exact guard/positive-column admission,
+business-write denials,grant/guard drift,real distinct-role preparation/schedule/
+retention andexpanded fence pass. API/operator grants,migrations,Neon ACLs and
+originaldata unchanged. Worker95write-capable tables now92ordinary DML plus
+verification-job columns andtwo immutable lock-column tables;33RO/9hidden.
+Preservation57fd5625:original8fingerprints unchanged/integrityOK/FK0,
+38savedmanifests valid,3470selectedfiles/zero configured-secretmatches. BuiltUI
+manifest identical to6a316e16. No requiredverification process running.
+Local lock task100%;broader servicepermissions80% (was75%);overall73% unchanged.
+No newnative/cloud/provider/mail/billing/deploy. Native precedingpolicy result
+doesnotprove currentcolumnpolicy. Hostedserver availability/setup question asked;
+answerpending,notauthorizationtoconnect/deploy andnotablockerforlocalwork.
+After30second checkpoint continue broader worker credential/staff lock/write
+dependency audit orremaining application/reference work. Goalactive,notcomplete.
+See WORKER_LOCK_PERMISSIONS.md andmatchingcheckpointartifact.
+
+2026-10-19 next local candidate:worker organization/site table DML replaced by
+SELECT plus UPDATE(id),using the unchanged migration088 immutable lock guard.
+Shared exact guard inspection extracted fromoperator checker;positive update-
+column checker shared withverification-job boundary. Startup checks actual
+table/column/PUBLIC/delegate grants andguard body/trigger identity;restricted
+tables receive nosequence access. Fence removes allthree worker column-update
+sets. Application/operator grants andmigrations unchanged. No Neon changes.
+New focused4tests pass9378.7389ms:10business mutation denials inclunreferenced
+IDs,required rowlocks/no-op updates,pause checks,11grant/missing/future/sequence
+drifts,threeguard damage/setup refusals andactual distinct-role preparation,
+scheduled publication andpopulated text retention withunchangedorg/site rows.
+Initial fixtures corrected missing site-control column,explicit preparation
+queue andtable-revoke restoration;production checksnotrelaxed. Existing24
+permission/authority checks pass25232.8445ms. Larger focusedexec80916 exited1:
+71pass/1fail,102050.4193ms;sole ENOENT ispreserved rootdist missing operator
+manifest,not a passing hostedstartup. Expanded mixed-role fence1pass2959.204ms
+also proves rowlocks denied andlater id-column grant invalidates fence.
+TypeScript passes. Full clean6c284a4b-7245-44b5-b023-74c7f08e7975,exec46855
+running;install/build passed.851files,SHA
+74dec3372dbac06bd0e87a3641f9f033841f598365fe955147c27d95880b1c7e.
+Prior6a316e16 remainsaccepted library-only baseline;this candidate needsfinal
+regression. Overall73% unchanged. No newcloud approval.
+
+2026-10-19T08:58:44.261UTC worker library restriction locally verified. Clean
+6a316e16-71db-4f30-bf19-33ef1afb0a19,exec61661 actualexit0:locked offline
+install/build,1207tests/1203pass/zero fail/four native-only skips,312692.2259ms,
+43contract/10pipeline checks. Source850files unchanged,SHA
+689dc6cdce82e0ebd208a000b2cde5f8947d67859cabe01c7b82c5f6ebdea6ad.
+Worker four library tables SELECT-only;API grants unchanged. Populated library
+creation/template use,14SQL/domain denials,two real preparation jobs,current
+glossary dependency,unchanged library inventory andfour legacy-grant drift cases
+pass locally. Prior sandbox de67 failure retained;same snapshot17checks passed
+outside isolated network before cleanretry. Preservation70897e61:original8
+fingerprints unchanged/integrityOK/FK0,37saved manifests valid,3403selectedfiles/
+zero configured-secret matches. Required verification processes all exited.
+No cloud/provider/mail/billing/deploy/actual Neon permission change. Narrow local
+library restriction100%;broader leastprivilege75%;S23receipt/history85%;overall73%.
+Next after30second checkpoint:positive worker organization/site lock-column
+boundary with exact existing immutable guard inspection andpopulated worker/fence
+tests. Do not remove row-lock privileges blindly. No freshcloud test authorized.
+See WORKER_LIBRARY_PERMISSIONS.md;goal remainsactive,notproductioncomplete.
+
+2026-10-19 next local candidate:worker template/glossary libraries become
+read-only (templates,template_versions,glossary_terms,glossary_versions).
+Application policy unchanged;no migration or actual Neon grant change. New
+embedded test uses real application-role library creation/template-derived draft,
+then actual worker-role denied writes,glossary dependency/preparation anddrift
+reconfiguration. Initial harness failed on expected95-versus94 write-capable
+tables (one is column-restricted),then on missing explicit synthetic integration
+mode;both corrected without relaxing guards. The glossary edit also queues the
+original seeded draft,so the new test now processes exactly both queued drafts
+before asserting readiness. Final focusedexec63772 actualexit0:28pass/0fail,
+23521.313ms;new isolated test1pass2745.7249ms;TypeScript passes. Sandbox clean
+de67c60e-cf2a-4aca-be75-240555d1466f,exec21665 exited1:install/build passed,
+1207tests/1070pass/133fail/4skip,321764.413ms. Loopback EACCES plus sandbox
+temp-file rename/symlink EPERM andderived session failures;not a passing run.
+850sourcefiles,SHA689dc6cdce82e0ebd208a000b2cde5f8947d67859cabe01c7b82c5f6ebdea6ad
+remain unchanged. Same-snapshot receipt+permissions tests outside isolated
+network sandbox exec11487 exited0:17pass/0fail,18748.0559ms. Full unchanged
+retry6a316e16-71db-4f30-bf19-33ef1afb0a19,exec61661 nowrunning withlocal
+loopback/temp operations available. Failedrunbreakdown126EACCES/4EPERM/
+3derived session errors retained. No cloudcalls oractualgrantchanges.
+Preservation0a348001:original8fingerprints unchanged/integrityOK/FK0,
+36saved manifests valid/3339selectedfiles/zero secrets. UI shell manifest SHA
+b0cced4b6f301e036525dbdddc952ec498c7858a7af3ec5e153256080aee97d1 identical
+toaccepted74f4475c;this doesnot convertfailedbackend regression intoa pass.
+This candidate isnot yet the verified74f4475c baseline andnot native acceptance.
+
+2026-10-19 S23 receipt/history task85%,overall73%. Same verified850-file build
+74f4475c now also passes built history paging/all seven projected states,EN/AR/UR
+labels,keyboard Enter,503/malformed clear/recovery,held read/selection removal
+andchanged-context lock. Nine receipts/six attempts are explicitly seeded
+metadata,not live workflow/quality proof. Fixture14213 actualexit0:allPOSTs0,
+13history reads,6list/4detail reads,6seeded attempts unchanged,cases/external0.
+Sandbox fixture1113 unreachable then stopped0 with0reads/writes. Historyviewport
+control stayed on earlier tab; actual desktop1280 capture isnot mobile proof.
+Owned activehistory tab closed/overridesreset;old ownednetwork-error tab cleanup
+blocked by URLpolicy,nobypass/user-tabchange. Preservation53b96653 verifies
+originaleightfingerprints/integrityOK/FK0,35savedmanifests,3277files/zero secrets.
+No requiredverification process running. No newcloud/runapproval consumed.
+See WORKER_SUBMISSION_HISTORY.md and WORKER_SUBMISSION_RECEIPT.md.
+
+2026-10-19 S23 exact immediate receipt locally verified. Clean run
+74f4475c-897c-4aef-a76f-21914c4a0249 (exec19659, actual exit0) passed locked
+offline install/build,1206 tests/1202 pass/zero failures/four native skips,
+350733.6369ms,contract and pipeline evaluations. All850 source files unchanged,
+SHA87f31d0b5d14e70dab33a6f812ddcc354a76bdeb642a0ec416ffe1583f25d852.
+Memory fixture49458 exited0:four explicit typed answer POSTs,four attempts,
+zero help/other POSTs,cases or external calls;25 exact receipt reads/13 history
+reads. Built browser confirms original answer/server time/version,received versus
+pending,actual synthetic assessment to matched without resend,malformed/503 read
+clear/recovery,changed-context lock,held-refresh continuity/navigation removal,
+direct Help composer focus without POST,and EN/AR/UR320/390/768/1440 fit.
+Settled EN/UR740x1600 screenshots saved. Hardware audio,independent language/AT,
+all reference states and native/hosted acceptance remain. Overall73% unchanged;
+S23 receipt/history task80%. Next:separate nine-row metadata history browser test.
+No new cloud mutation approved or performed;earlier native retry already consumed.
+
+2026-10-19 resumed interrupted S23immediate-receipt candidate. Exact request GET
+added inbothbackends withserver time,original text/audio,duration/version/language;
+newcaptured-session DTOreader andreceived/check stages,directHelp handoff and
+visible pending-only10second refresh implemented. Same-exact-data refreshkeeps
+playingaudio mounted;failures clearprotectedmetadata. Ownrecording WAVroutes
+reuse authenticated verified-byte rangehelper. No migrations/permissions/cloud
+changes. Source existsafterinterruption;notyet accepted. Focused tests added;
+Focused12tests nowpass2991.046ms:exactDTO/identity/selection,SQLite+embeddedPG
+original-vs-later receipt,servermetadata/private fields,deniedreads,withdrawal/
+disabledworker andverified private-range reads. Finaltypecheck passes. Memory
+fixture adds exact-read faults/counts andopt-in actualsynthetic assessment step;
+no externaladapter orcloudcalls. Fullclean/builtbrowser pending. Prior056ee876
+isverified history-only baseline,notthiscandidate. Overall73% unchanged.
+Clean74f4475c-897c-4aef-a76f-21914c4a0249,exec19659 running;do notrerun until
+reconciled. Receiptbrowserfixture starting fromthat exactsnapshot on3215;
+no originaldata/cloud/provider/mail/billing/deployment changes authorized.
+
+2026-10-16T12:20:58.282UTC S23history locallyverified (notbrowseraccepted):scoped
+submission-history DTO guard,captured-session GET,
+15second readtimeout,selection-keyed display andlocalized received/pending/paused/
+failed/unavailable/outcome steps. Both HTTP backends echo current clientContext;
+existing authorization/native-audio routes unchanged. Eleven focused tests pass
+127.3332ms afterfixing unsupported Node strip-only parameter-property syntax.
+Finaltypecheck passes. Memory-only fixture gains
+opt-in9synthetic historyrows andfixed held/failed/malformed/contextcontrols;
+not evidence ofnormal processing oractual recordingplayback. Clean056ee876,
+exec99457 terminal0:1201tests/1197pass/zero fail/four native skips,340893.6029ms,
+offlineinstall/build,43contract/tenpipeline checks,24scripted/zeroexternalrequests.
+All847sourcefiles unchanged,
+SHA42dd9e65e3370936877d75583b014b4dcb32705dd756b63fea4704951e5b7abf.
+Memory-only fixtureexec75779 starting on3215. Actual focused SQLite+client9pass
+524.1822ms andfinaltypecheck pass. Overall73% unchanged;prior verified947bfe0f
+remainshistorical baseline. Browserattach failed twice;inventory showsonlyuser
+tab3196,noownedtab. Fixture75779 stopped/terminal0 withzeroPOSTs and6seeded
+attempts. Directmemory-only PostgreSQL HTTP/reader48518 exited0,8checks pass:
+2pages/allstates,failure/malformed/context/heldselection/newselection/staleheader;
+zeroPOSTs/unchanged6seededattempts/0externalcalls. Its ownedserverclosed.
+Browseracceptance is NOTproved. See WORKER_SUBMISSION_HISTORY.md.
+Preservationf532f481:original8fingerprints/integrityOK/FK0,34savedmanifests valid,
+3204selectedfiles/zerosecretmatches. No neededverificationprocessrunning.
+Historytask75%,overall73%. Next:retry builtbrowser acceptance when attachment
+recovers,thencomplete immediate S23/S44 receipt-screen stages/exactrequestbinding.
+Selected740x1600 image41(12) inspected:current immediateACK branch lacks itsown
+directHelp action anddetailed ownanswer/time/version stages;bottomHelp stillworks.
+Implement withactual exactrequest/server metadata,noinventedtimestamp oroutcome.
+Independent localwork continues;browserfailure aloneisnotagoalblock.
+
+2026-10-16T12:06:03.394UTC:primary-first S21layout locallyverified. Existing
+saved-work tools remainvisible/mounted afterlisten/question/help,beforehistory;
+samekeys/props/guards. Playerstarts425px mobile/379px desktop,question639/547px;
+EN/AR/UR320/390/768/1440 fit,plusselected821x1600 EN inspected. Explicit synthetic
+textsave/reload/restore preserves exactunsentanswer;noPOST. Test snapshotremoved
+andsharedmode restored. Sliderfocus8pxgap andArrowRight0.1seconds verified.
+Clean947bfe0f,exec4153 terminal0,1196tests/1192pass/zero fail/four native skips,
+294630.701ms,offline lockedinstall/build,43contract/tenpipeline checks,
+24scripted/zeroexternal requests. All845sourcefiles unchanged,SHA
+25d3e9a8540d9704f211464d5aa2d735d2b5df5d02f46865d56405e1c9bebe18.
+Fixture1182 terminal0,audioReads8/writes0/attempts0/external0;briefings/publications
+unchanged. OwnedQA tabclosed,viewportreset,userpreview notnavigated orrebuilt.
+Preservation9cb5251e:original8fingerprints/integrityOK/FK0,33savedmanifests valid,
+3135selectedfiles/zerosecretmatches. No required verification process running.
+Overall73% unchanged,S21task85%. Fullmatched-reference/native-language/AT/phone/
+actualspeech/hosted remain. Next concrete task:S23 truthful receipt/pending/
+outcome presentation andcaptured-session/scoped submission-history reads;
+inspect existing contracts andaddfocused tests beforechanges. No cloud writes
+ornewlive tests authorized. Goalactive;no founder input needed forlocalwork.
+
+2026-10-16T11:57:45.402UTC: S21 playback controls locally verified. Actual native
+play/pause,0..12second range,End/ArrowRight seek,Replay reset,rate1.5,body/question
+exclusivity,Enter textdisclosure andfailed-read/explicit reload pass. All3UI
+languages at actual320/390/768/1440 fit. Authenticated worker speech now supports
+single-byte ranges only afterfull existing authority/storage/integrity checks;
+no caching orprivate URL bypass. This repairs browser-discovered zero seek range,
+not merely a cosmetic control. Earlier failed candidate e48e8105 is preserved.
+Clean5b3c6dbb,exec11196 terminal0,1195tests/1191pass/zero fail/four native skips,
+294312.5675ms,offline locked install/build,43contract/ten pipeline checks,
+24scripted/zeroexternal requests. All844source files unchanged,SHA
+cddc523e3a1a7146c754a5ac0f59c2f9642b6af5408b5905898b602671cc78e1.
+Fixture24792 terminal0,audioReads12/writes0/attempts0/external0;briefing and
+publication inventories unchanged. Owned QA tabs closed,viewport reset.
+Preservationaff05c1b:original8fingerprints/integrity/FK unchanged,32savedbuild
+manifests valid,3069selectedfiles/zerosecretmatches. See WORKER_PLAYBACK.md.
+Overall73% (66-79 uncertainty),S21controls80%. No required process running.
+That checkpoint's layoutfollowup is nowcompleted above. Native/cloud/live/hardware/
+independent language/AT/full-reference/release gates remain open. No cloud writes
+or external calls authorized;native retry authorization consumed.
+
+S20/S24 worker navigation and own-assignment Help hub locally verified.
+Briefings/Help/Device navigation, scoped current assignments, existing composer,
+draft leave/stay/discard, fresh-detail focus, delayed-read route isolation and
+localized failure/refresh pass in the built memory-only fixture. EN/AR/UR fit
+actual320/390/768/1440 widths; assignment language remains frozenEN. New help
+creates a pending request, not a fabricated staff follow-up conversation.
+Fixture70883 exited0 with helpPosts1/answerPosts0/otherPosts0,21list/3detail reads,
+onecase/zeroattempts/zeroexternalcalls. Owned tabs closed and viewport reset.
+Clean df261e27-44df-441d-a5b5-e1bcb2e3dfb5,exec35339 terminal0:
+1190tests/1186pass/zero fail/four native skips,275260.7615ms; locked offline
+install/build,43contract/ten pipeline checks,24scripted/zeroexternal requests.
+All839source files unchanged,SHA30706687d486e61bd5e839f74c4f2b38ff4e8bf4a47cfe221f07e7eaf4f92f84.
+Task80%; overall72% unchanged. Independent language/AT/phone/full-reference and
+hosted acceptance remain. No cloud run is active. See docs/WORKER_NAVIGATION_HELP.md.
+
+## Last Verified Checkpoint
+
+2026-10-16 current-policy native three-role retry6a30573b PASSED. Its atomic final
+journal reached finished/passed at06:29:36.284UTC (started06:20:56.218UTC):91
+migrations,three distinct verified-TLS profiles,20runtime checks/23SQL denials,
+seven scripted/zero external provider requests,one concurrent claim/attempt,
+revocation/pause/configuration/deadline fences,real5s/30s heartbeat/drain andSQL
+heartbeat-fault/persistent startup/recovery. All four exact resources disabled/
+removed as applicable;original outside catalog/ACL unchanged. Not network/process
+kill,processing-claim expiry,hosted transport,real AI quality or release proof.
+
+After interruption,exec2752 handle was missing;OS check found its exact PID27212
+absent. Original exit code was not captured;do not invent exit0. Independent
+read-only postcheck at11:12:11UTC exited0:zero exact name/OID databases/roles/
+sessions,outside hash stillmatches originala58095ce...65c3. No rerun or writes.
+Evidence:`artifacts/neon-three-roles-6a30573b-c52f-46b5-a140-61e1cd8472af.json`
+and`artifacts/neon-three-role-postcheck-6a30573b-c52f-46b5-a140-61e1cd8472af.json`.
+Authorization consumed;no standing cloud mutation permission. Source stillmatches
+clean2c9bdda4 exactly at11:11UTC. No owned verification process remains running.
+
+S19 welcome/language controls now implemented and built-browser checked locally:
+native EN/AR/UR radio choices,localized Continue,validated current-session labels,
+honest help disclosure,clear/focus masked link entry,explicit cancellation.
+No automatic redemption,raw-token persistence or assignment-language change.
+All three guest languages fit320/390/740/1440;two premature viewport measurements
+were rejected and corrected after settled state. Arabic lost-ack/reload/recheck
+reaches Arabic inbox with frozenEN assignment;canceling Urdu leaves Arabic active.
+Rejected-before-acceptance Urdu remains unconfirmed across reload/recheck,then
+explicit new-link recovery shows empty disabled entry with no invented identity.
+Six screenshots saved as `artifacts/worker-entry-s19-*2026-10-16.png`.
+Memory-only fixtureexec4414 exited0 via its existing15-minute timer. Actual final
+counters:accepted redeem1/logout1/proof3,before redeem1/logout1/proof0;one grant
+redeemed,zero active worker sessions,zero attempts/external calls. Port3214 has no
+listener after interruption. Browser viewport reset andtemporary tab closed;
+no user preview or original data changed.
+
+Clean2c9bdda4-4c58-46c9-968b-3ca55f4b602e,exec37904terminal0,passed
+06:10:20.011-06:15:35.670UTC:locked offline install/build,1188tests/1184pass/
+zero fail/four native skips,294500.9473ms,43contract/ten pipeline checks,
+24scripted/zero external requests. All835source files unchanged,
+SHAfab91e260f65e2c6066579147ea5d8e6b377939e77c281b302458c86d9a58720.
+Focused entry/recovery/language ten pass12543.7586ms. S19 task80%,loss containment
+90%,native rehearsal90%,delegated80%,operator85%,least-privilege75%,native88%,
+overall72% (65-78 uncertainty);wider failure/hosted/privacy/device/release gates open.
+Preservation8a427c4c at06:25:29UTC:original eight fingerprints unchanged,
+integrityOK/FK0,29saved manifests valid,2865files/zero configured-secret matches;
+private environments ignored/examples blank or disabled.
+
+## Previous Recovery Checkpoint
+
+2026-10-16: native run2e42b143 FAILED, exec50079 terminal1, unhandled leased
+PostgreSQL Client ECONNRESET. Its original journal remains stale/checking and is
+not a pass. All91 migrations and three verified-TLS/profile admissions completed;
+the full workflow did not. Original OIDs/outside-ACL baseline were lost with the
+process. Separate read-only reconciliation captured the four marked resources.
+The user then explicitly authorized cleanup of those exact inspected resources.
+Cleanup passed at05:46:30.176UTC: database106496 and roles106497/106499/106501
+disabled/removed as applicable, absence verified, cleanup-only outside ACL hash
+unchanged. Original-run outside invariance remains unverified. See separate
+`artifacts/neon-three-role-cleanup-2e42b143-fa5e-4164-b257-9d8697dcd380.json`.
+Both native-run and cleanup authorizations are consumed. No cloud rerun is allowed
+without fresh approval; no real data/provider/mail/storage/billing/deployment.
+
+Local repair in progress: guarded client leases contain asynchronous socket
+errors, reject later queries/false successful acknowledgements, discard broken
+or ambiguous-commit connections, and never replay work. All raw PostgreSQL
+application acquisitions use this guard, including health/import/restore locks.
+The rehearsal persists original nonsecret OIDs/markers/memberships/expiry and
+outside baseline before proceeding; atomic synced-file replacement protects the
+last complete journal from process interruption. This is not power-loss proof.
+Focused37/37, affected38/38 and final lock/lease10/10 passed (overlapping groups).
+The first restricted attempt failed only on loopback EACCES/temp rename EPERM;
+the same tests passed with local shell permissions. Clean09af7c48-c31b-4820-
+8fa9-a9e15a3b9e76, exec48631 terminal0, passed05:58:15.543-06:03:27.885UTC:
+offline install/build,1186tests/1182pass/zero fail/four native skips,
+294633.643ms,43contract/ten pipeline checks,24scripted/zero external requests.
+All833source files unchanged,SHA626e43c77f95c567bf2dfa53e909f3d89f21b5bdf95f435667449367cc037725.
+Preservatione1eeede7:original eight fingerprints unchanged,integrityOK/FK0,
+28saved manifests valid,2790files/zero configured-secret matches,private envs
+ignored/examples blank or disabled. Local loss-containment task90%; native
+preparation80%; overall71% unchanged. Native reset/lock/process/hosted acceptance
+remains open. Next:S19 welcome/language/reference controls. No frontend edit yet
+and no replacement of the user preview.
+See docs/POSTGRES_LEASE_RECOVERY.md.
+
+Previous Local Runner Checkpoint (Historical)
+
+2026-10-16 runnable three-role rehearsal: **about71% overall**,goal active,
+not production ready. Preparation75% (was55%);delegated75%,operator80%,
+service-role70%,crews85% unchanged. A distinct exact three-login CLI now selects
+the default current91-policy exercise and v2 evidence,not an injected pass stub.
+It adds pause/rotation/expired-queued-approval/guard-drift checks,normal five-second
+heartbeat through two18s requests and5.5s drain,SQL-rejected heartbeat,blocked
+second dispatch/late result,persistent startup rejection and recovered presence.
+Cleanup checks owned-role sessions across all databases and refuses every DROP
+on ambiguity. Lost role CREATE/COMMIT acknowledgement and lingering-session
+fixtures pass. No unrelated connection is terminated. The temporary SQL fault
+function gets only a disposable worker EXECUTE grant and is removed afterward;
+the initial fixture failure at permission admission is retained as failed history.
+Focused23pass55766.771ms preceded CLI changes;final CLI/ack/session five pass
+323.1661ms. Final clean d6b611b6-75cf-4e9d-818e-2b9542be2823,88363terminal0,
+05:22:16.741-05:30:36.945UTC:locked offline install/build,1173tests/1169pass/
+zero fail/four native skips,477038.5534ms,43contract/ten pipeline checks,
+24scripted/zero external requests. All832source files unchanged,SHA256
+1e6b589537f97ec46a0a46322443de091c7f0c0f7c54d6105678a507f907d030.
+Preservation e7b2fb18-838e-4032-bff8-7d49e07d0fe8:original eight fingerprints
+match prior checkpoint,integrityOK/FK0,27saved manifests valid,2722selected files/
+zero configured-secret matches;private envs ignored/examples blank or disabled.
+Fresh bounded Neon authorization requested and pending;no cloud/provider/mail/
+realdata/billing/deployment changes. NativeTLS/concurrency,processing-claim
+expiry,network/lock/process failure,hosted and release gates remain open.
+See docs/NATIVE_THREE_ROLE_PREPARATION.md and
+artifacts/production-three-role-runner-checkpoint-2026-10-16.json.
+
+Previous three-role orchestration preparation:
+
+2026-10-16 three-role rehearsal preparation: **about 71% overall**, goal active,
+not production ready. New preparation task55%; delegated75%,operator80%,
+service-role70%,crews85% unchanged. Explicit separately confirmed orchestration
+accounts for three expiring logins,exact outside exclusions and eight target DB
+connections. Cleanup independently disables provably owned roles and refuses
+deletion on any marker/OID uncertainty. The CLI remains unavailable for three
+roles; prior cloud authorizations are not reused.
+The embedded current91-policy exercise now covers all three distinct profiles,
+API publication/worker assessment,keyless operator enqueue/original receipts,
+competing calls/one claim,revocation,no replay/refund,positive-column denials,
+disposable grant drift/restoration and all-role fence with unchanged inventory.
+Serialized PGlite is not native concurrency/TLS/hosted evidence. Focused20tests
+pass,6707.1649ms. Final clean140abc11-005b-404e-8fc4-320e156225a3 passes,
+05:05:04.275-05:09:47.270UTC:locked offline install/build,1170tests/1166pass/
+zero fail/four native skips,265812.0237ms,43contract/ten pipeline checks,
+24scripted/zero external requests. All831source files unchanged,SHA256
+51c99ea3399e4820ae1e4d25be5b45186e7ab300d486676ad2d018863c116cf4.
+No cloud resource,provider/mail,real data,billing or deployment changed.
+Preservation d31cb22b-2192-402b-bc82-49bc154f980a:original eight fingerprints
+match f930c49a,integrityOK/FK0,26saved manifests valid,2654selected files/zero
+configured-secret matches;private envs ignored and examples blank/disabled.
+Next:finish native-ready failure matrices and distinct CLI/evidence before
+requesting fresh bounded three-role authorization. See
+docs/NATIVE_THREE_ROLE_PREPARATION.md and matching checkpoint artifact.
+
+Previous independent-heartbeat checkpoint:
+
+2026-10-16 independent worker heartbeat: **about 71% overall**, goal active,
+not production ready. Delegated verification **75%** (was 70%); operator isolation
+80%, service-role 70%, crews 85% unchanged. Health/capability now commit together
+every five seconds while stages await. Writes are serialized; stop drains them
+before a fresh terminal snapshot. Heartbeat failure blocks later dispatch/result
+promotion and remains visible even when discovered during shutdown. Stage errors
+are retained until acknowledged by a successful publication. No new SQL grants
+or migration: still 137 tables / 91 migrations.
+Final clean 650e1447-8227-4a07-9b29-54209ad479a9 passed, 04:49:42-04:54:45 UTC:
+locked offline install/build, 1163 tests / 1159 passed / zero failed / four native
+skips, 286103.1967ms; 43 contract and ten pipeline checks, 24 scripted requests,
+zero external requests. 831 source files unchanged, SHA256
+c9626532c20210f2d8dd892f8b434eac5f3aad7b8f6bbcd7ebab3c338340774c.
+Completed journal and exited/absent verifier handle revalidated after context
+transition. The real default-cadence synthetic test holds two requests 18 seconds
+each across the real 30-second freshness window. Native multi-connection and
+stalled-database/platform-stop behavior are not proven by PGlite.
+Preservation 968ccd2d-b15b-45b2-a6f0-a8b7ab2abfb8: original eight fingerprints
+match f930c49a, integrity OK/FK0, 25 saved build manifests valid, 2588 selected
+files/zero configured-secret matches; private envs ignored/examples blank and
+worker verification disabled. No original DB/preview, cloud resources, provider,
+mail, real data, billing or deployment changed. See docs/WORKER_HEARTBEAT.md and
+artifacts/production-worker-heartbeat-checkpoint-2026-10-16.json.
+Native three-role work is still preparation only, not a runnable/authorized
+cloud mode; docs/NATIVE_THREE_ROLE_PREPARATION.md records the remaining contract.
+
+Previous capability/keyless operator bridge checkpoint:
+
+2026-10-16 capability/keyless operator bridge: **about71% overall**, goal active,
+not production ready. Delegated verification70% (was45%); operator isolation80%
+(was75%); service-role70%,crews85% unchanged. Migration091 adds worker-only hash
+registrations with DB-stamped observations,immutable metadata and terminal stop.
+Fresh compatible workers with one configuration permit new tests;stale/stopped/
+missing/incompatible/conflicting observations block them. The dedicated operator
+holds no provider adapter/key, binds new commands to the reviewed configuration,
+and recovers original receipts without automatic POST replay. Browser command
+recovery persists and validates the fingerprint; stale success messages clear.
+Staging worker fixed synthetic tests are default-off/explicit opt-in;ordinary
+content/provider paths stay off and real-worker content remains prohibited.
+Normal heartbeat is still stage-boundary/throttled,not independent through long
+awaited stages;bounded liveness/native91/concurrency/hosted/live gates remain.
+Catalog137/91migrations:application118DML/12read-only/7hidden;worker98full-DML plus
+one limited-column job table/29read-only/9hidden;operator19some-write/19read-only/
+99hidden. Seven invoker functions/nine guards are inspected.49focused checks and
+two hosted-config checks pass. Initial e5a1ff9f full passed1153tests1149pass/four
+native skips/zero fail plus build/evaluations;after interruption,completed report
+and missing handles/process/listener revalidated. Only Operations.tsx changed
+after that snapshot to clear the prior command's success message.
+Final bfbca555-7889-49cc-bb77-291d1865bd77,30114terminal0,04:23:06-04:28:16UTC:
+locked offline install,production build,1153tests1149pass/zero fail/four native
+skips,289429.0564ms,43contract/ten pipeline checks,24scripted/zero external calls.
+829source files unchanged,SHA256
+331417d904eb627c72ea9b4b8cdc22c94e4192548e6f9b2f119fdac955de735e.
+Final built mock browser loss/outage/reload/completion/stopped-worker and320/1440
+checks pass:one test POST,one slot,one mock call,four receipt GETs,zero customer
+APIs. Keyboard login/receipt/logout observed;no full keyboard/AT or hostedTLS claim.
+Reticle had no connected browser/no verdict;no diagnostic uploaded. Owned tab
+closed/viewport reset;fixture62395 interrupted,exact child/launcher and3196
+listener absent. No graceful fixture-shutdown claim. No original DB/preview,
+existing cloud role/storage,provider/mail,real data,billing or deployment changed.
+Preservation1f953f5c-1bc5-41b1-8395-23e77771589b:original eight fingerprints
+match prior f930c49a,integrityOK/FK0,24saved build manifests valid,2518selected
+files/zero configured-secret matches. Private envs ignored,both example Gemini
+keys blank;worker verification example stays disabled. Durable record:
+artifacts/production-verification-capabilities-checkpoint-2026-10-16.json.
+See docs/VERIFICATION_WORKER_CAPABILITIES.md for exact limits and next work.
+
+Previous durable queue checkpoint:
+
+2026-10-15 durable provider-verification queue: **about71% overall**, goal active,
+not production ready. Delegated verification45% (was20%); operator75%,
+service-role70%,crews85% unchanged. Migration090 now connects atomic operator
+enqueue/quota/authority/audit, immutable fixed request metadata, one-claim worker
+execution, exact accepted request metering and original receipt reconciliation.
+Operators have no result-update/claim-token grant; workers get only seven job
+UPDATE columns and no operator sessions/identity access. Terminal jobs cannot
+reopen. Interrupted claims are sealed uncertain with no automatic provider replay
+or quota refund. The scheduler registers the stage only outside application-
+profile legacy runtimes; actual application job-table denial remains enforced.
+Local shutdown drains one claimed test and stops before the next stage.
+Catalog136/90migrations:application118DML/12read-only/6hidden;
+worker97DML plus one limited-column job table/29read-only/9hidden;
+operator19some-write/18read-only/99hidden. Six invoker guard functions/eight
+trigger bindings and exact worker job-column grants are verified at admission.
+Final focused33pass/zero fail/zero skip,26503.7446ms,57467terminal0.
+First full7fa49ae1-8127-447b-8a9d-e4f3c5e68830 retained as failed:1145total/
+1140pass/one application-role scheduler mismatch/four native skips,
+270184.7569ms. Only runtime.mjs and provider-verification-jobs.test.mjs changed
+after that snapshot; no database permission or original assertion was weakened.
+Corrected-source full7ba8b703-a873-4e24-bc6d-93d52f40f924 passed,93968terminal0,
+20:06:05-20:10:55UTC:locked offline install,production build,1146tests/1142pass/
+zero fail/four native-prerequisite skips,270364.0603ms,both synthetic evaluations.
+827source files unchanged,SHA256
+d44af148fea46ec1de4b19dfd86d1cb3235b9b5d2524fbb6605f9273c3ffb50a.
+Worker capability freshness/keyless operator HTTP/built queue UI/native90 and
+hosted/live acceptance remain open. Hosted Gemini still disabled, no real worker
+content/cloud resources/ACLs/storage/provider/mail/billing/deployment changed.
+Both evaluations passed43contract/ten pipeline checks with24scripted and zero
+external requests. Existing mixed static/dynamic-import build warnings remain.
+Preservation88f5f6d0-229d-4958-a4d5-1dcc69f426cf:original eight fingerprints
+match f930c49a,integrityOK/FK0,22saved build manifests valid,2384selected files/
+zero configured-secret matches;private envs ignored/example Gemini key blank.
+See docs/DELEGATED_PROVIDER_VERIFICATION.md and durable
+artifacts/production-verification-queue-checkpoint-2026-10-15.json.
+
+Previous authorization-only checkpoint:
+
+2026-10-15 provider-worker authorization foundation: **about71% overall**,goal
+active,not production ready. Worker-dispatched verification20%;operator75%,
+service-role70%,crews85% unchanged. Migration089/source/disposable only adds
+three-field worker-readable authorization,invoker capture/revocation hooks and
+exact runtime function/trigger admission. Customer role cannot access it;
+worker cannot insert/extend/revoke/reopen it. Per-request inline metering now
+also checks this authority. Actual delegated queue/worker execution is not built
+or enabled yet. Backfill preserves old verification rows while closing expired,
+missing,revoked,inactive/completed and mismatched approvals;UUID1-5 preserved.
+Catalog135:application118DML/12read-only/5hidden,worker97/29/9,operator16some-write/
+20read-only/99hidden. Final four-file34pass/zero fail/zero skip,22982.2422ms.
+Earlier root-build focused run27pass/one ENOENT operator-manifest failure retained;
+original dist not replaced. Superseded bbcf3ff4/ec590f05 clean runs intentionally
+stopped for mismatch/UUID fixes,not credited. Final a88a3875-1faf-4f71-a830-1dbaa8be9534,
+9682terminal1,19:27:36UTC:1130tests/1124pass/two fail/four native skips,
+258538.5942ms. Both failures were exact historical migration arrays ending88.
+Appended89 without removing any history/privacy assertions;both upgrade tests
+now pass,2061.869ms. Current source differs only in those two test files from
+the tested application snapshot.821source files,currentSHA256
+a560b5b71361192cba7feca735eb847c098d99895350cf9dfe11c1a3127b8fe2;
+baselineSHA256dec1b128fe5f646d1e37464a0103949b785f2ea4e9df632f7d61c75d4ca6fe29.
+Separate stripped-environment contract/pipeline evaluations pass at19:30:13UTC;
+original failed journal retained. No claim of an unchanged full verifier pass
+after the two expectation corrections. No application code changed after it.
+No original SQLite/preview,cloud roles/data/storage,provider/mail/billing or
+deployment changed. See docs/DELEGATED_PROVIDER_VERIFICATION.md.
+Final preservation f930c49a-efbe-4e6c-96b2-faaeb67468aa:original eight hashes
+match prior checkpoint,integrityOK/FK0,20build manifests valid,2252selected files/
+zero configured-secret matches. Durable record:
+artifacts/production-verification-authority-checkpoint-2026-10-15.json.
+
+Previous operator-entry checkpoint:
+
+2026-10-15 standalone operator entry: **about71% overall**,goal active,not
+production ready. Operator isolation75% (was70%);service-role70%,crews85% unchanged.
+Separate optimized frontend opens operator login at /,without customer bootstrap
+or PWA registration. Manifest graph limits served assets;customer JS/PWA return404,
+HTMLno-store,worker-src none,microphone/camera/geolocation denied. Hosted startup
+requires the new operator build and existing verified ACL/origin/cookie boundary.
+Focused13pass/zero skips. Fresh run0dbcbc34-02dd-4eb9-b49b-6bc76d6960e2 offline
+install/build and1118tests1114pass/four native skips/zero fail,263129.361ms;
+43contractchecks pass. Continuation stopped verifier/child during pipeline.
+Original running journal retained;separate resumption at19:01:36UTC passes ten
+pipeline checks with zero external requests. Before/after818file comparisons
+match SHA256436b45941de6eca40be774a2a9d58e687ff7eda324a556ee222e3fb07a99b9d2.
+This is composite unchanged-source evidence,not an uninterrupted verifier pass.
+Real local operator root/login/reload/logout and320/1440rendering observed;
+zero customer API calls. FourSWGETs included one explicit probe,all path404;
+unsolicited origin/browser cause unestablished,no prior-worker-clearance claim.
+Fixture process/port absent after continuation,owned tab closed,viewport reset;
+no graceful-shutdown claim. Preservation b3157a8b-b040-4008-b00b-2e480551caaa:
+original eight fingerprints/integrity/FK unchanged,17manifests valid (16x55/new56),
+2061selected files/zero secret matches. No external cloud/AI/mail/realdata/billing/
+deployment. See docs/OPERATOR_ENTRY.md and matching checkpoint artifact.
+
+Previous crew checkpoint:
+
+2026-10-15 17:56UTC crew browser checkpoint: **about71% overall**,goal active,
+not production ready. S27crew acceptance85% (was75%). Fixed desktop table word
+wrapping,mobile contact width/44px targets,forward arrows and Arabic comma.
+Built synthetic create/move/rename/archive/restore/keyboard-paging and EN/AR
+journeys observed;current membership18to17 while frozen assigned18 and header
+30/24/21/3/6 stay unchanged. Widths320/390/768/1440/1586 have no page overflow;
+390layout measured only. Screenshots saved;independent Arabic/AT/matched-reference/
+delayed-authority/native acceptance remains open. Contact settings destination
+is still English,part of existing localization backlog. Owned fixture stopped,
+QA tab closed/viewport reset,OSzero listeners3192/3193;original previews retained.
+Fresh clean0dc72f84-7c89-4cd7-8a76-ef61fc51ce17 terminal0,17:51:21-17:56:42UTC:
+offline install/build,1115tests/1111pass/zero fail/four native-prerequisite skips,
+279548.5331ms;43mocked contract/ten scripted pipeline checks pass.814source files
+unchanged,SHA256 c2d2893909fb04e4b18ff6bca4e6ed0627b7e4001c12fa984bd8e43b3efd2538.
+See artifacts/production-site-crews-browser-checkpoint-2026-10-15.json and
+docs/SITE_CREWS_OVERVIEW.md. No cloud/realdata/AI/mail/billing/deployment.
+Preservation f37ea774-7523-443f-b8b7-100a305afae2:original eight fingerprints
+match prior checkpoints,integrityOK/FK0,sixteen55-file shell manifests match,
+1987selected files/zero configured-secret matches;private envs ignored.
+
+Previous control-plane checkpoint:
+
+2026-10-15 control-plane/actual API-role checkpoint: **about71% overall**,
+goal active,productionReady false. Service-role estimate70% (was65%);narrow
+control-plane acceptance85%,operator isolation70% unchanged. Application control
+tables now read-only and operator audit hidden from API/worker. Catalog134:
+application118writable/12read-only/4hidden,worker97/28/9,operator15/20/99.
+All ten scripted customer stages now use actual application ACLs;15worker tasks
+restore their application caller. Four named maintenance setup/control actions,
+no owner fallback for customer work. Distinct-role customer retry reads original
+operator history but cannot forge receipts or unpause jobs. No new migration.
+Focused57tests and final47tests pass. First full493d367d-40ca-4b44-9ddb-536f28fb77d0,
+80106terminal1:1115total/1110pass/one failed/four skips,271830.7802ms. UNKNOWN
+Windows file-open error on copied016 migration,not a domain assertion. Original/
+copy SHA256match;unchanged same-snapshot15restore tests pass,73965.9913ms,
+27941terminal0. Cause not established;failed full run remains uncredited.
+Fresh full rerun d95947b4-ac0d-41d1-8ac8-b93ef550bb22 passed,13:40:40-13:45:24UTC:
+1115total/1111pass/zero failures/four native-prerequisite skips,265936.7204ms;
+43mocked contract/ten scripted pipeline checks pass.814source files unchanged,
+SHA256 b97eeaf7bd25f7ee563e1920da18320ae9e5161ac9ce170df4e0cb1055a3c752.
+No changed assertions or file-read retries to hide the earlier failure.
+Browser recovered. Fresh built in-memory fixture3192/3193 observed S27 member
+paging/selection and EN-to-AR/RTL;confirmed desktop table/contact-mobile wrapping
+defects remain,next UI work. Screenshots saved,not full reference acceptance.
+Owned QA tab closed/viewport reset,64194terminal interrupt,OSzero listeners.
+Other tabs and original previews/data/build retained. No cloud/realdata/AI/mail/
+billing/deployment or existing ACL changes. See docs/CONTROL_PLANE_RUNTIME.md.
+
+Previous2026-10-15 dedicated operator column/runtime checkpoint: **about71% overall**,
+goal active,productionReady false. Service-role hardening65% (was58%);dedicated
+operator isolation70% (was30%). Positive explicit operator column/verb ACLs,
+separate bounded login budget,guarded no-change locks/revocation/failed retries,
+generated export eligibility without snapshot SELECT,and actual restricted
+startup implemented. Source fence binds all three service profiles and removes
+operator column writes. Application124writable/seven read-only/three hidden;
+worker98/28/eight;operator15/20/99 of134 tables (three operator writes lock-only).
+New migration088 applied only in disposable embedded fixtures,not cloud/original
+data. New operator service refuses private storage/AI/mail credentials,customer
+APIs and wrong/owner database roles. No live provider tests enabled.
+Expanded13-file63tests pass,39729.6974ms,71617terminal0;guard/startup8tests pass,
+13922.606ms,90996terminal0. Full clean baseline6f06f347-36b3-4719-8cb2-1240d514b0dc,
+76154terminal0,13:02:58-13:08:36UTC:offline locked install/build,1114tests/1110
+pass/zero fail/four native-prerequisite skips,316713.2048ms;both evaluations pass,
+814stable baseline source files,SHA9aae5ca18bd6bb4adaf529a63071b709e5a89b711e85e935f0733c97e4fd165d.
+Final review then reproduced a real SQL-literal CR normalization drift defect
+(targeted one-test failure). Fixed to normalize CRLF pairs only. Final focused
+five-file28tests pass,15837.1163ms,88385terminal0. Only operator-permissions.mjs
+and its regression test differ from the full baseline;current814-file SHA
+0519df7b688487b948c005f468f30ad307a0d04b6a871874c78aa3198a9e986b.
+Do not describe the earlier full baseline as an unchanged final source snapshot.
+No public deployment,cloud role/DB/ACL changes,realdata,AI/mail,billing,original
+preview restart,original SQLite migration or build replacement. Native88/three
+verified-TLS logins,operator default entry/browser/proxy/deployment,provider-test
+delegation and finer application/worker privileges remain open. Next local work:
+remove remaining customer/worker control-plane authority after dependency audit,
+then prepare a bounded native three-role test. No user input needed yet.
+See docs/OPERATOR_COLUMN_PROFILE.md and the current progress board. Durable
+evidence:artifacts/production-operator-column-checkpoint-2026-10-15.json.
+Preservation13:14UTC,5ba190fb-6499-4815-a6d9-700b3e2ace86:original eight table
+hashes/integrity/FKs unchanged;thirteen55-file shell manifests match,
+1798selected files/zero configured credential matches,private envs ignored.
+All needed owned test/verifier handles terminal;no actual hosted/native/cloud
+change,external diagnostic workaround or browser screenshot. Final diff passes.
+
+Previous2026-10-15 operator HTTP/credential boundary: **about71% overall**,goal active,
+productionReady false. Service-role hardening58% (was55%);dedicated operator
+isolation30%. Hosted customer/worker configuration refuses operations access;
+internal separate-origin operator HTTP boundary has host-only Secure cookie,
+no customer APIs or storage/AI/mail credentials. Application SQL profile now
+124writable/seven read-only/two hidden operator identity/session tables;worker
+unchanged98/28/seven. New denials and grant-drift checks pass embedded SQL.
+Expanded11-file61tests pass,zero fail/skips,31956.3609ms,48136terminal0.
+Earlier13-test attempt12pass/one ECONNRESET from missing test-body framing;
+fixed Content-Length without dropping invalid-body/no-database assertions.
+Public operator launcher deliberately NOT added:positive operator DB profile,
+restricted retry/control grants,native new-policy and deployed/browser isolation
+remain open. Existing application roles retaining old operator grants fail
+startup pending explicit stopped-writer maintenance reconfiguration;no live ACLs
+changed. Fresh clean b1ec0c63-9c02-45fb-b931-e54c4ba74962,57142terminal0,
+12:33:24-12:39:03UTC:offline locked install/build,1106tests/1102pass/zero fail/
+four native-prerequisite skips,314999.3123ms;43mocked contract/ten scripted
+pipeline checks pass.811source hashes stable,SHA
+812b8f508b9adfa3dfa801d9cc7cd0b0f5fa0b8d7b3727f02b343276d156f5b9.
+Preservation b9fa842c-a38a-46a5-917c-efb62aff7b96:original eight table hashes
+unchanged,integrityOK/FK0,twelve55-file shell manifests match,1726selected
+files/zero configured credential matches,private envs ignored. All needed owned
+sessions terminal;no browser/reference,live AI,native new-policy or CI proof added.
+No cloud/realdata/mail/billing/deploy or original preview/build/database changes.
+See docs/OPERATOR_SERVICE_BOUNDARY.md. Current new code is not certified by the
+older full-suite result below. Progress board's stale62% weighting table was
+reconciled with the existing70.65% basis;that correction adds no progress credit.
+
+Final12:40UTC preservation8208388f-1313-40bf-b55a-e9916a08a938 confirms the
+same original eight hashes/integrity/FKs and twelve55-file manifests;1731selected
+files/zero configured credential matches. Final diff check passes. Next local
+task:positive operator metadata/verb/column profile and constrained retry/control
+authority,then a directly verified dedicated launcher. No user input needed yet.
+
+### Earlier Team-First Checkpoint (Historical)
+
+2026-10-15 12:12UTC: **about71% overall**,goal active,productionReady false.
+Team-first S27 source implemented at#people/crews:dual-backend scoped read model,
+frozen-publication crew metrics distinct from current members,configured site
+contacts,bounded activity and selection/member paging. Reuses existing worker/
+crew create/membership forms and crew rename/archive/restore;no new permissions
+or migration. Strict client DTO/denominator/scope guards;25focused tests and
+typecheck/separate ignored build pass. Legacy missing snapshot is unavailable,
+not zero or GET-time backfill. First smoke/fixture failures recorded in
+docs/SITE_CREWS_OVERVIEW.md;final focused25pass,zero skips.
+Visual/browser acceptance NOT run:Windows process-security launcher fails for
+both restricted shell and Cua,HRESULT0x80070020;one supported kernel reset also
+failed. No raw-browser or external-diagnostic workaround. Approved local shell
+fallback runs source/type/backend tests. Fixture31530 on3190/3191 stopped,
+terminal interrupt;OS confirms zero listeners3190/3191. Do not reuse previous
+Arabic-directory screenshots as new team-first evidence. Fresh clean
+a7f72d68-e42e-41b9-a420-377d2265983c,78081terminal0,12:04:23-12:10:14UTC:
+locked offline install/build,1101tests/1097pass/zero fail/four native-prerequisite
+skips,327018.7588ms;43mocked contract/ten scripted pipeline checks,809stable
+source hashes,cloud config/original data excluded. All needed owned sessions
+terminal. Original eight table hashes match,integrityOK/FK0;eleven55-file shell
+manifests match,1660selected files/zero current credential matches,private envs
+ignored. Preservation abdad6ff-ddb0-484e-9065-b8ebefb1211d. Original previews not
+restarted or newly liveness-certified;rootdist not replaced. Native/cloud/realdata/
+mail/billing/deploy not enabled. Team-first S27acceptance75%,localization57%;
+broader percentages unchanged pending actual new acceptance. Durable evidence:
+artifacts/production-site-crews-checkpoint-2026-10-15.json. Browser/runtime
+recovery and rendered acceptance remain open;independent local work may continue.
+Final12:15UTC check:all809current source files equal the passing snapshot;
+original eight table hashes and eleven shell manifests still match,
+1662selected files/zero current credential matches. Evidence
+3e411f27-49c5-418c-9144-082ae99aa69a. No new current-view screenshot is available.
+
+### Earlier Arabic Directory Checkpoint (Historical)
+
+2026-10-15 08:06UTC: **about71% overall** (64-77% uncertainty),goal active,
+productionReady false. Arabic presentation of existing directory/crew workflows
+implemented and locally verified. Localization57%;broader Arabic-directory/S27
+acceptance85%,not full S27 reference completion. New106 directory/17 shell
+English-Arabic message pairs,RTL right-side desktop sidebar/site selector/date/
+search/session-lock override,worker/crew forms,confirmation and membership moves.
+Locale changes retain open edits and do not change authority or worker language.
+Private-link/deletion/assignment-history subpanels explicitly remain English;
+unrelated routes stay English. App-instance preference is not durable on reload.
+Built synthetic create/rename/move/archive/restore/reload,error translation,
+unsent-language switching,keyboard confirmation/Escape and320/390/768/1440 checks
+pass without page overflow;320px dialogs281wide. Reticle possible-egress check
+blocked by auto-review,no bypass/diagnostics. IAB QA tab closed,viewport reset,
+owned fixture stopped;OS confirms zero listeners3188/3189.
+Focused28tests pass;initial restricted HTTP attempt hit EACCES,not a code failure.
+Fresh clean9cc91df8-999e-4431-86fe-d34119843f01,62109terminal0:locked offline
+install/build,1092tests/1088pass/zero fail/four native-prerequisite skips,
+253632.3536ms;43mocked contract/ten scripted pipeline checks,802stable source
+hashes. No live-accuracy or actual CI/native cloud/deployment claim.
+Original eight table hashes match,integrityOK/FK0;nine55-file shell manifests
+match,1531selected files/zero current credential matches,private envs ignored.
+No cloud/realdata/mail/billing,original preview restart/build replacement or
+existing database migration. Weighted combined refs/language/device category
+53to54 yields70.65 before rounding;overall remains71. Other domain estimates
+unchanged. Team-first S27 composition/remaining controls,independent language/
+AT/device,external erasure/restore,combined native cloud/private backup/cutoff,
+fine-grained/operator separation,live quality and authorized hosted release open.
+See docs/STAFF_DIRECTORY_ARABIC.md and
+artifacts/production-arabic-directory-checkpoint-2026-10-15.json.
+Post-checkpoint preservation08:09UTC:4a99e03b-576d-423d-b783-25098b82b8d9,
+1533selected files/zero current credential matches;original data/builds unchanged.
+
+### Earlier Cleanup-Scope Checkpoint (Historical)
+
+2026-10-15 07:39UTC: **about71% overall** (64-77% uncertainty),goal active,
+productionReady false. Current-application cleanup-scope API/UI task complete;
+broader application/provider/history/backup erasure accounting25%. Both backends
+project application_current_view and four not_verified external categories in
+directory/detail/initial/duplicate acknowledgements;strict browser guards reject
+missing/malformed scope or unsupported verified claims. Existing IDs,timestamps,
+redaction/pseudonym/completion/audit journals preserved;no migration or cleanup
+side effect added. UI and retention copy avoid universal permanent-erasure claims.
+Focused15tests pass. Built1440/320 queued/completed status and dialog focus trap/
+Escape checks pass;zero deletionPOSTs,two pre-created fixture requests,target
+untouched. Reticle disconnected before a substantive verdict,not counted as a
+pass;lease released/session yielded,no diagnostics sent. IAB QA tab closed and
+viewport reset;owned3186/3187 fixture stopped,ports absent on resume. Original
+preview services were not restarted or newly liveness-certified.
+Final fresh clean40c75c5e-8e6b-468a-831d-d3cb4bdced31,66974terminal0:
+locked offline install/build,1086tests/1082pass/zero fail/four prerequisite skips,
+256062.8081ms;43mocked contract/ten scripted pipeline checks,800stable source
+hashes,cloud config/original data excluded. Prior4deefb4c-5094-460b-8bc5-
+875a507d6424 failed one old exact DTO expectation,now updated to assert every
+new field. Prior5ca8c673-e3ac-481f-a83d-ffca8ca0f3f8 interrupted,not a pass;
+missing handle and OS inspection confirmed no verifier/tests before restart.
+All required owned test sessions terminal. Original eight table hashes match,
+integrityOK/FK0;seven55-file shell manifests match;1403selected files/zero
+current credential matches,private env files ignored. No cloud calls,realdata,
+mail,billing,existing DB migration,original build replacement or deployment.
+Storage55%,native82%,service-role55%,backup75%,hosted20%,release40% unchanged.
+See docs/DELETION_CLEANUP_SCOPE.md and docs/NEON_STORAGE_PRIVACY_GATE.md.
+Durable checkpoint: artifacts/production-cleanup-scope-checkpoint-2026-10-15.json.
+Post-checkpoint preservation at07:45UTC:1ae65a8e-574d-49d8-9efe-e5fd75578784,
+1409selected files/zero current credential matches;original data/builds unchanged.
+At that checkpoint,read-only inspection confirmed S27 staff site/crew Arabic RTL remained open:
+People.tsx management controls are English-only and main.tsx has no general
+staff locale mechanism. Worker language selection is a separate implemented path.
+Next broad work:independently verified external disposition and restore/backup
+accounting,combined native cloud storage/private backup/custody/cutoff,
+operator/column separation,complete staff/worker language/reference/a11y/device/
+live quality acceptance,actual CI and hosted release. No final-erasure claim.
+
+### Earlier Six-Family Checkpoint (Historical)
+
+2026-10-15 07:02UTC: **about71% overall** (64-77% uncertainty),goal active,
+productionReady false. Private storage55%,service-role55%,nativePG82%,backup75%,
+hosted20%,fresh-setup/release40%. Explicitly approved six-family cloud application
+test18166terminal0:artifacts/neon-application-storage-8eaa619c-eada-4fda-88be-
+231719897356.json,06:53:58-06:55:11UTC. Ten normal backend workflow checks,
+nine fixed synthetic tone objects/288396bytes,all authenticated readback/
+anonymous denial/conditional PUT412/unchanged-byte checks pass. All exact
+ownership-marked objects removed from current branch; final listing empty.
+Database remains PGlite and providers scripted;not native DB+storage together,
+browser/device or deployed acceptance. No cloud DB writes,external AI/mail,
+realdata,billing,configuration switch or public deployment. Original preview/
+DB not restarted,migrated or switched. Final source uses `checking` for initial
+runner journals;the live pass predates only that observational label/assertion
+fix. Earlier failures remain failures:journal fault handling was corrected;
+restricted config-import EPERM passed the approved unchanged rerun.
+Local34focused and final runner10focused pass; local pipeline ten checks/nine
+objects/15worker tasks/24scripted requests pass. Fresh clean snapshot
+99f90eb2-717a-4e05-ba7a-14af3522d0bc,35518terminal0:locked offline install/build,
+1084tests/1080pass/zero fail/four prerequisite skips,263373.657ms;43mocked
+contract and ten scripted pipeline checks;798source hashes stable. No inherited
+cloud configuration or original data copied. Privacy investigation confirms
+current404 is not storage-history/final-erasure evidence;provider lifecycle/
+branch/backup disposition and truthful completion scope remain a release gate.
+Hosted runtime still rejects non-synthetic staging. See
+docs/NEON_APPLICATION_STORAGE_REHEARSAL.md,docs/NEON_STORAGE_PRIVACY_GATE.md,
+docs/PROGRESS_BOARD.md and docs/PROGRESS_REASSESSMENT_2026-10-14.md.
+Next:application cleanup versus provider/history/backup completion accounting,
+combined native cloud-storage/private backup/custody/cutoff,and remaining
+operator/column privileges,reference/languages/a11y/devices/live quality/release.
+Preservation07:02:52UTC:original eight table fingerprints unchanged from prior
+checkpoint,integrityOK/FK0;five55-file shell manifests match;1276selected files/
+zero current credential matches,private env files ignored. All needed owned
+test sessions terminal. Checkpoint:
+artifacts/production-six-family-storage-checkpoint-2026-10-15.json;
+preservation:artifacts/clean-backup-preservation-1b8330a0-4cce-49f4-ab6d-
+93b7b7df6908.json.
+
+### Earlier Service-Role Checkpoint (Historical)
+
+2026-10-15 06:42UTC: **about70% overall** (63-76% uncertainty),goal active,
+productionReady false. Service-role hardening55%,nativePG82%,private storage40%,
+backup75%,hosted20%,fresh-setup/release40%. Actual authorized Neon test passed:
+87migrations,separate API/worker direct verified-TLS logins,wrong-profile startup
+rejection,API publication/submission,worker scheduled assessment,13 SQL denials
+and durable mixed-role fence with unchanged full business inventory. One exact
+temporary database and both expiring logins removed;outside catalog/ACL/roles/
+memberships unchanged. Evidence:artifacts/neon-service-roles-1ee4833f-f3bb-4e52-
+a40b-db7e1d64d010.json,36070terminal0,06:35:03-06:40:12UTC.
+Worker policy retains98writable/28read-only/7hidden tables; broad DML remains,
+so finer verb/column limits and operator-service separation are not complete.
+Populated worker/mail/hosted/pipeline35focused tests and runner/permission24
+focused tests pass. Fixed scripted pipeline runs15 tasks as the worker identity,
+24scripted requests/zero external;API remains an owner fixture in that evaluation.
+Fresh clean snapshot747d3395-92dc-4e8e-a66b-d2ae0a9c1a1e,15513terminal0:
+locked offline install/build/full1074tests,1070pass/zero fail/four prerequisite
+skips,228510.7486ms;43mocked contract/nine scripted pipeline checks pass;
+795selected source hashes unchanged. Initial restricted focused attempt failed
+loopbackEACCES;approved rerun passed unchanged. No realdata,provider/mail calls,
+storage writes,billing changes,public deployment,existingDB migration or preview
+restart. Original eight business tables match the06:22 checkpoint,integrityOK/
+FK0;06:43preservation scans1204files/zero current credential matches,private
+env files ignored,four55-file shell manifests match. All-six-family cloud
+application,permanent-erasure accounting,private backup/custody/cutoff,hosted,
+physical devices,reference/language/a11y and actual CI/release remain open.
+See docs/NEON_LOGIN_REHEARSAL.md and docs/PROGRESS_BOARD.md.
+Checkpoint:artifacts/production-service-role-checkpoint-2026-10-15.json;
+preservation:artifacts/clean-backup-preservation-48a53b54-c313-4211-9b93-
+44c0c3fd859c.json. All needed owned test sessions are terminal.
+
+### Earlier Storage Adapter Checkpoint (Historical)
+
+2026-10-15 06:12UTC: **about70% overall** (63-76% uncertainty), storage
+integration40%,hosted deployment20%,goal active/productionReady false. Live
+isolated private Neon probe passes; explicit hosted Neon adapter now implemented
+with shared scoped WAV/source-original integrity, bounded I/O, conditional
+creation, exact absence checks and sanitized failures. Migration087 names Neon
+in the immutable health journal; existing DB/previews were not migrated or
+restarted. Native PostgreSQL proof predates087. Forty-seven focused local tests
+pass. Fresh clean snapshot e40616ec-6d21-4ee4-abe7-bb80e27dbe3b terminal0:
+locked offline install/build/full1062 tests,1058pass/zero fail/four skips,
+239723.087ms;43mocked contract and nine scripted pipeline checks pass;
+794 source hashes unchanged. Preservation06:11:25UTC: original eight tables
+match prior05:27 checkpoint,integrityOK/FK0;three55-file shell manifests match;
+1133selected files/zero current credential matches, both private env files
+ignored. Original.env byte-identical through explicit storage-field import.
+No cloud application switch, real data, billing action or deployment. All
+owned test sessions terminal. Current-branch test object removed, not a claim
+of permanent erasure. All six cloud application families, branch-history/privacy
+accounting, private backup/custody/cutoff and hosted deployment remain open.
+Worker profile source remains in progress with populated functional acceptance
+pending, not credited by default-profile/full-regression passes. Evidence:
+artifacts/production-neon-storage-checkpoint-2026-10-15.json.
+
+### Earlier Storage Probe (Historical)
+
+2026-10-15 06:01UTC: **about70% overall** (63-76% uncertainty), goal active,
+productionReady false. User provisioned the private Neon Free synthetic bucket.
+Live isolated S3 probe passed: WAV upload/authenticated byte readback, anonymous
+read denied, conditional overwrite rejected, original bytes preserved and owned
+probe removed from the current branch. Evidence:
+artifacts/neon-storage-3f438b0c-a899-420a-b5ed-a51cefef89d0.json.
+Explicit four-field import from ignored.env to ignored.env.neon-storage-test
+left source.env byte-identical. No secret values printed;1041 selected source/
+evidence files have zero current credential matches. Final focused19tests pass,
+zero fail/skips; initial sandbox file-rename EPERM resolved by approved normal
+Windows replacement permissions, not weaker assertions. No DB writes, AI calls,
+app storage switch, real data, paid upgrade or deployment. Native PostgreSQL80% and
+backup/recovery75% unchanged; private Neon application integration25%,hosted20%.
+Neon soft-deletes objects and does not enforce stored lifecycle rules: permanent
+erasure, all six application families, independent backup/custody and hosted
+acceptance remain open. Existing hosted configuration is still R2-specific until
+an explicit verified adapter change. Separate worker-role edits remain in progress
+and are not credited by this storage-only checkpoint. No owned live test session
+or test object remains from the completed probe. Earlier full clean-suite proof
+does not cover these new files. See docs/NEON_PRIVATE_STORAGE_TEST_SETUP.md.
+
+### Earlier Backup Checkpoint (Historical)
+
+2026-10-15 05:26UTC: **about70% overall** (63-76% uncertainty),native80%,
+backup/recovery75%,clean-setup/release40%. Goal active; productionReady remains
+false. Native backup74340 terminal0:neon-backup-162031cf-aee7-4630-9d43-
+7d9c4b976a34.json,05:19:18-05:25:34UTC. Real pg_dump/pg_restore18.6, encrypted
+DB/object round trip, complete relational/guard comparison, private synthetic
+recording byte readback and restored quarantine/activation denied. Both exact
+temporary DBs removed, outside catalog/ACL matched, passfiles removed. Earlier
+six-minute attempt failed and cleaned; not credited. Remote fixture now has9min
+I/O budget inside10min process bound; SQL/assertions/native warnings unchanged.
+Official EDB ZIP SHA256 verified;32client files extracted under ignored.tools,
+no server/service/PATH install. User-only Windows scratch ACL verified.
+Clean snapshot2508 terminal0:bc0bfa2a-4ba4-4ab6-8d36-62073d5f658e under.clean-check,
+fresh locked offline install/build,1036tests/1032pass/zero fail/four prerequisite
+skips,235546.2492ms;43mocked contract/nine scripted pipeline checks pass;786source
+hashes stable. CI now builds before tests that serve dist. Earlier cache/config/
+loopback-permission failures preserved. Snapshot predates backup wrapper; latest
+backup/clean focused19pass and real native1pass are separate scopes, not a new
+combined full-suite claim. Original05:22/05:26 eight table hashes identical,
+integrityOK/FK0;original/fresh55asset manifests match;1061selected source/log/build
+files contain zero current credentials,.env ignored/exampleblank. Evidence:
+clean-backup-preservation-3dee9a71-30cb-4a7a-9b61-e2f0a77f0032.json under artifacts.
+All needed owned sessions terminal; both download attempts terminal; no temporary
+test databases, workers or API remain. Original3020/3021 previews/data untouched.
+No real data, AI/mail/payment calls, paid upgrade or public deployment. GeminiFree
+synthetic-only unchanged. Remaining:privateR2/all object families/off-host custody,
+backup interruptions/cutoff/privacy replay/activation,separate service profiles,
+full reference/language/a11y/physical-device/live-quality/CI/hosted acceptance.
+See docs/NEON_BACKUP_REHEARSAL.md,docs/CLEAN_VERIFICATION.md,docs/PROGRESS_BOARD.md.
+
+### Earlier LOGIN Checkpoint (Historical)
+
+2026-10-15 04:52 UTC: **about69% overall** (62-75% uncertainty),native acceptance
+75%,read-key85%. Goal active; no production-readiness claim. Native direct LOGIN
+run80657 terminal0:artifacts/neon-login-2f94d92b-ffa0-4eaf-ab0f-a3adeb3324bc.json
+passed04:38:39-04:40:06UTC. Six checks:two independent verifiedTLS direct runtime
+connections,unchanged production permission gate,restricted publish/submit/
+scheduled assessment,loopback API startup/health/auth denies,DDL/TEMP/TRUNCATE/
+maintenance and future-object denies. LOGIN disabled/password cleared; exact
+database/role removed and absence verified;existing catalog/ACL unchanged.
+Passwordrandom/30min expiry,never localfile/.env/chat/logged. No real data,
+provider/mail/billing/public-deployment action. Provider-side role creation uses
+Neon's required unhashed password over verified TLS; unsupported hash attempt
+failed cleanly and is separately preserved,not a pass.
+Source:server/postgres/neon-login-rehearsal.mjs/scripts/neon-synthetic-login.mjs;
+docs/NEON_LOGIN_REHEARSAL.md. Nine focused finaltests pass,2217.4001ms.
+Build72554 terminal0:2068modules/670.23KB entry,6.93s;existing size/import warnings.
+Suite42430 terminal1:1026tests/1021pass/one failure/four skips,235702.9708ms.
+Hosted runtime hit ENOENT while simultaneous npm build replaced a dist asset;
+this was test orchestration error,not hidden or relabeled a pass. Evidence
+artifacts/neon-login-final-suite-2cf67597-faac-4d1a-a5f5-881f7dd737de.{json,log}.
+Stable completed build then hosted focused3/3 pass,2276.1564ms. No assertions or
+production behavior changed. Never rebuild dist during tests that load it.
+FULL CURRENT SUITE61586 TERMINAL EXIT0:1026 tests/1022pass/zero fail/four explicit
+native prerequisite skips,220764.8971ms;189files,OS-only env/no provider/cloud
+config,no concurrent build/source edits. Durable passed completion evidence
+artifacts/neon-stable-build-suite-110bc507-d1d1-425b-9426-a511da3068fa.{json,log}.
+04:51readonly preservation:original eight business fingerprints unchanged,
+integrityOK/FK0;55built shell hashes match,1504 source/evidence/public/log files
+scanned,zero current Gemini/Neon URL/password matches,.env ignored/exampleblank.
+artifacts/neon-login-preservation-ec988671-ca59-401e-909f-7052cca65599.json.
+Diff whitespace passes. All needed owned sessions terminal; no test DB/role/API
+or owned interrupted worker remains. Earlier failures/interruptions preserved.
+30sec checkpoint pause completed04:49 then resumed. NEXT: native encrypted DB/
+private-object backup/restore prerequisites and remaining broad worker/PWA/
+reference/accessibility acceptance. Existing source must be inspected before
+assuming old checklist gaps remain: saved draft target-language editing and the
+same-build older-tab shell repair are implemented; different-build/physical
+journeys remain partial. Do not rebuild them from stale table rows.
+No native LOGIN or test API remains live. Original3020/3021 previews untouched.
+Native pg_dump/pg_restore/psql absent on PATH and standard PostgreSQL ProgramFiles
+directory absent at04:40;not an exhaustive filesystem inventory. Do not install
+systemwide tools without user authorization. Native backup/privateR2,other crash
+matrices,separate service profiles,hosted/CI/devices/fullrefs/a11y/language/live
+quality/approved real-data AI remain open. GeminiFree synthetic-only unchanged.
+
+### Previous In-Progress Notes (Historical)
+
+2026-10-15 04:39 UTC continuation: goal active,overallabout68%,native acceptance
+about70% after actual owned-worker crash/recovery proof; dedicated LOGIN not yet
+credited. User explicitly authorized ONE temporary synthetic database and LOGIN
+role,with memory-only password/no existing DB ACL changes/no paid resources.
+`scripts/neon-synthetic-login.mjs --confirm-synthetic
+--confirm-temporary-database-and-login` is the next interruptible action.
+New guarded server/postgres/neon-login-rehearsal.mjs creates template0 database,
+unique ownership markers and30min expiring SQL-created role; random password is
+sent only to Neon over verified TLS,never to local files,.env,logs or artifacts.
+Neon explicitly requires unhashed password input; an initial prehashed attempt
+failed at role creation (XX000),created NO role and removed its owned DB,with
+outside catalog/ACL unchanged. Evidence neon-login-ea74c2d7-9461-4db1-a9ee-
+742d0cb0038e.json. This verified-clean failure is not a LOGIN pass.
+Existing production
+permission configurator applies ONLY in the new DB. Direct TLS/identity/permission
+gate,normal publication/submission/scheduled assessment/loopback API and denied
+DDL/maintenance/future objects are checked. Cleanup disables its LOGIN and removes
+only marker/OID/owner-matched resources after pools close/no client sessions and
+outside catalog/ACL comparisons. Drift/lost unmarked CREATE ACK refuses DROP.
+SIGINT/SIGTERM request cleanup; forced kills still require journal reconciliation.
+Nine focused offline tests pass,2251.9863ms (including actual embedded policy/API,
+not native direct-login proof). Related thirteen pre-expiry checks passed.
+NEXT native LOGIN run,then full suite and final preservation/credential scan.
+Generated artifacts/neon-login-UUID.json journals resource identities before effects.
+No LOGIN cloud role has been created yet; capability-only TLS readonly check
+passed with CREATE DATABASE/ROLE true. Earlier review-usage error did not execute
+the check; after reset it was retried through the same approval path and passed.
+
+Actual process-death native run091c4332-517f-4efd-9dde-991d8eb75a0e passed at
+2026-10-14 17:53:25UTC,nine core/seven extended checks,owned child exited after
+SIGKILL,one recovery completion/audit after explicit synthetic lease expiry.
+Owned schema removed,outside catalog identities unchanged,no provider/realdata.
+Journal inspected after interruption; no owned native/worker/test process remained
+at19:58UTC. No original terminal exit-code claim for the interrupted70340 handle.
+Nineteen focused checks passed before native execution,17867.204ms.
+Two final full-suite attempts were interrupted,NOT passes: partial
+artifacts/neon-concurrency-guard-suite-2026-10-14.log and
+artifacts/neon-final-suite-14257cc2-97fe-4e5e-a535-f21d67cef438.{json,log}.
+24843 handle missing/original child24348 absent at04:25UTC; its running journal
+is stale,not proof of a live run. Last completed full suite remains1010/1006pass/
+zero failures/four native skips,prior to the extended worker and LOGIN additions.
+Local-only postgres-live expected migrations updated072to086 without relaxing
+its localhost guard; its focused case remains explicitly skipped,not executed.
+
+### Previous Checkpoint (Historical)
+
+2026-10-14 native/read-key continuation: **about68% overall** (61-74% uncertainty),
+native acceptance65%,exact read-key85%; goal remains active,not production-ready.
+Authorized Neon role run47931 terminal0: nine main/five scoped NOLOGIN checks
+passed,86 migrations/checksum/replay and concurrent exactly-once domain work.
+`artifacts/neon-rehearsal-7c172712-5b54-4d0a-b7d1-3fcb759e1599.json` records
+both roles/schema removed,outside ACLs/roles/catalog identities unchanged.
+Production directLOGIN gate deliberately rejected assumed-role instrumentation;
+no database-wide/public ACL changes,LOGIN credentials,realdata/provider/mail calls.
+Related17 tests pass before batching; final optimized8 pass. Post-role suite82896
+terminal0:1010tests/1006pass/zero fail/four native skips,357706.4494ms; log
+artifacts/neon-role-guard-suite-2026-10-14.log. Build48668 terminal0,2068modules/
+670.23KB with existing warnings. Final17:39 preservation:original eight table
+fingerprints unchanged,integrityOK/FK0;55shellhashes match;1482 files scanned,
+zero Gemini/Neon URL/password matches,.env ignored/exampleblank. Diff check pass.
+Extended native run94939 terminal0,17:45:21UTC:
+artifacts/neon-rehearsal-7a2805c4-b087-4e88-8c0b-98f07db4d0bc.json; six checks
+pass for one-use grant/session revocation,exact retry/generation race,expired
+lease takeover rejecting late completion,payment-versus-void,withdrawal frozen
+history,and authglobal/key capacity. Owned schema removed/outside identities
+unchanged. Original corecounts are a pre-extension snapshot,not final totals.
+Actual process-death test is newly implemented/default-off,offline checks running;
+do not credit it yet. It spawns only an owned hidden synthetic worker,requires
+run-marker/TLS/job checks,waits for a claim,then targets only that child handle
+and verifies exit before explicit synthetic lease expiry/recovery. No native
+helper is running; NEXT guarded CLI --confirm-synthetic
+--confirm-concurrency-extension --confirm-owned-worker-interruption after focused
+tests pass. Final new-source full suite/preservation still required.
+Current-build read-key delayed same-page refresh,zero-old-record page transition,
+503 cache clear/recovery and paused-template unsent-editor/Cancel/refresh pass.
+81596 terminal0:38 reads/eight failures/zero mutations,ten inventories unchanged.
+43204 terminal0:publication unchanged,one original template receipt/no new draft/
+receipt/external calls. Interrupted25696 reconciled timer-completed exit0,not live.
+Owned tabs closed; original browser and previews preserved. Post-role full suite/
+preservation passed as above; final extended-worker source acceptance pending. See
+docs/NEON_SYNTHETIC_REHEARSAL.md and docs/PROGRESS_BOARD.md. Next: native broader
+concurrency/process-death/backup/private-storage and remaining full-scope build;
+dedicated service LOGIN/hosted/device/reference/quality/release remain open.
+
+### Historical In-Progress Notes (Superseded Above)
+
+Native Neon rehearsal **passed**,47547 terminal exit0,2026-10-14 16:58:43 UTC.
+Evidence `artifacts/neon-rehearsal-e208ca21-ca30-46d5-8f85-d8c65502efd9.json`:
+PostgreSQL18 verifiedTLS/direct two-connection preflight,86 migrations/checksums/
+zero-change replay,concurrent publication/submission/claimed assessment eachone,
+cross-tenant FK/reader denial,immutable publication/audit and exact-version empty
+provider journal. Six committed inventories eachone. Owned random schema removed
+and absence verified,outside schema/relation/function/type catalog identities
+unchanged. Zero realdata/providercalls. This is a bounded native proof,not full
+restricted-role/TLS-restoration/concurrency/device/deployment release acceptance.
+Seven final offline guard/orchestration tests pass,2721.2141ms; initial PGlite
+fixture needed session serialization,not a production guard change or native pass.
+Current overallabout67% pending fullsuite/final reassessment. Need final full
+regression,source/secret/preservation scan,guarded cleanup failure tests and local
+current-build error/paused editor acceptance. Interrupted artifactfixturePID25696
+was still live at17:01 UTC; its20min timer may finish soon,recheck before restart.
+No other needed owned sessions live. Native goal remains active.
+
+Neon connection-only check **passed**,terminal exit0:PostgreSQL18,verifiedTLS,
+two independent native connections,zero application relations/no DBwrites.
+Evidence `artifacts/neon-connection-d340a33c-30e0-43bb-b2ab-36eb466e2095.json`.
+Dedicated rehearsal now implemented with ownership-marked random schema,all
+migrations/checksum/replay,concurrent synthetic publication/submission/assessment,
+scope/immutable guards and identity-checked cleanup. Seven offline tests pass;
+single-session PGlite fixture serializes only orchestration,NOT native concurrency.
+NEXT interruptible action `node scripts/neon-synthetic-rehearsal.mjs --confirm-synthetic`:
+write only newly-created synthetic schema and remove only that owned schema after
+external catalog identity comparison. Local `artifacts/neon-rehearsal-*.json`
+journals phase/run/schema before effects. No role grants,realdata,mail,Gemini,
+paid upgrade,public deployment or original preview/database writes. Reconcile
+any live handle and journal before repeat; cleanup uncertainty is not a pass.
+
+Active continuation: user confirms isolated Neon Free database ready. Dedicated
+URL and isolation flag present,legacy local-test URL unset (values not printed).
+`server/postgres/neon-test-config.mjs`, `neon-preflight.mjs` and
+`scripts/neon-synthetic-check.mjs` implement direct-host/explicit-isolation/TLS/
+empty-target/two-connection checks only. Four offline tests pass,85.7305ms.
+NEXT interruptible action: `node scripts/neon-synthetic-check.mjs --confirm-synthetic`
+against only the user-configured test target; no migrations/seed/roles/provider
+calls. Generated `artifacts/neon-connection-*.json` records checking/passed/failed
+without credentials; reconcile journal/owned process before any repeat.
+Latest-build browser did attach and proved1500ms same-selection refresh retains
+ten operations,while page2 pending showszero earlier operations then exacttwo.
+Delayed fixture63170 terminal0:three reads/no mutations,ten inventories unchanged.
+Earlier66080 terminal0:32 reads/no mutations,ten unchanged. Interrupted artifact
+fixturePID25696 still identified as live,sessionhandle unknown; keep reconciling.
+Full goal remains active and older overallabout67% unchanged pending final evidence.
+
+Latest2026-10-14 16:35 UTC: exact read-key state implemented in
+`src/useArtifactRead.ts`/`src/artifact-read-state.ts`; provider history retains
+only verified same-authority/job/frozen-publication/page metadata while refreshing.
+Focused31 pass,4128.9399ms;build2068/670.23KB passes. Full local suite **998 tests/
+994 pass/zero fail/four native skips**,340949.8093ms;54530 terminal exit0,log
+`artifacts/artifact-read-suite-2026-10-14.log`. Both fixtures terminal exit0:
+35352/3237 zero reads/mutations,ten inventories unchanged;23259/3210 no fault
+journeys/no extra receipts/fresh drafts,publication unchanged. Zero external calls.
+Browser tab creation twice failed webview attachment; no latest-hook browser
+verdict. Older screenshots do not prove this new build. Original previews untouched.
+Read-key acceptance about70%,other task estimates/overallabout67% unchanged.
+Final readonly preservation:original eight fingerprints unchanged,integrityOK/FK0;
+55 shell hashes match,1466 source/evidence/public files scanned,zero current-key
+matches,exampleblank. Diff whitespace check passes. Needed owned sessions terminal.
+User requested Neon Free setup steps; `docs/NEON_FREE_TEST_SETUP.md` now gives
+isolated project/direct URL instructions with separate UNDERSTOOD_NEON_TEST_URL.
+Correction to earlier question: current UNDERSTOOD_PG_TEST_URL tests explicitly
+allow localhost only; NEVER pass Neon URL to those tests or weaken local guards.
+No Neon/R2 credentials configured. Dedicated cloud rehearsal remains to implement;
+no account creation, cloud connection or deployment occurred. NEXT: resume built
+read-key/polling/paused-editor acceptance when browser attaches, then guarded
+Neon-specific validation with user-configured isolated target. Goal stays active.
+
+Updated 2026-10-14 16:23 UTC; full production goal remains active. Overall
+approximately **67%** (60-73% uncertainty), queue/App helpers **90%**, response
+retry **85%**, provider-history acceptance **85%**. Live synthetic AI remains45%.
+
+- Staff-session browser acceptance now **80%** (was65%), not full a11y/device
+  acceptance. Cross-tab signal unmounts private editor; explicit two-read recheck
+  and final fresh read restore only verified authority. Different account/site
+  remains disabled before confirmation. Cookie rotation/revocation after
+  observation cannot reopen earlier authority.503/malformed reads fail closed;
+  guest, EN/AR/UR, real30-second expiry and focused keyboard recovery verified.
+- Delayed periodic check verified actual busy/inert/hidden shell with exact
+  unsent text mounted. Same-session release restores exact editor unchanged;
+  second held read times out and locks/unmounts it. No app mutation or replay.
+  Arabic/Urdu and final expiry at320px documentwidth320,focus on lock heading.
+- Focused staff tests23 pass/zero fail,602.5722ms. Existing application code/build
+  and full996/992 suite below unchanged. Only disposable harness controls/port/
+  graceful stop added this acceptance continuation. Final25402 terminal exit0:
+  17 session GETs,zero appPOSTs,six controls,two held reads/one release,nine
+  business/audit inventories unchanged,zero external calls. Earlier88254 stopped
+  after exact process/script check (exit1); its stdin was closed and it had no
+  HTTP stop route,so no final inventory verdict is claimed for that old fixture.
+  All temporary tabs closed/viewport reset;original previews untouched.
+- Evidence: `docs/STAFF_SESSION_GUARD.md`,
+  `artifacts/staff-guard-checkpoint-2026-10-14.json` and screenshots. Wider
+  browser transitions/StrictMode/held mutation/account/device acceptance remains.
+
+- S17 job details now expose bounded read-only provider reservations, request
+  receipts and recorded result references for preparation/source/voice/check.
+  Frozen publication/assignment scope, active staff context and exact DTO checks
+  remain enforced. Stable public run identity is an operation ID, not a claim
+  token. Private hashes, contexts, bodies, rubric, storage paths and secrets stay
+  server-side. No new journal rows, schema, dispatch or result are created by reads.
+- HTTP accepted, rejected, unfinished and uncertain receipts are separate from
+  validated completion. Reservations with no receipts and historical missing
+  provenance are not invented. SQLite reports its absent provider journal honestly.
+- Focused27 pass, zero fail,35713.1055ms; full suite **996 tests/992 pass/zero
+  fail/four native skips**,358508.2645ms,90327 terminal exit0. Strict build passes
+  (2067 modules/669.55KB entry); existing bundle/import warnings remain.
+- Built normal queue, page1/page2, keyboard table focus, explicit refresh,
+  synthetic503/error/recovery,320px and settled auditor reads verified. 320px
+  document305px, native request tables scroll internally. Current/historical
+  claims share stable run IDs across pages. Response remains pending and unchanged.
+- Two disposable fixtures terminal: first55568,85 reads/13 failed reads/zero
+  mutations; final72273,7 reads/zero mutations. Both ten protected inventories
+  unchanged,zero external calls. Constructed browser metadata is not live-provider
+  evidence. Corrected fixture-only encoded hash shortcut; normal queue and final
+  corrected bootstrap work. Temporary tabs closed,viewport reset.
+- Original eight fingerprints/counts unchanged,integrityOK/FK0;55 shell hashes
+  match;1454 source/evidence/public files scanned with zero current-key matches;
+  exampleblank. Original3020/3021 and stored database untouched. No paid/cloud,
+  real data, external diagnostics or live provider calls this continuation.
+- Evidence: `docs/PROCESSING_PROVIDER_HISTORY.md`,
+  `artifacts/provider-history-checkpoint-2026-10-14.json` and suite/screen captures.
+- NEXT: wider staff authority-transition acceptance and strict read-key continuity;
+  frequent processing polling currently briefly replaces history with loading.
+  Native journal/concurrency, independent language/audio/device/all44references,
+  privacy-approved real AI and authorized hosting/release gates remain open.
+
+## Earlier Response Retry Checkpoint
+
+Updated 2026-10-14 15:35 UTC; full production goal remains active. Overall
+approximately **67%** (60-73% uncertainty); queue/App helpers **90%**, customer
+response-retry recovery **85%**. Live synthetic AI remains45%; no release verdict.
+
+- S17 failed voice-processing and durable typed-answer-check retries now have
+  exact scoped confirmed intents and immutable generation/actor receipts on both
+  supported backends. Migration086 and SQLite journal preserve frozen assignment/
+  publication binding. SQLite inline checks are completed, never fabricated as
+  pending/retryable work. Operator retry receipts also advance typed generation.
+- Historical exact replay returns original receipt without resetting a later
+  failure or completed outcome. Only pending checks/unassessed received voice can
+  queue. Active actor/worker, elapsed audio/text policies, purge/deletion/content
+  fences and normal dispatch/provider gates remain enforced. No operator access
+  delegated to staff, provider enabled, completed assessment changed or answer
+  replaced. New HTTP JSON paths require captured session context before effects.
+- Shared UI retains tab-scoped exact intent, resolves receipt reads without a
+  POST and exposes original-request retry only after a missing receipt. Matching
+  ACK plus receipt and current completion are required before cleanup. Same-job
+  verified metadata stays mounted during refresh, with mutations disabled while
+  loading; errors/changed authority discard the display cache. Acceptance status
+  now survives refresh. Wider transition/native/device acceptance remains.
+- Final full suite `artifacts/response-retry-suite-2026-10-14.log`: **990 tests,
+  986 pass, zero fail, four native skips**,297041.3484ms;44465 terminal exit0.
+  Focused retry/privacy/client/populated-import26 pass,17596.4944ms;80318 terminal.
+  Earlier focused17 pass; early fixture failures were corrected without reducing
+  assertions or loosening production guards. Build2065 modules/660.49KB passes;
+  existing chunk/mixed-import warnings remain. `git diff --check` passes.
+- Built voice and typed lost-ACK/reload/read-only recovery, precommit outage/
+  missing receipt/explicit original retry, preserved typed answer/pending outcome,
+  keyboard,320px and settled auditor controls verified. Final document305px at
+ 320 viewport. Screenshots in `artifacts/response-retry-*`.
+- Final disposable fixture63254 terminal:four POSTs/two lost ACKs/one precommit
+  outage/two failed receipt reads/one missing receipt/three immutable receipts
+  (voice gen0,typed gen0/1). Seven business inventories unchanged,zero external
+  calls. Earlier60016 terminal:one POST/one receipt; temporary tab closed and
+  viewport reset. All needed owned sessions terminal.
+- Read-only original eight fingerprints/counts unchanged,integrityOK/FK0;55 shell
+  hashes match.1383 nonignored source/evidence files/public assets contain zero
+  current-key matches;exampleblank. Original3020/3021 previews not migrated or
+  restarted. No real data, live provider calls, diagnostic upload, paid services
+  or cloud deployment this continuation. Populated local backup/import preserves
+  exact retry receipt and historical replay without another queue action.
+- Evidence: `docs/RESPONSE_PROCESSING_RETRY.md` and
+  `artifacts/response-retry-checkpoint-2026-10-14.json`.
+- NEXT major task: S17 safe run-level provider provenance for voice/check jobs,
+  tied to existing journal identities and exact publication inputs. Preparation
+  already exposes per-attempt stages. Inspect current operation/request schemas;
+  expose verified bounded metadata only, never transcript/rubric/hash/object/key
+  data or a falsely successful pipeline. Full original goal/gates remain intact.
+  Actual checkpoint pause: 30.0322 seconds, then resumed reading provider quota/
+  request journal, immutable audio completion links and current job detail DTO.
+  Earlier operations may be unattributed; reserved allowance, HTTP acceptance and
+  validated job completion must remain distinct. No provenance UI claim yet.
+
+## Earlier Mixed Queue Checkpoint
+
+Updated 2026-10-14 11:26 UTC; full production goal remains active, all 44 references
+and original production requirements retained. Overall about **66%** (59-72%
+uncertainty). App helpers and S17 mixed customer queue **85%**; processing-request
+recovery **80%**, live synthetic AI **45%**; remaining weighted areas unchanged.
+
+- S17 now reads accepted source transcription, worker voice transcription and
+  answer checks alongside preparation on both backends. Scoped SQL pages/counts,
+  typed IDs, immutable publication title/version/assignment binding, strict client
+  DTOs and redacted metadata are verified. SQLite actual inline synthetic checks
+  are labeled separately from durable PostgreSQL jobs. No fabricated pending jobs.
+- Source JSON reads/retry receipts and writes require captured session context;
+  native private audio/original downloads remain cookie-authenticated. Source
+  history and retry completion honor current mounted staff authority. Explicit
+  source retry is reused from the job detail, never automatically reposted.
+- Full suite log `artifacts/processing-kinds-verified-suite-2026-10-14.log`:
+  **974 tests, 970 pass, zero fail, four native skips**, 270430.2005 ms, handle
+  36298 terminal exit 0. Initial suite 76098 found one preparation-only count
+  assertion; corrected to assert both preparation and actual completed checking,
+  without reducing coverage. Focused source/client/session checks: 54 pass.
+- Final strict build: 2062 modules, 653.49 KB entry; existing chunk/mixed-import
+  warnings remain. Built desktop and 320px queue/filter/pagination/voice history/
+  explicit source retry/reload/keyboard/upload destination journeys pass locally.
+  Fixed 320px response button overflow; final document width 305 at viewport 320.
+  Background job polling stops while exact response history is open, preventing
+  repeated history unmount/audio interruption. No all-reference/a11y verdict.
+- Final disposable fixture 38737 is terminal: 12 processing reads, one explicit
+  retry, seven protected business inventories unchanged, zero external calls.
+  Earlier fixture runs also terminal. Temporary tab closed and viewport reset.
+- Eight original table fingerprints/counts unchanged; read-only integrity OK,
+  FK violations zero. All **55 current shell hashes** match. Initial shell check
+  used wrong metadata property `sha256`; corrected against actual `hash` field.
+  1364 nonignored source/evidence files and public assets contain zero current-key
+  matches; `.env.example` blank. No original migration/restart, provider call,
+  real data, external diagnostics, paid service or deployment this continuation.
+- Evidence/limits: `docs/PROCESSING_JOB_KINDS.md` and
+  `artifacts/processing-kinds-checkpoint-2026-10-14.json`.
+- NEXT: inspect S17 failed response/check job recovery and provenance against
+  existing durable operators and worker retries. Establish exact scoped customer
+  intent/receipt contracts before adding controls; never change an earlier answer,
+  invent native acceptance, enable Gemini on real data or delegate operator access.
+  Actual checkpoint pause: 30.0292 seconds, then resumed inspection of recording/
+  assessment workers, claim guards and operator retries. Customer recovery must
+  preserve frozen assignment/input, pending-only check completion, deletion/text/
+  audio expiry and dispatch/provider gates; retry generation cannot rely solely on
+  an attempt counter that resets to zero. No operator method reused as staff access.
+
+## Earlier Processing Recovery Checkpoint
+
+Updated 2026-10-14 10:18 UTC; spec 2026-10-02; root `D:/understod`; Git
+`main`/`2060776`. Full production goal remains active against all 44 references.
+Lead owns current integration; earlier unrelated/uncommitted work preserved.
+
+- Locally verified S09/S10/S17/S39/S42 and A06/A08: immutable processing receipts,
+  exact generation/replay, captured paths and shared draft/job tab recovery, with
+  built interruption/reload/keyboard/320px proof and populated SQLite import.
+  Main changes: preparation modules, migration 085, HTTP/context/runtime/import
+  integration, PreparationRequest/recovery/main, tests and fixture. Details:
+  `docs/PROCESSING_REQUEST_RECOVERY.md`.
+- Gemini authorization keys supported as opaque bounded header-safe secrets;
+  user's key works. Four live fixed synthetic assessment cases pass. Latest full
+  workflow completed actual metered preparation/translation/four speech tracks,
+  private publication, immutable snapshot and scoped playback checks; ninth
+  external request (extra synthetic answer voice) returned 429. No transcription
+  or voice assessment occurred; no auto retry. Artifact:
+  `artifacts/gemini-workflow-ece9080e-052b-4b01-bd29-7cfcde39359b.json`.
+- Final command: clean environment `node --test tests/*.test.mjs`, log
+  `artifacts/processing-key-verified-suite-2026-10-14.log`: 967 tests, 963 pass,
+  zero fail, four native skips, 255519.1153 ms, handle 15865 terminal exit 0.
+  Focused integration 32 passes and final key/adapter/workflow 24 passes.
+  Strict build 2060 modules/638.79 KB entry, existing warnings unchanged.
+- Eight original fingerprints/integrity OK/FK zero rechecked after tests/live run.
+  56 shell hashes matched; 1353 tracked/untracked source/evidence files and public
+  assets contained zero current-key matches; `.env.example` blank. No original
+  migration/restart, real worker data, external diagnostics, billing or deployment.
+- Owned live runner 23682 and fixture 66948 are terminal. Fixture graceful timeout
+  preserved seven business inventories, three receipts/five POSTs, zero external
+  calls. All needed owned commands terminal; temporary tab closed/viewport reset.
+  Unknown old 33515 result is not claimed; historical evidence remains below.
+- Overall estimate about 65% (58-71% uncertainty). App-owned helpers 80%,
+  processing-request recovery 80%, live synthetic AI 45%; other areas unchanged.
+  Native/cloud/real-data/Urdu speech/quality/all-reference/a11y/device/release
+  gates remain open. No production-ready verdict.
+- ONE next task: finish S17 staff queue coverage beyond `jobs` preparation:
+  source transcription, voice response transcription and typed answer-check
+  repositories are not included in its current paged read model. Inspect current
+  schemas/read DTOs and existing source/response destinations, agree bounded
+  tenant-safe contracts, then implement both backends/UI and verify. Preserve
+  exact published-version outcomes and do not expose transcripts/rubrics/leases.
+  Actual checkpoint pause: 30.0228 seconds, then resumed this inspection.
+
+## Earlier 14 October Continuation
+
+Active continuation 2026-10-14 09:37 UTC: full synthetic workflow runner is locally
+verified, not live complete. All three live workflow attempts are terminal; the
+first two exposed grounding shape gaps and the third passed grounding/translation/
+three speech tracks but stopped at HTTP 429 on Arabic question speech, with no
+publication. Artifact: `artifacts/gemini-workflow-1673569f-9138-4988-b972-7064e56cc468.json`.
+One live text assessment stopped on invalid output; its cause is not proven.
+Strict preparation schema/question pairing and assessment reason/evidence bounds,
+case-sensitive quotes and current evaluator provenance are repaired. Final focused
+command: `node --test tests/gemini-adapter.test.mjs tests/gemini-synthetic-smoke.test.mjs
+tests/evaluation.test.mjs tests/assessment-provider.test.mjs
+tests/gemini-synthetic-workflow.test.mjs`: 37 pass, zero failures/skips,
+22116.2905 ms, handle 69159 terminal exit 0. Earlier 39-pass run also terminal;
+the interrupted 33515 handle is missing, so its result is not claimed.
+The new key in ignored `.env` fails the local Google-format check; the attempted
+four-request text smoke exited before network dispatch. User asked to correct it
+without sharing it. A new key is not evidence of project quota relief. Command
+review access recovered after the earlier usage-limit rejection; no bypass used.
+Full-suite/build/preservation evidence below belongs to the earlier source; a
+fresh full checkpoint is still required. Original database/previews untouched.
+Processing recovery implementation now in progress: migration 085 and equivalent
+SQLite immutable scoped receipts, exact queue-generation admission, original-actor
+GET recovery and captured new HTTP paths; shared tab-scoped UI replaces draft/job
+commands and requires matching ACK plus immutable receipt before cleanup. Initial
+regression had a missing secondary-staff fixture, repaired without assertion change.
+Final 32 related checks pass (2121.9984 ms); strict build passes, 2060 modules,
+638.79 KB entry, existing chunk/dynamic-import warnings unchanged. Full processing
+suite now terminal: 966 tests, 962 pass, zero fail, four native skips,
+264676.6713 ms, handle 87515 exit 0. First full run had five pinned-migration
+list/count failures; explicit 085 expectations added without weakening assertions.
+Populated SQLite processing receipts import/replay and embedded runtime roles pass;
+32 integration checks pass (18640.6403 ms). Built browser confirms lost ACK/reload,
+receipt outage, later 503 rejection retaining uncertainty, read-only recovery,
+edit locks, explicit initial retry and 320px controls/keyboard check. Screenshots
+are local; no Reticle verdict or full reference/a11y acceptance claimed. Fixture
+66948 remains live until its 20-minute graceful timeout; stdin is closed, so do
+not restart it or claim shutdown. Temporary browser tab closed and viewport reset.
+Eight original fingerprints/integrity/FKs and 56 shell hashes rechecked unchanged.
+Correction: Google's new authorization keys invalidate our AIza-only assumption.
+User was correct. Prefix check replaced with opaque bounded header-safe validation;
+24 final adapter/smoke/workflow tests pass (10509.1582 ms). New key successfully
+ran four real fixed synthetic text assessments; complete matched, incomplete
+clarification, contradictory and injection unassessable. Evidence:
+`artifacts/gemini-synthetic-assessment-1791972360409.json`. No real data or billing.
+Next interruptible actions: final clean synthetic suite after the key compatibility
+change and ONE new isolated capped full workflow after the verified Pacific daily
+quota reset (previous refusal Pacific 13 October, current 14 October). Max 15
+external requests; no blind retry after failure. Preserve each metadata artifact.
+ONE next task: reconcile these specific handles/artifacts and the fixture timeout,
+checkpoint evidence, then resume larger reference/localization/accessibility work. Overall remains
+about 64%, live AI 40%; no native/cloud/real-data or production promotion.
+
+Updated: 2026-10-14 06:23 UTC. Spec 2026-10-02; root `D:/understod`;
+Git `main` at `2060776`, with local implementation/evidence changes not committed.
+Current goal remains full production against all 44 references, not a narrowed MVP.
+
+- App-owned captured transport checkpoint: 75%, requirements A06/S01/S08/S13/S17/
+  S31/S37/S42. Overview/briefing/processing/audit/readiness reads and staff
+  process/sign-out callbacks capture original authority. Broken retry header fixed.
+- Verified: final 176-file/954-test suite, 950 pass, zero fail, four native skips,
+  terminal exit 0 (220901.3975 ms). Strict build/56 shell hashes/eight original
+  database fingerprints, integrity OK/FK zero pass. Built retry/lost ACK/read/
+  activity-native CSV/readiness/auditor/sign-out evidence passes. All owned commands
+  terminal; temporary tabs closed. No original restart/migration. Google synthetic
+  requests occurred in the later Gemini checkpoint; no diagnostic/cloud operation.
+- Gemini Free technical task: 40%. Local key verified and kept out of tracked/public
+  files. Live fixed preparation, AR/UR translation checks and EN/AR speech pass;
+  protocol and real WAV normalization defects repaired. Complete live pipeline,
+  transcription/assessment and independent quality/Urdu speech remain open.
+- Current overall estimate: about 64% (57-70% uncertainty), dated reassessment in
+  `docs/PROGRESS_REASSESSMENT_2026-10-14.md`. Per-task checklist:
+  `docs/PROGRESS_BOARD.md`; evidence: `docs/APP_REQUEST_FENCING.md` and
+  `docs/GEMINI_LIVE_CHECKPOINT_2026-10-14.md`.
+- Partial: stricter DTOs, durable per-request processing retry recovery, account
+  transitions and wider authority/keyboard/Strict Mode/device/native acceptance.
+- Unverified release gates: all-44 fidelity, complete localization/accessibility,
+  actual phones/audio/offline, native DB/backup/restore/CI, live synthetic pipeline
+  and independent quality, privacy-approved real-data path and authorized hosting.
+- Next: complete the isolated live synthetic metered pipeline, then close larger
+  remaining acceptance/features using current source/register,
+  with processing recovery/DTO/account helpers tracked explicitly. Neon Free only;
+  Gemini Free synthetic only. Preserve original DB/previews; diagnostics stay local.
+
+## Historical Checkpoints
+
+- Actual private-worker checkpoint pause: 30.0322 seconds, then resumed RetentionSettings/RecordingNoticeSettings/TextRetentionSettings and receipt helper inspection. Their policy GET/save/receipt paths still use raw unbound fetches, and audio/notice catches can clear a previously uncertain original after later known 400/401/403/409 rejection. Audio direct save checks only next revision before clearing rather than fetching the exact accepted receipt; helpers clear by ID without rechecking complete saved intent. Authority already reaches RetentionSettings from main, but notice/text child callers still need propagation. Preserve EN/AR/UR notice scope, all six policy categories, disabled settings and scheduled cleanup semantics. The combined read output truncated part of TextRetentionSettings, so re-read its actual current source before editing. All owned required commands terminal; private-worker checkpoint parses with 879 passes/productionReady false. Goal active.
+
+- Current private worker/response checkpoint 2026-10-13 13:42 UTC: WorkerAccess list/issue/revoke and private clipboard now capture full original authority, validate selected worker and redacted metadata, require fresh status after uncertainty, keep bearer only in memory and clear at modal/link/session expiry. Clipboard uses immutable original session/grant and fresh scoped session read; cannot adopt a changed identity or report success after selection changes. WorkerDeletion has versioned abortable reads and guarded exact submitted-ID/reason completion from People and PrivacyWorkers (via RetentionSettings); unsent review nonce is separate from submitted intent. Privacy directory and publication/worker assignment/detail reads use shared captured transport; server middleware rejects stale/missing private-control/privacy/response context before grant/session/deletion/business/audit effects. Native audio unchanged; parent retention/notice/text settings NOT claimed migrated. Test-first dual-backend 200-vs-409 privacy failures corrected by enforcement. Initial 33-pass focused regression preceded final intent/snapshot corrections; final affected four-file 18-pass regression (3.720s), strict build 2041 modules/592.26 KB, 69 shell hashes/eight original fingerprints/integrity/FKs pass. Final full synthetic suite after all source changes: 165 files/883 tests/879 pass/zero failed/four native skips, terminal exit 0 (326.513s), log artifacts/worker-controls-suite-2026-10-13.log; handle 5166 terminal, all owned required commands terminal/no owned server. Preservation rechecked after full completion. Current browser inventory failed at CreateProcessSecurityEnvironment 0x80070020; no rendered verdict, original restart/migration, provider/mail/cloud operation or external diagnostic upload. docs/WORKER_CONTROL_FENCING.md and artifacts/worker-control-checkpoint-2026-10-13.json record limits. Boundary 75%, whole staff request fencing 80% (was 75%), overall about 60% (55-65% uncertainty), not production-ready. Next major boundary: RetentionSettings, RecordingNoticeSettings and TextRetentionSettings capture/receipt/retry/completion, preserving earlier uncertain saves after later known rejection and current policy receipts; then remaining workspace/template/glossary/report/notification/App callbacks. Goal active.
+
+- Actual CSV checkpoint pause: 30.0215 seconds, then resumed private worker-access/deletion/clipboard caller inspection. WorkerAccess still has unbound list/issue/revoke fetches and direct clipboard writes without a fresh original-context session check; WorkerDeletion still uses a local live ref rather than captured authority for read/post/queued/lock callbacks. People owns both, while PrivacyWorkers is a second actual deletion caller; assigned responses have separate raw-read transport. Existing scoped clipboard behavior is in src/artifact-review.ts/ArtifactCopy.tsx, not an assumed artifact-copy.ts filename. Preserve explicit replacement of private links (never auto-issue) and immutable deletion request/progress semantics when migrating all actual callers. All owned required commands terminal; import checkpoint JSON parses with 874 passes/productionReady false. Goal active.
+
+- Current CSV import checkpoint 2026-10-13 12:45 UTC: raw preview/upload/load/confirm/recovery use captured authority and guarded exact-intent completion. Shared transport adds a POST-only 1 byte-256 KiB CSV Blob format at the single preview endpoint, exact query names, 15s timeout/mount abort; original JSON behavior stays tested. Recovery persists only original actor/site/org-scoped request ID/content and filename fingerprints/phase/size, never CSV/worker labels/filename plaintext. Both backend private preview projections carry immutable fingerprints, including original filename identity after deletion minimization; no schema migration. Context policy covers import JSON/raw mutations but preserves cookie-only native errors.csv. Automatic recovery sends GET only; retries are explicit unchanged file/import actions. Initial raw-serialization and missing-route-context tests failed before implementation. Final focused seven-file 36-pass regression (20.989s), strict 2040-module/589.68 KB build, 69 shell hashes/eight protected original fingerprints/integrity/FKs pass. Final full synthetic suite after all source changes: 164 files/878 tests/874 pass/zero failed/four native skips, exit 0 (313.102s), log artifacts/import-request-suite-2026-10-13.log; handle 37127 terminal, all owned commands terminal/no owned server. Two browser inventory attempts failed at trusted runtime startup; no rendered verdict, original restart/migration, provider/mail/cloud operation or external diagnostic upload. docs/IMPORT_REQUEST_FENCING.md and artifacts/import-request-checkpoint-2026-10-13.json retain scope and limits. CSV boundary 75%, whole staff request fencing 75% (was 70%), overall about 60% (55-65% uncertainty), not production-ready. Next major boundary: private worker-link/list/issue/revoke/clipboard authority plus deletion request/receipt callbacks and assigned-response reads; preserve existing no-auto-link replacement and immutable deletion/progress semantics. Goal active.
+
+- Actual People checkpoint pause: 30.0316 seconds, then resumed CSV import schema/parser/receipt and session-cleanup inspection. WorkerImport still uses raw unbound preview/load/confirm requests; transport uncertainty during confirmation needs a read-only exact-import status lookup rather than blind resend. Existing parser is csv-parse, previews freeze request ID/file hash/filename and confirmations already replay atomically without new grants. Preserve native errors.csv downloads. Next implementation should reuse captured staff authority with a bounded raw CSV path, exact preview/outcome validation and current-view completion; do not count import/access/deletion/assignment boundaries as covered by People management. All owned commands terminal; full checkpoint 868 passes/productionReady false/goal active.
+
+- Current People checkpoint 2026-10-13: actual invitation checkpoint pause 30.0277 seconds, then resumed worker/import/access inventory. Worker/crew directory management now captures authority through actual People caller/crew lifecycle/reactivation/membership views, aborts reads, holds mutations and fences completion plus selected-worker/form changes. Narrow server predicates require context on migrated JSON routes only; CSV/native errors, private access/deletion/assignment helpers remain separate. Test-first missing-context failures on both backends fixed by enforcement. Focused seven-file 33-pass regression (10.504s); final combined full suite AFTER final invitation/People source changes: 163 files/872 tests/868 pass/zero failed/four native skips, terminal exit 0 (314.318s), log artifacts/people-request-suite-2026-10-13.log. Strict build 2039 modules/580.75 KB entry, 69 shell hashes and eight original fingerprints/integrity/FKs pass. Test 93427/build 13775 terminal; no owned required sessions remain. Worker/crew boundary 75%, whole staff request fencing 70% (was 65%), overall about 60% (55-65% uncertainty), not ready. docs/PEOPLE_REQUEST_FENCING.md and artifacts/people-request-checkpoint-2026-10-13.json record scope and remaining gates. No browser/native/deployment promotion, original restart/migration or external operation. Next ONE boundary: CSV raw-byte preview/load/confirm and read-only uncertain confirmation recovery; use existing csv-parse/immutable import IDs, preserve native errors.csv links and scope before extending policy. Goal active.
+
+- Current invitation checkpoint 2026-10-13: actual billing checkpoint pause 30.0344 seconds, then resumed. StaffInvitations list/issue/resend/cancel/receipt/retry now use captured authority with guarded asynchronous exact-receipt completion and changed-intent cleanup denial. Shared middleware rejects absent/stale context on both backends before invitation/mail/token/receipt/audit side effects; public invitation acceptance untouched. Initial test-first two failures corrected by enforcement, not weaker assertions. Focused six-file 40-pass regression (13.121s), neighboring billing/restore 14-pass regression (7.946s), strict build (2039 modules/579.75 KB), 69 shell hashes and eight protected original fingerprints/integrity/FKs pass. All owned commands terminal. Earlier full 866-pass suite ran before invitation changes, no newer full-suite claim. Invitation boundary 75%, whole staff request fencing 65% (was 60%), overall about 60%, not ready. docs/INVITATION_REQUEST_FENCING.md and artifacts/invitation-request-checkpoint-2026-10-13.json record remaining browser/native/mail/full-release gates. No original restart/migration, live API/mail/cloud operation or external diagnostic upload. Next independent major boundary: workers/people/import/access views and their receipt recovery; scope current source before editing. Goal active.
+
+- Current billing checkpoint 2026-10-13: captured authority now fences invoice reads/create/manual payment/void/receipt recovery, with exact canonical-intent receipt hashes and guarded saved-record cleanup. Both HTTP backends deny stale/missing context before ledger/audit side effects; native cookie-authenticated invoice downloads remain usable. Initial outdated SQLite expectation fixed without weakening assertions. Focused 17-pass regression; full 163-file/870-test suite passes 866 with zero failures/four native skips, exit 0 (312.734s), after all source changes. Strict build passes (2039 modules/579.70 KB entry), all 69 shell hashes match, eight original database fingerprints/integrity/FKs match. Test 91697/build 65027 terminal. Browser runtime reload/retry failed at startup (0x80070020), no rendered verdict or external diagnostics. Billing boundary 75%, whole staff request fencing 60% (was 50%), overall about 60% (55-65% uncertainty), not production-ready. See docs/BILLING_REQUEST_FENCING.md and artifacts/billing-request-checkpoint-2026-10-13.json. No original restart/migration or external rollout. Next major boundary: StaffInvitations list/issue/resend/cancel/receipt/retry, preserving exact private receipts and unchanged recovery. Goal active.
+
+- Actual optional-edit checkpoint pause: 30.0342 seconds, then resumed billing source/route inspection. Billing.request still lacks captured context across invoice list/detail/create/manual payment/void and receipt recovery, with async paths clearing saved records or invoking callbacks without current-view authority. Separate JSON routes from cookie-authenticated native invoice downloads so ordinary links remain usable. Preserve exact cents, immutable invoice identity, owner writes/auditor reads, request replay and earlier uncertainty; this records manual payments and must never imply a real card charge. Optional checkpoint JSON parses with full 862 passes/final affected 14 passes/productionReady false. All owned commands terminal; goal active.
+
+- Current checkpoint 2026-10-13 10:54 UTC, A06/S10-S13/S18/S42: optional source/translation edits and target regeneration now use captured StaffRequestAuthority through BriefingDetail/LanguageArtifacts, abortable scoped receipt reads, bounded expired-review verification and guarded success/recovery cleanup. Both HTTP backends require context on review/regenerate and their GET/verify receipts. Test-first missing-header regressions failed before implementation. Fixed real earlier-review uncertainty being forgotten after a later known retry rejection; tested shared retention policy preserves unresolved originals. Full suite before that final adjustment: 163 files/866 tests/862 pass/zero failed/four native skips, terminal 0 (297.658s), log artifacts/optional-edit-full-test-2026-10-13.log. Final affected four-file 14-pass regression (5.112s) and strict 2038-module build/68 hashes/eight original fingerprints/integrity/FKs pass afterward; existing warnings remain. Full handle 57645/build handle 54220 terminal; no owned servers or other required commands running. Inline rewrite rejected without source changes; direct apply_patch succeeded, no bypass. No new browser verdict, original restart/migration, live API/mail/cloud operation or external diagnostics. docs/OPTIONAL_EDIT_FENCING.md and artifacts/optional-edit-checkpoint-2026-10-13.json record limits. Estimates: optional edit boundary 75%, whole staff request fencing 50% (was 40%), staff lock/recovery 65%, overall about 60% (55-65% uncertainty), goal active, not ready. ONE next high-impact task: captured-context billing list/detail/create/manual payment/void and receipt recovery, fencing callbacks before persisted-record cleanup and retaining prior uncertainty; preserve owner/auditor separation, exact cents/replays and no actual card-charge semantics. Remaining helpers and native/live/cloud/full-reference/a11y/device/release gates stay open.
+
+- In progress optional edit/regeneration continuation: DraftReview and Regeneration now use captured authority and guarded completion through all actual BriefingDetail/LanguageArtifacts callers, with abortable scoped receipt GETs and bounded expired-review verify POSTs. Both backends require matching context for optional edit/regenerate and their GET/verify receipts. Test-first extensions failed on both backends before middleware change; related 13-pass regression and TypeScript pass afterward. Found and repaired prior review uncertainty being discarded after a known later retry rejection; shared tested retention policy preserves the original unresolved request. Full suite handle 57645 is live, log artifacts/optional-edit-full-test-2026-10-13.log, started before final retention-policy adjustment; build handle 54220 state must be reconciled before any rerun. Rejected inline source rewrite made no changes; direct apply_patch caller edits succeeded, no bypass. Final related/build/preservation/browser proof pending. Goal active; no original migration/restart or external operation.
+
+- Actual briefing checkpoint pause: 30.0478 seconds, then resumed optional edit/regeneration source and route inspection. Confirmed DraftReview.requestReview and Regeneration.requestRegeneration still omit captured context; their GET/POST/verify and recovery success/error paths can clear saved records or invoke latest callbacks after async work without per-view authority checks. LanguageArtifacts owns translated edits/regeneration while BriefingDetail owns source review and recovery; propagate the already established StaffRequestAuthority through those actual callers. Preserve exact private review hashes, target regeneration receipts, immutable published versions and OPTIONAL edits, with no new approval gate. Saved checkpoint JSON parses and reports 862 final passes/productionReady false. All owned commands terminal; goal active.
+
+- Current checkpoint 2026-10-13 10:34 UTC, A06/S09-S13/S18/S42: core briefing requests now capture full original staff authority through library/detail/creation/source PATCH/copy/archive/exact withdrawal/publish/schedule/cancel/receipt/retry, plus source-upload dispatch/completion checks and recipient reads. Guarded asynchronous completion preserves exact saved IDs and prevents old-view cleanup/success/navigation after receipt hashing. Both HTTP backends require mapped JSON headers; native private-byte audio URLs remain ordinary cookie-authorized requests. Fixed a real PostgreSQL context denial swallowed as schedule 503: common error handling now preserves 409. Test-first missing-header regressions failed before implementation; initial full run exit 1 (864 tests/856 pass/four failures/four native skips) exposed an intentional-login audit baseline and three legacy metadata reads without headers; repaired without removing assertions. Final full suite: 163 files/866 tests/862 pass/zero failed/four native skips, terminal 0, 263.140s. Final related five-file 49 pass, terminal 0 (218.576s), strict 2038-module build/68 hashes/eight original fingerprints/integrity/FKs pass. All owned test/build handles terminal (48378 failed initial, 41223/69948 final pass, 79738 build pass). No new browser verdict: prior trusted browser runtime startup issue remains unresolved; no diagnostic upload, original restart/migration or external service/deployment operation. docs/BRIEFING_REQUEST_FENCING.md and artifacts/briefing-request-checkpoint-2026-10-13.json record scope/limits. Estimates: core briefing boundary 75%, whole staff request fencing 40% (was 25%), staff lock/recovery 65%, overall about 60% (55-65% uncertainty), goal active, not ready. ONE next major task: migrate optional DraftReview/Regeneration and their receipt/retry/LanguageArtifacts callers to captured authority and guarded completion, preserving immutable published artifacts/exact IDs/no required human approval; require matching headers at those actual SQLite/PostgreSQL routes. Other staff helpers/native/live/cloud/full-reference/a11y/device/release gates remain open.
+
+- Verification continuation: first full briefing run handle 48378 is terminal exit 1 (864 tests/856 pass/four failures/four native skips, 296.214s). Corrected the intentional sign-in baseline and two normal HTTP fixture clients whose three briefing metadata reads omitted context; no behavioral assertions removed. Test helper now shares the JSON-route policy and leaves native audio requests without an automatic custom header. Added policy/helper tests proving fixed capture per cookie and preservation of deliberate bad headers. Final related five-file regression handle 41223 and final full suite handle 69948 are running; final full log artifacts/briefing-request-full-test-final-2026-10-13.log. Strict build handle 79738 is terminal exit 0 (2038 modules, existing warnings). Do not duplicate live suites or claim final green results yet. docs/BRIEFING_REQUEST_FENCING.md records scope, initial failures and remaining migration/browser/native/release gates.
+
+- In progress briefing-family continuation, 2026-10-13: scoped PATCH plus asynchronous receipt-completion guards now propagate through creation/editor/copy/archive/withdraw/publish/schedule/receipt/retry and source upload callback boundaries. Both backends require exact headers for briefing JSON library/detail, selected mutations, schedules and exact creation/publication receipts; native audio URLs are not forced to carry an impossible custom browser header. PostgreSQL's route-specific schedule error mapper was swallowing context mismatch as 503; common middleware now preserves 409 before route-specific classifiers. Corrected new fixture seeding, and captured the intentional second login before preservation baselines (PostgreSQL correctly audits sign-in). Full synthetic suite running under handle 48378, log artifacts/briefing-request-full-test-2026-10-13.log, started before final fixture baseline correction; do not claim it green or duplicate it until terminal. TypeScript passes; final related/browser/preservation/build proof still pending. Existing legacy HTTP fixture clients now capture one context per synthetic cookie rather than dropping headers; explicit negative context tests remain raw fetch. Goal active, original previews/database untouched.
+
+- Actual request checkpoint pause: 30.0255 seconds, then resumed briefing-family source/caller inspection at 2026-10-13 09:48 UTC. Confirmed unbound shared BriefingControls.request is used by source PATCH, copy/archive/withdraw, typed draft creation/recovery, publication/schedule and receipt/retry; PublishForm also uses it for worker/crew recipient reads. Callers reside in App/BriefingDetail/PublicationHistory. Exact receipt validators and saved IDs already exist and must remain intact. Next change must propagate captured authority through these real callers, handle PATCH explicitly, and recheck liveness after asynchronous draft-result validation before clearing recovery or navigating. Do not replace exact IDs/receipts with a fresh request or introduce global latest-session adoption. All owned commands are terminal; goal stays active.
+
+- Current checkpoint 2026-10-13, A06/S30/S42: Staff & Access now uses immutable captured staff context for directory/change/receipt/retry with per-view mount-generation aborts, pre/post transport/JSON/expiry checks, held dispatch/completion during verification, and guarded recovery-store cleanup. Main post-change refresh cannot auto-adopt another identity. Both SQLite/PostgreSQL HTTP routes require matching headers before every staff-directory/mutation/receipt handler. Test-first denials failed before implementation, then combined final six-file 28 tests passed (6.603s). Full synthetic suite: 161 files/860 tests/856 passed/zero failed/four native prerequisite skips, terminal 0 (277.646s); began before final pending-completion adjustment, covered by the final related regression/build afterward. Strict 2038-module build/68 shell hashes/eight original fingerprints/integrity/FKs pass; existing warnings remain. Full test handle 82964 and build handle 46325 are terminal; no owned server running. Two browser inventory calls exited at trusted Node startup, including requested reset retry; no browser verdict, original restart/migration, live API/mail/cloud or diagnostic upload. See docs/STAFF_REQUEST_FENCING.md and artifacts/staff-request-checkpoint-2026-10-13.json. Task estimates: Staff & Access boundary 75%, whole staff request fencing 25% (was 15%), staff lock/recovery 65%, overall about 60% (55-65% uncertainty), goal active, not production ready. ONE next major task: migrate captured-context authority through the shared briefing request family (BriefingControls, NewBriefing, PublishForm, PublicationRecovery and related call sites), preserving exact pending IDs, old-view liveness and late-callback recovery; require corresponding headers on both backends. Other older staff helpers remain inventoried/open.
+
+- In progress 2026-10-13 09:39 UTC, A06/S30/S42 staff-request fencing: createStaffRequest captures immutable exact authority, bounds no-store local fetch, checks pre/post transport/JSON/expiry/abort and distinguishes known denial from unknown mutation outcome. Per-view useStaffRequest binds mount generation and aborts cleanup; StaffAccess list/detail/receipt/retry use it with guarded saved-record cleanup and main refresh that never auto-adopts changed identity. Both HTTP backends now require matching context for all /api/settings/staff directory/mutation/receipt paths. Test-first missing-header regressions failed in both backends, then final combined six-file 28-pass regression and TypeScript pass. Initial integration typecheck required the explicit bounded bootstrap signal and was repaired. Full synthetic suite running, authoritative exec handle 82964, local log artifacts/staff-request-full-test-2026-10-13.log; strict build handle 46325 running. Do not restart either solely because an observation times out. Wider staff helper migration and browser/native/full-release checks remain open; no production promotion or original restart/migration.
+
+- Actual session checkpoint pause: 30.0188 seconds, then resumed request-fencing source inspection. Shared BriefingControls.request and StaffAccess.request omit captured page context; recovery callbacks can also reach storage/refresh after asynchronous acknowledgement. Next implementation must bind each view's immutable session context and liveness before dispatch and before success/recovery cleanup, then require matching headers on the corresponding SQLite/PostgreSQL routes. Do not use a global latest-cookie/context wrapper that would adopt a changed identity into an old callback. Broader helper inventory remains in the audit; do not claim universal fencing from the staff lock alone.
+
+- Current checkpoint, 2026-10-13: requested per-task checklist is docs/PROGRESS_BOARD.md. Staff session guard/recovery estimated 65%: actual role/scope/policy/context/expiry checks, explicit stable GET-only recovery, foreground/online/expiry/cross-tab hooks, checking-state inert workspace and localized lock/identity labels implemented. Full synthetic suite before final label/test additions: 851 tests, 847 pass, zero failed, four native skips, exit 0, 276.345s; final affected five-file regression 23 pass, exit 0. Strict 2036-module build/68 shell hashes/eight original SQLite fingerprints/integrity/FKs pass. Browser acceptance remains OPEN: Windows sandbox launcher fails with HRESULT 0x80070020, twice including reset; no workaround, external diagnostics or browser verdict. Disposable 3220 fixture stopped gracefully with zero reads/app POSTs/control calls, unchanged business/audit hashes and zero external calls. No original preview restart/migration; no preview listener was observed on 3020/3021 at this checkpoint, so existing preview availability is not claimed. Older staff helpers still omit captured-context headers and broader server fencing remains a separate 15% task. docs/STAFF_SESSION_GUARD.md records evidence and limits. Overall approximately 60% (55-65% uncertainty), goal active, not production ready.
+
 - Actual history checkpoint pause: 30.0273 seconds, then resumed access/session source inspection. Confirmed next major A06/S42 gap: src/useWorkerSessionGuard.ts broadcasts all identity changes but attaches expiry/foreground/online/cross-tab checks and reports a lock only for workers. Authenticated staff have no equivalent global stale-session lock/recheck screen; per-route server authorization is present but does not substitute for this client/session boundary. Extend the existing session contracts conservatively to actual staff role/site/context/expiry, retain unsent/recovery state without replaying mutations, and verify revoked/expired/rotated/foreign identities plus localized recovery controls. Initial invitation/recovery and worker-entry flows already exist; do not recreate them or infer every generic invalid link is expired. All owned history sessions remain terminal; original previews untouched.
 
 - Current checkpoint, 2026-10-12: S13/S18 now have metadata-only scoped version pages, exact-version details and number lookup in both repositories, with shared History/Languages/Responses selection and latest-only briefing DTOs. Correction: PostgreSQL had LIMIT 100; SQLite was actually unbounded. Old-version response metrics, immutable snapshots, role/session/context denial and archived content expiry are preserved. Browser checks found and repaired misleading Missing coverage on unavailable detail. Full synthetic suite 844 tests/840 passed/zero failed/four native skips, terminal 0 (236.080s), began before final UI/expiry-assertion adjustments; final affected four-file 22-pass regression and strict 2034-module build pass afterward. All 69 shell hashes/eight original fingerprints/integrity/FKs match. 125 actual synthetic publications, seven pages, retained selection, version lookup, exact v1 native tone, independent failed reads, auditor Urdu/320px and 320/390/768/1440 layouts have local evidence. Two owned built fixtures stopped gracefully with 22/9 and 9/9 catalog/detail reads, zero HTTP POSTs/unchanged briefing-publication evidence/zero external calls; tab closed, viewport reset, clipboard unused. No original restart/migration, Reticle disclosure or cloud/live/hardware operation. See docs/PUBLICATION_HISTORY.md and artifacts/publication-history-checkpoint-2026-10-12.json. Approximately 60% remains the full-production estimate, not readiness. Goal active. Next large application pass: audit S42 access/recovery states against the actual entry/invitation/recovery/session/site gates, implement confirmed missing destinations and return/retry controls while preserving exact authorization and one-use recovery; do not reimplement already working flows. Full native/live/cloud/reference/a11y/device/restore-cutoff/activation gates remain open. Protected original previews use older loaded server modules, not these fresh fixture APIs.

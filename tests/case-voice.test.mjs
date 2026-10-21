@@ -13,6 +13,8 @@ import {processOneDeletionCompletion} from '../server/postgres/deletion-completi
 import {encodeWav} from '../src/audio.ts';
 import {createPostgresRehearsalServer} from '../server/postgres/http.mjs';
 import {issueWorkerGrant,redeemWorkerGrant,provisionStaffCredential} from '../server/postgres/auth.mjs';
+import {createHash} from 'node:crypto';
+import {checkedVoiceHttpReceipt,requestCaseVoice} from '../src/case-voice-request.ts';
 
 const owner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'};
 const worker={principal_type:'worker',principal_id:'worker-14',org_id:'cedar',site_id:'beirut'};
@@ -56,17 +58,22 @@ test('voice HTTP requires the page context, accepts WAV only and serves private 
     const cookie=`understood_pg_rehearsal=${session.token}`;
     server=createPostgresRehearsalServer(f.pool,{schema,storage:f.storage,dataClass:'synthetic',tier:'local',aiMode:'synthetic',accessMode:'credential',publicOrigin:origin});
     await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base=`http://127.0.0.1:${server.address().port}/api`;
-    const context=(await (await fetch(`${base}/session`,{headers:{cookie}})).json()).clientContext;
+    const identity=await (await fetch(`${base}/session`,{headers:{cookie}})).json(),context=identity.clientContext;
     const request=(path,bytes,headers={})=>fetch(base+path,{method:bytes?'POST':'GET',headers:{origin,cookie,...(bytes?{'content-type':'audio/wav','x-client-session-context':context}:{}),...headers},...(bytes?{body:bytes}:{})});
     const path=`/worker/briefings/assignment-14/help-audio/${f.requestId}`;
     assert.equal((await request(path,wav(),{'x-client-session-context':''})).status,409);
     assert.equal((await request(path,wav(),{'content-type':'audio/webm'})).status,400);
     const first=await request(path,wav());assert.equal(first.status,200);const receipt=await first.json();assert.equal(receipt.status,'received');
+    const pending={id:f.requestId,hash:createHash('sha256').update(wav()).digest('hex')};
+    assert.equal(checkedVoiceHttpReceipt(receipt,{kind:'help',id:'assignment-14'},pending,context).status,'received');
     assert.deepEqual(await (await request(path)).json(),receipt);assert.deepEqual(await (await request(path,wav())).json(),receipt);
     const thread=await (await request(`/clarifications/${f.requestId}/messages`)).json();assert.equal(thread.canVoice,true);
     const audio=await request(thread.items[0].audioUrl.replace(/^\/api/,''));assert.equal(audio.status,200);assert.equal(audio.headers.get('content-type'),'audio/wav');assert.match(audio.headers.get('cache-control'),/private, no-store/);assert.deepEqual(Buffer.from(await audio.arrayBuffer()),wav());
     const id=randomUUID(),replyPath=`/clarifications/${f.requestId}/voice/${id}`;assert.equal((await request(replyPath,wav(),{'x-client-session-context':''})).status,409);
-    assert.equal((await request(replyPath,wav())).status,200);assert.equal((await request(replyPath)).status,200);
+    const voiceTransport=(path,init)=>fetch(base.replace(/\/api$/,'')+path,{...init,headers:{...init.headers,origin,cookie}});
+    const scope={kind:'reply',id:f.requestId,assignmentId:'assignment-14'},retained={...pending,id};
+    const accepted=await requestCaseVoice(voiceTransport,identity,scope,retained,{kind:'send',bytes:wav()},new AbortController().signal,()=>true);
+    assert.equal(accepted.status,'received');assert.deepEqual(await requestCaseVoice(voiceTransport,identity,scope,retained,{kind:'receipt'},new AbortController().signal,()=>true),accepted);
     assert.equal((await request(`${path}?unexpected=1`)).status,400);
     const anonymous=await fetch(`${base}/clarifications/${f.requestId}/messages/${f.requestId}/voice`);assert.equal(anonymous.status,401);
     assert.equal((await f.db.query('SELECT count(*)::int n FROM submission_receipts')).rows[0].n,0);

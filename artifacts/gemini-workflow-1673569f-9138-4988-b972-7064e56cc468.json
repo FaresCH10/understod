@@ -1,0 +1,44 @@
+{
+  "runId": "500f9b28-2e63-4a41-8197-eb1fb27e893c",
+  "startedAt": "2026-10-14T06:44:27.483Z",
+  "state": "failed",
+  "dataClass": "synthetic",
+  "realDataAllowed": false,
+  "productionReady": false,
+  "models": {
+    "text": "gemini-3.5-flash-lite",
+    "transcription": "gemini-3.5-transcribe",
+    "speech": "gemini-3.8-flash-lite-tts"
+  },
+  "maxExternalRequests": 15,
+  "externalRequests": 8,
+  "checks": [
+    {
+      "name": "credential_bootstrap_and_private_grants",
+      "state": "passed"
+    }
+  ],
+  "fixtureRequests": [],
+  "activeStage": "metered_automatic_preparation_translation_private_speech",
+  "groundingEnvelope": {
+    "expectedFacts": 3,
+    "expectedAskedFacts": 2,
+    "evidenceCount": 3,
+    "askedIndexCount": 2,
+    "booleansValid": true,
+    "fieldsValid": true,
+    "reasonsRecognized": true,
+    "sourceGrounded": true,
+    "questionAligned": true,
+    "ambiguous": false
+  },
+  "diagnosticCode": "workflow_gate_failed",
+  "jobStates": {
+    "preparation": [
+      "failed"
+    ],
+    "recording": [],
+    "assessment": []
+  },
+  "completedAt": "2026-10-14T06:44:58.310Z"
+}

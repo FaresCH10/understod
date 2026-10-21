@@ -34,7 +34,10 @@ function clear(storage:Storage,key:string,requestId:string) {
 const staffCheck=(value:PendingInvitation)=>[value.requestId,invitationSignature(value)];
 export const readPendingInvitation=(storage:Storage,scope:string)=>read<PendingInvitation>(storage,staffKey(scope),staffCheck);
 export const savePendingInvitation=(storage:Storage,scope:string,value:PendingInvitation)=>save(storage,staffKey(scope),value,staffCheck);
-export const clearPendingInvitation=(storage:Storage,scope:string,id:string)=>clear(storage,staffKey(scope),id);
+export function clearPendingInvitation(storage:Storage,scope:string,id:string,expected?:PendingInvitation) {
+  if(expected){const old=readPendingInvitation(storage,scope);if(!old || JSON.stringify(staffCheck(old))!==JSON.stringify(staffCheck(expected)))throw Error('Pending invitation changed.');}
+  clear(storage,staffKey(scope),id);
+}
 export function checkedInvitationResult(value:unknown,pending:PendingInvitation) {
   const row=value as {id:string;revision:number;state:string;delivery?:string;duplicate:boolean};pendingInput(pending);
   const revision=pending.action==='issue' ? 1 : (pending.body.revision as number)+(pending.action==='resend' ? 1 : 0);
@@ -43,8 +46,8 @@ export function checkedInvitationResult(value:unknown,pending:PendingInvitation)
 }
 export async function checkedInvitationReceipt(value:unknown,pending:PendingInvitation) {
   const row=value as {accepted:boolean;id:string;action:string;request:unknown;result:unknown};
-  if(row?.accepted===false) return false;
-  if(!row || row.accepted!==true || row.id!==pending.id || row.action!==pending.action) throw new Error('Invitation receipt does not match the saved request.');
+  if(strictObject(row,['accepted']) && row.accepted===false) return false;
+  if(!strictObject(row,['accepted','id','action','request','result']) || row.accepted!==true || row.id!==pending.id || row.action!==pending.action) throw new Error('Invitation receipt does not match the saved request.');
   const normalized=pendingInput(pending),expected:Record<string,unknown>=pending.action==='issue' ? {name:normalized.name,role:normalized.role,emailHash:await invitationDigest(invitationEmailKey(normalized.email!))} : normalized;
   if(!strictObject(row.request,Object.keys(expected)) || Object.keys(expected).some(key=>(row.request as Record<string,unknown>)[key]!==expected[key])) throw new Error('Invitation receipt does not match the saved request.');
   return checkedInvitationResult(row.result,pending);

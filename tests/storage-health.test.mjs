@@ -54,3 +54,16 @@ test('interrupted probe recovers only its exact cleanup and invalid readback sta
     assert.equal((await f.health()).status,'failed');assert.equal(st.a.size,1);assert.equal(st.b.size,0);
   }finally{await f.db.close();}
 });
+
+test('Neon health has its own immutable journal identity, defaults off and never claims permanent privacy erasure',async()=>{
+  const f=await fixture(),st=store();
+  try {
+    assert.equal(await processStorageProbe(f.pool,st,{adapter:'neon'}),false);assert.equal(st.writes,0);
+    assert.equal(await processStorageProbe(f.pool,st,{adapter:'neon',enabled:true}),true);
+    const health=await f.health();assert.equal(health.status,'responding');assert.equal(health.observation.adapter,'neon');
+    assert.equal(health.privacy,'unverified');assert.equal(health.productionReady,false);
+    assert.equal(st.a.size,0);assert.equal(st.b.size,0);assert.equal(st.writes,2);
+    await assert.rejects(f.run(client=>client.query("UPDATE storage_probes SET adapter='r2'")),/immutable/);
+    await assert.rejects(f.run(client=>client.query("INSERT INTO storage_probes(id,adapter,state,lease_token,lease_until) VALUES($1,'other','processing',$2,clock_timestamp())",[randomUUID(),randomUUID()])),/check constraint/);
+  }finally{await f.db.close();}
+});

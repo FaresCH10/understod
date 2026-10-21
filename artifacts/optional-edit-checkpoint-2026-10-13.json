@@ -1,0 +1,16 @@
+{
+  "dateUtc":"2026-10-13 10:54 UTC",
+  "requirements":["A06","S10","S11","S12","S13","S18","S42"],
+  "scope":"Optional review/translation edit and target regeneration captured authority, receipt/retry/verify and guarded recovery completion",
+  "fullSyntheticSuite":{"testFiles":163,"tests":866,"passed":862,"failed":0,"skipped":4,"exitCode":0,"durationMs":297657.5534,"log":"artifacts/optional-edit-full-test-2026-10-13.log","qualification":"Started before final uncertainty-retention adjustment; final affected regression/build afterward","externalDatabaseTestUrlsRemoved":true},
+  "finalAffectedRegression":{"files":["briefing-session-context","session-http","review-recovery","staff-request"],"passed":14,"failed":0,"skipped":0,"exitCode":0,"durationMs":5111.7968},
+  "build":{"exitCode":0,"modules":2038,"entryKb":579.56,"shellFiles":68,"shellMismatches":0,"existingWarningsRemain":true},
+  "protectedDatabase":{"matchingFingerprints":8,"integrity":"ok","foreignKeyViolations":0,"readOnlyVerification":true},
+  "browser":{"newVerdict":false,"passed":false,"reason":"Prior runtime startup failure remains unresolved","externalDiagnosticsSent":false},
+  "allOwnedCommandsTerminal":true,
+  "originalPreviewRestarted":false,
+  "originalDatabaseMigrated":false,
+  "externalRolloutPerformed":false,
+  "progressEstimates":{"optionalEditBoundary":75,"wholeStaffRequestFencing":50,"staffSessionGuard":65,"overall":60,"overallRange":[55,65]},
+  "productionReady":false
+}

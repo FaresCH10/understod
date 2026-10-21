@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-14",
+  "taskEstimatePercent": 75,
+  "overallEstimatePercent": 62,
+  "staffRequestFencingEstimatePercent": 98,
+  "fullSuite": {"files": 173, "tests": 940, "passed": 936, "failed": 0, "skipped": 4, "exitCode": 0, "durationMs": 219756.7999},
+  "initialFullSuite": {"tests": 940, "passed": 934, "failed": 2, "skipped": 4, "exitCode": 1, "durationMs": 232628.0726},
+  "focusedRegression": {"passed": 48, "failed": 0, "skipped": 0, "durationMs": 4973.1235},
+  "finalRegression": {"passed": 27, "failed": 0, "skipped": 0, "durationMs": 5706.0658},
+  "build": {"typecheck": true, "production": true, "modules": 2057, "entryKb": 632.76, "shellFiles": 56, "shellHashesMatch": true},
+  "originalDatabase": {"fingerprintsMatch": 8, "integrity": "ok", "foreignKeyViolations": 0, "migrated": false},
+  "browser": {"processingRetryBeforeCommitFailure": true, "explicitRetryAccepted": true, "rootLostAckNoFalseSuccess": true, "actualProcessingAfterReload": true, "overviewAndBriefingReads": true, "auditDetailAndNativeCsv": true, "csvRows": 5, "csvColumns": 7, "localReadinessInspection": true, "auditorReadOnly": true, "staffSignOut": true},
+  "fixture": {"terminal": true, "processPosts": 3, "newAcceptedProcessingRequests": 2, "protectedTablesUnchanged": 7, "externalCalls": 0},
+  "temporaryTabsClosed": true,
+  "viewportOverrideUsed": false,
+  "productionReady": false
+}

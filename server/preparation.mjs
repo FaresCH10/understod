@@ -3,6 +3,7 @@ import { NOW,transaction } from './db.mjs';
 import { draftInput,expectedRevision,copyDraftInput,checkDraftCopyReplay,archiveBriefingInput } from './briefing-input.mjs';
 import {ensureDraftReviewSchema} from './draft-review.mjs';
 import {ensureGlossarySchema} from './glossary.mjs';
+import {preparationRequestInput,preparationRequestId,preparationReference,preparationRequestReceipt} from './preparation-request-input.mjs';
 
 export function briefingAuthority(db,session) {
   if (session?.principal_type!=='staff' || !['owner','supervisor'].includes(session.role)
@@ -12,6 +13,22 @@ export function briefingAuthority(db,session) {
 export function ensureBriefingSchema(db) {
   ensureDraftReviewSchema(db);
   ensureGlossarySchema(db);
+  db.exec(`CREATE TABLE IF NOT EXISTS preparation_requests (
+    request_id TEXT PRIMARY KEY,org_id TEXT NOT NULL REFERENCES organizations(id),site_id TEXT NOT NULL REFERENCES sites(id),
+    briefing_id TEXT NOT NULL REFERENCES briefings(id),revision INTEGER NOT NULL CHECK(revision>0),job_id TEXT NOT NULL REFERENCES jobs(id),
+    generation INTEGER NOT NULL CHECK(generation BETWEEN 0 AND 1000000),request_json TEXT NOT NULL CHECK(json_valid(request_json)),
+    requested_by TEXT NOT NULL REFERENCES staff(id),created_at TEXT NOT NULL,UNIQUE(job_id,generation),
+    CHECK(json_type(request_json)='object' AND json_remove(request_json,'$.revision','$.jobId','$.generation')='{}'),
+    CHECK(json_type(request_json,'$.revision') IS 'integer' AND json_extract(request_json,'$.revision')=revision),
+    CHECK(json_type(request_json,'$.generation') IS 'integer' AND json_extract(request_json,'$.generation')=generation),
+    CHECK((json_type(request_json,'$.jobId') IS 'null' AND generation=0) OR (json_type(request_json,'$.jobId') IS 'text' AND json_extract(request_json,'$.jobId')=job_id))
+  ) STRICT;
+  CREATE TRIGGER IF NOT EXISTS preparation_request_scope BEFORE INSERT ON preparation_requests
+    WHEN NOT EXISTS(SELECT 1 FROM jobs WHERE id=NEW.job_id AND org_id=NEW.org_id AND site_id=NEW.site_id AND briefing_id=NEW.briefing_id AND revision=NEW.revision)
+      OR NOT EXISTS(SELECT 1 FROM staff WHERE id=NEW.requested_by AND org_id=NEW.org_id AND site_id=NEW.site_id)
+    BEGIN SELECT RAISE(ABORT,'Scope mismatch'); END;
+  CREATE TRIGGER IF NOT EXISTS preparation_request_update BEFORE UPDATE ON preparation_requests BEGIN SELECT RAISE(ABORT,'Preparation request evidence is immutable'); END;
+  CREATE TRIGGER IF NOT EXISTS preparation_request_delete BEFORE DELETE ON preparation_requests BEGIN SELECT RAISE(ABORT,'Preparation request evidence is immutable'); END;`);
   db.exec(`CREATE TABLE IF NOT EXISTS briefing_language_requests (
     request_id TEXT NOT NULL,org_id TEXT NOT NULL REFERENCES organizations(id),site_id TEXT NOT NULL REFERENCES sites(id),
     briefing_id TEXT NOT NULL REFERENCES briefings(id),accepted_revision INTEGER NOT NULL CHECK(accepted_revision>1),request_json TEXT NOT NULL,
@@ -193,7 +210,9 @@ export function editDraft(db,session,id,input) {
 
 export function queuePreparation(db,session,id,revision) {
   expectedRevision(revision);
-  return transaction(db,() => {
+  return transaction(db,() => queuePreparationTransaction(db,session,id,revision));
+}
+function queuePreparationTransaction(db,session,id,revision) {
     briefingAuthority(db,session);
     const row=db.prepare('SELECT revision,state FROM briefings WHERE id=? AND org_id=? AND site_id=?').get(id,session.org_id,session.site_id);
     if (!row) throw new Error('Briefing unavailable');
@@ -208,5 +227,41 @@ export function queuePreparation(db,session,id,revision) {
     db.prepare("UPDATE briefings SET state='processing',prepared_json=NULL,updated_at=? WHERE id=? AND org_id=? AND site_id=?").run(now,id,session.org_id,session.site_id);
     briefingAudit(db,session,'briefing.processing_requested',jobId);
     return {id:jobId,state:'processing',duplicate:false};
+}
+
+function preparationContext(db,session,id) {
+  briefingAuthority(db,session);preparationReference(id);
+  const row=db.prepare('SELECT revision,state FROM briefings WHERE id=? AND org_id=? AND site_id=?').get(id,session.org_id,session.site_id);
+  if(!row)throw Error('Briefing unavailable');
+  assertBriefingActive(db,session,id);
+  const job=db.prepare("SELECT id,status FROM jobs WHERE briefing_id=? AND org_id=? AND site_id=? AND revision=? AND kind='prepare'").get(id,session.org_id,session.site_id,row.revision);
+  const generation=job?db.prepare('SELECT count(*) AS n FROM preparation_requests WHERE job_id=?').get(job.id).n:0;
+  return {briefingId:id,revision:row.revision,state:row.state,job:job?{...job,generation}:null};
+}
+export function getPreparationRequestContext(db,session,id) {
+  return transaction(db,()=>preparationContext(db,session,id));
+}
+const sqlitePreparationReceipt=row=>preparationRequestReceipt({...row,request_json:JSON.parse(row.request_json)});
+export function getPreparationRequestReceipt(db,session,id,requestId) {
+  briefingAuthority(db,session);preparationReference(id);preparationRequestId(requestId);
+  const row=db.prepare('SELECT * FROM preparation_requests WHERE request_id=? AND briefing_id=? AND org_id=? AND site_id=? AND requested_by=?').get(requestId,id,session.org_id,session.site_id,session.principal_id);
+  return row?sqlitePreparationReceipt(row):{found:false};
+}
+export function requestPreparation(db,session,id,value) {
+  const input=preparationRequestInput(id,value),{requestId,briefingId,...body}=input;
+  return transaction(db,()=>{
+    briefingAuthority(db,session);
+    const saved=db.prepare('SELECT * FROM preparation_requests WHERE request_id=?').get(requestId);
+    if(saved) {
+      if(saved.org_id!==session.org_id || saved.site_id!==session.site_id || saved.requested_by!==session.principal_id
+        || saved.briefing_id!==id || JSON.stringify(preparationRequestInput(saved.briefing_id,{...JSON.parse(saved.request_json),requestId:saved.request_id}))!==JSON.stringify(input))throw Error('Preparation request conflict');
+      return {...sqlitePreparationReceipt(saved).result,duplicate:true};
+    }
+    const context=preparationContext(db,session,id);
+    if(context.revision!==input.revision || (context.job?.id ?? null)!==input.jobId || (context.job?.generation ?? 0)!==input.generation
+      || !['draft','failed'].includes(context.state) || context.job && context.job.status!=='failed')throw Error('Preparation request state changed');
+    const result=queuePreparationTransaction(db,session,id,input.revision),createdAt=NOW();
+    db.prepare('INSERT INTO preparation_requests VALUES(?,?,?,?,?,?,?,?,?,?)').run(requestId,session.org_id,session.site_id,id,input.revision,result.id,input.generation,JSON.stringify(body),session.principal_id,createdAt);
+    return {id:result.id,state:'processing',acceptedAt:createdAt,duplicate:false};
   });
 }

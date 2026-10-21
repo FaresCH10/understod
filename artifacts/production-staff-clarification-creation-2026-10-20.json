@@ -1,0 +1,826 @@
+{
+  "checkedAt": "2026-10-20T13:43:48.067Z",
+  "productionReady": false,
+  "scope": "local-staff-clarification-creation",
+  "progress": {
+    "overall": 78,
+    "range": [
+      71,
+      84
+    ],
+    "staffCreationAndQueue": 70,
+    "previousStaffCreationAndQueue": 20,
+    "method": "Engineering estimate of implementation plus verification; not a test pass rate"
+  },
+  "clean": {
+    "id": "8be48ec7-0bd8-41ad-a1a2-833ecf85c2c9",
+    "startedAt": "2026-10-20T13:36:41.274Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-20T13:36:42.874Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T13:36:54.188Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-20T13:36:54.189Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T13:36:58.910Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-20T13:36:58.911Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T13:43:14.121Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-20T13:43:14.121Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T13:43:14.787Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-20T13:43:14.787Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T13:43:19.305Z"
+      }
+    ],
+    "source": {
+      "files": 886,
+      "sha256": "d130b8b26e06936eee14e072498549f2bccd6ba72cd8aa223853f8c29feb9754"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-20T13:43:19.592Z",
+    "parentSession": 28389,
+    "parentExitObserved": true,
+    "parentExitCode": 0,
+    "summary": {
+      "tests": 1284,
+      "pass": 1280,
+      "fail": 0,
+      "skipped": 4
+    }
+  },
+  "sourceNow": {
+    "files": 886,
+    "sha256": "d130b8b26e06936eee14e072498549f2bccd6ba72cd8aa223853f8c29feb9754",
+    "matchesClean": true
+  },
+  "initialFailedClean": {
+    "id": "1708d139-0de0-48b7-a210-0d969f30bb52",
+    "state": "failed",
+    "parentSession": 26717,
+    "parentExitCode": 1,
+    "tests": 1284,
+    "passed": 1277,
+    "failed": 3,
+    "skipped": 4,
+    "failures": "Three explicit upgrade migration-list expectations omitted new migration 094",
+    "focusedUpgradeRecheck": {
+      "parentSession": 81453,
+      "exitCode": 0,
+      "tests": 14,
+      "failed": 0
+    },
+    "retained": true
+  },
+  "evaluations": {
+    "contractCases": 43,
+    "allContractChecksPassed": true,
+    "pipelineChecks": 10,
+    "allPipelineChecksPassed": true,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "schemaMigration": 94,
+  "policy": {
+    "application": {
+      "tables": 139,
+      "writable": 120,
+      "readOnly": 12,
+      "hidden": 7
+    },
+    "worker": {
+      "tables": 139,
+      "writable": 94,
+      "readOnly": 34,
+      "hidden": 11
+    },
+    "operator": {
+      "tables": 139,
+      "writable": 19,
+      "readOnly": 19,
+      "hidden": 101
+    }
+  },
+  "frontend": {
+    "manifest": {
+      "_Operations-D6UVN3rx.css": {
+        "file": "assets/Operations-D6UVN3rx.css",
+        "src": "_Operations-D6UVN3rx.css"
+      },
+      "_Operations-DC80z4Bk.js": {
+        "file": "assets/Operations-DC80z4Bk.js",
+        "name": "Operations",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_ProviderStageTests-BeAKeFqL.js"
+        ],
+        "css": [
+          "assets/Operations-D6UVN3rx.css"
+        ]
+      },
+      "_ProviderStageTests-BeAKeFqL.js": {
+        "file": "assets/ProviderStageTests-BeAKeFqL.js",
+        "name": "ProviderStageTests",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js"
+        ],
+        "css": [
+          "assets/ProviderStageTests-DadH-i3N.css"
+        ]
+      },
+      "_ProviderStageTests-DadH-i3N.css": {
+        "file": "assets/ProviderStageTests-DadH-i3N.css",
+        "src": "_ProviderStageTests-DadH-i3N.css"
+      },
+      "_audio-CxVNbuAQ.js": {
+        "file": "assets/audio-CxVNbuAQ.js",
+        "name": "audio"
+      },
+      "_calendar-clock-VAJXILnx.js": {
+        "file": "assets/calendar-clock-VAJXILnx.js",
+        "name": "calendar-clock",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js"
+        ]
+      },
+      "_case-workflow-recovery-DllhiQlv.js": {
+        "file": "assets/case-workflow-recovery-DllhiQlv.js",
+        "name": "case-workflow-recovery",
+        "imports": [
+          "_session-state-C-nYtNAq.js",
+          "_useStaffRequest-i90CxQ5E.js"
+        ]
+      },
+      "_civil-time-ChwhfbO_.js": {
+        "file": "assets/civil-time-ChwhfbO_.js",
+        "name": "civil-time",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js"
+        ]
+      },
+      "_earth-DfdOalw_.js": {
+        "file": "assets/earth-DfdOalw_.js",
+        "name": "earth",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js"
+        ]
+      },
+      "_hard-drive-ClmaNXP8.js": {
+        "file": "assets/hard-drive-ClmaNXP8.js",
+        "name": "hard-drive",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js"
+        ]
+      },
+      "_invitation-recovery-C7vjMrKh.js": {
+        "file": "assets/invitation-recovery-C7vjMrKh.js",
+        "name": "invitation-recovery",
+        "imports": [
+          "_staff-input-CWXYObDH.js"
+        ]
+      },
+      "_jsx-runtime-BfXX54b5.js": {
+        "file": "assets/jsx-runtime-BfXX54b5.js",
+        "name": "jsx-runtime",
+        "css": [
+          "assets/jsx-runtime-DS25fBgL.css"
+        ]
+      },
+      "_jsx-runtime-DS25fBgL.css": {
+        "file": "assets/jsx-runtime-DS25fBgL.css",
+        "src": "_jsx-runtime-DS25fBgL.css"
+      },
+      "_mic-Cnz5nvWt.js": {
+        "file": "assets/mic-Cnz5nvWt.js",
+        "name": "mic",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js"
+        ]
+      },
+      "_preload-helper-DjzSQ1t3.js": {
+        "file": "assets/preload-helper-DjzSQ1t3.js",
+        "name": "preload-helper"
+      },
+      "_session-state-C-nYtNAq.js": {
+        "file": "assets/session-state-C-nYtNAq.js",
+        "name": "session-state"
+      },
+      "_square-R27C3HIH.js": {
+        "file": "assets/square-R27C3HIH.js",
+        "name": "square",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js"
+        ]
+      },
+      "_staff-input-CWXYObDH.js": {
+        "file": "assets/staff-input-CWXYObDH.js",
+        "name": "staff-input"
+      },
+      "_useStaffRequest-i90CxQ5E.js": {
+        "file": "assets/useStaffRequest-i90CxQ5E.js",
+        "name": "useStaffRequest",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_session-state-C-nYtNAq.js"
+        ]
+      },
+      "_worker-audio-draft-CxK3tD32.js": {
+        "file": "assets/worker-audio-draft-CxK3tD32.js",
+        "name": "worker-audio-draft",
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_session-state-C-nYtNAq.js",
+          "index.html"
+        ]
+      },
+      "_worker-text-draft-DKg5eDmu.js": {
+        "file": "assets/worker-text-draft-DKg5eDmu.js",
+        "name": "worker-text-draft",
+        "imports": [
+          "_session-state-C-nYtNAq.js",
+          "index.html"
+        ]
+      },
+      "index.html": {
+        "file": "assets/customer-Dom8elwU.js",
+        "name": "customer",
+        "src": "index.html",
+        "isEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_preload-helper-DjzSQ1t3.js",
+          "_session-state-C-nYtNAq.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "_staff-input-CWXYObDH.js"
+        ],
+        "dynamicImports": [
+          "src/WorkerRecorder.tsx",
+          "src/WorkerDevice.tsx",
+          "index.html",
+          "src/WorkerTextDraft.tsx",
+          "src/WorkerAudioDraft.tsx",
+          "src/WorkerOffline.tsx",
+          "_worker-audio-draft-CxK3tD32.js",
+          "src/WorkerDeletion.tsx",
+          "src/StaffSearch.tsx",
+          "src/Billing.tsx",
+          "src/Audit.tsx",
+          "src/Clarifications.tsx",
+          "src/ClarificationCreate.tsx",
+          "src/PublishForm.tsx",
+          "src/NewBriefing.tsx",
+          "src/PublicProduct.tsx",
+          "src/Onboarding.tsx",
+          "_Operations-DC80z4Bk.js",
+          "src/SourceAudioUploads.tsx",
+          "src/PublicationRecovery.tsx",
+          "src/PublicationSchedules.tsx",
+          "src/LanguageArtifacts.tsx",
+          "src/LanguageReadiness.tsx",
+          "src/PlanUsage.tsx",
+          "src/Notifications.tsx",
+          "src/Reports.tsx",
+          "src/RetentionSettings.tsx",
+          "src/Regeneration.tsx",
+          "src/StaffInvitations.tsx",
+          "src/AcceptInvitation.tsx"
+        ]
+      },
+      "operator.html": {
+        "file": "assets/operator-BJtIx8xG.js",
+        "name": "operator",
+        "src": "operator.html",
+        "isEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_Operations-DC80z4Bk.js"
+        ]
+      },
+      "src/AcceptInvitation.tsx": {
+        "file": "assets/AcceptInvitation-BOfkzZ03.js",
+        "name": "AcceptInvitation",
+        "src": "src/AcceptInvitation.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "index.html",
+          "_invitation-recovery-C7vjMrKh.js"
+        ]
+      },
+      "src/Audit.tsx": {
+        "file": "assets/Audit-Bt_QMspF.js",
+        "name": "Audit",
+        "src": "src/Audit.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ]
+      },
+      "src/Billing.tsx": {
+        "file": "assets/Billing-CS4cI8h_.js",
+        "name": "Billing",
+        "src": "src/Billing.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ]
+      },
+      "src/ClarificationCreate.tsx": {
+        "file": "assets/ClarificationCreate-Ck56k8yn.js",
+        "name": "ClarificationCreate",
+        "src": "src/ClarificationCreate.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_session-state-C-nYtNAq.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html",
+          "_case-workflow-recovery-DllhiQlv.js"
+        ]
+      },
+      "src/Clarifications.tsx": {
+        "file": "assets/Clarifications-B-zXTnzl.js",
+        "name": "Clarifications",
+        "src": "src/Clarifications.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_calendar-clock-VAJXILnx.js",
+          "_session-state-C-nYtNAq.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html",
+          "_case-workflow-recovery-DllhiQlv.js",
+          "_civil-time-ChwhfbO_.js"
+        ]
+      },
+      "src/LanguageArtifacts.tsx": {
+        "file": "assets/LanguageArtifacts-CtaZ3zYs.js",
+        "name": "LanguageArtifacts",
+        "src": "src/LanguageArtifacts.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_square-R27C3HIH.js",
+          "index.html",
+          "src/Regeneration.tsx"
+        ]
+      },
+      "src/LanguageReadiness.tsx": {
+        "file": "assets/LanguageReadiness-I0nY_rvZ.js",
+        "name": "LanguageReadiness",
+        "src": "src/LanguageReadiness.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html",
+          "_ProviderStageTests-BeAKeFqL.js"
+        ]
+      },
+      "src/NewBriefing.tsx": {
+        "file": "assets/NewBriefing-Bb9VAlDs.js",
+        "name": "NewBriefing",
+        "src": "src/NewBriefing.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_mic-Cnz5nvWt.js",
+          "_square-R27C3HIH.js",
+          "index.html",
+          "_audio-CxVNbuAQ.js"
+        ]
+      },
+      "src/Notifications.tsx": {
+        "file": "assets/Notifications-B_0B2QUJ.js",
+        "name": "Notifications",
+        "src": "src/Notifications.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ]
+      },
+      "src/Onboarding.tsx": {
+        "file": "assets/Onboarding-DBZyHnfn.js",
+        "name": "Onboarding",
+        "src": "src/Onboarding.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_earth-DfdOalw_.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ],
+        "css": [
+          "assets/Onboarding-DS8Oml43.css"
+        ]
+      },
+      "src/PlanUsage.tsx": {
+        "file": "assets/PlanUsage-DlazeNhF.js",
+        "name": "PlanUsage",
+        "src": "src/PlanUsage.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ]
+      },
+      "src/PrivacyWorkers.tsx": {
+        "file": "assets/PrivacyWorkers-DbtqBgNO.js",
+        "name": "PrivacyWorkers",
+        "src": "src/PrivacyWorkers.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html",
+          "src/WorkerDeletion.tsx"
+        ]
+      },
+      "src/PublicProduct.tsx": {
+        "file": "assets/PublicProduct-D998TE2h.js",
+        "name": "PublicProduct",
+        "src": "src/PublicProduct.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_earth-DfdOalw_.js",
+          "_mic-Cnz5nvWt.js",
+          "index.html"
+        ],
+        "css": [
+          "assets/PublicProduct-mfmXaTZc.css"
+        ]
+      },
+      "src/PublicationRecovery.tsx": {
+        "file": "assets/PublicationRecovery-BeBR4F-k.js",
+        "name": "PublicationRecovery",
+        "src": "src/PublicationRecovery.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_calendar-clock-VAJXILnx.js",
+          "index.html"
+        ]
+      },
+      "src/PublicationSchedules.tsx": {
+        "file": "assets/PublicationSchedules-soB0vaF-.js",
+        "name": "PublicationSchedules",
+        "src": "src/PublicationSchedules.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_calendar-clock-VAJXILnx.js",
+          "index.html"
+        ]
+      },
+      "src/PublishForm.tsx": {
+        "file": "assets/PublishForm-_T_kjYaB.js",
+        "name": "PublishForm",
+        "src": "src/PublishForm.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_calendar-clock-VAJXILnx.js",
+          "index.html",
+          "_civil-time-ChwhfbO_.js"
+        ]
+      },
+      "src/RecordingNoticeSettings.tsx": {
+        "file": "assets/RecordingNoticeSettings-BqakUyrL.js",
+        "name": "RecordingNoticeSettings",
+        "src": "src/RecordingNoticeSettings.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "index.html"
+        ]
+      },
+      "src/Regeneration.tsx": {
+        "file": "assets/Regeneration-DFbVjiyx.js",
+        "name": "Regeneration",
+        "src": "src/Regeneration.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ]
+      },
+      "src/Reports.tsx": {
+        "file": "assets/Reports-VLmMUUPU.js",
+        "name": "Reports",
+        "src": "src/Reports.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ]
+      },
+      "src/RetentionSettings.tsx": {
+        "file": "assets/RetentionSettings-Bzfb2mO6.js",
+        "name": "RetentionSettings",
+        "src": "src/RetentionSettings.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_preload-helper-DjzSQ1t3.js",
+          "index.html"
+        ],
+        "dynamicImports": [
+          "src/PrivacyWorkers.tsx",
+          "src/RecordingNoticeSettings.tsx",
+          "src/TextRetentionSettings.tsx"
+        ]
+      },
+      "src/SourceAudioUploads.tsx": {
+        "file": "assets/SourceAudioUploads-CjKdOUHJ.js",
+        "name": "SourceAudioUploads",
+        "src": "src/SourceAudioUploads.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ]
+      },
+      "src/StaffInvitations.tsx": {
+        "file": "assets/StaffInvitations-DNYvCDFh.js",
+        "name": "StaffInvitations",
+        "src": "src/StaffInvitations.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html",
+          "_invitation-recovery-C7vjMrKh.js"
+        ]
+      },
+      "src/StaffSearch.tsx": {
+        "file": "assets/StaffSearch-D68IFKIS.js",
+        "name": "StaffSearch",
+        "src": "src/StaffSearch.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "index.html"
+        ]
+      },
+      "src/TextRetentionSettings.tsx": {
+        "file": "assets/TextRetentionSettings-AlvumZlI.js",
+        "name": "TextRetentionSettings",
+        "src": "src/TextRetentionSettings.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "index.html"
+        ]
+      },
+      "src/WorkerAudioDraft.tsx": {
+        "file": "assets/WorkerAudioDraft-DVDXUUdk.js",
+        "name": "WorkerAudioDraft",
+        "src": "src/WorkerAudioDraft.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_hard-drive-ClmaNXP8.js",
+          "index.html",
+          "_worker-audio-draft-CxK3tD32.js"
+        ]
+      },
+      "src/WorkerDeletion.tsx": {
+        "file": "assets/WorkerDeletion-WFAUfOBC.js",
+        "name": "WorkerDeletion",
+        "src": "src/WorkerDeletion.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_useStaffRequest-i90CxQ5E.js",
+          "index.html"
+        ]
+      },
+      "src/WorkerDevice.tsx": {
+        "file": "assets/WorkerDevice-DR6dfv50.js",
+        "name": "WorkerDevice",
+        "src": "src/WorkerDevice.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_hard-drive-ClmaNXP8.js",
+          "index.html",
+          "_worker-audio-draft-CxK3tD32.js",
+          "_worker-text-draft-DKg5eDmu.js",
+          "src/WorkerOffline.tsx"
+        ]
+      },
+      "src/WorkerOffline.tsx": {
+        "file": "assets/WorkerOffline-BTcypQ7K.js",
+        "name": "WorkerOffline",
+        "src": "src/WorkerOffline.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_session-state-C-nYtNAq.js",
+          "index.html",
+          "_worker-audio-draft-CxK3tD32.js"
+        ]
+      },
+      "src/WorkerRecorder.tsx": {
+        "file": "assets/WorkerRecorder-4eRN2Z1O.js",
+        "name": "WorkerRecorder",
+        "src": "src/WorkerRecorder.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "_mic-Cnz5nvWt.js",
+          "_square-R27C3HIH.js",
+          "index.html",
+          "_audio-CxVNbuAQ.js"
+        ]
+      },
+      "src/WorkerTextDraft.tsx": {
+        "file": "assets/WorkerTextDraft-DfC8dZGb.js",
+        "name": "WorkerTextDraft",
+        "src": "src/WorkerTextDraft.tsx",
+        "isDynamicEntry": true,
+        "imports": [
+          "_jsx-runtime-BfXX54b5.js",
+          "index.html",
+          "_worker-text-draft-DKg5eDmu.js"
+        ]
+      }
+    },
+    "screenshots": [
+      {
+        "path": "artifacts/clarification-create-final-320-2026-10-20.png",
+        "bytes": 72558,
+        "sha256": "4d88ed08a7cafc1e0e14cbd386eec3718528494740e3fbea4c4379cb9a67f98a"
+      },
+      {
+        "path": "artifacts/clarification-create-final-1440-2026-10-20.png",
+        "bytes": 112228,
+        "sha256": "ba54c13b1300c3c072a634a1bd43cb5d21c2d5df6a7203c38a4efb7ff43462d1"
+      },
+      {
+        "path": "artifacts/clarification-create-context-lock-2026-10-20.png",
+        "bytes": 36250,
+        "sha256": "a0d8ee4d603b3a62997ded7d30f4e12895ddfffd44c2948a30ca56e8e315236c"
+      }
+    ],
+    "browser": "Local CUA; not Reticle",
+    "finalBuild": "8be48ec7-0bd8-41ad-a1a2-833ecf85c2c9",
+    "passed": [
+      "completed-answer linkage with original matching assessment unchanged",
+      "independent staff creation and truthful provenance",
+      "existing-case navigation after selection refresh",
+      "post-commit malformed reply with explicit GET recovery",
+      "pending metadata survives local draft clearing and full reload without plaintext reason",
+      "session-context mismatch locks the form",
+      "Cancel-first local clear; corrected enabled-editor focus",
+      "received/due site offsets and reason legend"
+    ],
+    "preliminaryPassed": [
+      "changed-intent retry denied without a new POST",
+      "older receipt preserves newer private draft",
+      "malformed assignment refresh preserves draft and disables creation",
+      "unsent navigation guard"
+    ],
+    "preliminaryLimits": [
+      "First synthetic matched fixture omitted required evidence and remained pending; fixed final fixture requires actual completed matching assessment",
+      "Initial clear focus targeted a disabled trigger; final build verified enabled editor fallback"
+    ],
+    "responsive": [
+      {
+        "width": 320,
+        "documentScrollWidth": 305,
+        "outOfViewportFormControls": 0
+      },
+      {
+        "width": 390,
+        "documentScrollWidth": 375,
+        "outOfViewportFormControls": 0
+      },
+      {
+        "width": 768,
+        "documentScrollWidth": 753,
+        "outOfViewportFormControls": 0
+      },
+      {
+        "width": 1440,
+        "documentScrollWidth": 1425,
+        "outOfViewportFormControls": 0
+      }
+    ],
+    "viewportReset": true,
+    "tabsClosed": true
+  },
+  "finalBrowser": {
+    "parentSession": 8398,
+    "exitCode": 0,
+    "counters": {
+      "listReads": 2,
+      "detailReads": 1,
+      "actionPosts": 0,
+      "receiptReads": 0,
+      "otherPosts": 2,
+      "fixtureOwnerChanges": 0,
+      "repeatPosts": 0,
+      "reviewPosts": 0,
+      "workflowReads": 2,
+      "workflowReceipts": 0,
+      "fixtureRepeatChanges": 0,
+      "fixtureReviewChanges": 0,
+      "fixtureAnswers": 0,
+      "creationPosts": 2,
+      "creationReceipts": 1,
+      "creationSubjectReads": 5,
+      "externalCalls": 0,
+      "clarification_action_receipts": 0,
+      "clarification_creations": 2,
+      "clarifications": 3,
+      "help_requests": 1,
+      "attempts": 1,
+      "case_messages": 0,
+      "case_reviews": 0,
+      "case_repeats": 0,
+      "submission_receipts": 1,
+      "creationAttemptsUnchanged": true
+    },
+    "otherPostsIncludesCreationPosts": true
+  },
+  "preliminaryBrowser": {
+    "parentSession": 88780,
+    "exitCode": 0,
+    "creationPosts": 2,
+    "creationReceipts": 1,
+    "creationSubjectReads": 3,
+    "creationRows": 2,
+    "helpRequests": 1,
+    "attempts": 1,
+    "messages": 0,
+    "externalCalls": 0,
+    "originalAttemptHashChecked": false
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-986edabb-378c-4d6c-9b55-3f3d28cd3d4a.json",
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 60,
+    "allHashesMatch": true,
+    "filesScanned": 4857,
+    "configuredSecretMatches": 0
+  },
+  "cloudDatabaseStorageChanged": false,
+  "nativeAcceptanceClaimed": false,
+  "realWorkerDataUsed": false,
+  "liveProviderMailCalls": 0,
+  "microphoneUsed": false,
+  "billingChanged": false,
+  "deployment": false,
+  "limits": [
+    "English staff UI only; full reference/localization/AT/phone acceptance remains",
+    "Historical native91 does not accept schema94",
+    "PGlite is not native concurrency/hosted permission proof",
+    "No complete-erasure claim for metadata or external provider/backup histories",
+    "All real-worker AI, hosted and release gates remain"
+  ],
+  "nextTask": "Complete S14/S15 reference composition and EN/AR/UR staff clarification interfaces, preserving current safety and recovery behavior"
+}

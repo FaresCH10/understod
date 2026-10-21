@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-13",
+  "requirements": ["A06", "S30", "S42"],
+  "scope": "Staff & Access captured-context directory, mutation, receipt and retry; broader staff helper migration remains open",
+  "fullSyntheticSuite": {
+    "testFiles": 161,
+    "tests": 860,
+    "passed": 856,
+    "failed": 0,
+    "skipped": 4,
+    "skipReason": "Native database prerequisites",
+    "durationMs": 277645.6768,
+    "exitCode": 0,
+    "externalDatabaseTestUrlsRemoved": true,
+    "log": "artifacts/staff-request-full-test-2026-10-13.log",
+    "qualification": "Started before final pending-session completion adjustment; final affected regression and build run afterward"
+  },
+  "finalAffectedRegression": {
+    "files": ["staff-request", "staff-access", "staff-recovery", "staff-session-http", "staff-session-recovery", "session-state"],
+    "passed": 28,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 6602.6455,
+    "exitCode": 0
+  },
+  "build": {"exitCode": 0, "modules": 2038, "entryKb": 581.64, "shellFiles": 68, "shellMismatches": 0, "existingWarningsRemain": true},
+  "protectedDatabase": {"matchingFingerprints": 8, "integrity": "ok", "foreignKeyViolations": 0, "readOnlyVerification": true},
+  "browser": {"passed": false, "attempts": 2, "reason": "Trusted Node process exited at startup, including tool-requested retry after reset", "externalDiagnosticsSent": false},
+  "allOwnedSessionsTerminal": true,
+  "originalPreviewRestarted": false,
+  "originalDatabaseMigrated": false,
+  "externalRolloutPerformed": false,
+  "progressEstimates": {"staffAccessBoundary": 75, "wholeStaffRequestFencing": 25, "staffSessionGuard": 65, "overall": 60, "overallRange": [55, 65]},
+  "productionReady": false
+}

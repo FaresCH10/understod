@@ -1,0 +1,41 @@
+{
+  "runId": "ca3be323-0215-4f34-8f0d-80bd0990275d",
+  "startedAt": "2026-10-14T06:06:58.147Z",
+  "dataClass": "synthetic",
+  "realDataAllowed": false,
+  "models": {
+    "text": "gemini-3.5-flash-lite",
+    "transcription": "gemini-3.5-transcribe",
+    "speech": "gemini-3.8-flash-lite-tts"
+  },
+  "fixtureVersion": "provider-stage-fixture-v2",
+  "mode": "speech-en",
+  "maxRequests": 1,
+  "requests": [
+    {
+      "id": "34daf768-751a-4d7a-8b35-0dbd4e5550ac",
+      "state": "accepted",
+      "httpStatus": 200
+    }
+  ],
+  "results": [],
+  "productionReady": false,
+  "state": "failed",
+  "speechEnvelope": {
+    "completed": true,
+    "modelMatches": true,
+    "stepCount": 1,
+    "outputCount": 1,
+    "partCount": 1,
+    "audioType": true,
+    "wavMime": true,
+    "hasData": true,
+    "bytes": 380514,
+    "riff": true,
+    "sampleRate": 24000,
+    "fmtSize": 16,
+    "dataAt36": true
+  },
+  "diagnosticCode": "invalid_output",
+  "completedAt": "2026-10-14T06:07:01.078Z"
+}

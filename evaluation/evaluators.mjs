@@ -1,4 +1,4 @@
-import {createGeminiAdapter,GEMINI_MODELS} from '../server/ai/gemini.mjs';
+import {createGeminiAdapter,GEMINI_MODELS,GEMINI_ASSESSMENT_VERSION} from '../server/ai/gemini.mjs';
 import {syntheticAssessmentAdapter} from '../server/postgres/runtime.mjs';
 import {validatedAssessment} from '../server/postgres/assessment-worker.mjs';
 import {bundleHash} from '../server/ai/prepared-bundle.mjs';
@@ -7,7 +7,7 @@ import {evaluationProvenance} from './runner.mjs';
 
 export const LOCAL_PROVENANCE=Object.freeze({adapter:'synthetic-local-v1',dataClass:'synthetic',model:'none',promptVersion:'synthetic-shelf-v1',schemaVersion:'synthetic-shelf-v1'});
 export const GEMINI_PROVENANCE=Object.freeze({adapter:'gemini-typed-assessment-v1',dataClass:'synthetic',model:GEMINI_MODELS.text,
-  promptVersion:'gemini-assessment-v1',schemaVersion:'gemini-assessment-v1'});
+  promptVersion:GEMINI_ASSESSMENT_VERSION,schemaVersion:GEMINI_ASSESSMENT_VERSION});
 
 export async function evaluateLocal({sample,input}) {
   if(sample.fixture!=='labeled_response')return {status:'not_run',diagnostic:'fault_not_applicable'};

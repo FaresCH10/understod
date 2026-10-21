@@ -2,29 +2,36 @@ import {hostedSyntheticConfig} from '../server/postgres/hosted-config.mjs';
 import {createPostgresPool} from '../server/postgres/db.mjs';
 import {verifyMigrations} from '../server/postgres/migrate.mjs';
 import {verifyRuntimePermissions} from '../server/postgres/runtime-permissions.mjs';
-import {startHostedApi} from '../server/postgres/hosted-runtime.mjs';
+import {startHostedApi,startHostedOperator} from '../server/postgres/hosted-runtime.mjs';
+import {fileURLToPath} from 'node:url';
 import {runRehearsalWorker as runPostgresWorker} from '../server/postgres/runtime.mjs';
-import {r2AudioStore} from '../server/private-storage.mjs';
+import {hostedPrivateAudioStore} from '../server/private-storage.mjs';
 
+export function hostedServiceArguments(args) {
+  const mode=args[0] ?? 'api';
+  if(args.length>1 || !['api','worker','operator','check','check-worker','check-operator'].includes(mode))throw Error('Select one hosted API, worker or operator command');
+  return {mode,service:['worker','check-worker'].includes(mode)?'worker':['operator','check-operator'].includes(mode)?'operator':'api'};
+}
 async function main() {
-  const mode=process.argv[2] ?? 'api';if(!['api','worker','check'].includes(mode))throw Error('Use postgres-hosted.mjs api, worker or check');
-  const config=hostedSyntheticConfig(),pool=await createPostgresPool(),storage=r2AudioStore(config.storageConfig),stop=new AbortController();let server;
+  const {mode,service}=hostedServiceArguments(process.argv.slice(2));
+  const config=hostedSyntheticConfig(process.env,{service}),pool=await createPostgresPool(),storage=service==='operator'?null:hostedPrivateAudioStore(config),stop=new AbortController();let server;
   const shutdown=()=>stop.abort();process.once('SIGINT',shutdown);process.once('SIGTERM',shutdown);
   try {
-    if(mode==='api') {
-      server=await startHostedApi(pool,storage,config);console.log(`Hosted SYNTHETIC PostgreSQL API listening on port ${config.port}. Real worker data is not approved.`);
+    if(['api','operator'].includes(mode)) {
+      server=mode==='operator'?await startHostedOperator(pool,config):await startHostedApi(pool,storage,config);
+      console.log(`Hosted SYNTHETIC PostgreSQL ${service} listening on port ${config.port}. Real worker data is not approved.`);
       if(!stop.signal.aborted)await new Promise(resolve=>stop.signal.addEventListener('abort',resolve,{once:true}));
     }else {
       const result=await verifyMigrations(pool,{schema:config.schema});
-      await verifyRuntimePermissions(pool,{schema:config.schema});
-      if(mode==='check'){console.log(`Hosted synthetic schema verified (${result.migrations} migrations). No storage/provider connection was tested.`);return;}
-      console.log('Hosted SYNTHETIC PostgreSQL worker started. Free-tier provider dispatch is disabled.');
+      await verifyRuntimePermissions(pool,{schema:config.schema,profile:config.runtimeRoleProfile});
+      if(['check','check-worker','check-operator'].includes(mode)){console.log(`Hosted synthetic ${config.runtimeRoleProfile} schema verified (${result.migrations} migrations). No storage/provider connection was tested.`);return;}
+      console.log(`Hosted SYNTHETIC PostgreSQL worker started. Fixed verification tests are ${config.providerVerification?.metadata.testEnabled?'enabled by configuration; operator approval and quota are required':'disabled'}. Real-worker provider dispatch is disabled.`);
       await runPostgresWorker(pool,storage,config,{signal:stop.signal,onError:stage=>console.error(`Hosted worker stage failed: ${stage}`)});
     }
   }finally {
     process.off('SIGINT',shutdown);process.off('SIGTERM',shutdown);
     if(server){const timer=setTimeout(()=>server.closeAllConnections(),25000);timer.unref();try{await new Promise(resolve=>server.close(resolve));}finally{clearTimeout(timer);}}
-    storage.close();await pool.end();
+    storage?.close();await pool.end();
   }
 }
-main().catch(()=>{console.error('Hosted runtime unavailable. Check synthetic staging configuration, trusted proxy, verified migrations, TLS and private storage. Secret details are not logged.');process.exitCode=1;});
+if(process.argv[1] && fileURLToPath(import.meta.url)===process.argv[1])main().catch(()=>{console.error('Hosted runtime unavailable. Check synthetic staging configuration, service identity, trusted proxy, verified migrations, TLS and required private storage. Secret details are not logged.');process.exitCode=1;});

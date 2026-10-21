@@ -1,0 +1,17 @@
+{
+  "dateUtc":"2026-10-13 14:43 UTC",
+  "scope":"Six retention policies and EN/AR/UR recording notice captured authority, exact receipt and saved intent recovery",
+  "initialFullSuite":{"tests":893,"passed":888,"failed":1,"skipped":4,"exitCode":1,"durationMs":216100.5021,"log":"artifacts/policy-controls-suite-2026-10-13.log","resolution":"Normal standalone runtime fixture updated to capture required policy session context; assertions unchanged"},
+  "finalAffectedRegression":{"testFiles":8,"passed":31,"failed":0,"skipped":0,"exitCode":0,"durationMs":7876.8277},
+  "fullSyntheticSuite":{"testFiles":166,"tests":893,"passed":889,"failed":0,"skipped":4,"exitCode":0,"durationMs":240119.5337,"externalDatabaseTestUrlsRemoved":true,"log":"artifacts/policy-controls-final-suite-2026-10-13.log"},
+  "build":{"exitCode":0,"modules":2043,"entryKb":592.27,"shellFiles":69,"shellMismatches":0,"existingWarningsRemain":true},
+  "protectedDatabase":{"matchingFingerprints":8,"integrity":"ok","foreignKeyViolations":0,"readOnlyVerification":true,"checkedAfterFullSuite":true},
+  "browser":{"method":"Cua built UI, disposable synthetic PGlite fixture","categoriesPassed":["audio","response","case","generated","activity","briefing","notice"],"textReloadRecovered":true,"noticeLanguagesVerified":["en","ar","ur"],"mobileAudioRecovery":true,"mobileViewport":{"width":390,"height":844},"viewportReset":true,"posts":14,"withheldAcknowledgements":7,"rejectedRetries":7,"acceptedReceipts":7,"externalRequests":0,"reticleVerdict":false,"realPhoneAcceptance":false,"socketDropAcceptance":false,"externalDiagnosticsSent":false},
+  "allOwnedCommandsTerminal":true,
+  "originalPreviewRestarted":false,
+  "originalDatabaseMigrated":false,
+  "externalRolloutPerformed":false,
+  "progressEstimates":{"policyBoundary":85,"wholeStaffRequestFencing":85,"staffSessionGuard":65,"overall":60,"overallRange":[55,65]},
+  "productionReady":false,
+  "realDataAllowed":false
+}

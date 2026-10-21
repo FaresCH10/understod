@@ -1,0 +1,86 @@
+{
+  "initialBuild": "customer-BMQgzFoR",
+  "finalBuild": "customer-CFO7RqBu",
+  "initial": [
+    {
+      "bodyWidth": 305,
+      "clippedButtons": [],
+      "notes": "Newer synthetic draft that an older receipt must preserve.",
+      "privateDiagnosticVisible": false,
+      "readOnly": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "bodyWidth": 375,
+      "clippedButtons": [],
+      "notes": "Newer synthetic draft that an older receipt must preserve.",
+      "privateDiagnosticVisible": false,
+      "readOnly": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "bodyWidth": 753,
+      "clippedButtons": [],
+      "notes": "Newer synthetic draft that an older receipt must preserve.",
+      "privateDiagnosticVisible": false,
+      "readOnly": true,
+      "scrollWidth": 753,
+      "width": 768
+    },
+    {
+      "bodyWidth": 1425,
+      "clippedButtons": [],
+      "notes": "Newer synthetic draft that an older receipt must preserve.",
+      "privateDiagnosticVisible": false,
+      "readOnly": true,
+      "scrollWidth": 1425,
+      "width": 1440
+    }
+  ],
+  "final": [
+    {
+      "bodyWidth": 305,
+      "clippedButtons": [],
+      "notes": "Final newer synthetic notes must survive receipt recovery.",
+      "readOnly": true,
+      "scrollWidth": 305,
+      "width": 320,
+      "totalTextareas": 1
+    },
+    {
+      "bodyWidth": 375,
+      "clippedButtons": [],
+      "notes": "Final newer synthetic notes must survive receipt recovery.",
+      "readOnly": true,
+      "scrollWidth": 375,
+      "width": 390,
+      "totalTextareas": 1
+    },
+    {
+      "bodyWidth": 753,
+      "clippedButtons": [],
+      "notes": "Final newer synthetic notes must survive receipt recovery.",
+      "readOnly": true,
+      "scrollWidth": 753,
+      "width": 768,
+      "totalTextareas": 1
+    },
+    {
+      "bodyWidth": 1425,
+      "clippedButtons": [],
+      "notes": "Final newer synthetic notes must survive receipt recovery.",
+      "readOnly": true,
+      "scrollWidth": 1425,
+      "width": 1440,
+      "totalTextareas": 1
+    }
+  ],
+  "lateSelection": {
+    "elapsedMs": 117491,
+    "heading": "Worker 021 · Follow-up needed"
+  },
+  "recordingUsed": false,
+  "independentLanguageReview": false
+}

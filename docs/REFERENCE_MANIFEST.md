@@ -4,6 +4,17 @@ Spec: `Understood_AI_First_Engineering_Team_Prompt.md`, version 2026-10-02. This
 
 ## Asset and evidence status
 
+Latest S16-local delta: EN/AR/UR report/export controls and30 built locale-width
+checks, exact command recovery and identical CSV downloads pass locally. This
+is not full matched-reference acceptance: current five-metric/filter layout,
+dates/UUID names/extra states and fixture language distribution differ. See
+[evidence and explicit deviations](REPORT_LOCALIZATION.md).
+
+Latest narrow S15 delta: the new generated staff composer now matches the500-
+character reference limit while ordinary/pending-command compatibility remains1000.
+Over-limit text is preserved, not truncated. This is not full matched-reference
+acceptance; see [scoped evidence and limits](CONVERSATION_COMPOSER_LIMITS.md).
+
 - The user's `C:/Users/Fares/Desktop/images/images.rar` (SHA-256 `7DD60001E01C64DB24710941EA0FE60D940CB3C22293EDCC097AEAD141EB47A9`) was listed before extraction: exactly 47 flat `.jpeg` entries and no traversal paths. Copies were extracted without replacing existing data to `references/archive-2026-10-03/`. All 47 extracted JPEGs were visually identified; #14-47 also matched their chat attachments by exact SHA-256. Pixel dimensions below are from the extracted JPEG files.
 - The spec's original PNG directory, `C:/Users/User/Documents/Codex/2026-09-30/files-pasted-by-the-user-you/outputs/understood-ui-mockups`, does not exist on this host. The original PNGs, their dimensions, font identities and exact design tokens remain unverified. The extracted JPEGs are stable local reference copies, not original PNGs.
 - The 44 selected targets are S01-S44. Use `13-briefing-detail-history-v2.png`, `16-reports-exports-v2.png`, and `23-worker-submission-status-v2.png`; older chat previews #13, #16 and #24 are superseded. Chat preview #32 is selected S13, #18 is selected S16, and #25 is selected S23.
@@ -117,6 +128,61 @@ Every key in this table denotes an exact filename under `references/archive-2026
 The three excluded JPEG dimensions are #13 `1586x992`, #16 `1586x992`, and #24 `740x1600`. All three remain in the extracted archive; none was deleted or overwritten.
 
 ## Evidence still required
+
+Latest21 October S15 action/focus continuation: actual Generate/send and private
+record controls now share the desktop row and wrap at320/390 without overlap.
+Proof: `artifacts/staff-actions-aligned-en-1585-2026-10-21.png` and
+`staff-actions-aligned-ur-390-2026-10-21.png`;13 actual locale-width measurements
+and three-language history focus/draft/submission checks are retained. This is
+qualitative action placement, not a matched reference. The current1000-character
+message contract differs from the reference500-character staff counter and still
+needs reconciliation. Typed original/no original audio, seeded history, dates,
+worker language, draft interlocks and other geometry differ from the reference.
+Full44-reference/A17 and independent language/AT/phone acceptance remain open.
+
+Latest21 October worker-voice follow-up supersedes the missing-array limitation
+below: all twelve fresh preview widths are retained in
+`artifacts/worker-voice-purpose-layout-2026-10-21.json`; actual notice gates,
+storing/received and failed recovery are in the matching browser-final report.
+`worker-voice-purpose-ur-390-2026-10-21.png` shows the new candidate. This still
+does not prove full matched references, physical devices or independent language/AT.
+
+21 October 2026 S22/S24 continuation now includes synthetic preview/send,
+unknown-ack local clear/reload/GET recovery, exact reply replay and recovery
+after explicit supervisor closure. EN/AR/UR notice/capture and draft interlocks
+work with English profile/assignment. Images:
+`artifacts/worker-voice-final-en-320-2026-10-21.png`,
+`worker-voice-final-ar-390-2026-10-21.png`,
+`worker-voice-final-ur-320-2026-10-21.png`.
+Twelve width checks observed, raw array lost; not full matched-reference,
+physical-mic, independent language or AT acceptance. Purpose fallback copy and
+rendered failure matrix remain. See VOICE_CONVERSATION_CONTRACT.md.
+
+21 October2026 S15 staff-recorder continuation: the inspected selected JPEG#15
+now has an actual private staff-purpose recording action and bounded history,
+with explicit capture/preview/save and receipt recovery. Final local proof:
+`artifacts/staff-recording-final-en-desktop-2026-10-21.png`,
+`staff-recording-final-ar-390-2026-10-21.png`, and
+`staff-recording-final-ur-320-2026-10-21.png`. All12 locale-width combinations
+fit. The action is inside the follow-up panel, not yet side-by-side with Generate
+as in the source. A dedicated private recorder dialog is used; no waveform or
+spoken-language quality is fabricated. Fixed tones and synthetic history are QA
+data, not a matched visual fixture or physical recording proof. Pagination focus,
+full reference composition, independent languages/AT/phones and A17 remain open.
+See STAFF_CASE_RECORDINGS.md and the current checkpoint/browser evidence.
+
+20 October2026 S15 local timeline continuation: selected JPEG#15 was inspected
+again at1585x992. Actual timeline now sits beside the original response; facts
+remain in a disclosure. Saved current-build viewport screenshot:
+`artifacts/case-timeline-final-en-1585-2026-10-20.png`; mobile panels:
+`case-timeline-panel-ar-390-2026-10-20.png` and
+`case-timeline-panel-ur-320-2026-10-20.png`. EN/AR/UR320/390/768/1440 containment,
+keyboard scroller, paging/drafts/fault/context checks pass locally. This is a
+qualitative composition check, NOT a matched-reference acceptance: typed
+synthetic original (no fabricated audio), many seeded history events, actual
+current dates, expanded evidence and pending in-person recorder differ from
+the source fixture. Full S15/44-reference/A17 acceptance remains open. See
+CASE_TIMELINE.md and production-case-timeline-2026-10-20.json.
 
 1. If available, obtain the 44 original selected PNGs, measure source dimensions, record hashes/licensing, and compare them with these JPEG copies. Preserve originals. All 47 JPEGs have now been visually inspected.
 2. Reconcile proposed routes/control IDs with implemented routes and `docs/FEATURE_REGISTER.md` without treating page presence as completion.

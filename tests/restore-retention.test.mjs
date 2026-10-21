@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash,randomUUID} from 'node:crypto';
+import {EventEmitter} from 'node:events';
 import {mkdtemp,rm,readdir} from 'node:fs/promises';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
@@ -30,13 +31,14 @@ const owner={principal_type:'staff',principal_id:'owner',org_id:'org',site_id:'s
 const wav=Buffer.from(encodeWav({duration:1,sampleRate:16000,numberOfChannels:1,getChannelData:()=>new Float32Array(16000).fill(0.2)}));
 async function fixture(){
   const db=new PGlite(),root=await mkdtemp(join(tmpdir(),'understood-restore-retention-')),storage=localAudioStore(root),backupId=randomUUID();
-  let failure='',locked=false;
-  const pool={async connect(){return {async query(sql,values){
+  let failure='',locked=false,lockConnection;
+  const pool={async connect(){const client=new EventEmitter();return Object.assign(client,{async query(sql,values){
+    if(sql.startsWith('SELECT pg_try_advisory_lock'))lockConnection=client;
     if(sql==='SELECT pg_export_snapshot() AS id')return {rows:[{id:'embedded-authored-snapshot'}]};
     if(failure && sql.includes(failure))throw Error('Injected private failure');
     if(locked && sql.startsWith('SELECT pg_try_advisory_lock'))return {rows:[{owned:false}]};
     return values?.length?db.query(sql,values):(await db.exec(sql)).at(-1)||{rows:[]};
-  },release(){}};}};
+  },release(){}});}};
   await db.exec(`CREATE SCHEMA ${schema};SET search_path TO ${schema},pg_catalog`);await runMigrations(pool,{schema});
   await db.exec(`INSERT INTO organizations VALUES('org','Synthetic');INSERT INTO sites VALUES('site','org','Synthetic','UTC');
     INSERT INTO staff(id,org_id,site_id,name,role) VALUES('owner','org','site','Synthetic','owner');
@@ -48,6 +50,7 @@ async function fixture(){
     CREATE TABLE future_evidence(id text PRIMARY KEY,payload jsonb);INSERT INTO future_evidence VALUES('preserved','{"original":true}');`);
   return {db,pool,storage,root,options:{schema,backupId,isolatedTarget:true,writersStopped:true},
     fail(value){failure=value;},lock(value){locked=value;},quarantine:()=>quarantineRestoredDatabase(pool,{schema,backupId}),
+    breakLock(){assert.ok(lockConnection);lockConnection.emit('error',Error('Synthetic lock connection lost'));},
     async close(){await db.close();await rm(root,{recursive:true,force:true});}};
 }
 
@@ -138,6 +141,19 @@ test('restore sweep removes all six expired private families and text without ch
     assert.equal((await f.db.query("SELECT payload FROM future_evidence")).rows[0].payload.original,true);
     assert.equal((await f.db.query("SELECT count(*)::int AS n FROM audit WHERE action='backup.restore.elapsed_policies_reconciled'")).rows[0].n,1);
     const repeat=await sweepRestoredRetention(f.pool,f.storage,f.options);assert.equal(repeat.cycles,0);assert.equal(repeat.stop,'reconciled');
+  }finally{await f.close();}
+});
+
+test('authored lock-connection loss stops further private removals and never certifies restore cleanup',async()=>{
+  const f=await fixture();try{
+    await expiredFamilies(f);await f.quarantine();let removals=0;
+    const storage={...f.storage,async remove(row){removals++;await f.storage.remove(row);f.breakLock();}};
+    await assert.rejects(sweepRestoredRetention(f.pool,storage,f.options),error=>error.code==='UNDERSTOOD_PG_CONNECTION_LOST');
+    assert.equal(removals,1);
+    assert.equal((await f.db.query("SELECT count(*)::int AS n FROM audit WHERE action='backup.restore.elapsed_policies_reconciled'")).rows[0].n,0);
+    const state=await restoredRetentionState(f.pool,f.storage,f.options);
+    assert.equal(state.activationAllowed,false);assert.equal(state.elapsedPoliciesReconciled,false);assert.ok(state.pendingCount>0);
+    await withTransaction(f.pool,client=>requireQuarantine(client,f.options.backupId));
   }finally{await f.close();}
 });
 

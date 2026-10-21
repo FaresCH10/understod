@@ -3,11 +3,12 @@ export function canManageStaff(role:string|null|undefined) {
   return role==='owner' || role==='supervisor';
 }
 
-export function staffDate(timezone:string|undefined,now=new Date()) {
+export function staffDate(timezone:string|undefined,now=new Date(),language:'en'|'ar'|'ur'='en') {
+  const locale=language==='ar'?'ar-LB':language==='ur'?'ur-PK':'en-GB';
   try {
-    return now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:timezone || 'UTC'});
+    return now.toLocaleDateString(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:timezone || 'UTC'});
   } catch {
-    return `${now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'})} (UTC)`;
+    return `${now.toLocaleDateString(locale,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'})} (UTC)`;
   }
 }
 

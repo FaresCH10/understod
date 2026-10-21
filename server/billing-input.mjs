@@ -56,4 +56,10 @@ export function sameBillingRequest(old,value) {
   return old && Object.keys(old).length===Object.keys(value).length && Object.keys(value).every(key=>old[key]===value[key]);
 }
 export function billingRequestId(kind,value) {if(!['invoice','payment','void'].includes(kind) || !uuid(value)) throw new Error('Invalid billing request ID');return value;}
+export function billingRequestSignature(kind,id,invoiceId,value) {
+  billingRequestId(kind,id);
+  if(!uuid(invoiceId) || !value || typeof value!=='object' || Array.isArray(value)
+    || Object.values(value).some(item=>typeof item!=='string' && typeof item!=='number'))throw Error('Invalid billing receipt');
+  return JSON.stringify(['understood:billing-intent:v1',kind,id,invoiceId,Object.entries(value).sort(([a],[b])=>a<b?-1:a>b?1:0)]);
+}
 export const billingRecoveryScope=session=>session.principal_type==='staff' && session.role==='owner' ? JSON.stringify([session.org_id,session.site_id,session.principal_id]) : null;

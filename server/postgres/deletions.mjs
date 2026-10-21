@@ -1,4 +1,5 @@
 import {deletionInput,deletionFilters} from '../deletion-input.mjs';
+import {applicationCleanupEvidence} from '../deletion-scope.mjs';
 import {domainTransaction,domainAudit,requirePrincipal} from './domain.mjs';
 
 export async function listPrivacyWorkers(pool,session,filters={},{schema='public'}={}){
@@ -14,7 +15,7 @@ export async function listPrivacyWorkers(pool,session,filters={},{schema='public
       SELECT (SELECT count(*) FROM filtered) AS total,
         COALESCE((SELECT jsonb_agg(rows) FROM (SELECT * FROM filtered ORDER BY lower(code),id LIMIT $5 OFFSET $6) rows),'[]'::jsonb) AS items`,
       [session.org_id,session.site_id,search,status,pageSize,(page-1)*pageSize])).rows[0];
-    return {items:result.items,total:Number(result.total),page,pageSize};
+    return {items:result.items.map(row=>({...row,cleanupEvidence:applicationCleanupEvidence()})),total:Number(result.total),page,pageSize};
   });
 }
 
@@ -28,7 +29,7 @@ export async function getWorkerDeletion(pool,session,workerId,{schema='public'}=
       LEFT JOIN worker_deletion_pseudonyms p ON p.request_id=d.id LEFT JOIN worker_deletion_completions c ON c.request_id=d.id
       WHERE d.worker_id=$1 AND d.org_id=$2 AND d.site_id=$3`,[workerId,session.org_id,session.site_id])).rows[0];
     return row?{id:row.id,workerId:row.worker_id,reason:row.reason,createdAt:row.created_at,completedAt:row.completed_at,
-      status:row.completed_at?'complete':'queued',contentRedactedAt:row.redacted_at,identityPseudonymizedAt:row.pseudonymized_at}:null;
+      status:row.completed_at?'complete':'queued',contentRedactedAt:row.redacted_at,identityPseudonymizedAt:row.pseudonymized_at,cleanupEvidence:applicationCleanupEvidence()}:null;
   });
 }
 
@@ -41,7 +42,7 @@ export async function requestWorkerDeletion(pool,session,workerId,input,{schema=
     if(old){
       if(old.org_id!==session.org_id || old.site_id!==session.site_id || old.actor_id!==session.principal_id
         || old.worker_id!==workerId || old.fingerprint!==fingerprint)throw new Error('Deletion request conflict');
-      return {id:old.id,status:(await client.query('SELECT 1 FROM worker_deletion_completions WHERE request_id=$1',[old.id])).rows.length?'complete':'queued',duplicate:true};
+      return {id:old.id,status:(await client.query('SELECT 1 FROM worker_deletion_completions WHERE request_id=$1',[old.id])).rows.length?'complete':'queued',duplicate:true,cleanupEvidence:applicationCleanupEvidence()};
     }
     const worker=(await client.query('SELECT * FROM workers WHERE id=$1 AND org_id=$2 AND site_id=$3 FOR UPDATE',[workerId,session.org_id,session.site_id])).rows[0];
     if(!worker)throw new Error('Worker unavailable');
@@ -56,6 +57,6 @@ export async function requestWorkerDeletion(pool,session,workerId,input,{schema=
     await client.query(`UPDATE assessment_jobs SET status='blocked',lease_token=NULL,lease_until=NULL,error='Worker deletion pending'
       WHERE status<>'complete' AND assignment_id IN (SELECT id FROM assignments WHERE worker_id=$1)`,[workerId]);
     await domainAudit(client,session,'worker.deletion.requested',workerId);
-    return {id:input.requestId,status:'queued',duplicate:false};
+    return {id:input.requestId,status:'queued',duplicate:false,cleanupEvidence:applicationCleanupEvidence()};
   });
 }

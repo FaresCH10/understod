@@ -1,0 +1,38 @@
+[
+  {
+    "body": 305,
+    "occurrence": [
+      "Second (-05:00)"
+    ],
+    "overflow": [],
+    "scroll": 305,
+    "width": 320
+  },
+  {
+    "body": 375,
+    "occurrence": [
+      "Second (-05:00)"
+    ],
+    "overflow": [],
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "body": 753,
+    "occurrence": [
+      "Second (-05:00)"
+    ],
+    "overflow": [],
+    "scroll": 753,
+    "width": 768
+  },
+  {
+    "body": 1425,
+    "occurrence": [
+      "Second (-05:00)"
+    ],
+    "overflow": [],
+    "scroll": 1425,
+    "width": 1440
+  }
+]

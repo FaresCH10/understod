@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-14T11:26:00Z",
+  "scope": "S17 mixed customer queue, captured source JSON/retry and exact-publication destinations",
+  "overallEstimate": 66,
+  "overallUncertainty": [59, 72],
+  "taskEstimates": {"mixedQueue":85,"appHelpers":85,"processingRecovery":80,"liveSyntheticAi":45},
+  "fullSuite": {"tests":974,"pass":970,"fail":0,"skipped":4,"durationMs":270430.2005,"session":36298,"exitCode":0,"log":"processing-kinds-verified-suite-2026-10-14.log"},
+  "focused": {"tests":54,"pass":54,"fail":0,"durationMs":23971.7768,"exitCode":0},
+  "build": {"passed":true,"modules":2062,"entryKb":653.49,"shellAssets":55,"allShellHashesMatch":true,"existingWarningsRemain":true},
+  "browser": {"fixtureSession":38737,"terminal":true,"processingReads":12,"sourceRetryPosts":1,"protectedInventoriesUnchanged":7,"externalCalls":0,"viewport":320,"documentWidth":305,"temporaryTabClosed":true,"viewportReset":true},
+  "preservation": {"originalTablesUnchanged":8,"integrity":"ok","foreignKeyViolations":0,"sourceFilesChecked":1364,"currentKeyMatches":0,"publicKeyMatches":0,"exampleKeyBlank":true,"originalPreviewsRestarted":false},
+  "limits": ["Native database tests skipped","Customer failed voice/check recovery remains","No complete live voice pipeline","No Reticle verdict","No all-reference or full accessibility acceptance","No real-data/free-tier use","No cloud or release approval"]
+}

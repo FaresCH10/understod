@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "understood-checkpoint-v1",
+  "date": "2026-10-15",
+  "goalStatus": "active",
+  "productionReady": false,
+  "overallEstimatePercent": 71,
+  "scope": "control-plane permissions and actual embedded API-role pipeline",
+  "taskEstimates": {"serviceRoleHardening": 70, "controlPlaneAcceptance": 85, "operatorIsolation": 70},
+  "catalog": {"tables": 134, "migrations": 88},
+  "profiles": {
+    "application": {"writable": 118, "readOnly": 12, "hidden": 4},
+    "worker": {"writable": 97, "readOnly": 28, "hidden": 9},
+    "operator": {"someWrite": 15, "readOnly": 20, "hidden": 99}
+  },
+  "changes": [
+    "Application control tables read-only; operator audit hidden from API and worker",
+    "Ten customer pipeline stages use actual application ACLs, not schema owner",
+    "Nested worker tasks restore the application caller identity",
+    "Four named fixture-only maintenance actions; no owner fallback for customer operations",
+    "Separate local API/operator/worker retry-generation test and control-write denials"
+  ],
+  "focused": {"finalTests": 47, "passed": 47, "failed": 0, "skipped": 0, "durationMs": 36070.3477},
+  "firstClean": {
+    "id": "493d367d-40ca-4b44-9ddb-536f28fb77d0",
+    "state": "failed", "total": 1115, "passed": 1110, "failed": 1, "skipped": 4,
+    "failure": "Windows UNKNOWN opening copied 016 migration before restore-domain assertion; cause not established",
+    "fileHashesMatched": true,
+    "unchangedRestoreFileRerun": {"passed": 15, "failed": 0, "skipped": 0, "durationMs": 73965.9913}
+  },
+  "cleanRerun": {
+    "id": "d95947b4-ac0d-41d1-8ac8-b93ef550bb22",
+    "state": "passed", "startedAt": "2026-10-15T13:40:40.111Z", "finishedAt": "2026-10-15T13:45:24.291Z",
+    "offlineInstall": true, "build": true, "total": 1115, "passed": 1111, "failed": 0, "skipped": 4,
+    "durationMs": 265936.7204, "contractChecks": 43, "pipelineChecks": 10,
+    "sourceFiles": 814, "sourceUnchanged": true,
+    "sourceSha256": "b97eeaf7bd25f7ee563e1920da18320ae9e5161ac9ce170df4e0cb1055a3c752"
+  },
+  "pipeline": {"externalRequests": 0, "scriptedRequests": 24, "workerTaskExecutions": 15, "privateObjects": 9, "audioFamilies": 6},
+  "limitations": [
+    "PGlite session authorization exercises effective ACLs, not three independent native logins or TLS",
+    "Native87/two-role and earlier live storage evidence are historical, not current88/control-policy proof",
+    "Remaining API/worker positive column/verb and worker-only restrictions are open",
+    "Hosted, live-quality, privacy, backup, device, language and release gates remain open"
+  ],
+  "externalActions": {"cloudTests": false, "realWorkerData": false, "gemini": false, "mail": false, "billing": false, "deployment": false}
+}

@@ -1,5 +1,11 @@
 # Worker Access Entry
 
+2026-10-16: WORKER_ENTRY_WELCOME.md supersedes the old select-based presentation
+with native visible language rows,localized welcome/Continue,validated current
+session labels,honest supervisor help andclear/focus unsent link controls. The
+existing explicit/uncertain redemption guarantees below remain. Built EN/AR/UR,
+320-1440px andlost/rejected/cancel journeys pass locally; full release gates remain.
+
 2026-10-12: uncertain redemption now has exact current-cookie, redeemed-grant,
 GET-only reconciliation, tab reload recovery and localized bounded errors. See
 `WORKER_ENTRY_RECOVERY.md` for current checks and limitations; the missing-recovery

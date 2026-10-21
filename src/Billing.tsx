@@ -1,44 +1,51 @@
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {ArrowLeft,CheckCircle2,ChevronLeft,ChevronRight,Download,FileText,Plus,RefreshCw,Save,TriangleAlert,Ban,X} from 'lucide-react';
-import {readPendingBilling,savePendingBilling,clearPendingBilling,type PendingBilling} from './billing-recovery';
+import {readPendingBilling,savePendingBilling,clearPendingBilling,checkedBillingReceipt,checkedBillingResult,type PendingBilling} from './billing-recovery';
 import {keepDialogFocus} from './dialog-focus';
+import {useStaffRequest,type StaffRequestAuthority} from './useStaffRequest';
+import {completeStaffRequest,retainStaffRequest,StaffRequestError} from './staff-request';
 
 type Invoice={id:string;number:string;description:string;issueDate:string;dueDate:string;currency:string;issuerName:string;siteName:string;amountCents:number;paidCents:number;voidedCents:number;balanceCents:number;status:'unpaid'|'partial'|'paid'|'void'};
 type Detail=Invoice & {voidRecord:{reason:string;createdAt:string}|null;payments:{id:string;amountCents:number;date:string;reference:string;note:string;recordedAt:string}[];paymentCount:number;paymentPage:number;paymentPageSize:number};
 type Page={items:Invoice[];total:number;page:number;pageSize:number};
 const money=(cents:number)=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(cents/100);
 const today=()=>new Date().toISOString().slice(0,10);
-class BillingError extends Error {constructor(message:string,public uncertain=false){super(message);}}
-async function request<T>(path:string,body?:unknown):Promise<T> {
-  let response:Response,data;
-  try {response=await fetch(`/api${path}`,{credentials:'include',...(body ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)} : {})});data=await response.json();}
-  catch {throw new BillingError(body ? 'Connection interrupted. The record may have been saved. Retry the unchanged request to recover its receipt.' : 'Connection interrupted. Please refresh.',!!body);}
-  if(!response.ok) throw new BillingError(data.error || 'Request failed',!!body && response.status>=500);
-  return data;
+function useBillingRequests(authority:StaffRequestAuthority) {
+  const scoped=useStaffRequest(authority);
+  const complete=<T,>(value:unknown,validate:(value:unknown)=>T|Promise<T>,done:(result:T)=>void)=>completeStaffRequest(value,validate,done,scoped.current,authority.canMutate);
+  const accepted=(value:unknown,pending:PendingBilling,done:(invoiceId:string)=>void)=>complete(value,async value=>{
+    checkedBillingResult(value,pending);
+    const receipt=await scoped.request(`/api/invoices/requests/${pending.kind}/${pending.requestId}`);
+    const id=await checkedBillingReceipt(receipt,pending);if(!id)throw Error('The billing outcome is not confirmed. Check the saved receipt.');return id;
+  },done);
+  return {...scoped,complete,accepted};
 }
 function Status({value}:{value:Invoice['status']}) {return <span className={`status status-${value==='paid' ? 'green' : value==='void' ? 'gray' : 'amber'}`}>{value==='paid' ? 'Paid' : value==='partial' ? 'Partially paid' : value==='void' ? 'Voided' : 'Awaiting payment'}</span>;}
 function Pager({page,total,setPage,label}:{page:number;total:number;setPage:(page:number)=>void;label:string}) {
   const pages=Math.max(1,Math.ceil(total/20));
   return <div className="audit-pagination"><span>Page {page} of {pages} · {total} {label}</span><div className="actions"><button className="icon-button" title={`Previous ${label} page`} aria-label={`Previous ${label} page`} disabled={page<=1} onClick={()=>setPage(page-1)}><ChevronLeft size={18}/></button><button className="icon-button" title={`Next ${label} page`} aria-label={`Next ${label} page`} disabled={page>=pages} onClick={()=>setPage(page+1)}><ChevronRight size={18}/></button>{page>pages && <button className="button outline" onClick={()=>setPage(1)}>First page</button>}</div></div>;
 }
-function LedgerForm({invoice,onSaved,onLocked,scope}:{invoice?:Invoice;onSaved:(id:string)=>void;onLocked:(locked:boolean)=>void;scope:string}) {
+function LedgerForm({invoice,onSaved,onLocked,scope,authority}:{invoice?:Invoice;onSaved:(id:string)=>void;onLocked:(locked:boolean)=>void;scope:string;authority:StaffRequestAuthority}) {
+  const {request,current,accepted}=useBillingRequests(authority);
   const [values,setValues]=useState({number:'',description:'',issueDate:today(),dueDate:today(),amount:'',date:today(),reference:'',note:''});
   const [confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[uncertain,setUncertain]=useState(false),[error,setError]=useState('');
   const sending=useRef(false),pending=useRef<{key:string;id:string}|null>(null);
   const update=(key:keyof typeof values,value:string)=>{setValues(old=>({...old,[key]:value}));setConfirmed(false);setError('');};
   const submit=async(event:FormEvent)=>{
-    event.preventDefault();if(sending.current || !confirmed) return;
+    event.preventDefault();if(sending.current || !confirmed || !current()) return;
     const payload:Record<string,string|boolean>=invoice ? {amount:values.amount,date:values.date,reference:values.reference.trim(),note:values.note.trim(),confirmed:true} : {number:values.number,description:values.description.trim(),issueDate:values.issueDate,dueDate:values.dueDate,amount:values.amount,confirmed:true};
     const key=JSON.stringify(payload);if(pending.current?.key!==key) pending.current={key,id:crypto.randomUUID()};
     sending.current=true;setBusy(true);setError('');
     let sent=false;
-    try {savePendingBilling(sessionStorage,scope,{requestId:pending.current.id,kind:invoice ? 'payment' : 'invoice',invoiceId:invoice?.id || null,body:payload});sent=true;
-      const saved=await request<{id:string}>(invoice ? `/invoices/${invoice.id}/payments` : '/invoices',{...payload,requestId:pending.current.id});clearPendingBilling(sessionStorage,scope,pending.current.id);pending.current=null;setUncertain(false);setConfirmed(false);setValues(old=>({...old,amount:'',reference:'',note:''}));onSaved(invoice?.id || saved.id);}
-    catch(err) {const unknown=sent && (!(err instanceof BillingError) || err.uncertain);setError((err as Error).message);setUncertain(unknown);if(sent && !unknown && pending.current) {try {clearPendingBilling(sessionStorage,scope,pending.current.id);}catch(storageError){setError((storageError as Error).message);setUncertain(true);}}}
-    finally {sending.current=false;setBusy(false);}
+    const submitted:PendingBilling={requestId:pending.current.id,kind:invoice ? 'payment' : 'invoice',invoiceId:invoice?.id || null,body:payload};
+    try {savePendingBilling(sessionStorage,scope,submitted);sent=true;
+      const saved=await request(invoice ? `/api/invoices/${encodeURIComponent(invoice.id)}/payments` : '/api/invoices',{...payload,requestId:submitted.requestId});
+      await accepted(saved,submitted,invoiceId=>{clearPendingBilling(sessionStorage,scope,submitted.requestId,submitted);pending.current=null;setUncertain(false);setConfirmed(false);setValues(old=>({...old,amount:'',reference:'',note:''}));onSaved(invoiceId);});}
+    catch(err) {if(!current())return;const unknown=retainStaffRequest(uncertain,sent,err instanceof StaffRequestError?err:null);setError((err as Error).message);setUncertain(unknown);if(sent && !unknown && pending.current) {try {clearPendingBilling(sessionStorage,scope,submitted.requestId,submitted);}catch(storageError){setError((storageError as Error).message);setUncertain(true);}}}
+    finally {sending.current=false;if(current())setBusy(false);}
   };
   const locked=busy || uncertain;
-  useEffect(()=>{onLocked(locked);},[locked,onLocked]);
+  useEffect(()=>{if(current())onLocked(locked);},[locked,onLocked,current]);
   return <form className="billing-form" onSubmit={event=>void submit(event)}>
     <h2>{invoice ? 'Record received payment' : 'Create invoice'}</h2>
     {!invoice && <><label className="field">Invoice number<input value={values.number} onChange={event=>update('number',event.target.value)} pattern="[A-Z0-9][A-Z0-9-]{0,39}" maxLength={40} disabled={locked} required/></label><label className="field">Description<textarea value={values.description} onChange={event=>update('description',event.target.value)} maxLength={500} disabled={locked} required/></label><div className="billing-dates"><label className="field">Issue date<input type="date" value={values.issueDate} onChange={event=>update('issueDate',event.target.value)} disabled={locked} required/></label><label className="field">Due date<input type="date" min={values.issueDate} value={values.dueDate} onChange={event=>update('dueDate',event.target.value)} disabled={locked} required/></label></div></>}
@@ -50,21 +57,24 @@ function LedgerForm({invoice,onSaved,onLocked,scope}:{invoice?:Invoice;onSaved:(
     <div className="notice notice-blue"><FileText size={20}/><span>{invoice ? 'This records a payment; it does not charge a card.' : 'Issued invoices cannot be edited or deleted.'}</span></div>
   </form>;
 }
-function VoidControl({invoice,scope,disabled,onSaved,onLocked}:{invoice:Invoice;scope:string;disabled:boolean;onSaved:(id:string,message?:string)=>void;onLocked:(value:boolean)=>void}) {
+function VoidControl({invoice,scope,disabled,onSaved,onLocked,authority}:{invoice:Invoice;scope:string;disabled:boolean;onSaved:(id:string,message?:string)=>void;onLocked:(value:boolean)=>void;authority:StaffRequestAuthority}) {
+  const {request,current,accepted}=useBillingRequests(authority);
   const dialog=useRef<HTMLDialogElement>(null),sending=useRef(false),pending=useRef<{key:string;id:string}|null>(null);
   const [reason,setReason]=useState(''),[confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[uncertain,setUncertain]=useState(false),[error,setError]=useState('');
   const locked=busy || uncertain;
   const submit=async(event:FormEvent)=>{
-    event.preventDefault();if(sending.current || !confirmed || reason.trim().length<3) return;
+    event.preventDefault();if(sending.current || !confirmed || reason.trim().length<3 || !current()) return;
     const body={number:invoice.number,amount:(invoice.amountCents/100).toFixed(2),reason:reason.trim(),confirmed:true},key=JSON.stringify(body);
     if(pending.current?.key!==key) pending.current={key,id:crypto.randomUUID()};
     sending.current=true;setBusy(true);onLocked(true);setError('');let sent=false;
-    try {savePendingBilling(sessionStorage,scope,{kind:'void',invoiceId:invoice.id,requestId:pending.current.id,body});sent=true;
-      await request(`/invoices/${invoice.id}/void`,{...body,requestId:pending.current.id});clearPendingBilling(sessionStorage,scope,pending.current.id);pending.current=null;setUncertain(false);dialog.current?.close();onLocked(false);onSaved(invoice.id,'Invoice voided.');}
-    catch(err) {let unknown=sent && (!(err instanceof BillingError) || err.uncertain);setError((err as Error).message);
-      if(sent && !unknown && pending.current) {try {clearPendingBilling(sessionStorage,scope,pending.current.id);}catch(storageError){setError((storageError as Error).message);unknown=true;}}
+    const submitted:PendingBilling={kind:'void',invoiceId:invoice.id,requestId:pending.current.id,body};
+    try {savePendingBilling(sessionStorage,scope,submitted);sent=true;
+      const result=await request(`/api/invoices/${encodeURIComponent(invoice.id)}/void`,{...body,requestId:submitted.requestId});
+      await accepted(result,submitted,id=>{clearPendingBilling(sessionStorage,scope,submitted.requestId,submitted);pending.current=null;setUncertain(false);dialog.current?.close();onLocked(false);onSaved(id,'Invoice voided.');});}
+    catch(err) {if(!current())return;let unknown=retainStaffRequest(uncertain,sent,err instanceof StaffRequestError?err:null);setError((err as Error).message);
+      if(sent && !unknown && pending.current) {try {clearPendingBilling(sessionStorage,scope,submitted.requestId,submitted);}catch(storageError){setError((storageError as Error).message);unknown=true;}}
       setUncertain(unknown);onLocked(unknown);}
-    finally {sending.current=false;setBusy(false);}
+    finally {sending.current=false;if(current())setBusy(false);}
   };
   return <><button className="button outline" disabled={disabled || busy} onClick={()=>{setReason('');setConfirmed(false);setError('');dialog.current?.showModal();}}><Ban size={18}/>Void invoice</button>
     <dialog ref={dialog} className="withdraw-dialog" aria-labelledby="void-title" aria-describedby="void-impact" onKeyDown={keepDialogFocus} onCancel={event=>{if(sending.current || uncertain) event.preventDefault();}} onClose={()=>setConfirmed(false)}>
@@ -76,21 +86,23 @@ function VoidControl({invoice,scope,disabled,onSaved,onLocked}:{invoice:Invoice;
       </form>
     </dialog></>;
 }
-function Recovery({pending,scope,onSaved}:{pending:PendingBilling;scope:string;onSaved:(id:string)=>void}) {
+function Recovery({pending,scope,onSaved,authority}:{pending:PendingBilling;scope:string;onSaved:(id:string)=>void;authority:StaffRequestAuthority}) {
+  const {request,current:sessionCurrent,complete,accepted}=useBillingRequests(authority),saved=useRef(onSaved);saved.current=onSaved;
   const [error,setError]=useState(''),[checking,setChecking]=useState(true),[busy,setBusy]=useState(false),[receiptMissing,setReceiptMissing]=useState(false),[refresh,setRefresh]=useState(0);
   const sending=useRef(false);
-  useEffect(()=>{let current=true;setChecking(true);setReceiptMissing(false);setError('');
-    request<{found:boolean;kind?:string;invoiceId?:string}>(`/invoices/requests/${pending.kind}/${pending.requestId}`).then(receipt=>{
-      if(!current) return;if(receipt.found) {if(receipt.kind!==pending.kind || !receipt.invoiceId || (pending.invoiceId && receipt.invoiceId!==pending.invoiceId)) throw new Error('Billing receipt does not match this request.');clearPendingBilling(sessionStorage,scope,pending.requestId);onSaved(receipt.invoiceId);}else setReceiptMissing(true);
-    }).catch(err=>{if(current) setError((err as Error).message);}).finally(()=>{if(current) setChecking(false);});
-    return ()=>{current=false;};
-  },[pending,scope,refresh,onSaved]);
-  const retry=async()=>{if(sending.current) return;sending.current=true;setBusy(true);setError('');
-    try {const saved=await request<{id:string}>(pending.kind==='invoice' ? '/invoices' : `/invoices/${pending.invoiceId}/${pending.kind==='void' ? 'void' : 'payments'}`,{...pending.body,requestId:pending.requestId});clearPendingBilling(sessionStorage,scope,pending.requestId);onSaved(pending.invoiceId || saved.id);}
-    catch(err){setError((err as Error).message);}finally{sending.current=false;setBusy(false);}};
+  useEffect(()=>{const controller=new AbortController();setChecking(true);setReceiptMissing(false);setError('');
+    request(`/api/invoices/requests/${pending.kind}/${pending.requestId}`,undefined,controller.signal).then(receipt=>complete(receipt,value=>checkedBillingReceipt(value,pending),id=>{
+      if(controller.signal.aborted)return;if(id){clearPendingBilling(sessionStorage,scope,pending.requestId,pending);saved.current(id);}else setReceiptMissing(true);
+    })).catch(err=>{if(!controller.signal.aborted && sessionCurrent())setError((err as Error).message);}).finally(()=>{if(!controller.signal.aborted && sessionCurrent())setChecking(false);});
+    return ()=>controller.abort();
+  },[pending,scope,refresh,request,sessionCurrent]);
+  const retry=async()=>{if(sending.current || !receiptMissing || !sessionCurrent()) return;sending.current=true;setBusy(true);setError('');
+    try {const result=await request(pending.kind==='invoice' ? '/api/invoices' : `/api/invoices/${pending.invoiceId}/${pending.kind==='void' ? 'void' : 'payments'}`,{...pending.body,requestId:pending.requestId});await accepted(result,pending,id=>{clearPendingBilling(sessionStorage,scope,pending.requestId,pending);saved.current(id);});}
+    catch(err){if(sessionCurrent())setError((err as Error).message);}finally{sending.current=false;if(sessionCurrent())setBusy(false);}};
   return <section className="panel billing-new"><h2>Recover pending billing record</h2><p>{pending.kind==='payment' ? 'A payment save was interrupted. No second payment will be entered.' : pending.kind==='void' ? 'An invoice void was interrupted.' : 'An invoice save was interrupted.'}</p><dl className="billing-details"><dt>Amount (USD)</dt><dd>{String(pending.body.amount)}</dd><dt>{pending.kind==='payment' ? 'Payment reference' : 'Invoice number'}</dt><dd>{String(pending.body.number || pending.body.reference)}</dd><dt>{pending.kind==='invoice' ? 'Description' : pending.kind==='void' ? 'Reason for voiding' : 'Date received'}</dt><dd>{String(pending.body.description || pending.body.reason || pending.body.date)}</dd></dl>{checking && <p role="status">Checking saved receipt...</p>}{error && <p role="alert" className="record-error">{error}</p>}<div className="actions"><button className="button outline" disabled={busy || checking} onClick={()=>setRefresh(value=>value+1)}><RefreshCw size={18}/>Check saved record</button>{receiptMissing && <button className="button primary" disabled={busy || checking} onClick={()=>void retry()}><Save size={18}/>{busy ? 'Saving...' : 'Retry unchanged request'}</button>}</div></section>;
 }
-export function BillingPage({id,newInvoice,owner,navigate,scope}:{id?:string;newInvoice?:boolean;owner:boolean;navigate:(path:string)=>void;scope?:string|null}) {
+export function BillingPage({id,newInvoice,owner,navigate,scope,authority}:{id?:string;newInvoice?:boolean;owner:boolean;navigate:(path:string)=>void;scope?:string|null;authority:StaffRequestAuthority}) {
+  const {request,current:sessionCurrent}=useBillingRequests(authority);
   const [search,setSearch]=useState(''),[status,setStatus]=useState('all'),[page,setPage]=useState(1),[paymentPage,setPaymentPage]=useState(1),[refresh,setRefresh]=useState(0);
   const [list,setList]=useState<Page|null>(null),[detail,setDetail]=useState<Detail|null>(null),[error,setError]=useState(''),[loading,setLoading]=useState(true),[message,setMessage]=useState('');
   const [formLocked,setFormLocked]=useState(false);
@@ -101,27 +113,27 @@ export function BillingPage({id,newInvoice,owner,navigate,scope}:{id?:string;new
   useEffect(()=>{heading.current?.focus();},[id,newInvoice,pending]);
   useEffect(()=>{
     if(newInvoice) {setLoading(false);return;}
-    let current=true;setLoading(true);setError('');
-    request<Page|Detail>(id ? `/invoices/${encodeURIComponent(id)}?page=${paymentPage}&pageSize=20` : `/invoices?${query}`)
-      .then(data=>{if(current) {if(id) setDetail(data as Detail);else setList(data as Page);}})
-      .catch(err=>{if(current) {setError((err as Error).message);setDetail(null);setList(null);}})
-      .finally(()=>{if(current) setLoading(false);});
-    return ()=>{current=false;};
-  },[id,newInvoice,query,paymentPage,refresh]);
-  const saved=(invoiceId:string,message='Payment record saved.')=>{setFormLocked(false);if(newInvoice) navigate(`settings/invoices/${invoiceId}`);else {setMessage(message);setPaymentPage(1);setRefresh(value=>value+1);heading.current?.focus();}};
-  const recovered=useRef((invoiceId:string)=>{setPending(null);setMessage('Saved billing receipt recovered.');if(id===invoiceId) {setRefresh(value=>value+1);heading.current?.focus();}else navigate(`settings/invoices/${invoiceId}`);}).current;
+    const controller=new AbortController();setLoading(true);setError('');setDetail(null);setList(null);
+    request<Page|Detail>(id ? `/api/invoices/${encodeURIComponent(id)}?page=${paymentPage}&pageSize=20` : `/api/invoices?${query}`,undefined,controller.signal)
+      .then(data=>{if(!controller.signal.aborted && sessionCurrent()) {if(id) setDetail(data as Detail);else setList(data as Page);}})
+      .catch(err=>{if(!controller.signal.aborted && sessionCurrent()) {setError((err as Error).message);setDetail(null);setList(null);}})
+      .finally(()=>{if(!controller.signal.aborted && sessionCurrent())setLoading(false);});
+    return ()=>controller.abort();
+  },[id,newInvoice,query,paymentPage,refresh,request,sessionCurrent]);
+  const saved=(invoiceId:string,message='Payment record saved.')=>{if(!sessionCurrent())return;setFormLocked(false);if(newInvoice) navigate(`settings/invoices/${invoiceId}`);else {setMessage(message);setPaymentPage(1);setRefresh(value=>value+1);heading.current?.focus();}};
+  const recovered=(invoiceId:string)=>{if(!sessionCurrent())return;setPending(null);setMessage('Saved billing receipt recovered.');if(id===invoiceId) {setRefresh(value=>value+1);heading.current?.focus();}else navigate(`settings/invoices/${invoiceId}`);};
   if(recoveryError) return <p role="alert" className="record-error">{recoveryError}</p>;
-  if(pending && scope) return <><div className="page-header"><h1 ref={heading} tabIndex={-1}>Pending billing record</h1></div><Recovery pending={pending} scope={scope} onSaved={recovered}/></>;
+  if(pending && scope) return <><div className="page-header"><h1 ref={heading} tabIndex={-1}>Pending billing record</h1></div><Recovery authority={authority} pending={pending} scope={scope} onSaved={recovered}/></>;
   return <>
     {(id || newInvoice) && <button className="back-link" disabled={formLocked} onClick={()=>navigate('settings/invoices')}><ArrowLeft size={18}/>Invoices</button>}
     <div className="page-header"><div><h1 ref={heading} tabIndex={-1}>{newInvoice ? 'New invoice' : id ? `Invoice ${detail?.number || ''}` : 'Invoices & payment records'}</h1><p>Manual billing for this workspace.</p></div><div className="actions">{!newInvoice && <button className="icon-button" title="Refresh invoices" aria-label="Refresh invoices" disabled={formLocked} onClick={()=>setRefresh(value=>value+1)}><RefreshCw size={19}/></button>}{!id && !newInvoice && owner && <button className="button primary" onClick={()=>navigate('settings/invoices/new')}><Plus size={18}/>New invoice</button>}</div></div>
     {message && <p role="status"><CheckCircle2 size={18}/>{message}</p>}
-    {newInvoice ? owner && scope ? <section className="panel billing-new"><LedgerForm onSaved={saved} onLocked={setFormLocked} scope={scope}/></section> : <p role="alert">Your role cannot create invoices.</p> : <>
+    {newInvoice ? owner && scope ? <section className="panel billing-new"><LedgerForm authority={authority} onSaved={saved} onLocked={setFormLocked} scope={scope}/></section> : <p role="alert">Your role cannot create invoices.</p> : <>
       {!id && <div className="filters"><label className="search-box"><span className="sr-only">Search invoices</span><input value={search} maxLength={80} placeholder="Search invoices" onChange={event=>{setSearch(event.target.value);setPage(1);}}/></label><label className="select-label">Payment status<select value={status} onChange={event=>{setStatus(event.target.value);setPage(1);}}><option value="all">All statuses</option><option value="unpaid">Awaiting payment</option><option value="partial">Partially paid</option><option value="paid">Paid</option><option value="void">Voided</option></select></label></div>}
       {loading ? <p role="status">Loading invoices...</p> : error ? <p role="alert" className="record-error">{error}</p> : id && detail ? <div className="billing-grid"><div>
-        <section className="panel"><h2>Invoice preview</h2><div className="billing-issuer"><strong>{detail.issuerName}</strong><span>{detail.siteName}</span></div><dl className="billing-details"><dt>Invoice</dt><dd>{detail.number}</dd><dt>Issue date</dt><dd>{detail.issueDate}</dd><dt>Due date</dt><dd>{detail.dueDate}</dd><dt>Status</dt><dd><Status value={detail.status}/></dd></dl><p className="billing-description">{detail.description}</p><dl className="billing-totals"><dt>Total (USD)</dt><dd>{money(detail.amountCents)}</dd><dt>Paid</dt><dd>{money(detail.paidCents)}</dd>{detail.voidedCents>0 && <><dt>Voided amount</dt><dd>{money(detail.voidedCents)}</dd></>}<dt>Outstanding balance</dt><dd>{money(detail.balanceCents)}</dd></dl>{detail.voidRecord && <div className="notice"><Ban size={20}/><span><strong>Invoice voided</strong><br/>{detail.voidRecord.reason}<br/>{detail.voidRecord.createdAt}</span></div>}<a className="button outline full" href={`/api/invoices/${detail.id}/download`} download={`invoice-${detail.number}.html`}><Download size={18}/>Download invoice</a>{owner && scope && detail.status==='unpaid' && <VoidControl invoice={detail} scope={scope} disabled={formLocked} onSaved={saved} onLocked={setFormLocked}/>}</section>
+        <section className="panel"><h2>Invoice preview</h2><div className="billing-issuer"><strong>{detail.issuerName}</strong><span>{detail.siteName}</span></div><dl className="billing-details"><dt>Invoice</dt><dd>{detail.number}</dd><dt>Issue date</dt><dd>{detail.issueDate}</dd><dt>Due date</dt><dd>{detail.dueDate}</dd><dt>Status</dt><dd><Status value={detail.status}/></dd></dl><p className="billing-description">{detail.description}</p><dl className="billing-totals"><dt>Total (USD)</dt><dd>{money(detail.amountCents)}</dd><dt>Paid</dt><dd>{money(detail.paidCents)}</dd>{detail.voidedCents>0 && <><dt>Voided amount</dt><dd>{money(detail.voidedCents)}</dd></>}<dt>Outstanding balance</dt><dd>{money(detail.balanceCents)}</dd></dl>{detail.voidRecord && <div className="notice"><Ban size={20}/><span><strong>Invoice voided</strong><br/>{detail.voidRecord.reason}<br/>{detail.voidRecord.createdAt}</span></div>}<a className="button outline full" href={`/api/invoices/${detail.id}/download`} download={`invoice-${detail.number}.html`}><Download size={18}/>Download invoice</a>{owner && scope && detail.status==='unpaid' && <VoidControl authority={authority} invoice={detail} scope={scope} disabled={formLocked} onSaved={saved} onLocked={setFormLocked}/>}</section>
         <section className="panel"><h2>Payment records ({detail.paymentCount})</h2>{detail.payments.length ? <ul className="billing-payments">{detail.payments.map(item=><li key={item.id}><div><strong>{item.reference}</strong><span>{item.date}</span>{item.note && <p>{item.note}</p>}</div><strong>{money(item.amountCents)}</strong></li>)}</ul> : <p>No received payments recorded.</p>}<Pager page={paymentPage} total={detail.paymentCount} setPage={setPaymentPage} label="payments"/></section>
-      </div><aside className="panel">{owner && scope && detail.balanceCents>0 ? <LedgerForm key={detail.id} invoice={detail} onSaved={saved} onLocked={setFormLocked} scope={scope}/> : <><h2>{detail.status==='void' ? 'Voided invoice' : detail.balanceCents===0 ? 'Paid in full' : 'Read-only record'}</h2><p>{detail.status==='void' ? 'No payments can be recorded on this invoice.' : detail.balanceCents===0 ? 'No outstanding balance.' : 'Only the workspace owner can record payments.'}</p></>}<div className="notice notice-blue"><FileText size={20}/><span>Invoice and payment records are retained as immutable evidence.</span></div></aside></div> : list && <section className="panel"><h2>Invoices ({list.total})</h2>{list.items.length ? <div className="billing-list">{list.items.map(item=><button className="billing-row" key={item.id} onClick={()=>navigate(`settings/invoices/${item.id}`)}><span><strong>{item.number}</strong><small>{item.issueDate} · Due {item.dueDate}</small><span>{item.description}</span></span><span><strong>{money(item.amountCents)}</strong><small>{money(item.balanceCents)} outstanding</small><Status value={item.status}/></span><ChevronRight size={18}/></button>)}</div> : <p>{page>Math.ceil(list.total/20) && page>1 ? 'This page is no longer available.' : 'No invoices match these filters.'}</p>}<Pager page={page} total={list.total} setPage={setPage} label="invoices"/></section>}
+      </div><aside className="panel">{owner && scope && detail.balanceCents>0 ? <LedgerForm authority={authority} key={detail.id} invoice={detail} onSaved={saved} onLocked={setFormLocked} scope={scope}/> : <><h2>{detail.status==='void' ? 'Voided invoice' : detail.balanceCents===0 ? 'Paid in full' : 'Read-only record'}</h2><p>{detail.status==='void' ? 'No payments can be recorded on this invoice.' : detail.balanceCents===0 ? 'No outstanding balance.' : 'Only the workspace owner can record payments.'}</p></>}<div className="notice notice-blue"><FileText size={20}/><span>Invoice and payment records are retained as immutable evidence.</span></div></aside></div> : list && <section className="panel"><h2>Invoices ({list.total})</h2>{list.items.length ? <div className="billing-list">{list.items.map(item=><button className="billing-row" key={item.id} onClick={()=>navigate(`settings/invoices/${item.id}`)}><span><strong>{item.number}</strong><small>{item.issueDate} · Due {item.dueDate}</small><span>{item.description}</span></span><span><strong>{money(item.amountCents)}</strong><small>{money(item.balanceCents)} outstanding</small><Status value={item.status}/></span><ChevronRight size={18}/></button>)}</div> : <p>{page>Math.ceil(list.total/20) && page>1 ? 'This page is no longer available.' : 'No invoices match these filters.'}</p>}<Pager page={page} total={list.total} setPage={setPage} label="invoices"/></section>}
     </>}
     <div className="notice"><TriangleAlert size={20}/><span>Payment records are entered manually. They are not bank or provider reconciliation.</span></div>
   </>;

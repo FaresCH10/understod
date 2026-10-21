@@ -22,6 +22,8 @@ import {resolveRecordingAdapter} from '../server/ai/recording-config.mjs';
 import {receiveRecording} from '../server/postgres/recordings.mjs';
 import {requestWorkerDeletion} from '../server/postgres/deletions.mjs';
 import {rehearsalTasks} from '../server/postgres/runtime.mjs';
+import {getProcessingProvenance} from '../server/postgres/processing-provenance.mjs';
+import {checkedProviderHistory} from '../src/processing-provenance.ts';
 
 const env={UNDERSTOOD_TIER:'local',UNDERSTOOD_AI_MODE:'synthetic',UNDERSTOOD_DATA_CLASS:'synthetic',UNDERSTOOD_ACCESS_MODE:'credential',UNDERSTOOD_PROVIDER_TESTS:'gemini-free',GEMINI_API_KEY:'synthetic-test-key'};
 const verification=()=>({requestId:randomUUID(),kind:'provider-verification',maxRequests:1,confirmed:true});
@@ -131,6 +133,13 @@ test('scheduled recording pipeline meters allowlisted transcription and assessme
     await assert.rejects(run(client=>client.query('UPDATE recordings SET transcript=NULL WHERE id=$1',[receipt.id])),/Provider transcript is immutable/);
     const requests=(await run(client=>client.query('SELECT state,cleanup FROM provider_requests ORDER BY created_at'))).rows;
     assert.equal(requests.length,6);assert.equal(requests.filter(row=>row.state==='uncertain').length,1);assert.equal(requests.filter(row=>row.cleanup).length,1);
+    const historyOwner={principal_type:'staff',principal_id:'maya',org_id:'cedar',site_id:'beirut',role:'owner'},voiceJob=`response_transcription:${receipt.id}`;
+    const history=await getProcessingProvenance(pool,historyOwner,voiceJob);assert.equal(history.total,3);
+    checkedProviderHistory(history,{id:voiceJob,kind:'response_transcription',publication_id:'p',publication_version:1,assignment_id:'a'},1);
+    assert.equal(history.items.filter(row=>row.resultReference==='transcription').length,1);assert.equal(history.items.filter(row=>row.resultReference==='assessment').length,1);
+    assert.equal(history.items.filter(row=>row.currentRun).length,0);assert.equal(new Set(history.items.map(row=>row.runId)).size,2);
+    assert.equal(history.items.flatMap(row=>row.requests).length,6);assert.equal(history.items.flatMap(row=>row.requests).filter(row=>row.state==='uncertain').length,1);
+    assert.doesNotMatch(JSON.stringify(history),/Finished blue|unfinished yellow|input_hash|claim_token|lease_token|sha256|synthetic-test-key|snapshot_json|storage/);
     const second=await receiveRecording(pool,worker,'a',randomUUID(),audio,storage);pauseUpload=true;await task();
     assert.equal(calls,9);assert.equal(assessmentCalls,2);assert.equal(await task(),false);
     const stopped=(await run(client=>client.query('SELECT status,transcript FROM recordings WHERE id=$1',[second.id]))).rows[0];
@@ -167,6 +176,8 @@ test('allowlisted synthetic source uses tenant and global quotas; pause blocks n
     await processOneSourceAudio(pool,adapter,storage);assert.equal(calls,0);
     await saveProviderPolicy(pool,identity,policy('cedar',1,8));await run(client=>client.query('UPDATE source_audio_requests SET retry_at=NULL'));
     await processOneSourceAudio(pool,adapter,storage);assert.equal(calls,4);assert.equal((await getSourceAudioReceipt(pool,owner,first.requestId)).status,'transcribed');
+    const sourceHistory=await getProcessingProvenance(pool,owner,`source_transcription:${first.requestId}`);assert.equal(sourceHistory.total,1);assert.equal(sourceHistory.items[0].resultReference,'transcription');
+    assert.equal(sourceHistory.items[0].requests.length,4);assert.equal(sourceHistory.items[0].requests.filter(row=>row.cleanup).length,1);
     const second=await upload();pause=true;await processOneSourceAudio(pool,adapter,storage);assert.equal(calls,7);
     const requests=(await run(client=>client.query('SELECT cleanup,state FROM provider_requests ORDER BY created_at,sequence'))).rows;
     assert.equal(requests.at(-1).cleanup,true);assert.equal(requests.at(-1).state,'accepted');

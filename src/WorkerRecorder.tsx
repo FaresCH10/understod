@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Mic, Play, RotateCcw, Send, Square, Trash2,RefreshCw,Save } from 'lucide-react';
 import { createRecordingSubmission } from './audio';
 import type { RecordingSubmission } from './audio';
-import { recordingNotice,conversationRecordingNotice,siteNoticeText } from './recording-notice';
+import { recordingNotice,conversationRecordingNotice,staffCaseRecordingNotice,siteNoticeText,conversationRecorderText } from './recording-notice';
 import {workerRecordingNotice} from './notice-recovery';
 import {recorderHasUnsent} from './worker-unsent';
 import {WorkerAudioRetryError,workerAudioRetryText} from './worker-audio-retry';
@@ -14,7 +14,12 @@ const labels = {
   ur: { title: 'میرا جواب ریکارڈ کریں', requesting: 'مائیکروفون کا انتظار ہے...', stop: 'ریکارڈنگ بند کریں', cancel: 'منسوخ کریں', preview: 'بھیجنے سے پہلے سنیں', again: 'دوبارہ ریکارڈ کریں', discard: 'حذف کریں', send: 'ریکارڈنگ بھیجیں', uploading: 'بھیجا جا رہا ہے...', received: 'ریکارڈنگ موصول ہو گئی', permission: 'مائیکروفون دستیاب نہیں۔ براؤزر کی اجازت دیکھیں یا جواب لکھیں۔', empty: 'آواز ریکارڈ نہیں ہوئی۔ دوبارہ کوشش کریں۔', interrupted: 'ریکارڈنگ غیر متوقع طور پر رک گئی۔ دوبارہ ریکارڈ کریں۔', format: 'ریکارڈنگ تیار نہیں ہو سکی۔ دوبارہ ریکارڈ کریں یا جواب لکھیں۔', error: 'وصولی کی تصدیق نہیں ہو سکی۔ پیش نظارہ موجود ہے؛ دوبارہ کوشش میں وہی ارسال شناخت استعمال ہو گی۔' },
 };
 
-export type RecorderProps = { language: 'en' | 'ar' | 'ur'; noticeLanguage?:'en'|'ar'|'ur'; purpose?:'answer'|'help'|'reply'; retryOnly?:boolean; localOnlyNotice?:OfflineNotice; synthetic: boolean; disabled:boolean; saveAllowed:boolean;onSave:(bytes:Uint8Array,id:string,capturedAt:string)=>Promise<void>; onSend: (bytes: Uint8Array, submissionId: string) => Promise<void>;onUnsavedChange:(unsaved:boolean)=>void };
+export const staffRecorderText={
+  en:{title:'Record in-person clarification',preview:'Listen before saving',send:'Save private recording',received:'Private recording saved',permission:'Microphone is unavailable. Check browser permission or add written resolution notes instead.',format:'Recording could not be prepared. Record again or add written notes.',error:'Save receipt is unconfirmed. Keep this preview and check the private recording receipt.'},
+  ar:{title:'تسجيل توضيح حضوري',preview:'استمع قبل الحفظ',send:'حفظ التسجيل الخاص',received:'تم حفظ التسجيل الخاص',permission:'الميكروفون غير متاح. تحقق من إذن المتصفح أو أضف ملاحظات حل مكتوبة بدلًا من ذلك.',format:'تعذر تجهيز التسجيل. سجّل مجددًا أو أضف ملاحظات مكتوبة.',error:'استلام الحفظ غير مؤكد. احتفظ بهذه المعاينة وتحقق من استلام التسجيل الخاص.'},
+  ur:{title:'بالمشافہ وضاحت ریکارڈ کریں',preview:'محفوظ کرنے سے پہلے سنیں',send:'نجی ریکارڈنگ محفوظ کریں',received:'نجی ریکارڈنگ محفوظ ہو گئی',permission:'مائیکروفون دستیاب نہیں۔ براؤزر کی اجازت چیک کریں یا تحریری حل کے نوٹس شامل کریں۔',format:'ریکارڈنگ تیار نہیں ہو سکی۔ دوبارہ ریکارڈ کریں یا تحریری نوٹس شامل کریں۔',error:'محفوظ ہونے کی تصدیق نہیں ہو سکی۔ پیش نظارہ برقرار رکھیں اور نجی ریکارڈنگ کی وصولی چیک کریں۔'},
+};
+export type RecorderProps = { language: 'en' | 'ar' | 'ur'; noticeLanguage?:'en'|'ar'|'ur'; purpose?:'answer'|'help'|'reply'|'in_person'; loadSiteNotice?:(language:'en'|'ar'|'ur',signal:AbortSignal)=>Promise<string|null>; retryOnly?:boolean; localOnlyNotice?:OfflineNotice; synthetic: boolean; disabled:boolean; saveAllowed:boolean;onSave:(bytes:Uint8Array,id:string,capturedAt:string)=>Promise<void>; onSend: (bytes: Uint8Array, submissionId: string) => Promise<void>;onUnsavedChange:(unsaved:boolean)=>void };
 type Phase = 'idle' | 'requesting' | 'recording' | 'preview' | 'uploading' | 'received';
 
 function stopTracks(live: MediaStream | null) {
@@ -27,10 +32,10 @@ async function decodeRecording(source: Blob): Promise<AudioBuffer> {
   finally { await context.close().catch(() => {}); }
 }
 
-export function WorkerRecorder({ language, noticeLanguage=language, purpose='answer', retryOnly=false, localOnlyNotice, synthetic,disabled,saveAllowed,onSave, onSend,onUnsavedChange }: RecorderProps) {
-  const t = labels[language];
-  const notice = purpose==='answer'?recordingNotice(language, synthetic):conversationRecordingNotice(language);
-  const title=purpose==='answer'?t.title:purpose==='help'?{en:'Record a help request',ar:'سجّل طلب مساعدة',ur:'مدد کی درخواست ریکارڈ کریں'}[language]:{en:'Record a reply',ar:'سجّل ردًا',ur:'جواب کا پیغام ریکارڈ کریں'}[language];
+export function WorkerRecorder({ language, noticeLanguage=language, purpose='answer', loadSiteNotice, retryOnly=false, localOnlyNotice, synthetic,disabled,saveAllowed,onSave, onSend,onUnsavedChange }: RecorderProps) {
+  const t = {...labels[language],...(purpose==='in_person'?staffRecorderText[language]:purpose==='help'||purpose==='reply'?conversationRecorderText[language]:{})};
+  const notice = purpose==='answer'?recordingNotice(language, synthetic):purpose==='in_person'?staffCaseRecordingNotice(language):conversationRecordingNotice(language);
+  const title=purpose==='answer'||purpose==='in_person'?t.title:purpose==='help'?{en:'Record a help request',ar:'سجّل طلب مساعدة',ur:'مدد کی درخواست ریکارڈ کریں'}[language]:{en:'Record a reply',ar:'سجّل ردًا',ur:'جواب کا پیغام ریکارڈ کریں'}[language];
   const siteText=siteNoticeText[language];
   const [siteNotice,setSiteNotice]=useState<string|null>(null),[noticeReady,setNoticeReady]=useState(false),[noticeError,setNoticeError]=useState(false),[noticeTick,setNoticeTick]=useState(0);
   const [phase, setPhase] = useState<Phase>('idle');
@@ -92,12 +97,13 @@ export function WorkerRecorder({ language, noticeLanguage=language, purpose='ans
       try{setSiteNotice(workerRecordingNotice(localOnlyNotice,noticeLanguage));setNoticeReady(true);}catch{setNoticeError(true);}
       return()=>controller.abort();
     }
-    fetch('/api/privacy/recording-notice',{credentials:'include',signal:controller.signal}).then(async response=>{
-      if(!response.ok)throw Error();const value=workerRecordingNotice(await response.json(),noticeLanguage);
+    if(!loadSiteNotice){setNoticeError(true);return()=>controller.abort();}
+    const load=loadSiteNotice(noticeLanguage,controller.signal);
+    load.then(value=>{
       if(!controller.signal.aborted){setSiteNotice(value);setNoticeReady(true);}
     }).catch(()=>{if(!controller.signal.aborted)setNoticeError(true);});
     return()=>controller.abort();
-  },[noticeLanguage,noticeTick,localOnlyNotice]);
+  },[noticeLanguage,noticeTick,localOnlyNotice,loadSiteNotice,purpose]);
   useEffect(() => {
     if (phase !== 'recording') return;
     const timer = window.setInterval(() => {
@@ -245,10 +251,10 @@ export function WorkerRecorder({ language, noticeLanguage=language, purpose='ans
     </aside>
     {phase === 'idle' && <button className="button primary full" disabled={disabled || !noticeReady} onClick={start}><Mic size={20} />{title}</button>}
     {phase === 'requesting' && <><p role="status">{t.requesting}</p><button className="button outline full" onClick={cancelRequest}>{t.cancel}</button></>}
-    {phase === 'recording' && <><div className="record-timer" role="status">{String(Math.floor(seconds / 60)).padStart(2, '0')}:{String(seconds % 60).padStart(2, '0')}</div><button className="button primary full" onClick={stop}><Square size={18} />{t.stop}</button><button className="button outline full" onClick={discard}><Trash2 size={18} />{t.discard}</button></>}
-    {(phase === 'preview' || phase === 'uploading') && <><label className="field">{t.preview}<audio controls src={url} /></label>{localOnlyNotice===undefined && <button className="button primary full" disabled={disabled || saving || phase === 'uploading' || !noticeReady} onClick={send}><Send size={18} />{phase === 'uploading' ? t.uploading : t.send}</button>}{purpose==='answer' && <button className="button outline full" disabled={disabled || saving || !saveAllowed || phase === 'uploading' || !noticeReady} onClick={()=>void savePreview()}><Save size={18}/>{saveText.save}</button>}<button className="button outline full" disabled={disabled || retryOnly || saving || phase === 'uploading' || !noticeReady} onClick={start}><RotateCcw size={18} />{t.again}</button><button className="button subtle full" disabled={retryOnly || saving || phase === 'uploading'} onClick={discard}><Trash2 size={18} />{t.discard}</button></>}
+    {phase === 'recording' && <><div className="record-timer" role="status">{String(Math.floor(seconds / 60)).padStart(2, '0')}:{String(seconds % 60).padStart(2, '0')}</div><button className="button primary full" onClick={stop}><Square size={18} />{t.stop}</button>{purpose!=='in_person'&&<button className="button outline full" onClick={discard}><Trash2 size={18} />{t.discard}</button>}</>}
+    {(phase === 'preview' || phase === 'uploading') && <><label className="field">{t.preview}<audio controls src={url} /></label>{localOnlyNotice===undefined && <button className="button primary full" disabled={disabled || saving || phase === 'uploading' || !noticeReady} onClick={send}><Send size={18} />{phase === 'uploading' ? t.uploading : t.send}</button>}{purpose==='answer' && <button className="button outline full" disabled={disabled || saving || !saveAllowed || phase === 'uploading' || !noticeReady} onClick={()=>void savePreview()}><Save size={18}/>{saveText.save}</button>}<button className="button outline full" disabled={disabled || retryOnly || saving || phase === 'uploading' || !noticeReady} onClick={start}><RotateCcw size={18} />{t.again}</button>{purpose!=='in_person'&&<button className="button subtle full" disabled={retryOnly || saving || phase === 'uploading'} onClick={discard}><Trash2 size={18} />{t.discard}</button>}</>}
     {saveStatus && <p role="status">{saveStatus}</p>}
-    {phase === 'received' && <><p className="record-receipt"><Play size={18} />{t.received}</p>{purpose!=='answer' && <button className="button outline full" disabled={disabled} onClick={discard}><Mic size={18}/>{title}</button>}</>}
+    {phase === 'received' && <><p className="record-receipt"><Play size={18} />{t.received}</p>{purpose!=='answer' && <button className="button outline full" disabled={disabled||retryOnly||!noticeReady} onClick={()=>{discard();void start();}}><Mic size={18}/>{title}</button>}</>}
     {error && <p role="alert" className="record-error">{error}</p>}
   </div>;
 }

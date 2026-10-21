@@ -1,0 +1,20 @@
+{
+  "runId": "3f438b0c-a899-420a-b5ed-a51cefef89d0",
+  "startedAt": "2026-10-15T06:00:42.698Z",
+  "productionReady": false,
+  "realData": false,
+  "applicationStorageChanged": false,
+  "kind": "neon-private-storage-synthetic-probe",
+  "targetFingerprint": "832e4d404142e7cf80009e7b21007f66cbe5e9853b2918eb9593dd80536d37c6",
+  "state": "passed",
+  "phase": "completed",
+  "authenticatedRead": true,
+  "anonymousReadDenied": true,
+  "conditionalOverwriteRejected": true,
+  "originalBytesPreserved": true,
+  "cleanup": "removed-from-current-branch",
+  "databaseWrites": 0,
+  "aiProviderCalls": 0,
+  "irreversibleErasureVerified": false,
+  "finishedAt": "2026-10-15T06:00:45.104Z"
+}

@@ -2,7 +2,7 @@ import {CANONICAL_SOURCE,QUESTION,syntheticPrepare} from '../domain.mjs';
 import {inspectWav} from '../audio.mjs';
 import {bundleHash,translatedContent,translationCheck} from './prepared-bundle.mjs';
 
-export const STAGE_FIXTURE_VERSION='provider-stage-fixture-v1';
+export const STAGE_FIXTURE_VERSION='provider-stage-fixture-v3';
 export const STAGE_TESTS=Object.freeze([
   Object.freeze({stage:'translation',language:'ar',maxRequests:2}),
   Object.freeze({stage:'translation',language:'ur',maxRequests:2}),

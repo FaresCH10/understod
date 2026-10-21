@@ -1,51 +1,76 @@
-import {useEffect,useRef,useState,type FormEvent} from 'react';
+import {useEffect,useMemo,useRef,useState,type FormEvent} from 'react';
 import {Building2,Globe,RefreshCw,Save,TriangleAlert,Pencil,ChevronLeft,ChevronRight,Search} from 'lucide-react';
 import {OrganizationSites} from './OrganizationSites';
+import {useStaffRequest,type StaffRequestAuthority} from './useStaffRequest';
+import {completeStaffRequest} from './staff-request';
+import {usePolicySettings,type PolicyDefinition} from './usePolicySettings';
+import {verifyPolicyAcknowledgement} from './policy-state';
+import {checkedWorkspaceContext,readSettingsChange,storeSettingsChange,clearSettingsChange,checkedSettingsReceipt,type SettingsChange} from './workspace-settings-state';
 type SiteContact={id:string;name:string;role:string;available:boolean};
-export type WorkspaceContext={organization:{id:string;name:string;supportEmail:string;revision:number};site:{id:string;name:string;timezone:string;revision:number;generationLanguages:string[];primaryContact:SiteContact|null;deputyContact:SiteContact|null};canWrite:boolean;canWriteSite:boolean};
-class SettingsError extends Error {constructor(message:string,public uncertain=false){super(message);}}
-async function request<T>(path:string,body?:unknown):Promise<T> {
-  let response:Response,data;
-  try {response=await fetch(`/api/settings${path}`,{credentials:'include',...(body ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)} : {})});data=await response.json();}
-  catch {throw new SettingsError(body ? 'Connection interrupted. Retry the unchanged settings request.' : 'Settings could not be loaded.',!!body);}
-  if(!response.ok) throw new SettingsError(data.error || 'Settings request failed',!!body && response.status>=500);return data;
-}
-function SettingsForm({kind,context,onSaved,onLocked,disabled}:{kind:'organization'|'site';context:WorkspaceContext;onSaved:()=>void;onLocked:(value:boolean)=>void;disabled:boolean}) {
-  const current=context[kind],second=kind==='organization' ? context.organization.supportEmail : context.site.timezone;
-  const [editing,setEditing]=useState(false),[name,setName]=useState(current.name),[value,setValue]=useState(second),[confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[uncertain,setUncertain]=useState(false),[error,setError]=useState('');
-  const sending=useRef(false),pending=useRef<{key:string;id:string}|null>(null);
+export type WorkspaceContext={organization:{id:string;name:string;supportEmail:string;revision:number};site:{id:string;name:string;timezone:string;revision:number;generationLanguages:string[];primaryContact:SiteContact|null;deputyContact:SiteContact|null};canWrite:boolean;canWriteSite:boolean;recoveryScope:string|null};
+function SettingsForm({authority,kind,context,onSaved,onLocked,disabled}:{authority:StaffRequestAuthority;kind:'organization'|'site';context:WorkspaceContext;onSaved:()=>void;onLocked:(value:boolean)=>void;disabled:boolean}) {
+  const [loadedContext,setLoadedContext]=useState(context);
+  const current=loadedContext[kind],second=kind==='organization' ? loadedContext.organization.supportEmail : loadedContext.site.timezone;
+  const [editing,setEditing]=useState(false),[name,setName]=useState(current.name),[value,setValue]=useState(second),[confirmed,setConfirmed]=useState(false);
   const [languages,setLanguages]=useState(context.site.generationLanguages);
   const [primary,setPrimary]=useState(context.site.primaryContact),[deputy,setDeputy]=useState(context.site.deputyContact),[contactsReady,setContactsReady]=useState(false);
-  const locked=busy || uncertain,changed=name.trim()!==current.name || value.trim()!==second || (kind==='site' && (JSON.stringify(languages)!==JSON.stringify(context.site.generationLanguages) || (primary?.id ?? null)!==(context.site.primaryContact?.id ?? null) || (deputy?.id ?? null)!==(context.site.deputyContact?.id ?? null)));
+  const {current:isCurrent}=useStaffRequest(authority);
+  const policy=useMemo<PolicyDefinition<{canWrite:boolean;recoveryScope:string|null;context:WorkspaceContext},SettingsChange>>(()=>({
+    endpoint:`/api/settings/${kind}`,loadEndpoint:'/api/settings',receiptEndpoint:`/api/settings/${kind}/receipts`,
+    validate(raw,scope){const value=checkedWorkspaceContext(raw,scope);return {context:value,recoveryScope:value.recoveryScope,canWrite:kind==='organization'?value.canWrite:value.canWriteSite};},
+    read:(storage,scope)=>readSettingsChange(storage,scope,kind),
+    store:(storage,scope,change)=>storeSettingsChange(storage,scope,kind,change),
+    clear:(storage,scope,id,change)=>clearSettingsChange(storage,scope,kind,id,change),
+    acknowledgement:verifyPolicyAcknowledgement,receipt:(value,change)=>checkedSettingsReceipt(value,kind,change)
+  }),[kind]);
+  const {pending,saving:busy,loading,error,saved,refresh:checkReceipt,save}=usePolicySettings(authority,policy,(data,restored)=>{
+    setLoadedContext(data.context);const baseline=data.context[kind];setName(restored?.name ?? baseline.name);
+    setValue(kind==='organization'?restored?.supportEmail ?? data.context.organization.supportEmail:restored?.timezone ?? data.context.site.timezone);
+    setLanguages(restored?.generationLanguages ?? data.context.site.generationLanguages);
+    setPrimary(data.context.site.primaryContact);setDeputy(data.context.site.deputyContact);
+    setConfirmed(false);if(restored)setEditing(true);
+  });
+  const callbacks=useRef({onSaved,onLocked});callbacks.current={onSaved,onLocked};
+  const locked=busy || !!pending || loading,changed=!!pending || name.trim()!==current.name || value.trim()!==second || (kind==='site' && (JSON.stringify(languages)!==JSON.stringify(loadedContext.site.generationLanguages) || (primary?.id ?? null)!==(loadedContext.site.primaryContact?.id ?? null) || (deputy?.id ?? null)!==(loadedContext.site.deputyContact?.id ?? null)));
+  useEffect(()=>{if(isCurrent())callbacks.current.onLocked(editing || !!pending || busy);},[editing,pending,busy,isCurrent]);
+  useEffect(()=>{if(saved && isCurrent() && authority.canMutate()){setEditing(false);setConfirmed(false);callbacks.current.onLocked(false);callbacks.current.onSaved();}},[saved,isCurrent]);
   const contactInvalid=kind==='site' && (!!primary && !primary.available || !!deputy && (!deputy.available || !primary || deputy.id===primary.id));
-  const zones=[...new Set(['UTC',context.site.timezone,...Intl.supportedValuesOf('timeZone')])];
+  const zones=[...new Set(['UTC',loadedContext.site.timezone,...Intl.supportedValuesOf('timeZone')])];
   async function submit(event:FormEvent) {
-    event.preventDefault();if(sending.current || !confirmed || !changed || contactInvalid || (kind==='site' && !contactsReady)) return;
-    const body={revision:current.revision,name:name.trim(),...(kind==='organization' ? {supportEmail:value.trim()} : {timezone:value,generationLanguages:languages,primaryContactId:primary?.id ?? null,deputyContactId:deputy?.id ?? null}),confirmed:true},key=JSON.stringify(body);
-    if(pending.current?.key!==key) pending.current={key,id:crypto.randomUUID()};
-    sending.current=true;setBusy(true);onLocked(true);setError('');
-    try {const result=await request<{revision:number;duplicate:boolean}>(`/${kind}`,{...body,requestId:pending.current.id});if(result.revision!==current.revision+1 || typeof result.duplicate!=='boolean')throw new SettingsError('Settings acknowledgement does not match. Retry the unchanged request.',true);pending.current=null;setUncertain(false);setEditing(false);setConfirmed(false);onLocked(false);onSaved();}
-    catch(err) {const unknown=!(err instanceof SettingsError) || err.uncertain;setUncertain(unknown);onLocked(true);setError((err as Error).message);}
-    finally {sending.current=false;setBusy(false);}
+    event.preventDefault();if(disabled || busy || loading || !confirmed || !changed || !pending && (contactInvalid || kind==='site' && !contactsReady))return;
+    const body:SettingsChange=pending || {requestId:crypto.randomUUID(),revision:current.revision,name:name.trim(),...(kind==='organization'?{supportEmail:value.trim()}:{timezone:value,generationLanguages:languages,primaryContactId:primary?.id ?? null,deputyContactId:deputy?.id ?? null}),confirmed:true};
+    setConfirmed(false);await save(body);
   }
   return <section className="panel workspace-settings-section"><div className="workspace-settings-heading">{kind==='organization' ? <Building2 size={24}/> : <Globe size={24}/>}<h2>{kind==='organization' ? 'Organization' : 'Current site'}</h2></div>
     {editing ? <form onSubmit={event=>void submit(event)}>
       <label className="field">{kind==='organization' ? 'Organization name' : 'Site name'}<input value={name} minLength={2} maxLength={120} disabled={locked} required onChange={event=>{setName(event.target.value);setConfirmed(false);}}/></label>
       {kind==='organization' ? <label className="field">Support contact email (optional)<input type="email" value={value} maxLength={254} disabled={locked} onChange={event=>{setValue(event.target.value);setConfirmed(false);}}/></label> : <label className="field">Site timezone<select value={value} disabled={locked} onChange={event=>{setValue(event.target.value);setConfirmed(false);}}>{zones.map(zone=><option value={zone} key={zone}>{zone}</option>)}</select></label>}
       {kind==='site' && <fieldset className="generation-language-options"><legend>Generation defaults</legend>{[['en','English'],['ar','Arabic'],['ur','Urdu']].map(([code,label])=><label className="billing-confirm" key={code}><input type="checkbox" checked={languages.includes(code)} disabled={locked || code==='en'} onChange={event=>{setLanguages(['en',...['ar','ur'].filter(target=>target===code?event.target.checked:languages.includes(target))]);setConfirmed(false);}}/><span>{label}{code==='en'?' (source)':''}</span></label>)}</fieldset>}
-      {kind==='site' && <SiteContacts primary={primary} deputy={deputy} disabled={locked} onReady={setContactsReady} onChange={(p,d)=>{setPrimary(p);setDeputy(d);setConfirmed(false);}}/>}
+      {kind==='site' && (pending?<dl className="billing-details"><dt>Saved primary contact reference</dt><dd>{pending.primaryContactId ?? 'Not configured'}</dd><dt>Saved deputy contact reference</dt><dd>{pending.deputyContactId ?? 'Not configured'}</dd></dl>:<SiteContacts authority={authority} primary={primary} deputy={deputy} disabled={locked} onReady={setContactsReady} onChange={(p,d)=>{setPrimary(p);setDeputy(d);setConfirmed(false);}}/>)}
       <div className="notice notice-blue"><TriangleAlert size={20}/><span>{kind==='organization' ? 'The organization name and support contact are shared across its sites. Issued invoice labels stay unchanged. Saving a contact does not send an email.' : 'New preparation runs use these generation defaults. Prepared and published versions, active runs and exact-target regeneration keep their languages. Selection does not verify a provider. Existing UTC deadlines and received timestamps stay unchanged.'}</span></div>
-      <label className="billing-confirm"><input type="checkbox" checked={confirmed} disabled={locked || !changed || contactInvalid || (kind==='site' && !contactsReady)} onChange={event=>setConfirmed(event.target.checked)}/><span>{kind==='organization' ? 'I confirm these organization details.' : 'I confirm these site settings.'}</span></label>
-      {error && <p role="alert" className="record-error">{error}</p>}<div className="actions"><button type="button" className="button outline" disabled={locked} onClick={()=>{setEditing(false);setError('');onLocked(false);}}>Cancel</button><button className="button primary" disabled={busy || !confirmed || !changed || contactInvalid || (kind==='site' && !contactsReady)}><Save size={18}/>{busy ? 'Saving...' : uncertain ? 'Retry unchanged request' : 'Save settings'}</button></div>
-    </form> : <><dl className="billing-details"><dt>Name</dt><dd>{current.name}</dd><dt>{kind==='organization' ? 'Support contact' : 'Timezone'}</dt><dd>{second || 'Not configured'}</dd>{kind==='site' && <><dt>Generation defaults</dt><dd>{context.site.generationLanguages.map(code=>({en:'English',ar:'Arabic',ur:'Urdu'}[code] || code)).join(', ')}</dd>{[['Primary contact',context.site.primaryContact],['Deputy contact',context.site.deputyContact]].map(([label,contact])=><ContactDetail key={label as string} label={label as string} contact={contact as SiteContact|null}/>)}</>}<dt>Revision</dt><dd>{current.revision}</dd></dl>{(kind==='organization' ? context.canWrite : context.canWriteSite) && <button className="button outline" disabled={disabled} onClick={()=>{setName(current.name);setValue(second);setLanguages(context.site.generationLanguages);setPrimary(context.site.primaryContact);setDeputy(context.site.deputyContact);setContactsReady(false);setConfirmed(false);setError('');setEditing(true);onLocked(true);}}><Pencil size={18}/>Edit {kind==='organization' ? 'organization' : 'site'}</button>}</>}
+      {pending && <p role="status">The original settings save is unconfirmed. Check its receipt before explicitly retrying.</p>}
+      <label className="billing-confirm"><input type="checkbox" checked={confirmed} disabled={busy || loading || !changed || !pending && (contactInvalid || kind==='site' && !contactsReady)} onChange={event=>setConfirmed(event.target.checked)}/><span>{kind==='organization' ? 'I confirm these organization details.' : 'I confirm these site settings.'}</span></label>
+      {error && <p role="alert" className="record-error">{error}</p>}<div className="actions">{pending && <button type="button" className="button outline" disabled={busy} onClick={checkReceipt}><RefreshCw size={18}/>Check settings receipt</button>}<button type="button" className="button outline" disabled={locked} onClick={()=>{setEditing(false);onLocked(false);}}>Cancel</button><button className="button primary" disabled={disabled || busy || loading || !confirmed || !changed || !pending && (contactInvalid || kind==='site' && !contactsReady)}><Save size={18}/>{busy ? 'Saving...' : pending ? 'Retry unchanged request' : 'Save settings'}</button></div>
+    </form> : <><dl className="billing-details"><dt>Name</dt><dd>{current.name}</dd><dt>{kind==='organization' ? 'Support contact' : 'Timezone'}</dt><dd>{second || 'Not configured'}</dd>{kind==='site' && <><dt>Generation defaults</dt><dd>{loadedContext.site.generationLanguages.map(code=>({en:'English',ar:'Arabic',ur:'Urdu'}[code] || code)).join(', ')}</dd>{[['Primary contact',loadedContext.site.primaryContact],['Deputy contact',loadedContext.site.deputyContact]].map(([label,contact])=><ContactDetail key={label as string} label={label as string} contact={contact as SiteContact|null}/>)}</>}<dt>Revision</dt><dd>{current.revision}</dd></dl>{error && <p role="alert">{error}</p>}{(kind==='organization' ? loadedContext.canWrite : loadedContext.canWriteSite) && <button className="button outline" disabled={disabled || loading} onClick={()=>{setName(current.name);setValue(second);setLanguages(loadedContext.site.generationLanguages);setPrimary(loadedContext.site.primaryContact);setDeputy(loadedContext.site.deputyContact);setContactsReady(false);setConfirmed(false);setEditing(true);onLocked(true);}}><Pencil size={18}/>Edit {kind==='organization' ? 'organization' : 'site'}</button>}</>}
   </section>;
 }
 function ContactDetail({label,contact}:{label:string;contact:SiteContact|null}) {
   return <><dt>{label}</dt><dd dir="auto">{contact?`${contact.name}${contact.available?'':' (unavailable)'}`:'Not configured'}</dd></>;
 }
-function SiteContacts({primary,deputy,disabled,onReady,onChange}:{primary:SiteContact|null;deputy:SiteContact|null;disabled:boolean;onReady:(value:boolean)=>void;onChange:(primary:SiteContact|null,deputy:SiteContact|null)=>void}) {
+function SiteContacts({authority,primary,deputy,disabled,onReady,onChange}:{authority:StaffRequestAuthority;primary:SiteContact|null;deputy:SiteContact|null;disabled:boolean;onReady:(value:boolean)=>void;onChange:(primary:SiteContact|null,deputy:SiteContact|null)=>void}) {
+  const {request,current}=useStaffRequest(authority);
   const [search,setSearch]=useState(''),[page,setPage]=useState(1),[refresh,setRefresh]=useState(0),[data,setData]=useState<{items:SiteContact[];total:number;page:number;pageSize:number}|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState('');
-  useEffect(()=>{let active=true;setLoading(true);setError('');onReady(false);request<{items:SiteContact[];total:number;page:number;pageSize:number}>(`/contacts?${new URLSearchParams({search,page:String(page),pageSize:'10'})}`).then(value=>{if(active){setData(value);onReady(true);}}).catch(err=>{if(active){setData(null);setError(err.message);}}).finally(()=>{if(active)setLoading(false);});return()=>{active=false;};},[search,page,refresh,onReady]);
+  useEffect(()=>{const controller=new AbortController(),live=()=>current() && !controller.signal.aborted;setLoading(true);setError('');onReady(false);
+    request<{items:SiteContact[];total:number;page:number;pageSize:number}>(`/api/settings/contacts?${new URLSearchParams({search,page:String(page),pageSize:'10'})}`,undefined,controller.signal)
+      .then(value=>completeStaffRequest(value,row=>{
+        const result=row as typeof value;
+        if(!result || !Array.isArray(result.items) || result.items.length>10 || !Number.isSafeInteger(result.total) || result.total<0 || result.page!==page || result.pageSize!==10
+          || result.items.some(contact=>!contact || typeof contact.id!=='string' || !contact.id || typeof contact.name!=='string' || !['owner','supervisor'].includes(contact.role) || contact.available!==true
+            || Object.keys(contact).sort().join(',')!=='available,id,name,role') || new Set(result.items.map(contact=>contact.id)).size!==result.items.length)throw Error('Site contacts cannot be verified.');
+        return result;
+      },result=>{setData(result);onReady(true);},live))
+      .catch(err=>{if(live()){setData(null);setError(err.message);}}).finally(()=>{if(live())setLoading(false);});return()=>controller.abort();
+  },[search,page,refresh,onReady,request,current]);
   const options=[...new Map([primary,deputy,...(data?.items || [])].filter((row):row is SiteContact=>!!row).map(row=>[row.id,row])).values()],pages=Math.max(1,Math.ceil((data?.total || 0)/10));
   return <fieldset className="site-contact-options"><legend>Site contacts</legend><label className="field">Search site contacts<span className="search-box"><Search size={18}/><input value={search} maxLength={120} disabled={disabled} onChange={event=>{setSearch(event.target.value);setPage(1);}}/></span></label>
     {loading && <p role="status">Loading site contacts...</p>}{error && <p role="alert">{error}</p>}
@@ -54,13 +79,20 @@ function SiteContacts({primary,deputy,disabled,onReady,onChange}:{primary:SiteCo
     {(!primary && deputy || primary && deputy && primary.id===deputy.id || primary && !primary.available || deputy && !deputy.available) && <p role="alert">Choose an available primary contact and a different deputy, or clear unavailable contacts.</p>}
   </fieldset>;
 }
-export function WorkspaceSettings({onContextChanged,onLifecycleChanged,session}:{onContextChanged:(value:WorkspaceContext)=>void;onLifecycleChanged:()=>void;session:{clientContext:string;expiresAt:string;siteState?:'active'|'archived'}}) {
+export function WorkspaceSettings({authority,onContextChanged,onLifecycleChanged,session}:{authority:StaffRequestAuthority;onContextChanged:(value:WorkspaceContext)=>void;onLifecycleChanged:()=>void;session:{clientContext:string;expiresAt:string;siteState?:'active'|'archived'}}) {
+  const {request,current}=useStaffRequest(authority);
   const [data,setData]=useState<WorkspaceContext|null>(null),[refresh,setRefresh]=useState(0),[loading,setLoading]=useState(true),[error,setError]=useState(''),[message,setMessage]=useState('');
   const [locks,setLocks]=useState({organization:false,site:false,creation:false}),heading=useRef<HTMLHeadingElement>(null);
   useEffect(()=>{heading.current?.focus();},[]);
-  useEffect(()=>{let active=true;setLoading(true);setError('');request<WorkspaceContext>('').then(value=>{if(active) {setData(value);onContextChanged(value);}}).catch(err=>{if(active) setError((err as Error).message);}).finally(()=>{if(active) setLoading(false);});return()=>{active=false;};},[refresh]);
+  const contextCallback=useRef(onContextChanged);contextCallback.current=onContextChanged;
+  useEffect(()=>{const controller=new AbortController(),live=()=>current() && !controller.signal.aborted;setLoading(true);setError('');
+    request<WorkspaceContext>('/api/settings',undefined,controller.signal)
+      .then(value=>completeStaffRequest(value,row=>checkedWorkspaceContext(row,authority.session.staffScope),result=>{setData(result);contextCallback.current(result);},live))
+      .catch(err=>{if(live())setError((err as Error).message);}).finally(()=>{if(live())setLoading(false);});return()=>controller.abort();
+  },[refresh,request,current,authority.session.staffScope]);
   const saved=()=>{setMessage('Workspace settings saved.');setRefresh(value=>value+1);heading.current?.focus();};
+  const lock=(kind:keyof typeof locks,value:boolean)=>{if(!current())return;if(value)setMessage('');setLocks(old=>old[kind]===value?old:{...old,[kind]:value});};
   return <><div className="page-header"><div><h1 ref={heading} tabIndex={-1}>Organization & site</h1><p>{data?.site.name || 'Workspace settings'}</p></div><button className="icon-button" title="Refresh workspace settings" aria-label="Refresh workspace settings" disabled={locks.organization || locks.site || locks.creation} onClick={()=>{setMessage('');setRefresh(value=>value+1);}}><RefreshCw size={20}/></button></div>
-    {message && <p role="status">{message}</p>}{loading ? <p role="status">Loading workspace settings...</p> : error ? <p role="alert" className="record-error">{error}</p> : data && <><div className="workspace-settings-grid"><SettingsForm key={`organization-${data.organization.revision}`} kind="organization" context={data} disabled={locks.site || locks.creation || session.siteState==='archived'} onSaved={saved} onLocked={value=>setLocks(old=>({...old,organization:value}))}/><SettingsForm key={`site-${data.site.revision}`} kind="site" context={data} disabled={locks.organization || locks.creation || session.siteState==='archived'} onSaved={saved} onLocked={value=>setLocks(old=>({...old,site:value}))}/></div>{data.canWrite && <OrganizationSites key={session.clientContext} session={session} timezone={data.site.timezone} disabled={locks.organization || locks.site} onLifecycleChanged={onLifecycleChanged} onLocked={value=>setLocks(old=>({...old,creation:value}))}/>}</>}
+    {message && <p role="status">{message}</p>}{loading ? <p role="status">Loading workspace settings...</p> : error ? <p role="alert" className="record-error">{error}</p> : data && <><div className="workspace-settings-grid"><SettingsForm authority={authority} key="organization" kind="organization" context={data} disabled={locks.site || locks.creation || session.siteState==='archived'} onSaved={saved} onLocked={value=>lock('organization',value)}/><SettingsForm authority={authority} key="site" kind="site" context={data} disabled={locks.organization || locks.creation || session.siteState==='archived'} onSaved={saved} onLocked={value=>lock('site',value)}/></div>{data.canWrite && <OrganizationSites authority={authority} key={session.clientContext} session={session} timezone={data.site.timezone} disabled={locks.organization || locks.site} onLifecycleChanged={onLifecycleChanged} onLocked={value=>lock('creation',value)}/>}</>}
   </>;
 }

@@ -1,0 +1,18 @@
+{
+  "checkpoint":"worker-playback-controls-local",
+  "date":"2026-10-16",
+  "overallEstimatePercent":73,
+  "taskEstimatePercent":80,
+  "productionVerdict":false,
+  "cleanRun":"5b3c6dbb-7d19-4c6c-95c0-e3cfbaa4b496",
+  "cleanExec":11196,"cleanExitCode":0,
+  "tests":{"total":1195,"passed":1191,"failed":0,"nativeOnlySkipped":4,"durationMs":294312.5675},
+  "source":{"files":844,"unchanged":true,"sha256":"cddc523e3a1a7146c754a5ac0f59c2f9642b6af5408b5905898b602671cc78e1"},
+  "evaluations":{"contract":43,"pipeline":10,"scriptedRequests":24,"externalRequests":0},
+  "rejectedFunctionalCandidate":{"run":"e48e8105-4be9-4df3-9d29-ac8b82571a39","cleanExitCode":0,"browserFailure":"seekable range zero; replay and keyboard seeking ineffective","fixture":8254,"fixtureExitCode":0},
+  "browserChecks":["native-play-pause","finite-duration","positive-actual-seek-range","keyboard-End-and-ArrowRight","replay-reset","speed-1.5","body-question-exclusivity","Enter-text-disclosure","private-read-failure","explicit-independent-reload","media-elements-removed-on-navigation"],
+  "responsive":{"languages":["en","ar","ur"],"actualWidths":[320,390,768,1440],"documentAndPlayerOverflow":false},
+  "fixture":{"memoryOnly":true,"port":3216,"exec":24792,"exitCode":0,"audioReads":12,"writes":0,"attempts":0,"externalCalls":0,"briefingsUnchanged":true,"publicationsUnchanged":true,"ownedTabsClosed":true,"viewportReset":true},
+  "preservationArtifact":"clean-backup-preservation-aff05c1b-1bd1-4f28-aa92-4e5f53587feb.json",
+  "remaining":["primary-first-saved-work-placement","slider-focus-spacing","full-reference-comparison","independent-language-review","assistive-technology","real-phone-and-acoustics","actual-speech-quality","native-and-hosted-acceptance"]
+}

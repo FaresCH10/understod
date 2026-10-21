@@ -1,4 +1,4 @@
-import {createGeminiAdapter,GEMINI_MODELS} from './gemini.mjs';
+import {createGeminiAdapter,GEMINI_MODELS,GEMINI_ASSESSMENT_VERSION} from './gemini.mjs';
 import {transcriptionProvenance} from './audio-provenance.mjs';
 
 export function resolveRecordingAdapter(env=process.env,{fetchImpl=fetch}={}) {
@@ -18,7 +18,7 @@ export function resolveRecordingAdapter(env=process.env,{fetchImpl=fetch}={}) {
   return Object.freeze({provenance:Object.freeze({dataClass:'synthetic',adapter:'gemini-recording-allowlist-v1'}),
     transcriptionProvenance:transcriptionProvenance('gemini-recording-allowlist-v1',GEMINI_MODELS.transcription),
     assessmentProvenance:Object.freeze({adapter:'gemini-recording-assessment-v1',dataClass:'synthetic',model:GEMINI_MODELS.text,
-      promptVersion:'gemini-assessment-v1',schemaVersion:'gemini-assessment-v1'}),
+      promptVersion:GEMINI_ASSESSMENT_VERSION,schemaVersion:GEMINI_ASSESSMENT_VERSION}),
     transcriptionModel:GEMINI_MODELS.transcription,assessmentModel:GEMINI_MODELS.text,
     permitsRecording:adapter.permitsSourceAudio,transcribe:adapter.transcribe,assess:adapter.assess,
     withJournal:requestJournal=>{

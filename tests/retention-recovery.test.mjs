@@ -11,7 +11,7 @@ test('retention reload recovery isolates scope and verifies the original immutab
   assert.deepEqual(readPendingRetention(storage,'actor-site-a'),change);
   assert.throws(()=>storePendingRetention(storage,'actor-site-a',{...change,audioDays:30}),/Resolve/);
   assert.throws(()=>verifyRetentionReceipt({requestId:change.requestId,revision:5,request:{...change,audioDays:30}},change),/cannot be verified/);
-  verifyRetentionReceipt({requestId:change.requestId,revision:5,request:change},change);
+  verifyRetentionReceipt({requestId:change.requestId,revision:5,request:{revision:4,audioDays:7,confirmed:true}},change);
   assert.throws(()=>clearPendingRetention(storage,'actor-site-a',randomUUID()),/changed/);
   clearPendingRetention(storage,'actor-site-a',change.requestId);
   assert.equal(readPendingRetention(storage,'actor-site-a'),null);

@@ -1,0 +1,113 @@
+[
+  {
+    "body": 465,
+    "controls": [
+      {
+        "client": 123,
+        "left": 226.3125,
+        "name": "Clarifications",
+        "right": 349.25,
+        "scroll": 123
+      },
+      {
+        "client": 88,
+        "left": 354.25,
+        "name": "People",
+        "right": 442.109375,
+        "scroll": 88
+      },
+      {
+        "client": 127,
+        "left": 447.109375,
+        "name": "AI processing",
+        "right": 574.546875,
+        "scroll": 127
+      },
+      {
+        "client": 93,
+        "left": 579.546875,
+        "name": "Reports",
+        "right": 672.609375,
+        "scroll": 93
+      },
+      {
+        "client": 95,
+        "left": 677.609375,
+        "name": "Settings",
+        "right": 772.171875,
+        "scroll": 95
+      },
+      {
+        "client": 331,
+        "left": 131.828125,
+        "name": "Use current deadline as starting point",
+        "right": 465,
+        "scroll": 331
+      }
+    ],
+    "scroll": 465,
+    "width": 320
+  },
+  {
+    "body": 465,
+    "controls": [
+      {
+        "client": 88,
+        "left": 354.25,
+        "name": "People",
+        "right": 442.109375,
+        "scroll": 88
+      },
+      {
+        "client": 127,
+        "left": 447.109375,
+        "name": "AI processing",
+        "right": 574.546875,
+        "scroll": 127
+      },
+      {
+        "client": 93,
+        "left": 579.546875,
+        "name": "Reports",
+        "right": 672.609375,
+        "scroll": 93
+      },
+      {
+        "client": 95,
+        "left": 677.609375,
+        "name": "Settings",
+        "right": 772.171875,
+        "scroll": 95
+      },
+      {
+        "client": 331,
+        "left": 131.828125,
+        "name": "Use current deadline as starting point",
+        "right": 465,
+        "scroll": 331
+      }
+    ],
+    "scroll": 465,
+    "width": 390
+  },
+  {
+    "body": 753,
+    "controls": [
+      {
+        "client": 95,
+        "left": 677.609375,
+        "name": "Settings",
+        "right": 772.171875,
+        "scroll": 95
+      }
+    ],
+    "scroll": 753,
+    "width": 768
+  },
+  {
+    "body": 1425,
+    "controls": [],
+    "scroll": 1425,
+    "width": 1440
+  }
+]

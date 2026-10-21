@@ -64,12 +64,12 @@ function checkedBundle(value:unknown,now:number):OfflineBundle {
   for(const item of bundle.briefings){
     if(!exact(item,'answerUntil,audio,canRecord,expiresAt,notice,question,savedAt,scope,text,title') || !exact(item.scope,'assignmentId,language,publicationId,version')
       || !text(item.scope.assignmentId,100) || !text(item.scope.publicationId,100) || !Number.isSafeInteger(item.scope.version) || item.scope.version<1
-      || item.scope.language!==session.language || !text(item.title,300) || !text(item.text,20000) || !text(item.question,2000)
+      || !['en','ar','ur'].includes(item.scope.language) || !text(item.title,300) || !text(item.text,20000) || !text(item.question,2000)
       || !iso(item.savedAt) || !iso(item.expiresAt) || Date.parse(item.savedAt)>now || Date.parse(item.expiresAt)<=Date.parse(item.savedAt)
       || Date.parse(item.expiresAt)>Math.min(Date.parse(session.expiresAt!),Date.parse(item.savedAt)+86400000)
       || item.answerUntil!==null && !iso(item.answerUntil) || typeof item.canRecord!=='boolean' || !exact(item.audio,'body,question')
       || !exact(item.notice,'configured,language,notice,revision') || ids.has(item.scope.assignmentId))throw new OfflineError('invalid');
-    workerRecordingNotice(item.notice,item.scope.language);ids.add(item.scope.assignmentId);
+    try{workerRecordingNotice(item.notice,item.scope.language);}catch{throw new OfflineError('invalid');}ids.add(item.scope.assignmentId);
     for(const audio of [item.audio.body,item.audio.question])if(audio!==null)offlineAudioBytes(audio);
   }
   return bundle;
@@ -157,7 +157,7 @@ export async function fetchOfflineBriefing(send:typeof fetch,session:PageSession
       const {response,bytes}=await get(value.speechUrls[part],offlineLimits.audioBytes);if(response.headers.get('content-type')?.split(';')[0]!=='audio/wav')throw new OfflineError('invalid');
       audio[part]=base64(bytes);offlineAudioBytes(audio[part]);
     }
-    const notice=await json('/api/privacy/recording-notice');workerRecordingNotice(notice,scope.language);
+    const notice=await json(`/api/privacy/recording-notice?${new URLSearchParams({language:scope.language})}`);workerRecordingNotice(notice,scope.language);
     const last=detail(await json(path));if(JSON.stringify(last.content)!==JSON.stringify(value.content) || (last.repeatRequest?.id ?? null)!==(value.repeatRequest?.id ?? null))throw new OfflineError('session');await identity();guard();
     const savedAt=new Date(now()).toISOString(),expiresAt=new Date(Math.min(Date.parse(expected.expiresAt!),now()+86400000)).toISOString();
     const item:OfflineBriefing={scope:{...scope},title:last.content?.title,text:last.content?.text,question:last.content?.question,savedAt,expiresAt,answerUntil:last.repeatRequest?.dueAt ?? last.dueAt ?? null,canRecord:workerResponseState(last,now()).canRespond,

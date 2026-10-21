@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import assert from 'node:assert/strict';
 import {randomUUID,createHash} from 'node:crypto';
 import {PGlite} from '@electric-sql/pglite';

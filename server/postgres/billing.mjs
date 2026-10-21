@@ -1,6 +1,8 @@
 import {domainTransaction,requirePrincipal,domainAudit} from './domain.mjs';
 import {responseRead} from './responses.mjs';
 import {invoiceInput,paymentInput,voidInput,invoiceFilters,paymentFilters,invoiceTotals,invoiceView,sameBillingRequest,billingRequestId} from '../billing-input.mjs';
+import {createHash} from 'node:crypto';
+import {billingRequestSignature} from '../billing-input.mjs';
 
 const paid=`COALESCE((SELECT SUM(p.amount_cents) FROM invoice_payments p WHERE p.invoice_id=i.id AND p.org_id=i.org_id AND p.site_id=i.site_id),0)`;
 const voided=`CASE WHEN EXISTS(SELECT 1 FROM invoice_voids v WHERE v.invoice_id=i.id AND v.org_id=i.org_id AND v.site_id=i.site_id) THEN i.amount_cents ELSE 0 END`;
@@ -90,9 +92,9 @@ export async function billingReceipt(pool,session,kind,id,{schema='public'}={}) 
   return domainTransaction(pool,schema,async client=>{
     await requirePrincipal(client,session,'staff',['owner']);
     await client.query('SELECT pg_advisory_xact_lock(hashtext($1))',[`${kind}:${session.org_id}:${session.site_id}:${id}`]);
-    const row=(await client.query(kind==='invoice' ? 'SELECT id,id AS "invoiceId" FROM invoices WHERE id=$1 AND org_id=$2 AND site_id=$3 AND created_by=$4'
-      : kind==='void' ? 'SELECT id,invoice_id AS "invoiceId" FROM invoice_voids WHERE id=$1 AND org_id=$2 AND site_id=$3 AND created_by=$4'
-      : 'SELECT id,invoice_id AS "invoiceId" FROM invoice_payments WHERE id=$1 AND org_id=$2 AND site_id=$3 AND recorded_by=$4',[id,session.org_id,session.site_id,session.principal_id])).rows[0];
-    return row ? {found:true,kind,...row} : {found:false};
+    const row=(await client.query(kind==='invoice' ? 'SELECT id,id AS "invoiceId",request_json FROM invoices WHERE id=$1 AND org_id=$2 AND site_id=$3 AND created_by=$4'
+      : kind==='void' ? 'SELECT id,invoice_id AS "invoiceId",request_json FROM invoice_voids WHERE id=$1 AND org_id=$2 AND site_id=$3 AND created_by=$4'
+      : 'SELECT id,invoice_id AS "invoiceId",request_json FROM invoice_payments WHERE id=$1 AND org_id=$2 AND site_id=$3 AND recorded_by=$4',[id,session.org_id,session.site_id,session.principal_id])).rows[0];
+    return row ? {found:true,kind,id:row.id,invoiceId:row.invoiceId,requestHash:createHash('sha256').update(billingRequestSignature(kind,row.id,row.invoiceId,row.request_json)).digest('hex')} : {found:false};
   });
 }

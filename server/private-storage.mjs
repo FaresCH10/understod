@@ -3,6 +3,7 @@ import { inspectWav, savePrivateWav, readPrivateWav, removePrivateWav,privateWav
 import {createHash} from 'node:crypto';
 import {mkdir,open,unlink,stat,readdir} from 'node:fs/promises';
 import {join} from 'node:path';
+import {validateNeonStorageConfig,neonStorageClientOptions} from './neon-storage-config.mjs';
 
 const MAX_BYTES = 44 + 90 * 16000 * 2;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -33,7 +34,7 @@ function verifyBytes(recording, bytes) {
   return info;
 }
 
-// Local storage remains available for the loopback app; R2 is selected explicitly.
+// Cloud storage is selected explicitly; loopback storage stays local.
 export function localAudioStore(root) {
   return {
     async isEmpty(){try{return (await readdir(root)).length===0;}catch(error){if(error.code==='ENOENT')return true;throw error;}},
@@ -77,6 +78,21 @@ export function r2AudioStore(config, { client } = {}) {
     credentials: { accessKeyId: config.accessKeyId, secretAccessKey: config.secretAccessKey },
     maxAttempts: 2,
   });
+  return privateS3AudioStore(config,s3);
+}
+
+export function neonAudioStore(config,{client}={}) {
+  const checked=validateNeonStorageConfig(config);
+  return privateS3AudioStore(checked,client || new S3Client(neonStorageClientOptions(checked)));
+}
+
+export function hostedPrivateAudioStore(config,options={}) {
+  if(config.storageAdapter==='neon')return neonAudioStore(config.storageConfig,options);
+  if(config.storageAdapter==='r2')return r2AudioStore(config.storageConfig,options);
+  throw Error('Invalid hosted private storage adapter');
+}
+
+function privateS3AudioStore(config,s3) {
   const send = async (command) => {
     try { return await s3.send(command, { abortSignal: AbortSignal.timeout(30_000) }); }
     catch { throw new Error('Private storage operation failed'); }

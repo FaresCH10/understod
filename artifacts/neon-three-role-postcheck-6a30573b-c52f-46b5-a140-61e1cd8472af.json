@@ -1,0 +1,14 @@
+{
+  "runId": "6a30573b-c52f-46b5-a140-61e1cd8472af",
+  "checkedAt": "2026-10-16T11:12:11.202Z",
+  "scope": "read-only-post-terminal-resource-absence-and-original-outside-baseline",
+  "state": "passed",
+  "cloudWrites": 0,
+  "testRerun": false,
+  "productionReady": false,
+  "remainingDatabases": 0,
+  "remainingRoles": 0,
+  "remainingSessions": 0,
+  "outsideCatalogAndAclSha256": "a58095ce27284a2bac2b9361d37c1d43765e3d26af90dc8451115adef15265c3",
+  "originalOutsideBaselineUnchanged": true
+}

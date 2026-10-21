@@ -12,8 +12,9 @@ export function getGeneratedRetention(pool,session,{schema='public'}={}) {
     const counts=(await client.query(`SELECT count(*)::integer AS retired,count(*) FILTER(WHERE r.bundle_id IS NOT NULL)::integer AS removed
       FROM generated_audio_retirements t LEFT JOIN generated_audio_removals r ON r.bundle_id=t.bundle_id
       WHERE t.org_id=$1 AND t.site_id=$2`,[session.org_id,session.site_id])).rows[0];
+    const scope=staffRecoveryScope(session);
     return {revision:policy?.revision ?? 0,days:policy?.days ?? null,canWrite:['owner','administrator'].includes(session.role),
-      recoveryScope:`generated:${staffRecoveryScope(session)}`,options:textRetentionDays,completed:counts,
+      recoveryScope:scope?`generated:${scope}`:null,options:textRetentionDays,completed:counts,
       limitations:'Generated body/question speech expires from its verified storage date, including current published and draft versions. Playback and publishing expired bundles stop before retryable object removal. Text, immutable publication snapshots, assignment history and provenance remain. Disabling this policy cannot undo retirement or cancel already queued cleanup. Backups and device copies have separate lifecycles.'};
   });
 }

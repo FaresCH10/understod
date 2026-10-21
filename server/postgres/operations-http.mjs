@@ -1,12 +1,12 @@
 import {send,readJson} from '../http.mjs';
 import {sessionCookie,clearSessionCookie} from '../auth.mjs';
 import {operatorHttpError} from '../operator-input.mjs';
-import {OPERATOR_COOKIE,authenticateOperator,requireOperator,operatorSession,revokeOperator} from './operators.mjs';
+import {OPERATOR_COOKIE,HOSTED_OPERATOR_COOKIE,authenticateOperator,requireOperator,operatorSession,revokeOperator} from './operators.mjs';
 import {operationsOverview,operationsTenants,operationsAudit,saveOperatorControl,operatorReceipt,operationsJobs,retryOperationsJob} from './operations.mjs';
 import {readProviderControls,saveProviderPolicy,runProviderVerification} from './provider-controls.mjs';
 import {operationsTenantAccess} from './operator-tenant-access.mjs';
 
-export async function handleOperationsRoute(pool,req,res,url,{enabled=false,schema='public',providerVerification,pipeline,secure=false,clientAddress=req.socket.remoteAddress}={}) {
+export async function handleOperationsRoute(pool,req,res,url,{enabled=false,schema='public',providerVerification,workerVerification=false,pipeline,secure=false,clientAddress=req.socket.remoteAddress}={}) {
   const path=url.pathname;
   if(!path.startsWith('/api/ops/'))return false;
   try {
@@ -15,11 +15,11 @@ export async function handleOperationsRoute(pool,req,res,url,{enabled=false,sche
         path==='/api/ops/session' && req.method==='GET'?{available:false,authenticated:false}:{error:'Not found'});
       return true;
     }
-    const options={schema};
+    const cookieName=secure?HOSTED_OPERATOR_COOKIE:OPERATOR_COOKIE,options={schema,cookieName};
     if(path==='/api/ops/login' && req.method==='POST') {
       if(url.search)throw Error('Invalid operator login');
       const login=await authenticateOperator(pool,await readJson(req,4096),clientAddress,options);
-      send(res,200,operatorSession(login.session),{'set-cookie':sessionCookie(login.token,login.maxSeconds,{name:OPERATOR_COOKIE,secure})});return true;
+      send(res,200,operatorSession(login.session),{'set-cookie':sessionCookie(login.token,login.maxSeconds,{name:cookieName,secure})});return true;
     }
     if(path==='/api/ops/session' && req.method==='GET') {
       if(url.search)throw Error('Invalid operator filters');
@@ -30,7 +30,7 @@ export async function handleOperationsRoute(pool,req,res,url,{enabled=false,sche
     const actor=await requireOperator(pool,req,options);
     if(path==='/api/ops/logout' && req.method==='POST') {
       if(url.search)throw Error('Invalid operator command');
-      await revokeOperator(pool,actor,options);send(res,200,{ok:true},{'set-cookie':clearSessionCookie({name:OPERATOR_COOKIE,secure})});return true;
+      await revokeOperator(pool,actor,options);send(res,200,{ok:true},{'set-cookie':clearSessionCookie({name:cookieName,secure})});return true;
     }
     if(path==='/api/ops/overview' && req.method==='GET') {
       if(url.search)throw Error('Invalid operator filters');
@@ -47,7 +47,7 @@ export async function handleOperationsRoute(pool,req,res,url,{enabled=false,sche
       send(res,200,await operationsJobs(pool,actor,Object.fromEntries(url.searchParams),options));return true;
     }
     if(path==='/api/ops/providers' && req.method==='GET') {
-      send(res,200,await readProviderControls(pool,actor,providerVerification,Object.fromEntries(url.searchParams),{...options,pipeline}));return true;
+      send(res,200,await readProviderControls(pool,actor,providerVerification,Object.fromEntries(url.searchParams),{...options,pipeline,workerVerification}));return true;
     }
     if(path==='/api/ops/providers/policy' && req.method==='POST') {
       if(url.search)throw Error('Invalid operator command');
@@ -56,7 +56,7 @@ export async function handleOperationsRoute(pool,req,res,url,{enabled=false,sche
     }
     if(path==='/api/ops/providers/verify' && req.method==='POST') {
       if(url.search)throw Error('Invalid operator command');
-      const body=await readJson(req,4096),result=await runProviderVerification(pool,actor,body,providerVerification,options);
+      const body=await readJson(req,4096),result=await runProviderVerification(pool,actor,body,providerVerification,{...options,workerVerification,expectedFingerprint:req.headers['x-verification-config']});
       send(res,200,{requestId:body.requestId,clientContext:operatorSession(actor).clientContext,...result});return true;
     }
     if(path==='/api/ops/jobs/retry' && req.method==='POST') {

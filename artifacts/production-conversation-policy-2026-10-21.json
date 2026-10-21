@@ -1,0 +1,136 @@
+{
+  "checkedAt": "2026-10-21T12:43:15.667Z",
+  "scope": "generated-composer-ui-limit-and-worker-lock-locale",
+  "productionReady": false,
+  "progress": {
+    "overall": 81,
+    "range": [
+      74,
+      87
+    ],
+    "staffRecording": 90,
+    "staffCaseDetailAndRecovery": 92,
+    "workerVoiceRecovery": 90,
+    "wholeApplicationLocalization": 60,
+    "method": "Engineering estimates, not test pass rates or production readiness."
+  },
+  "clean": {
+    "id": "326a25fd-ae72-4fc7-b2b2-74d604e9a039",
+    "startedAt": "2026-10-21T12:37:20.231Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:37:21.681Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:37:29.086Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:37:29.087Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:37:33.225Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:37:33.226Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:42:29.559Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:42:29.561Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:42:30.249Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-21T12:42:30.250Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T12:42:34.102Z"
+      }
+    ],
+    "source": {
+      "files": 913,
+      "sha256": "52a317b8689c526b9ad15d9fc711201970f2a3774aab6a0682194c1799469eb2"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-21T12:42:34.697Z",
+    "parentSession": 47743,
+    "parentExitObserved": true,
+    "parentExitCode": 0,
+    "summary": {
+      "tests": 1335,
+      "pass": 1331,
+      "fail": 0,
+      "skipped": 4
+    }
+  },
+  "sourceNow": {
+    "files": 913,
+    "sha256": "52a317b8689c526b9ad15d9fc711201970f2a3774aab6a0682194c1799469eb2",
+    "matchesClean": true
+  },
+  "browser": {
+    "staff": "artifacts/conversation-policy-browser-2026-10-21.json",
+    "worker": "artifacts/worker-lock-language-browser-2026-10-21.json",
+    "assetsMatchClean": true,
+    "fixtures": [
+      {
+        "parent": 47993,
+        "pid": 5260,
+        "exitCodeObserved": true,
+        "exitCode": 0
+      },
+      {
+        "parent": 3552,
+        "pid": 5764,
+        "exitCodeObserved": true,
+        "exitCode": 0
+      }
+    ]
+  },
+  "evaluations": {
+    "contractCases": 43,
+    "pipelineChecks": 10,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-20268ea9-c3db-4720-aac9-f7db5448d073.json",
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 87,
+    "filesScanned": 6626,
+    "configuredSecretMatches": 0
+  },
+  "limits": [
+    "New generated-draft UI500 only; ordinary/captured-command API contract remains1000",
+    "Queue-only synthetic job, not live provider or delivered follow-up acceptance",
+    "Resize-transition screenshot and early selector wait retained but not accepted",
+    "Not full matched-reference, independent language/AT, real phone/mic, current native/hosted or real-worker privacy acceptance"
+  ],
+  "cloudDatabaseStorageChanged": false,
+  "realWorkerDataUsed": false,
+  "actualMicrophoneUsed": false,
+  "liveProviderMailCalls": 0,
+  "billingChanged": false,
+  "deployment": false,
+  "nextTask": "Continue larger remaining interface and localization requirements locally; required external release gates remain separate."
+}

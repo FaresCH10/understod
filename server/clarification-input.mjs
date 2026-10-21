@@ -7,6 +7,16 @@ export function helpInput(assignmentId,input) {
   return {requestId:input.requestId,text:input.text.trim()};
 }
 
+export function workerHelpHistoryInput(assignmentId,input={}) {
+  const invalid=()=>{throw new Error('Invalid help history request');};
+  if(!id(assignmentId) || /[\u0000-\u0020\u007f]/.test(assignmentId) || !input || typeof input!=='object'
+    || Array.isArray(input) || Object.keys(input).some(key=>!['page','pageSize'].includes(key)))return invalid();
+  const {page=1,pageSize=5}=input;
+  if(!['string','number'].includes(typeof page) || !/^[1-9][0-9]{0,3}$/.test(String(page)) || Number(page)>5000
+    || ![5,'5'].includes(pageSize))return invalid();
+  return {page:Number(page),pageSize:5};
+}
+
 export function clarificationFilters(filters={}) {
   if (!filters || typeof filters!=='object' || Array.isArray(filters) || Object.keys(filters).some((key) => !['search','status','owner','overdue','page','pageSize'].includes(key))) throw new Error('Invalid clarification filter');
   const {search='',status='all',owner='all',overdue='all'}=filters,page=Number(filters.page ?? 1),pageSize=Number(filters.pageSize ?? 20);

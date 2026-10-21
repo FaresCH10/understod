@@ -1,5 +1,5 @@
 import {createHash,randomUUID} from 'node:crypto';
-import {withTransaction} from './db.mjs';
+import {withTransaction,acquirePostgresClient} from './db.mjs';
 import {backupTables,databaseInventory,privateObjectInventory} from './backup.mjs';
 import {bundleHash} from '../ai/prepared-bundle.mjs';
 import {restoreStateHash,validateRestoreReplayState,requireRestorePredecessor} from './restore-replay-state.mjs';
@@ -116,7 +116,7 @@ export async function createRestoreCleanupAccounting({pool,storage,baseline,ledg
     ledgerFingerprint:bundleHash(ledger),predecessor,activationAllowed:false,productionReady:false});
 
   const accountedPool={async connect(){healthy();if(!stage || active)throw Error('Cleanup accounting requires serial scoped transactions');
-    const client=await pool.connect();let begun=false,before,inputs;
+    const client=await acquirePostgresClient(pool);let begun=false,before,inputs;
     return {async query(sql,args){
       if(sql==='ROLLBACK'){try{return await client.query(sql,args);}finally{if(begun){active--;begun=false;}}}
       healthy();
@@ -146,7 +146,7 @@ export async function createRestoreCleanupAccounting({pool,storage,baseline,ledg
         await save('ack',{format:'understood-restore-cleanup-ack-v1',backupId:baseline.id,transitionId,stateSha256:restoreStateHash(state),activationAllowed:false,productionReady:false});
         return result;
       }catch(error){poisoned=true;throw error;}
-    },release(){if(begun)poisoned=true;client.release();}};
+    },release(error){if(begun)poisoned=true;client.release(error);}};
   }};
   const remove=async(original,row)=>{
     healthy();if(active || !removalFamilies[stage] || original && stage!=='sourceAudio')throw Error('Removal outside an accounted cleanup boundary');

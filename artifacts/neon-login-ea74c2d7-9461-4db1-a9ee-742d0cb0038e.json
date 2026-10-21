@@ -1,0 +1,23 @@
+{
+  "startedAt": "2026-10-15T04:37:12.930Z",
+  "updatedAt": "2026-10-15T04:37:21.046Z",
+  "runId": "ea74c2d7-9461-4db1-a9ee-742d0cb0038e",
+  "database": "understood_login_db_ea74c2d794614db1a9ee742d0cb0038e",
+  "role": "understood_login_rt_ea74c2d794614db1a9ee742d0cb0038e",
+  "schema": "understood_test_login_ea74c2d794614db1a9ee742d0cb0038e",
+  "kind": "isolated-direct-login-rehearsal",
+  "state": "failed",
+  "checks": [],
+  "cleanupDatabase": "verified-removed",
+  "cleanupRole": "absent",
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "productionVerdict": false,
+  "phase": "finished",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "failedPhase": "role-creation",
+  "error": "Temporary direct LOGIN rehearsal did not pass.",
+  "sqlState": "XX000",
+  "existingCatalogAndAclUnchanged": true
+}

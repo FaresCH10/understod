@@ -15,13 +15,14 @@ export function readPendingMessage(storage:Store,session:MessageSession,caseId:s
   if(!value || !['hash,id','hash,id,kind'].includes(Object.keys(value).sort().join(',')) || !uuid.test(value.id) || !digest.test(value.hash)
     || (namespace==='message'?('kind' in value && value.kind!=='followup'):!['deadline','disagree'].includes(value.kind)))throw Error('Conversation recovery cannot be verified.');return value;
 }
-export async function retainMessage(storage:Store,session:MessageSession,caseId:string,text:string,kind:'message'|'followup'|'deadline'|'disagree'='message',namespace:'message'|'review'='message') {
-  valid(session,caseId);if(!text.trim() || text.length>1000)throw Error('Invalid conversation request');
+export async function retainMessage(storage:Store,session:MessageSession,caseId:string,text:string,kind:'message'|'followup'|'deadline'|'disagree'='message',namespace:'message'|'review'='message',current:()=>boolean=()=>true) {
+  const expected={...session},assertCurrent=()=>{valid(session,caseId);if(!current()||session.clientContext!==expected.clientContext||session.expiresAt!==expected.expiresAt)throw Error('Conversation session unavailable.');};
+  assertCurrent();if(!text.trim() || text.length>1000)throw Error('Invalid conversation request');
   const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text.trim()));
-  valid(session,caseId);const hash=Array.from(new Uint8Array(bytes),byte=>byte.toString(16).padStart(2,'0')).join('');
+  assertCurrent();const hash=Array.from(new Uint8Array(bytes),byte=>byte.toString(16).padStart(2,'0')).join('');
   const old=readPendingMessage(storage,session,caseId,namespace);
   if(!(namespace==='message'?['message','followup']:['deadline','disagree']).includes(kind) || old && (old.hash!==hash || (old.kind || 'message')!==kind))throw Error('Check the pending receipt, or retry the exact original message.');
-  const value:PendingMessage=old || {id:crypto.randomUUID(),hash,...(kind!=='message'?{kind}:{})},raw=JSON.stringify(value);storage.setItem(key(session,caseId,namespace),raw);
+  const value:PendingMessage=old || {id:crypto.randomUUID(),hash,...(kind!=='message'?{kind}:{})},raw=JSON.stringify(value);assertCurrent();storage.setItem(key(session,caseId,namespace),raw);
   if(storage.getItem(key(session,caseId,namespace))!==raw)throw Error('Conversation recovery storage unavailable. Nothing was sent.');return value;
 }
 export function clearPendingMessage(storage:Store,session:MessageSession,caseId:string,id:string,namespace:'message'|'review'='message') {

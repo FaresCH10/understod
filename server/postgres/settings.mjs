@@ -1,6 +1,7 @@
 import {domainTransaction,requirePrincipal,domainAudit} from './domain.mjs';
 import {responseRead} from './responses.mjs';
-import {settingsInput,sameSettingsRequest,generationLanguages,siteContactFilters,siteContactDto} from '../settings-input.mjs';
+import {settingsInput,settingsRequestId,sameSettingsRequest,generationLanguages,siteContactFilters,siteContactDto} from '../settings-input.mjs';
+import {staffRecoveryScope} from '../staff-input.mjs';
 export async function getDraftLanguageSelection(client,orgId,siteId,briefingId) {
   const latest=(await client.query('SELECT request_json FROM briefing_language_requests WHERE org_id=$1 AND site_id=$2 AND briefing_id=$3 ORDER BY accepted_revision DESC LIMIT 1',[orgId,siteId,briefingId])).rows[0];
   if(latest)return latest.request_json.generationLanguages;
@@ -28,7 +29,15 @@ export function listSiteContacts(pool,session,input={},{schema='public'}={}) {
     return {items,total,page:f.page,pageSize:f.pageSize};});
 }
 export function getSettings(pool,session,{schema='public'}={}) {
-  return responseRead(pool,schema,async client=>{await requirePrincipal(client,session,'staff',['owner','administrator','supervisor','auditor']);return {...await context(client,session),canWrite:session.role==='owner',canWriteSite:['owner','administrator'].includes(session.role)};});
+  return responseRead(pool,schema,async client=>{await requirePrincipal(client,session,'staff',['owner','administrator','supervisor','auditor']);return {...await context(client,session),recoveryScope:staffRecoveryScope(session),canWrite:session.role==='owner',canWriteSite:['owner','administrator'].includes(session.role)};});
+}
+export function settingsReceipt(pool,session,kind,id,{schema='public'}={}){
+  settingsRequestId(id);if(!['organization','site'].includes(kind))throw Error('Invalid settings request');
+  return responseRead(pool,schema,async client=>{
+    await requirePrincipal(client,session,'staff',kind==='site'?['owner','administrator']:['owner']);
+    const row=(await client.query('SELECT * FROM settings_requests WHERE id=$1 AND org_id=$2 AND site_id=$3 AND kind=$4 AND created_by=$5',[id,session.org_id,session.site_id,kind,session.principal_id])).rows[0];
+    return row?{requestId:row.id,kind:row.kind,request:row.request_json,revision:row.revision}:null;
+  });
 }
 export function updateSettings(pool,session,kind,input,{schema='public'}={}) {
   const value=settingsInput(kind,input);
@@ -36,7 +45,7 @@ export function updateSettings(pool,session,kind,input,{schema='public'}={}) {
     await requirePrincipal(client,session,'staff',kind==='site' ? ['owner','administrator'] : ['owner']);
     await client.query('SELECT pg_advisory_xact_lock(hashtext($1))',[`settings:${session.org_id}:${session.site_id}:${input.requestId}`]);
     const old=(await client.query('SELECT * FROM settings_requests WHERE id=$1 AND org_id=$2 AND site_id=$3',[input.requestId,session.org_id,session.site_id])).rows[0];
-    if(old) {if(old.kind!==kind || !sameSettingsRequest(old.request_json,value)) throw new Error('Settings request conflict');return {revision:old.revision,duplicate:true};}
+    if(old) {if(old.created_by!==session.principal_id || old.kind!==kind || !sameSettingsRequest(old.request_json,value)) throw new Error('Settings request conflict');return {revision:old.revision,duplicate:true};}
     if(kind==='organization') await client.query('SELECT id FROM organizations WHERE id=$1 FOR UPDATE',[session.org_id]);
     else await client.query('SELECT id FROM sites WHERE id=$1 AND org_id=$2 FOR UPDATE',[session.site_id,session.org_id]);
     const current=(await context(client,session))[kind];

@@ -1,0 +1,16 @@
+{
+  "dateUtc":"2026-10-13",
+  "requirements":["A06","S34","S42"],
+  "scope":"Billing captured authority, exact canonical-intent receipts and guarded recovery completion",
+  "fullSyntheticSuite":{"testFiles":163,"tests":870,"passed":866,"failed":0,"skipped":4,"exitCode":0,"durationMs":312734.3653,"log":"artifacts/billing-request-suite-2026-10-13.log","qualification":"After all billing source changes","externalDatabaseTestUrlsRemoved":true},
+  "focusedRegression":{"files":["billing","postgres-billing","billing-recovery","briefing-session-context","session-http"],"passed":17,"failed":0,"skipped":0,"exitCode":0,"durationMs":6758.8648},
+  "build":{"exitCode":0,"modules":2039,"entryKb":579.70,"shellFiles":69,"shellMismatches":0,"existingWarningsRemain":true},
+  "protectedDatabase":{"matchingFingerprints":8,"integrity":"ok","foreignKeyViolations":0,"readOnlyVerification":true},
+  "browser":{"newVerdict":false,"passed":false,"reason":"Documentation reload and requested inventory retry failed at Windows runtime startup, CreateProcessSecurityEnvironment 0x80070020","externalDiagnosticsSent":false},
+  "allOwnedCommandsTerminal":true,
+  "originalPreviewRestarted":false,
+  "originalDatabaseMigrated":false,
+  "externalRolloutPerformed":false,
+  "progressEstimates":{"billingBoundary":75,"wholeStaffRequestFencing":60,"staffSessionGuard":65,"overall":60,"overallRange":[55,65]},
+  "productionReady":false
+}

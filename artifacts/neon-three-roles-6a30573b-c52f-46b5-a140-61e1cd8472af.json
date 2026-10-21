@@ -1,0 +1,184 @@
+{
+  "startedAt": "2026-10-16T06:20:56.218Z",
+  "updatedAt": "2026-10-16T06:29:36.284Z",
+  "schemaVersion": "neon-login-rehearsal-v2",
+  "runId": "6a30573b-c52f-46b5-a140-61e1cd8472af",
+  "database": "understood_login_db_6a30573bc52f46b5a14061e1cd8472af",
+  "role": "understood_login_rt_6a30573bc52f46b5a14061e1cd8472af",
+  "schema": "understood_test_login_6a30573bc52f46b5a14061e1cd8472af",
+  "workerRole": "understood_login_wk_6a30573bc52f46b5a14061e1cd8472af",
+  "operatorRole": "understood_login_op_6a30573bc52f46b5a14061e1cd8472af",
+  "kind": "isolated-api-worker-operator-login-rehearsal",
+  "state": "passed",
+  "checks": [
+    "two-independent-verified-tls-application-connections",
+    "actual-application-runtime-permission-gate",
+    "two-independent-verified-tls-worker-connections",
+    "actual-worker-runtime-permission-gate",
+    "two-independent-verified-tls-operator-connections",
+    "actual-operator-runtime-permission-gate",
+    "separate-api-worker-runtime-profile-admission",
+    "wrong-role-startup-rejected-before-heartbeat",
+    "api-publication-submission-and-worker-assessment",
+    "read-only-api-startup-health-and-auth-denials",
+    "worker-billing-operator-and-policy-denials",
+    "runtime-ddl-and-future-object-denials",
+    "mixed-profile-source-fence-with-unchanged-business-inventory",
+    "three-distinct-profiles-and-all-wrong-profile-denials",
+    "operator-worker-api-positive-column-denials",
+    "keyless-reviewed-config-enqueue-original-receipt-and-one-concurrent-claim",
+    "revoked-inflight-approval-cannot-promote-or-replay",
+    "operator-column-drift-rejected-and-restored",
+    "inflight-provider-pause-fences-result-and-new-quota",
+    "configuration-rotation-fences-late-result-and-reviewed-new-command",
+    "expired-original-queued-approval-closes-without-dispatch-or-refund",
+    "disabled-verification-guard-rejects-all-three-profiles-and-restores",
+    "default-heartbeat-real-freshness-and-graceful-drain",
+    "database-heartbeat-failure-blocks-second-dispatch-and-result",
+    "persistent-heartbeat-failure-rejects-startup-and-persists-stopped-failure",
+    "fault-trigger-removed-and-fresh-presence-recovers"
+  ],
+  "cleanupDatabase": "verified-removed",
+  "cleanupRole": "verified-removed",
+  "cleanupWorkerRole": "verified-removed",
+  "cleanupOperatorRole": "verified-removed",
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "productionVerdict": false,
+  "phase": "finished",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "ownership": {
+    "format": "understood-neon-login-ownership-v1",
+    "marker": "Understood synthetic LOGIN 6a30573b-c52f-46b5-a140-61e1cd8472af",
+    "originalOwner": "neondb_owner",
+    "outsideCatalogAndAclSha256": "a58095ce27284a2bac2b9361d37c1d43765e3d26af90dc8451115adef15265c3",
+    "database": {
+      "name": "understood_login_db_6a30573bc52f46b5a14061e1cd8472af",
+      "oid": 114688,
+      "owner": "neondb_owner",
+      "markerObserved": true
+    },
+    "roles": [
+      {
+        "name": "understood_login_rt_6a30573bc52f46b5a14061e1cd8472af",
+        "profile": "application",
+        "expires": "2026-10-16T06:51:02.153Z",
+        "commitAcknowledged": true,
+        "oid": 114689,
+        "markerObserved": true,
+        "memberships": [
+          {
+            "oid": 114690,
+            "roleid": 114689,
+            "member": 16392,
+            "grantor": 10,
+            "admin_option": true,
+            "inherit_option": false,
+            "set_option": false,
+            "member_name": "neondb_owner"
+          }
+        ]
+      },
+      {
+        "name": "understood_login_wk_6a30573bc52f46b5a14061e1cd8472af",
+        "profile": "worker",
+        "expires": "2026-10-16T06:51:02.725Z",
+        "commitAcknowledged": true,
+        "oid": 114691,
+        "markerObserved": true,
+        "memberships": [
+          {
+            "oid": 114692,
+            "roleid": 114691,
+            "member": 16392,
+            "grantor": 10,
+            "admin_option": true,
+            "inherit_option": false,
+            "set_option": false,
+            "member_name": "neondb_owner"
+          }
+        ]
+      },
+      {
+        "name": "understood_login_op_6a30573bc52f46b5a14061e1cd8472af",
+        "profile": "operator",
+        "expires": "2026-10-16T06:51:03.205Z",
+        "commitAcknowledged": true,
+        "oid": 114693,
+        "markerObserved": true,
+        "memberships": [
+          {
+            "oid": 114694,
+            "roleid": 114693,
+            "member": 16392,
+            "grantor": 10,
+            "admin_option": true,
+            "inherit_option": false,
+            "set_option": false,
+            "member_name": "neondb_owner"
+          }
+        ]
+      }
+    ]
+  },
+  "migrationsApplied": 91,
+  "runtime": {
+    "passed": true,
+    "checks": [
+      "separate-api-worker-runtime-profile-admission",
+      "wrong-role-startup-rejected-before-heartbeat",
+      "api-publication-submission-and-worker-assessment",
+      "read-only-api-startup-health-and-auth-denials",
+      "worker-billing-operator-and-policy-denials",
+      "runtime-ddl-and-future-object-denials",
+      "mixed-profile-source-fence-with-unchanged-business-inventory",
+      "three-distinct-profiles-and-all-wrong-profile-denials",
+      "operator-worker-api-positive-column-denials",
+      "keyless-reviewed-config-enqueue-original-receipt-and-one-concurrent-claim",
+      "revoked-inflight-approval-cannot-promote-or-replay",
+      "operator-column-drift-rejected-and-restored",
+      "inflight-provider-pause-fences-result-and-new-quota",
+      "configuration-rotation-fences-late-result-and-reviewed-new-command",
+      "expired-original-queued-approval-closes-without-dispatch-or-refund",
+      "disabled-verification-guard-rejects-all-three-profiles-and-restores",
+      "default-heartbeat-real-freshness-and-graceful-drain",
+      "database-heartbeat-failure-blocks-second-dispatch-and-result",
+      "persistent-heartbeat-failure-rejects-startup-and-persists-stopped-failure",
+      "fault-trigger-removed-and-fresh-presence-recovers"
+    ],
+    "deniedStatements": 23,
+    "providerCalls": 0,
+    "scriptedProviderRequests": 7,
+    "heartbeat": {
+      "scriptedRequests": 3,
+      "externalRequests": 0,
+      "heartbeatMs": 5000,
+      "freshnessMs": 30000,
+      "healthyObserved": true,
+      "drainObserved": true,
+      "databaseRejectedHeartbeat": true,
+      "persistentStartupRejected": true,
+      "recoveredPresenceVerified": true,
+      "nativeNetworkOrProcessKillClaim": false,
+      "checks": [
+        "default-heartbeat-real-freshness-and-graceful-drain",
+        "database-heartbeat-failure-blocks-second-dispatch-and-result",
+        "persistent-heartbeat-failure-rejects-startup-and-persists-stopped-failure",
+        "fault-trigger-removed-and-fresh-presence-recovers"
+      ]
+    },
+    "runtimeProfiles": [
+      "application",
+      "worker",
+      "operator"
+    ],
+    "runtimeWriteFenceVerified": true,
+    "activationAllowed": false,
+    "productionReady": false
+  },
+  "existingCatalogAndAclUnchanged": true,
+  "temporaryLoginDisabled": true,
+  "temporaryWorkerLoginDisabled": true,
+  "temporaryOperatorLoginDisabled": true
+}

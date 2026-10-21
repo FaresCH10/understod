@@ -1,31 +1,29 @@
 import {useEffect,useRef,useState} from 'react';
 import {CalendarClock,ChevronLeft,ChevronRight,RefreshCw,X} from 'lucide-react';
+import {useBriefingRequest} from './BriefingControls';
+import type {StaffRequestAuthority} from './useStaffRequest';
 
 type Schedule={id:string;revision:number;version:number;recipientCount:number;publishAt:string;dueAt:string|null;reminderMinutes:number;state:'queued'|'published'|'cancelled'|'failed';publicationId:string|null;error:string|null;createdAt:string;finishedAt:string|null;attempts:number;retryAt:string|null};
 type Page={items:Schedule[];total:number;page:number;pageSize:number;asOf:string};
-async function read(path:string,signal?:AbortSignal):Promise<Page> {
-  const response=await fetch(path,{credentials:'include',cache:'no-store',signal});const data=await response.json();
-  if(!response.ok)throw Error(data.error || 'Schedules unavailable');return data;
-}
-export default function PublicationSchedules({id,refresh,onChanged,timezone='UTC'}:{id:string;refresh:number;onChanged:()=>void;timezone?:string}) {
+export default function PublicationSchedules({id,refresh,onChanged,authority,timezone='UTC'}:{id:string;refresh:number;onChanged:()=>void;timezone?:string;authority:StaffRequestAuthority}) {
+  const {request,current,complete}=useBriefingRequest(authority);
   const [page,setPage]=useState(1),[tick,setTick]=useState(0),[data,setData]=useState<Page|null>(null),[loading,setLoading]=useState(true);
   const [error,setError]=useState(''),[busy,setBusy]=useState(false),[selected,setSelected]=useState(''),[confirmed,setConfirmed]=useState(false);
   const title=useRef<HTMLHeadingElement>(null),inflight=useRef(false);
-  const base=`/api/briefings/${encodeURIComponent(id)}/schedules`;
+  const base=`/briefings/${encodeURIComponent(id)}/schedules`;
   useEffect(()=>{
     const controller=new AbortController();setLoading(true);setData(null);setError('');setSelected('');setConfirmed(false);
-    read(`${base}?page=${page}`,controller.signal).then(value=>{if(!controller.signal.aborted)setData(value);})
-      .catch(err=>{if(!controller.signal.aborted)setError(err.message);}).finally(()=>{if(!controller.signal.aborted)setLoading(false);});
+    request<Page>(`${base}?page=${page}`,'GET',undefined,controller.signal).then(value=>{if(!controller.signal.aborted && current())setData(value);})
+      .catch(err=>{if(!controller.signal.aborted && current())setError(err.message);}).finally(()=>{if(!controller.signal.aborted && current())setLoading(false);});
     return ()=>controller.abort();
-  },[base,page,tick,refresh]);
+  },[base,page,tick,refresh,request,current]);
   async function cancel() {
-    if(!confirmed || !selected || inflight.current)return;inflight.current=true;setBusy(true);setError('');
+    if(!confirmed || !selected || inflight.current || !current())return;inflight.current=true;setBusy(true);setError('');
     try {
-      const response=await fetch(`${base}/${encodeURIComponent(selected)}/cancel`,{method:'POST',credentials:'include',cache:'no-store',headers:{'content-type':'application/json'},body:JSON.stringify({confirmed:true})});
-      const value=await response.json();if(!response.ok)throw Error(value.error || 'Cancellation unavailable');
-      setSelected('');setConfirmed(false);setTick(value=>value+1);onChanged();title.current?.focus();
-    }catch(err){setError(`${(err as Error).message} Refresh schedules to check the saved outcome.`);setConfirmed(false);}
-    finally {inflight.current=false;setBusy(false);}
+      const result=await request(`${base}/${encodeURIComponent(selected)}/cancel`,'POST',{confirmed:true});
+      await complete(result,value=>value,()=>{setSelected('');setConfirmed(false);setTick(value=>value+1);onChanged();title.current?.focus();});
+    }catch(err){if(current()){setError(`${(err as Error).message} Refresh schedules to check the saved outcome.`);setConfirmed(false);}}
+    finally {inflight.current=false;if(current())setBusy(false);}
   }
   const pages=Math.max(1,Math.ceil((data?.total || 0)/20));
   const date=(value:string)=>`${new Date(value).toLocaleString('en-GB',{timeZone:timezone,timeZoneName:'shortOffset'})} ${timezone}`;

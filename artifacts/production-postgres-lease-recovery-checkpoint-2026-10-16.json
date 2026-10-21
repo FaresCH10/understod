@@ -1,0 +1,58 @@
+{
+  "checkpoint": "local-postgres-lease-and-durable-ownership-repair",
+  "overallEstimatePercent": 71,
+  "localLossContainmentTaskPercent": 90,
+  "nativeThreeRolePreparationPercent": 80,
+  "productionReady": false,
+  "failedNativeRun": {
+    "id": "2e42b143-fa5e-4164-b257-9d8697dcd380",
+    "session": 50079,
+    "exitCode": 1,
+    "cause": "unhandled-leased-client-ECONNRESET-origin-unknown",
+    "migrationsApplied": 91,
+    "threeTlsAndProfileAdmissions": true,
+    "fullWorkflowAccepted": false,
+    "originalOutsideBaselineVerified": false,
+    "originalJournalRetainedUnchanged": true
+  },
+  "separatelyAuthorizedCleanup": {
+    "evidence": "neon-three-role-cleanup-2e42b143-fa5e-4164-b257-9d8697dcd380.json",
+    "state": "passed",
+    "finishedAt": "2026-10-16T05:46:30.176Z",
+    "databaseOidRemoved": 106496,
+    "roleOidsDisabledAndRemoved": [106497, 106499, 106501],
+    "cleanupOutsideAclUnchanged": true,
+    "newNativeRunAuthorized": false
+  },
+  "localCleanVerification": {
+    "id": "09af7c48-c31b-4820-8fa9-a9e15a3b9e76",
+    "session": 48631,
+    "exitCode": 0,
+    "finishedAt": "2026-10-16T06:03:27.885Z",
+    "lockedOfflineInstall": "passed",
+    "productionBuild": "passed",
+    "tests": 1186,
+    "passed": 1182,
+    "failed": 0,
+    "nativeOnlySkipped": 4,
+    "testDurationMilliseconds": 294633.643,
+    "contractChecks": 43,
+    "pipelineChecks": 10,
+    "scriptedProviderRequests": 24,
+    "externalProviderRequests": 0,
+    "sourceFiles": 833,
+    "sourceSha256": "626e43c77f95c567bf2dfa53e909f3d89f21b5bdf95f435667449367cc037725",
+    "sourceUnchanged": true
+  },
+  "preservation": {
+    "evidence": "clean-backup-preservation-e1eeede7-72e7-4140-b671-f8ea3db9b964.json",
+    "originalEightTableFingerprintsUnchanged": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "validSavedShellManifests": 28,
+    "filesScanned": 2790,
+    "configuredSecretMatches": 0
+  },
+  "next": "S19 worker welcome, explicit language selection and honest own-session/help/reference controls",
+  "remainingLimits": ["current-policy-native-workflow", "native-network-lock-process-failure", "hosted-transport-and-operations", "complete-reference-language-accessibility-device-live-quality-release-acceptance", "privacy-approved-real-worker-AI-path"]
+}

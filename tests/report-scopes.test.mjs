@@ -14,11 +14,21 @@ import {runMigrations} from '../server/postgres/migrate.mjs';
 import {publish as publishPg} from '../server/postgres/domain.mjs';
 import {readPublicationReport} from '../server/postgres/reports.mjs';
 import * as pgExports from '../server/postgres/exports.mjs';
+import {checkedExportResult,checkedExportReceipt} from '../src/export-recovery.ts';
+import {createAppServer} from '../server/index.mjs';
+import {createPostgresRehearsalServer} from '../server/postgres/http.mjs';
+import {provisionStaffCredential} from '../server/postgres/auth.mjs';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
 
 async function fixture(pg) {
-  const schema='report_scopes',owner={principal_type:'staff',principal_id:pg?'owner':'maya',org_id:pg?'org':'cedar',site_id:pg?'site':'beirut',role:'owner'};
+  const schema='understood_test_report_scopes',owner={principal_type:'staff',principal_id:pg?'owner':'maya',org_id:pg?'org':'cedar',site_id:pg?'site':'beirut',role:'owner'};
   const db=pg?new PGlite():openDatabase(':memory:');
-  const pool={async connect(){return {query:async(sql,args)=>args?.length?db.query(sql,args):(await db.exec(sql)).at(-1)||{rows:[]},release(){}};}};
+  let failRetryAudit=false,loseCommit=false;
+  const pool={async connect(){return {query:async(sql,args)=>{
+    if(failRetryAudit && sql.includes('INSERT INTO audit'))throw Error('Injected retry audit failure');
+    const result=args?.length?await db.query(sql,args):(await db.exec(sql)).at(-1)||{rows:[]};
+    if(loseCommit && sql==='COMMIT'){loseCommit=false;throw Error('Lost retry commit acknowledgement');}return result;
+  },release(){}};}};
   const query=async(sql,args=[])=>{if(pg){let n=0;return (await db.query(sql.replaceAll('?',()=>`$${++n}`),args)).rows;}
     return db.prepare(sql).all(...args);};
   if(pg){await db.exec(`CREATE SCHEMA ${schema};SET search_path TO ${schema},pg_catalog;SET timezone='UTC'`);await runMigrations(pool,{schema});
@@ -39,8 +49,61 @@ async function fixture(pg) {
     if(pg)await query("INSERT INTO attempts(id,org_id,site_id,assignment_id,submission_id,answer_text,outcome,reasons_json,received_at,assessment_status) VALUES(?,?,?,?,?,'PRIVATE ANSWER','matched','[]',?,'complete')",[id,owner.org_id,owner.site_id,assignment,submission,time]);
     else await query("INSERT INTO attempts(id,org_id,assignment_id,submission_id,answer_text,outcome,reasons_json,received_at) VALUES(?,?,?,?,'PRIVATE ANSWER','matched','[]',?)",[id,owner.org_id,assignment,submission,time]);
     await query("INSERT INTO submission_receipts(org_id,assignment_id,submission_id,kind,received_at) VALUES(?,?,?,'typed',?)",[owner.org_id,assignment,submission,time]);};
-  return {db,pool,schema,owner,workers,publication,assignments,query,read,request,receive,close:()=>db.close()};
+  return {db,pool,schema,owner,workers,publication,assignments,query,read,request,receive,
+    failRetry(){if(pg)failRetryAudit=true;else db.exec("CREATE TRIGGER reject_retry_audit BEFORE INSERT ON audit WHEN NEW.action='export.retried' BEGIN SELECT RAISE(ABORT,'Injected retry audit failure'); END");},
+    resetRetry(){if(pg)failRetryAudit=false;else db.exec('DROP TRIGGER reject_retry_audit');},loseRetry(){loseCommit=true;},close:()=>db.close()};
 }
+
+for(const pg of [false,true])test(`${pg?'PostgreSQL':'SQLite'} exports expose original actor receipts and immutable exact retry acceptance after queue progress`,async()=>{
+  const f=await fixture(pg),options={schema:f.schema};
+  const receipt=(session,kind,id)=>pg?pgExports.exportReceipt(f.pool,session,kind,id,options):exports.exportReceipt(f.db,session,kind,id);
+  const retry=(session,id,body)=>pg?pgExports.retryExport(f.pool,session,id,body,options):exports.retryExport(f.db,session,id,body);
+  try{
+    const colleague={...f.owner,principal_id:'colleague',role:'supervisor'},auditor={...f.owner,principal_id:'audit',role:'auditor'};
+    await f.query('INSERT INTO staff(id,org_id,site_id,name,role) VALUES(?,?,?,?,?),(?,?,?,?,?)',['colleague',f.owner.org_id,f.owner.site_id,'Colleague','supervisor','audit',f.owner.org_id,f.owner.site_id,'Auditor','auditor']);
+    const body={requestId:randomUUID(),publicationId:f.publication.id,filters:{crewId:'first',responseFrom:'2026-10-01',responseThrough:'2026-10-31'}},pending={kind:'create',requestId:body.requestId,exportId:null,body:{publicationId:body.publicationId,filters:body.filters}};
+    const accepted=await f.request(body),saved=await receipt(f.owner,'create',body.requestId);
+    assert.deepEqual(checkedExportReceipt(saved,pending),checkedExportResult(accepted,pending));
+    for(const session of [colleague,auditor])assert.deepEqual(await receipt(session,'create',body.requestId),{found:false});
+    await assert.rejects(async()=>pg?pgExports.requestExport(f.pool,colleague,body,options):exports.requestExport(f.db,colleague,body),/conflict/);
+    await f.query("UPDATE report_exports SET status='failed',attempts=1 WHERE id=?",[body.requestId]);
+    const change={requestId:randomUUID(),attempts:1},retryPending={kind:'retry',requestId:change.requestId,exportId:body.requestId,body:{attempts:1}};
+    f.failRetry();await assert.rejects(async()=>retry(f.owner,body.requestId,change),/Injected/);f.resetRetry();
+    assert.deepEqual(await receipt(f.owner,'retry',change.requestId),{found:false});
+    assert.equal((await f.query('SELECT status FROM report_exports WHERE id=?',[body.requestId]))[0].status,'failed');
+    if(pg){f.loseRetry();await assert.rejects(retry(f.owner,body.requestId,change),/Lost retry/);}else await retry(f.owner,body.requestId,change);
+    const retrySaved=await receipt(f.owner,'retry',change.requestId);
+    assert.equal(checkedExportReceipt(retrySaved,retryPending).id,body.requestId);
+    const replay=await retry(f.owner,body.requestId,change);assert.equal(replay.duplicate,true);assert.deepEqual(checkedExportResult(replay,retryPending),checkedExportReceipt(retrySaved,retryPending));
+    assert.deepEqual(await receipt(colleague,'retry',change.requestId),{found:false});await assert.rejects(async()=>retry(colleague,body.requestId,change),/conflict/);
+    await assert.rejects(async()=>retry(f.owner,body.requestId,{...change,attempts:2}),/conflict/);
+    if(pg)await pgExports.processOneExport(f.pool,options);else exports.processOneExport(f.db);
+    assert.equal((await f.query('SELECT status FROM report_exports WHERE id=?',[body.requestId]))[0].status,'ready');
+    assert.deepEqual(await receipt(f.owner,'retry',change.requestId),retrySaved);
+    assert.deepEqual(checkedExportReceipt(await receipt(f.owner,'create',body.requestId),pending),checkedExportResult(accepted,pending));
+    assert.equal((await retry(f.owner,body.requestId,change)).duplicate,true);
+    for(const action of ["UPDATE report_export_retries SET attempts=2","DELETE FROM report_export_retries"])await assert.rejects(f.query(action),/immutable/);
+    await assert.rejects(async()=>retry(f.owner,body.requestId,{requestId:randomUUID(),attempts:1}),/cannot be retried/);
+    await assert.rejects(async()=>receipt({...f.owner,principal_type:'worker'},'create',body.requestId),/Forbidden/);
+    await assert.rejects(async()=>receipt(f.owner,'create','bad'),/Invalid/);
+    const config={tier:'local',aiMode:'synthetic',dataClass:'synthetic',accessMode:pg?'credential':'demo',publicOrigin:'http://127.0.0.1:3031',...(pg?options:{})};
+    if(pg)await provisionStaffCredential(f.pool,{staffId:f.owner.principal_id,orgId:f.owner.org_id,siteId:f.owner.site_id,email:'receipt@example.test',password:'Synthetic export receipt password'},options);
+    const server=pg?createPostgresRehearsalServer(f.pool,config):createAppServer(f.db,config);
+    await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base=`http://127.0.0.1:${server.address().port}/api`,normalFetch=createSessionContextFetch();
+    const call=(path,cookie,input)=>normalFetch(base+path,{method:input===undefined?'GET':'POST',headers:{origin:config.publicOrigin,'content-type':'application/json',...(cookie?{cookie}:{})},body:input===undefined?undefined:JSON.stringify(input)});
+    try {
+      const login=await call(pg?'/auth/staff/login':'/demo/session',null,pg?{email:'receipt@example.test',password:'Synthetic export receipt password'}:{principal:'maya'}),cookie=login.headers.get('set-cookie').split(';')[0];
+      const path=`/reports/exports/receipts/retry/${change.requestId}`;
+      assert.equal((await fetch(base+path,{headers:{cookie}})).status,409);
+      const httpReceipt=await call(path,cookie);assert.equal(httpReceipt.status,200);assert.match(httpReceipt.headers.get('cache-control'),/no-store/);
+      assert.deepEqual(checkedExportReceipt(await httpReceipt.json(),retryPending),checkedExportResult(replay,retryPending));
+      assert.equal((await call(path+'?scope=other',cookie)).status,400);
+      const createReceipt=await call(`/reports/exports/receipts/create/${body.requestId}`,cookie);assert.equal(createReceipt.status,200);checkedExportReceipt(await createReceipt.json(),pending);
+      const acceptedAgain=await call(`/reports/exports/${body.requestId}/retry`,cookie,change);assert.equal(acceptedAgain.status,202);assert.equal((await acceptedAgain.json()).duplicate,true);
+      assert.equal((await call(`/reports/exports/${body.requestId}/retry`,cookie,{})).status,400);
+    }finally{await new Promise(resolve=>server.close(resolve));}
+  }finally{await f.close();}
+});
 
 for(const pg of [false,true]){
   test(`${pg?'PostgreSQL':'SQLite'} publication crew snapshot survives later moves/rename/archive; legacy history never invents membership`,async()=>{

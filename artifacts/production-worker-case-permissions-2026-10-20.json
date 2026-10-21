@@ -1,0 +1,192 @@
+{
+  "checkedAt": "2026-10-20T12:58:02.169Z",
+  "productionReady": false,
+  "scope": "local-worker-case-cleanup-acls",
+  "progress": {
+    "overall": 77,
+    "range": [
+      70,
+      83
+    ],
+    "servicePermissions": 83,
+    "previousServicePermissions": 82,
+    "method": "Engineering estimate; overall unchanged after rounding; not a test pass rate"
+  },
+  "clean": {
+    "id": "b187180f-c7f2-4543-86bf-5da2735f421b",
+    "startedAt": "2026-10-20T12:51:40.061Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-20T12:51:41.728Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T12:51:51.104Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-20T12:51:51.104Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T12:51:55.561Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-20T12:51:55.562Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T12:57:37.158Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-20T12:57:37.160Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T12:57:37.785Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-20T12:57:37.785Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-20T12:57:41.694Z"
+      }
+    ],
+    "source": {
+      "files": 877,
+      "sha256": "f2a5a4d74c4535eb593b93b5f51a3a0647b3821c964aa67d6356fbd0509a877f"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-20T12:57:42.245Z",
+    "parentSession": 26533,
+    "parentExitObserved": true,
+    "parentExitCode": 0,
+    "summary": {
+      "tests": 1269,
+      "pass": 1265,
+      "fail": 0,
+      "skipped": 4
+    }
+  },
+  "sourceNow": {
+    "files": 877,
+    "sha256": "f2a5a4d74c4535eb593b93b5f51a3a0647b3821c964aa67d6356fbd0509a877f",
+    "matchesClean": true
+  },
+  "initialFailedClean": {
+    "id": "8773ed18-d486-411b-97e6-e1186fa4910b",
+    "state": "failed",
+    "parentSession": 81472,
+    "parentExitCode": 1,
+    "failedTests": 1,
+    "error": "Windows UNKNOWN lstat for temporary encrypted backup manifest",
+    "sourceHash": "f2a5a4d74c4535eb593b93b5f51a3a0647b3821c964aa67d6356fbd0509a877f",
+    "unchangedFocusedBackupRecheck": {
+      "exitCode": 0,
+      "tests": 1,
+      "failed": 0,
+      "log": ".clean-check/8773ed18-d486-411b-97e6-e1186fa4910b/backup-focused-recheck.log"
+    },
+    "causeConfirmed": false,
+    "safetyChecksWeakened": false
+  },
+  "evaluations": {
+    "contractCases": 43,
+    "allContractChecksPassed": true,
+    "pipelineChecks": 10,
+    "allPipelineChecksPassed": true,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "policy": {
+    "application": {
+      "tables": 138,
+      "writable": 119,
+      "readOnly": 12,
+      "hidden": 7
+    },
+    "worker": {
+      "tables": 138,
+      "writable": 94,
+      "readOnly": 34,
+      "hidden": 10
+    },
+    "operator": {
+      "tables": 138,
+      "writable": 19,
+      "readOnly": 19,
+      "hidden": 100
+    }
+  },
+  "workerColumns": {
+    "case_reviews": [
+      "reason"
+    ],
+    "case_repeats": [
+      "status"
+    ],
+    "reviewSequencePrivileges": false,
+    "ordinaryDmlTables": 85,
+    "columnRestrictedTables": 9
+  },
+  "verification": {
+    "focusedRegression": {
+      "tests": 41,
+      "failed": 0
+    },
+    "finalGuardFence": {
+      "tests": 5,
+      "failed": 0
+    },
+    "actualDistinctEmbeddedRoles": true,
+    "typedAndRecordedRepeat": true,
+    "privateAudioAbsenceBeforeDeletion": true,
+    "reviewRetentionAndDeletion": true,
+    "unchangedReceiptHashesAndAssessmentMetadata": true,
+    "broadGrantUpgradeAndDriftDenied": true,
+    "postFenceCleanupWritesDenied": true
+  },
+  "frontend": {
+    "manifestMatchesPriorAcceptedBuild": true,
+    "newBrowserPassClaimed": false
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-f6981c31-a726-46e0-9971-28f664d03bab.json",
+    "parentSession": 86787,
+    "exitCode": 0,
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 58,
+    "allHashesMatch": true,
+    "filesScanned": 4714,
+    "configuredSecretMatches": 0
+  },
+  "schemaMigration": 93,
+  "newMigration": false,
+  "cloudGrantsChanged": false,
+  "nativeAcceptanceClaimed": false,
+  "realWorkerDataUsed": false,
+  "liveProviderMailCalls": 0,
+  "microphoneUsed": false,
+  "deployment": false,
+  "limits": [
+    "Trusted status lifecycle operation is not deletion-only row authorization",
+    "Other worker lifecycle/read restrictions and credential confidentiality remain",
+    "Historical native91 does not accept this schema93/ACL policy",
+    "PGlite does not prove native concurrency or hosted separation",
+    "Full reference/localization/device/privacy/hosted/release gates remain"
+  ],
+  "nextTask": "S14 staff-created clarification workflow, truthful provenance and durable recovery; queue received/due and reason legend; complete interface localization"
+}

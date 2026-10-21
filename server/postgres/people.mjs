@@ -110,7 +110,10 @@ export async function reenableWorker(pool,session,id,input,{schema='public'}={})
 
 export async function listCrews(pool,session,filters={}, {schema='public'}={}) {
   const {page,pageSize,search,status}=crewFilters(filters);
-  return domainTransaction(pool,schema,async (client) => {
+  return domainTransaction(pool,schema,client=>readCrewPage(client,session,{page,pageSize,search,status}));
+}
+
+export async function readCrewPage(client,session,{page,pageSize,search,status}) {
     await requirePrincipal(client,session,'staff');
     const row=(await client.query(`WITH filtered AS (
       SELECT c.id,c.name,c.active FROM crews c WHERE c.org_id=$1 AND c.site_id=$2
@@ -123,7 +126,6 @@ export async function listCrews(pool,session,filters={}, {schema='public'}={}) {
         (SELECT COALESCE(jsonb_agg(page ORDER BY lower(page.name),page.id),'[]') FROM page) AS items`,
       [session.org_id,session.site_id,search,status,pageSize,(page-1)*pageSize])).rows[0];
     return {...row,page,pageSize};
-  });
 }
 
 export async function createCrew(pool,session,input,{schema='public'}={}) {

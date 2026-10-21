@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-14",
+  "overallEstimatePercent": 60,
+  "taskEstimatePercent": 85,
+  "staffRequestFencingEstimatePercent": 97,
+  "fullSuite": {"files": 172, "tests": 936, "passed": 932, "failed": 0, "skipped": 4, "exitCode": 0, "durationMs": 217110.3725},
+  "focusedRegression": {"passed": 47, "failed": 0, "skipped": 0, "durationMs": 5429.1024},
+  "finalRegression": {"passed": 25, "failed": 0, "skipped": 0, "durationMs": 5147.0326},
+  "build": {"typecheck": true, "production": true, "modules": 2056, "entryKb": 631.18, "shellFiles": 56, "shellHashesMatch": true},
+  "originalDatabase": {"fingerprintsMatch": 8, "integrity": "ok", "foreignKeyViolations": 0, "migrated": false},
+  "browser": {"lostAcknowledgementRecovered": true, "receiptOutageRecovered": true, "laterRejectionPreservesOriginal": true, "beforeCommitFailureExplicitRetry": true, "ownerInboxPageTwoItems": 2, "supervisorPersonalList": true, "administratorPersonalReceipt": true, "auditorReadOnly": true, "foreignSiteIsolation": true, "width320ScrollWidth": 305, "width320RecoveryClientAndScroll": 233, "width390RecoveryClientAndScroll": 303},
+  "fixture": {"backend": "embedded-postgresql-pglite", "terminal": true, "explicitPosts": 6, "seedRequests": 13, "newAcceptedRequests": 4, "finalUsageAuditEvents": 17, "protectedTablesUnchanged": 11, "externalCalls": 0},
+  "temporaryTabClosed": true,
+  "viewportReset": true,
+  "productionReady": false,
+  "remaining": ["Broader authority loss and assistive acceptance", "Actual devices", "Native PostgreSQL acceptance", "App-owned metadata/action helpers", "Live synthetic AI", "Authorized hosting and release gates"]
+}

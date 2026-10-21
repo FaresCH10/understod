@@ -1,6 +1,6 @@
 import {createHash,randomUUID} from 'node:crypto';
 import {schemaName,verifyMigrations} from './migrate.mjs';
-import {withTransaction} from './db.mjs';
+import {withTransaction,acquirePostgresClient,assertPostgresClientHealthy} from './db.mjs';
 import {backupTables,privateObjectInventory} from './backup.mjs';
 import {processOneAudioPurge} from './retention.mjs';
 import {processOneTextPurge} from './text-retention.mjs';
@@ -137,7 +137,7 @@ export async function sweepRestoredRetention(pool,storage,{schema='public',backu
     throw Error('Invalid restore cleanup bounds');
   if(typeof storage?.remove!=='function' || typeof storage.removeOriginal!=='function')throw Error('Restore private storage unavailable');
   await verifyMigrations(pool,{schema});
-  const lock=await pool.connect(),lockName=`understood:restore-retention:${schema}`;
+  const lock=await acquirePostgresClient(pool),lockName=`understood:restore-retention:${schema}`;
   let owned=false;
   try{
     owned=(await lock.query('SELECT pg_try_advisory_lock(hashtext($1)) AS owned',[lockName])).rows[0].owned;
@@ -167,12 +167,14 @@ export async function sweepRestoredRetention(pool,storage,{schema='public',backu
     while(!state.elapsedPoliciesReconciled && cycles<maxCycles && Date.now()-started<maxMilliseconds){
       let activity=false;cycles++;
       for(const [name,task] of Object.entries(tasks)){
+        assertPostgresClientHealthy(lock);
         if(Date.now()-started>=maxMilliseconds)break;
         try{
           const result=accounting?await accounting.run(name,task):await task(pool,storage);
           if(result===true || typeof result==='number' && result>0){activity=true;work[name]+=result===true?1:result;}
         }catch{errors.add(name);}
         accounting?.assertHealthy();
+        assertPostgresClientHealthy(lock);
       }
       state=await restoredRetentionState(pool,storage,{schema,backupId});
       if(!activity)break;
@@ -185,9 +187,11 @@ export async function sweepRestoredRetention(pool,storage,{schema='public',backu
         VALUES($1,$2,$3,'system','restore-operator','backup.restore.elapsed_policies_reconciled',$4)`,[randomUUID(),site.org_id,site.id,backupId]);
     });
     if(stop==='reconciled'){
+      assertPostgresClientHealthy(lock);
       if(accounting)await accounting.run('completionAudit',completionAudit);else await completionAudit(pool);
     }
     const cleanupState=accounting?await accounting.verify():undefined;
+    assertPostgresClientHealthy(lock);
     return {...state,elapsedPoliciesReconciled:stop==='reconciled',stop,cycles,work,failedStages:[...errors],
       ...(cleanupState?{cleanupState,accountedEvents:accounting.events}:{}),
       limitation:'Uses policies and deletion requests present in this restored database only. Authoritative post-backup requests, policy changes and retirement evidence must still be reconciled. No activation is performed.'};

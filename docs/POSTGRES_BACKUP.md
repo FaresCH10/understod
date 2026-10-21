@@ -1,7 +1,10 @@
 # PostgreSQL And Private Object Recovery
 
 Implemented maintenance workflow, 11 October 2026. This is not a production
-readiness verdict. The native PostgreSQL/Neon and R2 execution gates remain open.
+readiness verdict. A bounded native Neon round trip passed on 15 October 2026;
+see NEON_BACKUP_REHEARSAL.md. It covers one synthetic local private recording,
+full native relational inventory and quarantine, not private R2, all object
+families, off-host key custody, complete cutoff/reconciliation or activation.
 The saved SQLite preview is not a source or destination of these commands.
 
 2026-10-12: retention requires the exact authenticated quarantine/replay/cleanup
@@ -27,7 +30,10 @@ invented. Other unvalidated constraints reject backup.
 
 Six private object families are covered: worker recordings, source canonical WAVs,
 source originals, generated briefing/question speech, generated case follow-ups
-and worker case voice messages. Retired/deleted/cleaning/unaccepted objects are
+and case voice audio (worker messages plus migration095 private staff in-person
+recordings, with explicit immutable authorship). The staff purpose reuses the
+existing private object family; no public bucket or seventh family is created.
+Retired/deleted/cleaning/unaccepted objects are
 not copied. Their relational tombstones and evidence remain in the archive. A
 cross-family UUID collision, missing accepted object, wrong size or wrong hash
 rejects completion. The encrypted manifest is written last; an incomplete

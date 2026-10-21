@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import {mkdtemp,rm,readdir} from 'node:fs/promises';
@@ -555,7 +557,7 @@ test('private speech HTTP streams verified WAV with no-store headers, credential
     server=createPostgresRehearsalServer(f.pool,{...options,storage,tier:'local',aiMode:'synthetic',accessMode:'credential',dataClass:'synthetic',publicOrigin:'http://127.0.0.1:3020'});
     await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
     const base=`http://127.0.0.1:${server.address().port}/api/worker/briefings/${assignment}`;
-    const call=(path,token)=>fetch(`${base}${path}`,{headers:token ? {cookie:`understood_pg_rehearsal=${token}`} : {}});
+    const call=(path,token,headers={})=>fetch(`${base}${path}`,{headers:{...headers,...(token ? {cookie:`understood_pg_rehearsal=${token}`} : {})}});
     assert.equal((await call('/speech/body')).status,401);
     assert.equal((await call('/speech/body',other.token)).status,404);
     assert.equal((await call('/speech/body?worker=other',signed.token)).status,404);
@@ -565,11 +567,24 @@ test('private speech HTTP streams verified WAV with no-store headers, credential
       assert.equal(response.headers.get('cache-control'),'no-store');assert.equal(response.headers.get('x-content-type-options'),'nosniff');
       assert.equal(response.headers.get('referrer-policy'),'no-referrer');
       assert.deepEqual(Buffer.from(await response.arrayBuffer()),value.audio.find(row=>row.id===value.manifest.languages.en.speech[kind].id).bytes);
+      const bytes=value.audio.find(row=>row.id===value.manifest.languages.en.speech[kind].id).bytes;
+      assert.equal(response.headers.get('accept-ranges'),'bytes');
+      for(const [range,start,end] of [['bytes=0-43',0,43],['bytes=44-',44,bytes.length-1],['bytes=-12',bytes.length-12,bytes.length-1]]){
+        const partial=await call(`/speech/${kind}`,signed.token,{range});assert.equal(partial.status,206);
+        assert.equal(partial.headers.get('content-range'),`bytes ${start}-${end}/${bytes.length}`);assert.equal(partial.headers.get('cache-control'),'no-store');
+        assert.deepEqual(Buffer.from(await partial.arrayBuffer()),bytes.subarray(start,end+1));
+      }
+      const invalid=await call(`/speech/${kind}`,signed.token,{range:`bytes=${bytes.length}-`});assert.equal(invalid.status,416);
+      assert.equal(invalid.headers.get('content-range'),`bytes */${bytes.length}`);assert.equal((await invalid.arrayBuffer()).byteLength,0);
+    }
+    for(const [token,status] of [[undefined,401],[other.token,404]]){
+      const denied=await call('/speech/body',token,{range:'bytes=0-43'});assert.equal(denied.status,status);assert.equal(denied.headers.get('content-range'),null);
     }
     const dto=await (await call('',signed.token)).json();assert.ok(dto.speechUrls.body);
     storage.objects.get(value.audio[0].id).writeInt16LE(10,44);
     const corrupt=await call('/speech/body',signed.token);assert.equal(corrupt.status,404);
     assert.deepEqual(await corrupt.json(),{error:'Generated audio unavailable'});
+    assert.equal((await call('/speech/body',signed.token,{range:'bytes=0-43'})).status,404);
   }finally {if(server) await new Promise(resolve=>server.close(resolve));await f.close();}
 });
 

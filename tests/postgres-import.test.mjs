@@ -19,15 +19,15 @@ import { ensureRecordingSchema, isCurrentRecording, receiveRecording } from '../
 import { createCrew, moveWorkerToCrew,restoreCrew,reenableWorker,ensurePeopleSchema } from '../server/people.mjs';
 import {restoreCrew as restorePgCrew,reenableWorker as reenablePgWorker} from '../server/postgres/people.mjs';
 import { createSession, issueWorkerGrant, provisionStaffCredential } from '../server/auth.mjs';
-import { requestExport, processOneExport } from '../server/exports.mjs';
+import { requestExport, processOneExport,retryExport } from '../server/exports.mjs';
 import { ensureWorkerImportSchema, previewWorkerImport, confirmWorkerImport,expireWorkerImports,importFilenameHash } from '../server/worker-import.mjs';
 import { backupLocal } from '../scripts/local-backup.mjs';
 import { runMigrations } from '../server/postgres/migrate.mjs';
 import { importSqliteBackup } from '../server/postgres/import-sqlite.mjs';
 import { readPublicationReport } from '../server/postgres/reports.mjs';
-import {requestExport as pgRequestExport,downloadExport as pgDownloadExport} from '../server/postgres/exports.mjs';
-import { getClarification,resolveClarification } from '../server/postgres/clarifications.mjs';
-import { ensureClarificationSchema,requestHelp,resolveClarification as resolveLocalHelp } from '../server/clarifications.mjs';
+import {requestExport as pgRequestExport,downloadExport as pgDownloadExport,exportReceipt as pgExportReceipt,retryExport as pgRetryExport} from '../server/postgres/exports.mjs';
+import { getClarification,resolveClarification,clarificationActionReceipt as pgActionReceipt } from '../server/postgres/clarifications.mjs';
+import { ensureClarificationSchema,requestHelp,assignClarification as assignLocalHelp,resolveClarification as resolveLocalHelp } from '../server/clarifications.mjs';
 import {copyDraft,editDraft,archiveBriefing} from '../server/preparation.mjs';
 import {copyDraft as copyPgDraft,archiveBriefing as archivePgBriefing} from '../server/postgres/preparation.mjs';
 import {ensureBillingSchema,createInvoice,recordPayment,voidInvoice} from '../server/billing.mjs';
@@ -38,8 +38,10 @@ import {createSite,saveSiteAccess,saveSiteLifecycle} from '../server/sites.mjs';
 import {createSite as pgCreateSite,siteCreationReceipt as pgSiteReceipt,siteAccessReceipt as pgAccessReceipt,saveSiteAccess as pgSaveAccess,siteLifecycleReceipt as pgLifecycleReceipt,saveSiteLifecycle as pgSaveLifecycle} from '../server/postgres/sites.mjs';
 import {saveDraftReview} from '../server/draft-review.mjs';
 import {saveDraftReview as savePgReview} from '../server/postgres/draft-review.mjs';
-import {createDraft} from '../server/preparation.mjs';
-import {createDraft as createPgDraft} from '../server/postgres/preparation.mjs';
+import {createDraft,requestPreparation,getPreparationRequestReceipt} from '../server/preparation.mjs';
+import {createDraft as createPgDraft,requestPreparation as requestPgPreparation,getPreparationRequestReceipt as pgPreparationReceipt} from '../server/postgres/preparation.mjs';
+import {getProcessingRetryContext,retryProcessing,getProcessingRetryReceipt} from '../server/processing-retry.mjs';
+import {retryProcessing as pgRetryProcessing,getProcessingRetryReceipt as pgProcessingReceipt} from '../server/postgres/processing-retry.mjs';
 import {draftCreationReceipt as pgDraftReceipt} from '../server/postgres/draft-creations.mjs';
 import {CANONICAL_SOURCE} from '../server/domain.mjs';
 import {ensureTemplateSchema,changeTemplate} from '../server/templates.mjs';
@@ -63,6 +65,8 @@ import {processOneDeletionCompletion as pgComplete} from '../server/postgres/del
 import {saveRecordingNotice} from '../server/recording-notices.mjs';
 import {getRecordingNotice as pgNotice,recordingNoticeReceipt as pgNoticeReceipt} from '../server/postgres/recording-notices.mjs';
 import {ensureCaseMessageSchema,sendCaseMessage} from '../server/case-messages.mjs';
+import {createStaffClarification as createLocalClarification} from '../server/clarification-create.mjs';
+import {staffClarificationCreationReceipt as pgCreationReceipt} from '../server/postgres/clarification-create.mjs';
 import {listCaseMessages as listPgMessages,caseMessageReceiptLookup as pgMessageReceipt} from '../server/postgres/case-messages.mjs';
 
 const maya = { principal_type: 'staff', principal_id: 'maya', org_id: 'cedar', site_id: 'beirut', role: 'owner' };
@@ -85,6 +89,35 @@ function wav() {
   bytes.write('data',36); bytes.writeUInt32LE(32000,40); bytes.writeInt16LE(1000,44); return bytes;
 }
 
+test('synthetic cutover retains original clarification action receipts after case and staff policy changes',async()=>{
+  const root=await mkdtemp(join(tmpdir(),'understood-pg-import-')),sqlite=openDatabase(join(root,'source.sqlite'));seed(sqlite);ensureRecordingSchema(sqlite);ensureClarificationSchema(sqlite);
+  const pg=new PGlite(),pool=poolFor(pg),options={schema};
+  try{
+    sqlite.prepare("INSERT INTO staff VALUES('historic-owner','cedar','beirut','Historic supervisor','supervisor',1)").run();
+    const caseId=randomUUID();requestHelp(sqlite,worker,'assignment-30',{requestId:caseId,text:'Synthetic historical help'});
+    const command={requestId:randomUUID(),ownerId:'historic-owner',expectedOwnerId:null},receipt=assignLocalHelp(sqlite,maya,caseId,command);
+    const resolution=resolveLocalHelp(sqlite,maya,caseId,{requestId:randomUUID(),notes:'Synthetic historical private follow-up'});
+    const publication=sqlite.prepare('SELECT publication_id FROM assignments WHERE id=?').get('assignment-30');
+    const version=sqlite.prepare('SELECT version FROM publications WHERE id=?').get(publication.publication_id).version;
+    const creationInput={requestId:randomUUID(),assignmentId:'assignment-30',publicationId:publication.publication_id,version,attemptId:null,reason:'Synthetic historical staff follow-up'};
+    const creation=createLocalClarification(sqlite,maya,creationInput);
+    sqlite.prepare("UPDATE staff SET active=0,role='auditor' WHERE id='historic-owner'").run();
+    sqlite.prepare("UPDATE staff SET role='auditor' WHERE id='maya'").run();
+    await backupLocal({database:join(root,'source.sqlite'),audioRoot:join(root,'audio'),destination:join(root,'backup')});
+    await pg.exec(`CREATE SCHEMA ${schema}`);await runMigrations(pool,options);
+    const imported=await importSqliteBackup(pool,{source:join(root,'backup'),schema,requestId:randomUUID(),dataClass:'synthetic',dryRun:false});assert.equal(imported.counts.clarification_action_receipts,2);assert.equal(imported.counts.clarification_creations,1);
+    const rows=(await pg.query(`SELECT * FROM ${schema}.clarification_action_receipts ORDER BY request_id`)).rows;
+    assert.equal(rows.find(row=>row.request_id===command.requestId).result_status,'open');assert.equal(rows.find(row=>row.request_id===resolution.requestId).result_status,'resolved');
+    assert.equal(JSON.stringify(rows).includes('Synthetic historical private follow-up'),false);
+    await assert.rejects(pgActionReceipt(pool,{...maya,role:'auditor'},caseId,command.requestId,options),/receipt unavailable/);
+    await pg.exec(`SET search_path TO ${schema},pg_catalog;UPDATE staff SET role='owner' WHERE id='maya'`);
+    assert.deepEqual(await pgActionReceipt(pool,maya,caseId,command.requestId,options),receipt);
+    assert.deepEqual(await pgActionReceipt(pool,maya,caseId,resolution.requestId,options),resolution);
+    assert.deepEqual(await pgCreationReceipt(pool,maya,creation.requestId,options),creation);
+    assert.equal((await getClarification(pool,maya,creation.caseId,options)).staffCreation.actorId,'maya');
+  }finally{sqlite.close();await pg.close();assert.ok(resolve(root).startsWith(resolve(tmpdir())+sep+'understood-pg-import-'));await rm(root,{recursive:true});}
+});
+
 test('synthetic cutover preserves immutable draft creation after source edits',async()=>{
   const root=await mkdtemp(join(tmpdir(),'understood-pg-import-')),sqlite=openDatabase(join(root,'source.sqlite'));seed(sqlite);ensureRecordingSchema(sqlite);
   const pg=new PGlite(),pool=poolFor(pg),options={schema};
@@ -96,12 +129,17 @@ test('synthetic cutover preserves immutable draft creation after source edits',a
     const siteRequest={requestId:randomUUID(),name:'Created before cutover',timezone:'UTC',generationLanguages:['en','ur'],confirmed:true},siteActor={...maya,access_mode:'credential'},createdSite=createSite(sqlite,siteActor,siteRequest);
     const accessRequest={requestId:randomUUID(),siteId:createdSite.id,revision:0,state:'paused',reason:'pilot_review',confirmed:true};saveSiteAccess(sqlite,siteActor,accessRequest);
     const lifecycleRequest={requestId:randomUUID(),siteId:createdSite.id,revision:0,state:'archived',reason:'operational',confirmed:true};saveSiteLifecycle(sqlite,siteActor,lifecycleRequest);
+    const processingInput={requestId:randomUUID(),revision:1,jobId:null,generation:0};
+    const processingResult=requestPreparation(sqlite,maya,first.id,processingInput),processingReceipt=getPreparationRequestReceipt(sqlite,maya,first.id,processingInput.requestId);
     editDraft(sqlite,maya,first.id,{revision:1,title:'Edited before cutover',source:'A different synthetic instruction after creation.'});
     const evidence=sqlite.prepare('SELECT * FROM draft_creations').all().map(row=>({...row}));
     await backupLocal({database:join(root,'source.sqlite'),audioRoot:join(root,'audio'),destination:join(root,'backup')});
     await pg.exec(`CREATE SCHEMA ${schema}`);await runMigrations(pool,{schema});
     const result=await importSqliteBackup(pool,{source:join(root,'backup'),schema,requestId:randomUUID(),dataClass:'synthetic',dryRun:false});assert.equal(result.counts.draft_creations,1);
     assert.equal(result.counts.site_creations,1);
+    assert.equal(result.counts.preparation_requests,1);
+    assert.deepEqual(await pgPreparationReceipt(pool,maya,first.id,processingInput.requestId,options),processingReceipt);
+    assert.deepEqual(await requestPgPreparation(pool,maya,first.id,processingInput,options),{...processingResult,duplicate:true});
     assert.equal(result.counts.site_access_requests,1);assert.equal(result.counts.site_access_controls,1);
     assert.equal(result.counts.site_lifecycle,1);assert.equal(result.counts.site_lifecycle_requests,1);
     await provisionPgCredential(pool,{staffId:'maya',orgId:'cedar',siteId:'beirut',email:'cutover-owner@example.test',password:'Synthetic-cutover-password'},options);
@@ -289,13 +327,18 @@ test('cutover preserves publication crew provenance and filtered export request/
     const draft=sqlite.prepare("SELECT * FROM briefings WHERE id='shelf'").get();
     const publication=publish(sqlite,maya,'shelf',{requestId:randomUUID(),revision:draft.revision,nextVersion:draft.next_version,workerIds:['worker-29','worker-30']});
     const body={requestId:randomUUID(),publicationId:publication.id,filters:{crewId:crew.id,responseFrom:'',responseThrough:''}};
-    requestExport(sqlite,maya,body);processOneExport(sqlite);
+    requestExport(sqlite,maya,body);
+    sqlite.prepare("UPDATE report_exports SET status='failed',attempts=1 WHERE id=?").run(body.requestId);
+    const retry={requestId:randomUUID(),attempts:1};retryExport(sqlite,maya,body.requestId,retry);processOneExport(sqlite);
     sqlite.prepare("UPDATE crews SET name='Later crew name' WHERE id=?").run(crew.id);sqlite.prepare("DELETE FROM crew_memberships WHERE worker_id='worker-30'").run();
     const frozen=JSON.parse(sqlite.prepare('SELECT snapshot_json FROM report_exports WHERE id=?').get(body.requestId).snapshot_json);
     await backupLocal({database:join(root,'source.sqlite'),audioRoot:join(root,'audio'),destination:join(root,'backup')});
     await pg.exec(`CREATE SCHEMA ${schema}`);await runMigrations(pool,{schema});
     const result=await importSqliteBackup(pool,{source:join(root,'backup'),schema,requestId:randomUUID(),dataClass:'synthetic',dryRun:false});
     assert.equal(result.counts.publication_report_audience,2);
+    assert.equal(result.counts.report_export_retries,1);
+    const retryReceipt=await pgExportReceipt(pool,maya,'retry',retry.requestId,{schema});assert.equal(retryReceipt.found,true);assert.equal(retryReceipt.result.attempts,1);
+    assert.equal((await pgRetryExport(pool,maya,body.requestId,retry,{schema})).duplicate,true);
     const report=await readPublicationReport(pool,maya,{schema,publicationId:publication.id,filters:body.filters});
     assert.equal(report.metrics.assigned,1);assert.equal(report.availableCrews[0].name,'Publication crew');
     const replay=await pgRequestExport(pool,maya,body,{schema});assert.equal(replay.duplicate,true);assert.equal(replay.filters.crewId,crew.id);assert.equal(replay.filters.timezone,'Asia/Beirut');
@@ -325,6 +368,10 @@ test('PostgreSQL synthetic migration dry-runs, preserves evidence and scopes rep
     createSession(sqlite, sqlite.prepare("SELECT * FROM staff WHERE id='maya'").get(), 'staff', 'demo');
     issueWorkerGrant(sqlite, maya, 'worker-30');
     const audio = await receiveRecording(sqlite,worker,'assignment-30',randomUUID(),wav(),join(root,'audio'));
+    sqlite.prepare("UPDATE recordings SET status='failed',attempts=3 WHERE id=?").run(audio.id);
+    const retryContext=getProcessingRetryContext(sqlite,maya,`response_transcription:${audio.id}`),processingRetry={requestId:randomUUID(),jobId:retryContext.jobId,publicationId:retryContext.publicationId,assignmentId:retryContext.assignmentId,generation:retryContext.generation,confirmed:true};
+    retryProcessing(sqlite,maya,retryContext.jobId,processingRetry);
+    const processingRetryReceipt=getProcessingRetryReceipt(sqlite,maya,retryContext.jobId,processingRetry.requestId);
     submitAnswer(sqlite,worker,'assignment-30',randomUUID(),'Finished on blue; unfinished on yellow.');
     const exported = requestExport(sqlite,maya,{ requestId:randomUUID(),publicationId:'shelf-v3' }); processOneExport(sqlite);
     const notificationEvent=sqlite.prepare("SELECT id FROM audit WHERE action='export.ready'").get().id;
@@ -434,6 +481,10 @@ test('PostgreSQL synthetic migration dry-runs, preserves evidence and scopes rep
     const pgPublication = (await pg.query(`SELECT snapshot_json FROM ${schema}.publications WHERE id='shelf-v3'`)).rows[0];
     assert.deepEqual(pgPublication.snapshot_json,JSON.parse(sqlite.prepare("SELECT snapshot_json FROM publications WHERE id='shelf-v3'").get().snapshot_json));
     assert.equal((await pg.query(`SELECT status FROM ${schema}.recordings WHERE id=$1`,[audio.id])).rows[0].status,'received');
+    assert.equal(result.counts.processing_retries,1);
+    assert.deepEqual(await pgProcessingReceipt(pool,maya,processingRetry.jobId,processingRetry.requestId,{schema}),processingRetryReceipt);
+    assert.deepEqual(await pgRetryProcessing(pool,maya,processingRetry.jobId,processingRetry,{schema}),processingRetryReceipt.result);
+    assert.equal((await pg.query(`SELECT count(*)::int AS n FROM ${schema}.processing_retries`)).rows[0].n,1);
     assert.equal((await pg.query(`SELECT COUNT(*)::int AS n FROM ${schema}.sessions WHERE revoked_at IS NULL`)).rows[0].n,0);
     assert.equal((await pg.query(`SELECT COUNT(*)::int AS n FROM ${schema}.worker_grants WHERE revoked_at IS NULL`)).rows[0].n,0);
     assert.equal((await pg.query(`SELECT COUNT(*)::int AS n FROM ${schema}.staff_credentials`)).rows[0].n,0);

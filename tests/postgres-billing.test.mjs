@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {randomUUID} from 'node:crypto';
+import {createHash,randomUUID} from 'node:crypto';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
+import {billingRequestSignature,voidInput,paymentInput} from '../server/billing-input.mjs';
 import {PGlite} from '@electric-sql/pglite';
 import {runMigrations} from '../server/postgres/migrate.mjs';
 import {createInvoice,recordPayment,voidInvoice,getInvoice,listInvoices,billingReceipt} from '../server/postgres/billing.mjs';
@@ -34,7 +37,7 @@ test('PostgreSQL unpaid void survives lost commit receipt, blocks payments and p
     await assert.rejects(voidInvoice(pool,owner,created.id,{...input,requestId:randomUUID()},options),/voided/);
     const detail=await getInvoice(pool,owner,created.id,{},options);assert.equal(detail.amountCents,2500);assert.equal(detail.voidedCents,2500);assert.equal(detail.paidCents,0);assert.equal(detail.balanceCents,0);assert.equal(detail.status,'void');assert.equal(detail.voidRecord.reason,input.reason);
     assert.equal((await listInvoices(pool,owner,{status:'void'},options)).total,1);assert.equal((await listInvoices(pool,owner,{status:'unpaid'},options)).total,0);assert.equal((await listInvoices(pool,owner,{status:'paid'},options)).total,0);
-    assert.deepEqual(await billingReceipt(pool,owner,'void',input.requestId,options),{found:true,kind:'void',id:input.requestId,invoiceId:created.id});
+    assert.deepEqual(await billingReceipt(pool,owner,'void',input.requestId,options),{found:true,kind:'void',id:input.requestId,invoiceId:created.id,requestHash:createHash('sha256').update(billingRequestSignature('void',input.requestId,created.id,voidInput(input))).digest('hex')});
     await assert.rejects(recordPayment(pool,owner,created.id,payment(),options),/voided/);
     await assert.rejects(db.query("INSERT INTO invoice_payments(id,org_id,site_id,invoice_id,amount_cents,payment_date,reference,note,request_json,recorded_by) VALUES($1,'a','a',$2,1,'2026-10-01','Synthetic','','{}','owner')",[randomUUID(),created.id]),/voided/);
     for(const sql of ["UPDATE invoice_voids SET reason='Changed'",'DELETE FROM invoice_voids']) await assert.rejects(db.query(sql),/immutable/);
@@ -54,7 +57,7 @@ test('PostgreSQL invoice/payment ledger is immutable, exact-replayable and atomi
     await assert.rejects(createInvoice(pool,owner,{...request,description:'Changed'},options),/conflict/);
     const first=payment();f.loseCommit();await assert.rejects(recordPayment(pool,owner,created.id,first,options),/acknowledgment lost/);
     assert.equal((await recordPayment(pool,owner,created.id,first,options)).duplicate,true);
-    assert.deepEqual(await billingReceipt(pool,owner,'payment',first.requestId,options),{found:true,kind:'payment',id:first.requestId,invoiceId:created.id});
+    assert.deepEqual(await billingReceipt(pool,owner,'payment',first.requestId,options),{found:true,kind:'payment',id:first.requestId,invoiceId:created.id,requestHash:createHash('sha256').update(billingRequestSignature('payment',first.requestId,created.id,paymentInput(first))).digest('hex')});
     assert.equal((await billingReceipt(pool,owner,'invoice',randomUUID(),options)).found,false);
     let detail=await getInvoice(pool,owner,created.id,{},options);assert.equal(detail.paidCents,1010);assert.equal(detail.balanceCents,1490);assert.equal(detail.status,'partial');
     await assert.rejects(recordPayment(pool,owner,created.id,{...first,amount:'10.11'},options),/conflict/);

@@ -14,6 +14,7 @@ import {processOneDeletionPseudonym as pgPseudonym} from '../server/postgres/del
 import {processOneDeletionCompletion} from '../server/deletion-completions.mjs';
 import {processOneDeletionCompletion as pgComplete} from '../server/postgres/deletion-completions.mjs';
 import {deletionSnapshotsClear} from '../server/deletion-verification.mjs';
+import {applicationCleanupEvidence} from '../server/deletion-scope.mjs';
 import {processOneAudioPurge} from '../server/retention.mjs';
 import {processOneAudioPurge as pgPurge} from '../server/postgres/retention.mjs';
 import * as localExports from '../server/exports.mjs';
@@ -142,6 +143,10 @@ for(const backend of ['SQLite','PostgreSQL'])test(`${backend} worker pseudonymiz
     assert.equal((await (pg?pgDelete:requestWorkerDeletion)(connection,owner,'worker-30',change)).status,'complete');
     const status=await get(connection,owner,'worker-30');
     assert.equal(status.status,'complete');assert.ok(status.completedAt);assert.ok(status.contentRedactedAt);assert.ok(status.identityPseudonymizedAt);
+    assert.deepEqual(status.cleanupEvidence,applicationCleanupEvidence());
+    const completionBefore=await query('SELECT * FROM worker_deletion_completions');
+    assert.deepEqual(await get(connection,owner,'worker-30'),status);
+    assert.deepEqual(await query('SELECT * FROM worker_deletion_completions'),completionBefore);
     assert.doesNotMatch(JSON.stringify(status),/Worker 030|code_hash|fingerprint|token/);
     assert.equal(Number((await query("SELECT count(*) AS count FROM audit WHERE action='worker.deletion.completed'"))[0].count),1);
     await assert.rejects(async()=>query('DELETE FROM worker_deletion_completions'),/immutable/);

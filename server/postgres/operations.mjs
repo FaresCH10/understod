@@ -104,7 +104,7 @@ export function retryOperationsJob(pool,identity,input,{schema='public'}={}) {
     const reference=(await client.query(`SELECT org_id${value.kind==='preparation'?',briefing_id':''} FROM ${table} WHERE id=$1`,[value.jobId])).rows[0];
     if(!reference)throw Error('Job is not retryable');await requireTenantActive(client,reference.org_id);
     if(value.kind==='preparation')await client.query('SELECT id FROM briefings WHERE id=$1 FOR UPDATE',[reference.briefing_id]);
-    const job=(await client.query(`SELECT * FROM ${table} WHERE id=$1 FOR UPDATE`,[value.jobId])).rows[0];
+    const job=(await client.query(`SELECT id,org_id,site_id,status,attempts,lease_token${value.kind==='preparation'?',briefing_id,revision,kind':value.kind==='assessment'?',attempt_id':''} FROM ${table} WHERE id=$1 FOR UPDATE`,[value.jobId])).rows[0];
     if(!(job.status==='failed' || value.kind==='assessment' && job.status==='blocked') || job.attempts!==value.attempts || job.lease_token!==null)throw Error('Job is not retryable');
     if(value.kind==='preparation') {
       const draft=(await client.query(`SELECT revision,state FROM briefings WHERE id=$1 AND org_id=$2 AND site_id=$3
@@ -118,7 +118,7 @@ export function retryOperationsJob(pool,identity,input,{schema='public'}={}) {
         WHERE t.id=$1 AND t.org_id=$2 AND t.site_id=$3 AND t.assessment_status='pending' AND w.active=true
         AND NOT EXISTS(SELECT 1 FROM worker_deletion_requests d WHERE d.worker_id=w.id AND d.org_id=w.org_id)`,[job.attempt_id,job.org_id,job.site_id])).rows.length)throw Error('Job is not retryable');
     }else if(!(await client.query(`SELECT 1 FROM report_exports e JOIN staff s ON s.id=e.requested_by AND s.org_id=e.org_id AND s.site_id=e.site_id
-      WHERE e.id=$1 AND e.expires_at>clock_timestamp() AND e.snapshot_json IS NOT NULL AND NOT (${deletionExportExpiry})
+      WHERE e.id=$1 AND e.expires_at>clock_timestamp() AND e.snapshot_available AND NOT (${deletionExportExpiry})
       AND s.active=true AND s.role IN ('owner','supervisor','auditor')`,[job.id])).rows.length)throw Error('Job is not retryable');
     await client.query(`UPDATE ${table} SET status='queued',attempts=0,lease_token=NULL,lease_until=NULL,error=NULL${value.kind!=='export'?',due_at=clock_timestamp()':''} WHERE id=$1`,[job.id]);
     const result={kind:value.kind,jobId:job.id,status:'queued',attempts:0};

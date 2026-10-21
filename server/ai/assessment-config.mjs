@@ -1,4 +1,4 @@
-import {createGeminiAdapter,GEMINI_MODELS} from './gemini.mjs';
+import {createGeminiAdapter,GEMINI_MODELS,GEMINI_ASSESSMENT_VERSION} from './gemini.mjs';
 import {bundleHash} from './prepared-bundle.mjs';
 
 export const assessmentInputHash=({answer,question,askedFacts,language,publicationId,version})=>bundleHash({answer,question,askedFacts,language,publicationId,version});
@@ -18,7 +18,7 @@ export function resolveAssessmentAdapter(env=process.env,{fetchImpl=fetch}={}) {
   const permitted=new Set(hashes),options={apiKey:env.GEMINI_API_KEY,dataClass:'synthetic',fetchImpl};
   const adapter=createGeminiAdapter(options);
   return Object.freeze({provenance:Object.freeze({adapter:'gemini-typed-assessment-v1',dataClass:'synthetic',
-    model:GEMINI_MODELS.text,promptVersion:'gemini-assessment-v1',schemaVersion:'gemini-assessment-v1'}),
+    model:GEMINI_MODELS.text,promptVersion:GEMINI_ASSESSMENT_VERSION,schemaVersion:GEMINI_ASSESSMENT_VERSION}),
     assessmentModel:GEMINI_MODELS.text,assess:adapter.assess,
     permitsAssessment:input=>permitted.has(assessmentInputHash(input)),
     withJournal:requestJournal=>Object.freeze({assess:createGeminiAdapter({...options,requestJournal}).assess})});

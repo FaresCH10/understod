@@ -1,0 +1,112 @@
+{
+  "readings": [
+    {
+      "alert": [
+        "This draft exceeds the current send limit. Shorten it before sending. Your text has not been changed."
+      ],
+      "counter": "800 / 500",
+      "invalid": "true",
+      "length": 800,
+      "limit": 500,
+      "phase": "preserved-over-limit",
+      "submitDisabled": true
+    },
+    {
+      "alert": [
+        "تتجاوز هذه المسودة حد الإرسال الحالي. اختصرها قبل الإرسال. لم يتغير النص."
+      ],
+      "counter": "800 / 500",
+      "length": 800,
+      "limit": 500,
+      "phase": "ar-over-limit"
+    },
+    {
+      "alert": [
+        "یہ مسودہ بھیجنے کی موجودہ حد سے زیادہ ہے۔ بھیجنے سے پہلے اسے مختصر کریں۔ آپ کا متن تبدیل نہیں ہوا۔"
+      ],
+      "counter": "800 / 500",
+      "length": 800,
+      "limit": 500,
+      "phase": "ur-over-limit"
+    },
+    {
+      "alertWidth": 303,
+      "counter": "800 / 500",
+      "docWidth": 375,
+      "phase": "ur-mobile-over-limit",
+      "submitDisabled": true,
+      "width": 390
+    },
+    {
+      "counter": "800 / 1000",
+      "length": 800,
+      "limit": 1000,
+      "phase": "restored-plain-message",
+      "submitDisabled": false
+    },
+    {
+      "counter": "500 / 500",
+      "length": 500,
+      "limit": 500,
+      "phase": "new-followup-boundary",
+      "submitDisabled": false
+    }
+  ],
+  "before": {
+    "actualMicrophoneUsed": false,
+    "attempts": 1,
+    "audioPosts": 0,
+    "caseMessages": 0,
+    "caseStatus": "open",
+    "externalCalls": 0,
+    "followupMode": "queue-only",
+    "followups": [],
+    "held": false,
+    "language": "en",
+    "listHeld": false,
+    "listPages": [],
+    "listReads": 0,
+    "noticeReads": 0,
+    "objects": 0,
+    "originalAttemptUnchanged": true,
+    "otherPosts": 0,
+    "playbackReads": 0,
+    "receiptReads": 0,
+    "recordings": [],
+    "seededRecordings": 0,
+    "simulatedMicrophoneRequests": 0,
+    "submissionReceipts": 1
+  },
+  "after": {
+    "actualMicrophoneUsed": false,
+    "attempts": 1,
+    "audioPosts": 0,
+    "caseMessages": 0,
+    "caseStatus": "open",
+    "externalCalls": 0,
+    "followupMode": "queue-only",
+    "followups": [
+      {
+        "id": "7d556bd1-4584-47af-acb3-bba754936188",
+        "language": "en",
+        "status": "queued"
+      }
+    ],
+    "held": false,
+    "language": "en",
+    "listHeld": false,
+    "listPages": [],
+    "listReads": 0,
+    "noticeReads": 0,
+    "objects": 0,
+    "originalAttemptUnchanged": true,
+    "otherPosts": 1,
+    "playbackReads": 0,
+    "receiptReads": 0,
+    "recordings": [],
+    "seededRecordings": 0,
+    "simulatedMicrophoneRequests": 0,
+    "submissionReceipts": 1
+  },
+  "scope": "Built synthetic queue-only UI; ordinary/captured-command API limit remains1000; no real microphone or external provider."
+}

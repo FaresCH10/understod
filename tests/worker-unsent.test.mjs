@@ -1,6 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {recorderHasUnsent,workerLeaveRequired,workerLeaveText,workerNavigationDecision,retainWorkerDetail,workerRefreshText} from '../src/worker-unsent.ts';
+import {recorderHasUnsent,workerLeaveRequired,workerLeaveText,workerNavigationDecision,retainWorkerDetail,workerRefreshText,workerInputAvailability} from '../src/worker-unsent.ts';
+
+test('worker answer, help and conversation drafts block competing writers, never their own continuation',()=>{
+  const empty={answer:' \n',help:' ',audio:false,helpVoice:false,conversation:false};
+  assert.deepEqual(workerInputAvailability(empty),{answerBlocked:false,helpBlocked:false,conversationBlocked:false});
+  for(const patch of [{answer:'Original draft'},{audio:true}])assert.deepEqual(workerInputAvailability({...empty,...patch}),{answerBlocked:false,helpBlocked:true,conversationBlocked:true});
+  for(const patch of [{help:'Original help'},{helpVoice:true}])assert.deepEqual(workerInputAvailability({...empty,...patch}),{answerBlocked:true,helpBlocked:false,conversationBlocked:true});
+  assert.deepEqual(workerInputAvailability({...empty,conversation:true}),{answerBlocked:true,helpBlocked:true,conversationBlocked:false});
+  assert.deepEqual(workerInputAvailability({...empty,audio:true,helpVoice:true,conversation:true}),{answerBlocked:true,helpBlocked:true,conversationBlocked:true});
+});
 
 test('worker leave warnings distinguish retained typed text from discarded recording and sent work',()=>{
   for(const phase of ['requesting','recording','preview','uploading'])assert.equal(recorderHasUnsent(phase),true);

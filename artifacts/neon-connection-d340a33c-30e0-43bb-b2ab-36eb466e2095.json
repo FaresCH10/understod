@@ -1,0 +1,16 @@
+{
+  "startedAt": "2026-10-14T16:50:47.787Z",
+  "finishedAt": "2026-10-14T16:50:52.511Z",
+  "state": "passed",
+  "passed": true,
+  "kind": "connection-only",
+  "certificateVerified": true,
+  "independentConnections": 2,
+  "applicationRelations": 0,
+  "postgresMajor": 18,
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "channelBinding": "enabled-when-offered",
+  "databaseWrites": 0,
+  "migrationsApplied": 0,
+  "productionVerdict": false
+}

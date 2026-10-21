@@ -34,13 +34,25 @@ test('normal credential/audio/publication/answer/help/report paths complete with
   globalThis.fetch=async()=>assert.fail('The rehearsal must not use an external network transport');
   let report;
   try {report=await runPipelineRehearsal({onStage:name=>stages.push(name)});}finally{globalThis.fetch=originalFetch;}
-  assert.equal(stages.length,9);assert.deepEqual(report.checks,stages.map(name=>({name,status:'passed'})));
+  assert.equal(stages.length,10);assert.deepEqual(report.checks,stages.map(name=>({name,status:'passed'})));
   assert.ok(Object.isFrozen(report));assert.ok(Object.isFrozen(report.typedEvaluation));
   assert.deepEqual(report.metrics,{assigned:5,responses:5,matches:3,clarifications:2,unassessed:0,pending:0,completion:100});
   assert.equal(report.providerEvidence.scriptedRequests,24);assert.equal(report.providerEvidence.externalRequests,0);
   assert.equal(report.providerEvidence.operations,16);assert.equal(report.providerEvidence.reservedRequests,24);assert.equal(report.providerEvidence.acceptedRequests,24);
   assert.deepEqual(report.providerEvidence.byKind,{'source-transcription':1,preparation:8,'typed-assessment':4,'recording-transcription':1,'recording-assessment':1,'case-followup':1});
-  assert.equal(report.privateStorage.objects,8);assert.equal(report.frozenPublication.version,1);
+  assert.equal(report.privateStorage.objects,9);assert.equal(report.frozenPublication.version,1);
+  assert.deepEqual(report.privateStorage.families,{'case-followup':1,'case-voice':1,generated:4,recording:1,source:1,'source-original':1});
+  assert.equal(report.workerPermissions.profile,'worker');assert.equal(report.workerPermissions.verified,true);
+  assert.equal(report.workerPermissions.taskExecutions,15);
+  assert.deepEqual(report.workerPermissions.stages,['assessment','caseFollowup','preparation','recording','sourceTranscription']);
+  assert.equal(report.workerPermissions.hiddenTables,11);assert.equal(report.workerPermissions.nativeAuthentication,'not-tested');
+  assert.equal(report.workerPermissions.apiIdentity,'embedded-application-role');
+  assert.equal(report.apiPermissions.profile,'application');assert.equal(report.apiPermissions.verified,true);
+  assert.equal(report.apiPermissions.writableTables,120);assert.equal(report.apiPermissions.readOnlyTables,12);assert.equal(report.apiPermissions.hiddenTables,7);
+  assert.equal(report.apiPermissions.taskExecutions,10);assert.deepEqual(report.apiPermissions.stages,[...stages].sort());
+  assert.equal(report.apiPermissions.nativeAuthentication,'not-tested');assert.equal(report.apiPermissions.schemaOwnerUsedForCustomerOperations,false);
+  assert.equal(report.apiPermissions.roleRestoredAfterNestedWork,true);
+  assert.deepEqual(report.apiPermissions.maintenanceStages,['workspace-bootstrap','provider-policy-fixture','pause-provider','resume-provider']);
   assert.equal(report.typedEvaluation.metrics.completed,4);assert.equal(report.typedEvaluation.metrics.failed,0);
   assert.equal(report.typedEvaluation.metrics.notRun,0);assert.equal(report.typedEvaluation.metrics.outcomeDisagreements,0);
   assert.ok(report.typedEvaluation.results.every(row=>row.provenance.model===GEMINI_MODELS.text && /^[a-f0-9]{64}$/.test(row.inputHash)));

@@ -1,0 +1,862 @@
+{
+  "measurements": [
+    {
+      "requested": 320,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 305,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 320
+    },
+    {
+      "requested": 320,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 305,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 320
+    },
+    {
+      "requested": 320,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 305,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 320
+    },
+    {
+      "requested": 390,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 375,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 390
+    },
+    {
+      "requested": 390,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 375,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 390
+    },
+    {
+      "requested": 390,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 375,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 390
+    },
+    {
+      "requested": 768,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 753,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 768
+    },
+    {
+      "requested": 768,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 753,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 768
+    },
+    {
+      "requested": 768,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 753,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 768
+    },
+    {
+      "requested": 1440,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 1425,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 1440
+    },
+    {
+      "requested": 1440,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 1425,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 1440
+    },
+    {
+      "requested": 1440,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 1425,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 1440
+    },
+    {
+      "requested": 1586,
+      "locale": "en",
+      "dir": "ltr",
+      "document": 1571,
+      "lang": "en",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "Processing",
+        "Queued",
+        "Ready",
+        "Failed",
+        "Expired"
+      ],
+      "width": 1586
+    },
+    {
+      "requested": 1586,
+      "locale": "ar",
+      "dir": "rtl",
+      "document": 1571,
+      "lang": "ar",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "قيد المعالجة",
+        "في قائمة الانتظار",
+        "جاهز",
+        "فشل",
+        "منتهي الصلاحية"
+      ],
+      "width": 1586
+    },
+    {
+      "requested": 1586,
+      "locale": "ur",
+      "dir": "rtl",
+      "document": 1571,
+      "lang": "ur",
+      "metrics": [
+        "30",
+        "24",
+        "21",
+        "3",
+        "6"
+      ],
+      "outside": [],
+      "overflow": [],
+      "statuses": [
+        "پروسیسنگ جاری ہے",
+        "قطار میں",
+        "تیار",
+        "ناکام",
+        "میعاد ختم"
+      ],
+      "width": 1586
+    }
+  ],
+  "flows": [
+    {
+      "phase": "held-publication",
+      "locale": "en",
+      "active": "H2",
+      "busy": "true",
+      "rows": 0
+    },
+    {
+      "phase": "page2-publication",
+      "locale": "en",
+      "active": "H2",
+      "page": "Page 2 of 2",
+      "rows": 3
+    },
+    {
+      "phase": "held-publication",
+      "locale": "ar",
+      "active": "H2",
+      "busy": "true",
+      "rows": 0
+    },
+    {
+      "phase": "page2-publication",
+      "locale": "ar",
+      "active": "H2",
+      "page": "الصفحة 2 من 2",
+      "rows": 3
+    },
+    {
+      "phase": "held-publication",
+      "locale": "ur",
+      "active": "H2",
+      "busy": "true",
+      "rows": 0
+    },
+    {
+      "phase": "page2-publication",
+      "locale": "ur",
+      "active": "H2",
+      "page": "صفحہ 2 از 2",
+      "rows": 3
+    },
+    {
+      "phase": "search-draft-after-locale",
+      "value": null
+    },
+    {
+      "phase": "selected-historical",
+      "active": "Briefing version",
+      "header": "Briefing activitySynthetic historical 21 · العربية · اردو · Published v24Interface languageEnglishالعربيةاردوActivity historyExport CSV",
+      "historyOpen": false
+    },
+    {
+      "phase": "search-property-after-locale",
+      "value": "Shelf colour handover"
+    },
+    {
+      "phase": "held-exports-ar",
+      "rows": 0,
+      "text": "سجل التصديرجارٍ تحميل سجل التصدير..."
+    },
+    {
+      "phase": "held-exports-ur",
+      "rows": 0,
+      "text": "برآمد کی تاریخبرآمد کی تاریخ لوڈ ہو رہی ہے..."
+    },
+    {
+      "phase": "failed-exports-ur",
+      "diagnostic": false,
+      "rows": 0,
+      "text": "برآمد کی تاریخبرآمد کی تاریخ کی تصدیق نہیں ہو سکی۔"
+    },
+    {
+      "phase": "failed-publications-ur",
+      "rows": 0,
+      "text": "اشاعت کی تاریخ لوڈ نہیں ہو سکی۔ دوبارہ لوڈ کریں۔"
+    },
+    {
+      "phase": "failed-report-en",
+      "alert": [
+        "The report could not be loaded. Try again."
+      ],
+      "diagnostic": false,
+      "metrics": 0
+    },
+    {
+      "phase": "recovered-report-ar",
+      "crew": "@unassigned",
+      "metrics": [
+        "18",
+        "12",
+        "9",
+        "3",
+        "6"
+      ]
+    },
+    {
+      "phase": "captured-filters-before-create",
+      "fields": [
+        "morning",
+        "",
+        ""
+      ],
+      "metrics": [
+        "12",
+        "12",
+        "12",
+        "0",
+        "0"
+      ]
+    }
+  ],
+  "beforeMutations": {
+    "attemptsUnchanged": true,
+    "commands": [],
+    "downloads": [
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      },
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      },
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      }
+    ],
+    "exports": [
+      {
+        "attempts": 0,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "13aeb393-eae3-4b85-9ce6-4d751e7c4802",
+        "requested_by": "maya",
+        "status": "queued"
+      },
+      {
+        "attempts": 1,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "716078a8-57b9-477e-b528-72e7712bb148",
+        "requested_by": "maya",
+        "status": "processing"
+      },
+      {
+        "attempts": 1,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "72d129cc-0d3f-48f7-8286-bdbc20107b5b",
+        "requested_by": "maya",
+        "status": "failed"
+      },
+      {
+        "attempts": 1,
+        "checksum": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "requested_by": "maya",
+        "status": "ready"
+      },
+      {
+        "attempts": 0,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "8542fd92-88a4-4c01-9210-4138c93fd3a3",
+        "requested_by": "maya",
+        "status": "expired"
+      }
+    ],
+    "externalRequests": 0,
+    "faults": {
+      "create": {
+        "posts": 0,
+        "rejected": 0,
+        "stage": 0
+      },
+      "retry": {
+        "posts": 0,
+        "rejected": 0,
+        "stage": 0
+      }
+    },
+    "publicationReads": [
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "Synthetic historical 21",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "Shelf colour handover",
+        "through": ""
+      }
+    ],
+    "publicationsUnchanged": true,
+    "readHeld": false,
+    "reportReads": [
+      {
+        "crewId": "",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "",
+        "publicationId": "locale-history-21",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "",
+        "publicationId": "shelf-v3",
+        "responseFrom": "",
+        "responseThrough": ""
+      }
+    ],
+    "retryReceipts": [],
+    "seededReady": "8187aa93-ca77-48a7-91af-eb7774efa203"
+  },
+  "rejectedCreate": {
+    "attemptsUnchanged": true,
+    "commands": [
+      {
+        "body": {
+          "filters": {
+            "crewId": "morning",
+            "responseFrom": "",
+            "responseThrough": ""
+          },
+          "publicationId": "shelf-v3",
+          "requestId": "779489b7-d1fe-4cd1-bb67-300eacced877"
+        },
+        "kind": "create"
+      }
+    ],
+    "downloads": [
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      },
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      },
+      {
+        "bytes": 2107,
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "sha256": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "status": 200
+      }
+    ],
+    "exports": [
+      {
+        "attempts": 0,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "13aeb393-eae3-4b85-9ce6-4d751e7c4802",
+        "requested_by": "maya",
+        "status": "queued"
+      },
+      {
+        "attempts": 1,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "716078a8-57b9-477e-b528-72e7712bb148",
+        "requested_by": "maya",
+        "status": "processing"
+      },
+      {
+        "attempts": 1,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "72d129cc-0d3f-48f7-8286-bdbc20107b5b",
+        "requested_by": "maya",
+        "status": "failed"
+      },
+      {
+        "attempts": 1,
+        "checksum": "06a25736d100a522859ead0f4c18711121cdb5c496c9b3579b3b7780bb0b661e",
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "8187aa93-ca77-48a7-91af-eb7774efa203",
+        "requested_by": "maya",
+        "status": "ready"
+      },
+      {
+        "attempts": 0,
+        "checksum": null,
+        "filters_json": "{\"crewId\":\"\",\"responseFrom\":\"\",\"responseThrough\":\"\",\"timezone\":\"Asia/Beirut\"}",
+        "id": "8542fd92-88a4-4c01-9210-4138c93fd3a3",
+        "requested_by": "maya",
+        "status": "expired"
+      }
+    ],
+    "externalRequests": 0,
+    "faults": {
+      "create": {
+        "posts": 1,
+        "rejected": 0,
+        "stage": 0
+      },
+      "retry": {
+        "posts": 0,
+        "rejected": 0,
+        "stage": 0
+      }
+    },
+    "publicationReads": [
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "2",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "Synthetic historical 21",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "Shelf colour handover",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      },
+      {
+        "from": "",
+        "page": "1",
+        "pageSize": "20",
+        "search": "",
+        "through": ""
+      }
+    ],
+    "publicationsUnchanged": true,
+    "readHeld": false,
+    "reportReads": [
+      {
+        "crewId": "",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "",
+        "publicationId": "locale-history-21",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "",
+        "publicationId": "shelf-v3",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "@unassigned",
+        "publicationId": "shelf-v3",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "@unassigned",
+        "publicationId": "shelf-v3",
+        "responseFrom": "",
+        "responseThrough": ""
+      },
+      {
+        "crewId": "morning",
+        "publicationId": "shelf-v3",
+        "responseFrom": "",
+        "responseThrough": ""
+      }
+    ],
+    "retryReceipts": [],
+    "seededReady": "8187aa93-ca77-48a7-91af-eb7774efa203"
+  },
+  "notes": [
+    "Built layout, focus and CSV comparisons are retained.",
+    "Recovery trial did not reach acceptance: fixture instrumentation started reading the body before the real API parser; one request was rejected, with a missing receipt. Fix instrumentation, not production parsing.",
+    "ISO date fill left empty values; formatted native-date fill failed. Inspect real calendar controls.",
+    "Search attribute was null for an uncontrolled input; only later value-property and actual query checks prove continuity."
+  ]
+}

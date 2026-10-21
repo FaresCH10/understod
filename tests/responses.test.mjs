@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {createSessionContextFetch} from './helpers/session-http.mjs';
+const fetch=createSessionContextFetch();
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { mkdtemp,rm } from 'node:fs/promises';
@@ -167,6 +169,8 @@ test('SQLite response history is scoped, receipt-ordered, paged and read-only ac
     const read=await (await request(`${path}/assignment-30`,maya)).json();assert.equal(read.publication.state,'withdrawn');assert.equal(read.receipts.length,3);
     assert.equal((await (await request(path,maya)).json()).total,30);
     const ownHttp=await (await request('/worker/briefings/assignment-30/submissions?pageSize=1',workerCookie)).json();assert.equal(ownHttp.assignment.state,'withdrawn');assert.equal(ownHttp.total,3);assert.equal(ownHttp.receipts.length,1);
+    const workerSession=await (await request('/session',workerCookie)).json();assert.equal(ownHttp.clientContext,workerSession.clientContext);
+    assert.equal((await fetch(base+'/api/worker/briefings/assignment-30/submissions',{headers:{cookie:workerCookie,'x-client-session-context':'f'.repeat(64)}})).status,409);
     assert.ok(!/reasons|evidence|notes|facts|rubric|sequence/.test(JSON.stringify(ownHttp)));
     assert.equal(db.prepare('SELECT COUNT(*) n FROM audit').get().n,count);
     assert.deepEqual(db.prepare("SELECT * FROM submission_receipts WHERE assignment_id='assignment-30' ORDER BY sequence").all(),before);

@@ -21,6 +21,8 @@ import {processOneSourceAudioCleanup} from '../server/source-audio-cleanup.mjs';
 import {saveRetention} from '../server/retention.mjs';
 import {receiveSourceAudio} from '../server/source-audio.mjs';
 import {ensureSourceRetrySchema} from '../server/source-audio-retry.mjs';
+import {createCrew,moveWorkerToCrew} from '../server/people.mjs';
+import {captureReportAudience} from '../server/report-scope.mjs';
 
 // Disposable UI evidence: all state lives in memory; no existing local data is changed.
 const db=openDatabase(':memory:');
@@ -79,7 +81,7 @@ if(process.argv.includes('--site-contacts'))for(let n=0;n<18;n++)db.prepare('INS
 db.prepare("INSERT INTO workers VALUES('qa-new','cedar','beirut','QA Worker New','en',1)").run();
 db.prepare("INSERT INTO workers VALUES('qa-ar','cedar','beirut','QA Worker Arabic','ar',1)").run();
 db.prepare("INSERT INTO workers VALUES('qa-ur','cedar','beirut','QA Worker Urdu','ur',1)").run();
-for(const [id,worker,language] of [['qa-answer-new','qa-new','en'],['qa-answer-ar','qa-ar','ar'],['qa-answer-ur','qa-ur','ur']]){
+for(const [id,worker,language] of process.argv.includes('--site-crews')?[]:[['qa-answer-new','qa-new','en'],['qa-answer-ar','qa-ar','ar'],['qa-answer-ur','qa-ur','ur']]){
   db.prepare('INSERT INTO assignments(id,org_id,site_id,publication_id,worker_id,due_at,created_at,language) VALUES(?,?,?,?,?,?,?,?)')
     .run(id,'cedar','beirut','shelf-v3',worker,null,new Date().toISOString(),language);
 }
@@ -88,6 +90,15 @@ db.prepare("INSERT INTO workers VALUES('qa-pending','cedar','beirut','QA Worker 
 requestWorkerDeletion(db,owner,'qa-complete',{requestId:randomUUID(),expectedCode:'QA Worker Complete',reason:'worker_request',confirmed:true});
 processOneDeletionRedaction(db);processOneDeletionPseudonym(db);await processOneDeletionCompletion(db,{});
 requestWorkerDeletion(db,owner,'qa-pending',{requestId:randomUUID(),expectedCode:'QA Worker Pending',reason:'customer_policy',confirmed:true});
+if(process.argv.includes('--site-crews')){
+  // This disposable fixture explicitly constructs a synthetic publication audience, not a legacy migration.
+  for(const [name,from,through] of [['الفريق الصباحي',1,18],['الفريق المسائي QA',19,26],['فريق المكتب',27,30]]){
+    const crew=createCrew(db,owner,{name});for(let n=from;n<=through;n++)moveWorkerToCrew(db,owner,`worker-${n}`,crew.id);
+  }
+  captureReportAudience(db,'shelf-v3');
+  db.prepare("INSERT INTO staff VALUES('qa-crew-deputy','cedar','beirut','Rami QA','supervisor',1)").run();
+  db.prepare("INSERT INTO site_settings(site_id,org_id,revision,primary_contact_id,deputy_contact_id) VALUES('beirut','cedar',0,'maya','qa-crew-deputy')").run();
+}
 const handler=api.listeners('request')[0];api.removeAllListeners('request');
 let rejectSubmissions=false,submittedBodies=[],rejectNotice=false,noticeBodies=[],noticeReadFailures=0,rejectRecorderChunk=false,blockedChunks=0;
 let sessionFailure=false,sessionReads=0,workerPosts=0;

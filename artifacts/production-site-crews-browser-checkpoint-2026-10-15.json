@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "understood-checkpoint-v1",
+  "date": "2026-10-15",
+  "productionReady": false,
+  "goalStatus": "active",
+  "overallEstimatePercent": 71,
+  "siteCrewsEstimatePercent": 85,
+  "previousSiteCrewsEstimatePercent": 75,
+  "sourceChanges": [
+    "Crew table headings preserve whole words with normal wrapping",
+    "Mobile contact tiles span the full metric grid with44px edit targets",
+    "Contact and activity arrows use forward direction with RTL mirroring",
+    "Arabic greeting uses Arabic comma"
+  ],
+  "clean": {
+    "id": "0dc72f84-7c89-4cd7-8a76-ef61fc51ce17",
+    "state": "passed", "startedAt": "2026-10-15T17:51:21.982Z", "finishedAt": "2026-10-15T17:56:42.030Z",
+    "sourceFiles": 814, "sourceSha256": "c2d2893909fb04e4b18ff6bca4e6ed0627b7e4001c12fa984bd8e43b3efd2538", "sourceUnchanged": true,
+    "offlineInstall": true, "build": true,
+    "totalTests": 1115, "passed": 1111, "failed": 0, "skippedNativePrerequisites": 4,
+    "durationMs": 279548.5331, "contractChecks": 43, "scriptedPipelineChecks": 10
+  },
+  "browser": {
+    "tool": "supported Cua browser APIs",
+    "fixture": "disposable in-memory SQLite; optimized clean build; no worker loop or provider/mail",
+    "ports": [3192, 3193],
+    "observedWidths": [320, 390, 768, 1440, 1586],
+    "pageHorizontalOverflow": false,
+    "mobile320": {"clientWidth": 305, "scrollWidth": 305, "contactWidth": 269, "nameHeight": 15, "buttonWidth": 44, "tableWidth": 680, "tableRegionWidth": 233},
+    "journeys": ["English to Arabic RTL", "focused create-crew form", "create crew", "move assigned worker", "rename with keyboard save", "archive with confirmation", "restore with confirmation", "select crew with keyboard", "keyboard member paging", "contact link opens settings"],
+    "frozenHistory": {
+      "headerBeforeAndAfter": {"assigned": 30, "responses": 24, "matches": 21, "clarifications": 3, "pending": 6},
+      "morningCurrentBefore": 18, "morningCurrentAfter": 17,
+      "morningFrozenBeforeAndAfter": {"assigned": 18, "matches": 17, "clarifications": 1, "pending": 0},
+      "newCrewAfterMove": {"currentMembers": 1, "frozenAssigned": 0},
+      "settledMorningPage1": ["002", "003", "004", "005", "006"],
+      "settledMorningPage2": ["007", "008", "009", "010", "011"]
+    },
+    "screenshots": ["artifacts/site-crews-en-1440-fixed-2026-10-15.jpg", "artifacts/site-crews-ar-320-fixed-2026-10-15.jpg", "artifacts/site-crews-ar-768-fixed-2026-10-15.jpg", "artifacts/site-crews-ar-1586-workflow-2026-10-15.jpg"],
+    "measurementOnlyWidth": 390,
+    "nonPassingAttempt": "A row-text locator used aria-label wording and timed out after archive had succeeded. Fresh DOM showed success; mutation not repeated.",
+    "cleanup": {"ownedTabClosed": true, "viewportReset": true, "fixtureStopped": true, "listenersRemaining": 0},
+    "reticleVerdict": "not claimed", "externalDiagnostics": false
+  },
+  "preservation": {"report": "artifacts/clean-backup-preservation-f37ea774-7523-443f-b8b7-100a305afae2.json", "originalTables": 8, "integrityOk": true, "foreignKeyViolations": 0, "buildManifests": 16, "filesPerManifest": 55, "selectedFilesScanned": 1987, "secretMatches": 0},
+  "limits": ["Not complete matched-reference acceptance", "Not full keyboard or assistive-technology certification", "Not independent Arabic/font/pluralization review", "Delayed, outage and authority-transition crew journeys remain", "English destination settings/subpanels remain localization backlog", "No native/deployed concurrency or real-device evidence"],
+  "next": ["Complete remaining S27 reference and transition acceptance", "Implement remaining dedicated-operator entry and provider-test delegation boundaries", "Prepare native88/three-role proof before seeking fresh bounded cloud authorization"],
+  "externalActions": {"realWorkerData": false, "cloudWrites": false, "gemini": false, "mail": false, "billing": false, "deployment": false}
+}

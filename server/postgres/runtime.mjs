@@ -31,7 +31,7 @@ import {resolveSourceTranscription} from '../ai/source-transcription-config.mjs'
 import {processOnePilot} from './pilot.mjs';
 import {pilotDestination} from '../pilot-input.mjs';
 import {randomUUID} from 'node:crypto';
-import {recordWorkerHealth} from './worker-health.mjs';
+import {recordWorkerPresence} from './worker-health.mjs';
 import {resolveProviderVerification} from '../ai/provider-verification-config.mjs';
 import {processStorageProbe} from './storage-health.mjs';
 import {processOneCaseEscalation} from './case-routing.mjs';
@@ -42,6 +42,8 @@ import {resolveRecordingAdapter} from '../ai/recording-config.mjs';
 import {processOneRecording} from './recording-worker.mjs';
 import {resolvePreparationAdapter} from '../ai/preparation-config.mjs';
 import {resolveAssessmentAdapter} from '../ai/assessment-config.mjs';
+import {processOneProviderVerification} from './provider-verification-worker.mjs';
+import {startWorkerHeartbeat} from './worker-heartbeat.mjs';
 
 export function rehearsalConfig(env=process.env) {
   const config=resolveAuthConfig({tier:env.UNDERSTOOD_TIER,aiMode:env.UNDERSTOOD_AI_MODE,
@@ -74,10 +76,11 @@ export const syntheticAssessmentAdapter={
   },
 };
 
-export function rehearsalTasks(pool,storage,config) {
+export function rehearsalTasks(pool,storage,config,{verificationSignal}={}) {
   const options={schema:config.schema,integrationMode:'synthetic'};
   return {
     storageProbe:()=>processStorageProbe(pool,storage,{...options,adapter:config.storageAdapter ?? 'local',enabled:config.storageChecks ?? false}),
+    providerVerification:()=>config.runtimeRoleProfile==='application'?false:processOneProviderVerification(pool,config.providerVerification,{...options,signal:verificationSignal}),
     preparation:() => processOnePreparation(pool,{...options,...(config.preparationAdapter ? {adapter:config.preparationAdapter,storage,languages:config.preparationLanguages} : {})}),
     sourceTranscription:() => processOneSourceAudio(pool,config.sourceAdapter,storage,options),
     publicationSchedule:() => processOneSchedule(pool,{...options,storage}),
@@ -118,27 +121,41 @@ export async function runWorkerCycle(tasks,{signal,onError=() => {},onStage}={})
   for (const [name,task] of Object.entries(tasks)) {
     if (signal?.aborted) break;
     if(onStage)await onStage(name);
+    if(signal?.aborted)break;
     try {results[name]=await task();} catch {results[name]=null;onError(name);}
   }
   return results;
 }
 
-export async function runRehearsalWorker(pool,storage,config,{signal,intervalMs=750,onError=() => {}}={}) {
-  if(config.runtimePermissionsRequired===true)await verifyRuntimePermissions(pool,{schema:config.schema});
-  const tasks=rehearsalTasks(pool,storage,config),id=randomUUID();let failures=[],lastHealth=0;
-  const health=async(state,stage=null)=>{
-    if(state!=='stopped' && Date.now()-lastHealth<5000)return;
-    await recordWorkerHealth(pool,id,{state,stage,failures},{schema:config.schema});lastHealth=Date.now();
+export async function runRehearsalWorker(pool,storage,config,{signal,intervalMs=750,heartbeatIntervalMs=5000,onError=() => {}}={}) {
+  if(config.runtimePermissionsRequired===true)await verifyRuntimePermissions(pool,{schema:config.schema,profile:config.runtimeRoleProfile ?? 'application'});
+  const fault=new AbortController(),loopSignal=signal?AbortSignal.any([signal,fault.signal]):fault.signal;
+  const tasks=rehearsalTasks(pool,storage,config,{verificationSignal:fault.signal}),id=randomUUID();
+  const failures=new Map();let failureVersion=0,presence={state:'idle',stage:null},heartbeat,stopFailed=false;
+  const failed=stage=>{failures.set(stage,++failureVersion);onError(stage);};
+  const publish=async snapshot=>{
+    const observed=new Map(failures);
+    await recordWorkerPresence(pool,id,snapshot,config);
+    for(const [stage,version] of observed)if(failures.get(stage)===version)failures.delete(stage);
   };
+  const snapshot=()=>({...presence,failures:[...failures.keys()]});
   try {
-    while (!signal?.aborted) {
-      failures=[];
-      await runWorkerCycle(tasks,{signal,onStage:stage=>health('busy',stage),onError:stage=>{failures.push(stage);onError(stage);}});
-      await health('idle');
-      try {await sleep(intervalMs,undefined,{signal});}
+    if(!loopSignal.aborted)heartbeat=await startWorkerHeartbeat(publish,snapshot,{intervalMs:heartbeatIntervalMs,onFailure:()=>{
+      fault.abort();failed('workerHealth');
+    }});
+    while (!loopSignal.aborted) {
+      await runWorkerCycle(tasks,{signal:loopSignal,onStage:stage=>{heartbeat.assertHealthy();presence={state:'busy',stage};},onError:failed});
+      presence={state:'idle',stage:null};heartbeat.assertHealthy();
+      try {await sleep(intervalMs,undefined,{signal:loopSignal});}
       catch(error) {if(error.name!=='AbortError') throw error;}
     }
-  }finally{try{await health('stopped');}catch{onError('workerHealth');}}
+    heartbeat?.assertHealthy();
+  }finally{
+    const stopped=()=>({state:'stopped',stage:null,failures:[...failures.keys()]});
+    try{if(heartbeat)await heartbeat.stop(stopped);else await publish(stopped());}catch{stopFailed=true;onError('workerHealth');}
+  }
+  if(fault.signal.aborted)throw Error('Worker heartbeat unavailable');
+  if(stopFailed)throw Error('Worker heartbeat stop unavailable');
 }
 
 export async function startRehearsalApi(pool,storage,config) {

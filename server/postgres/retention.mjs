@@ -12,7 +12,7 @@ export function getRetention(pool,session,{schema='public'}={}){
     const sourceJobs=(await client.query('SELECT status,count(*)::integer AS count FROM source_audio_purges WHERE org_id=$1 AND site_id=$2 GROUP BY status',[session.org_id,session.site_id])).rows;
     return {revision:policy?.revision || 0,audioDays:policy?.audio_days ?? null,updatedAt:policy?.updated_at || null,textRetentionAvailable:true,caseRetentionAvailable:true,generatedRetentionAvailable:true,activityRetentionAvailable:true,briefingRetentionAvailable:true,
       recoveryScope:staffRecoveryScope(session),canWrite:['owner','administrator'].includes(session.role),audioOptions:audioRetentionDays,jobs:Object.fromEntries(jobs.map(row=>[row.status,row.count])),sourceJobs:Object.fromEntries(sourceJobs.map(row=>[row.status,row.count])),activityRetention:'separate_policy',
-      limitations:'Audio cleanup applies to server worker recordings and supervisor source audio (original and canonical). Transcripts, drafts and response history have a separate retention lifecycle. Backups and disconnected devices are not erased by this operation.'};
+      limitations:'Audio cleanup applies to the current application storage view of worker recordings and supervisor source audio (original and canonical). Transcripts, drafts and response history have a separate retention lifecycle. Provider history, backups and disconnected devices are not verified as erased by this operation.'};
   });
 }
 export function retentionReceipt(pool,session,requestId,{schema='public'}={}){

@@ -58,5 +58,6 @@ export function useWorkerSessionGuard(session:PageSession|null,paused:boolean) {
     };
   },[binding,session?.language,session?.workerId,paused,locked]);
   return {locked:!!binding && locked===binding,checking:!!binding && !paused && checking===binding,invalidate,resume,
+    isInvalidated:()=>!!active.current && lockedRef.current===active.current,
     isLocked:()=>!!active.current && (lockedRef.current===active.current || checkingRef.current===active.current)};
 }

@@ -1,5 +1,10 @@
 # Private Case Reviews And Deadline Changes
 
+20 October 2026 continuation: captured paged contracts, canonical v2/legacy
+receipt recovery, draft preservation and site-timezone/DST input are implemented
+locally. See CASE_WORKFLOW_RECOVERY.md for current evidence and limits. The
+device-timezone UI description and build statistics below are historical.
+
 2026-10-10 checkpoint, PostgreSQL migration 061. Not a production-readiness
 declaration. SQLite parity and broader release verification remain.
 

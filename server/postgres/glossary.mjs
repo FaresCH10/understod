@@ -32,7 +32,7 @@ export async function glossaryReceipt(pool,session,requestId,{schema='public'}={
   glossaryRequestId(requestId);
   return domainTransaction(pool,schema,async client=>{
     await requirePrincipal(client,session,'staff');
-    const row=(await client.query('SELECT request_json AS request,result_json AS result FROM glossary_requests WHERE request_id=$1 AND org_id=$2 AND site_id=$3',[requestId,session.org_id,session.site_id])).rows[0];
+    const row=(await client.query('SELECT request_json AS request,result_json AS result FROM glossary_requests WHERE request_id=$1 AND org_id=$2 AND site_id=$3 AND created_by=$4',[requestId,session.org_id,session.site_id,session.principal_id])).rows[0];
     return row ? {found:true,...row} : {found:false};
   });
 }
@@ -42,8 +42,8 @@ export async function changeGlossary(pool,session,kind,id,input,{schema='public'
     await requirePrincipal(client,session,'staff');
     // Serialize site terminology edits, then lock drafts before jobs, as preparation completion does.
     await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[`understood:glossary:${schema}:${session.org_id}:${session.site_id}`]);
-    const old=(await client.query('SELECT request_json,result_json FROM glossary_requests WHERE request_id=$1 AND org_id=$2 AND site_id=$3',[input.requestId,session.org_id,session.site_id])).rows[0];
-    if(old) {if(glossarySignature(old.request_json)!==glossarySignature(change)) throw new Error('Glossary request conflict');return {...old.result_json,duplicate:true};}
+    const old=(await client.query('SELECT request_json,result_json,created_by FROM glossary_requests WHERE request_id=$1 AND org_id=$2 AND site_id=$3',[input.requestId,session.org_id,session.site_id])).rows[0];
+    if(old) {if(old.created_by!==session.principal_id || glossarySignature(old.request_json)!==glossarySignature(change)) throw new Error('Glossary request conflict');return {...old.result_json,duplicate:true};}
     const current=kind==='create' ? null : (await client.query('SELECT t.*,v.content_json FROM glossary_terms t JOIN glossary_versions v ON v.term_id=t.id AND v.revision=t.revision WHERE t.id=$1 AND t.org_id=$2 AND t.site_id=$3 FOR UPDATE OF t',[id,session.org_id,session.site_id])).rows[0];
     if(kind!=='create' && !current) throw new Error('Glossary term unavailable');
     if(current && current.revision!==change.revision) throw new Error('Glossary revision changed');

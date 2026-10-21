@@ -1,0 +1,94 @@
+{
+  "runId": "2e42b143-fa5e-4164-b257-9d8697dcd380",
+  "checkedAt": "2026-10-16T05:44:20.563Z",
+  "scope": "read-only-exact-owned-resource-reconciliation",
+  "originalOidsAvailable": false,
+  "outsideAclBaselineAvailable": false,
+  "cloudWrites": 0,
+  "productionReady": false,
+  "database": {
+    "oid": 106496,
+    "datname": "understood_login_db_2e42b143fa5e4164b2579d8697dcd380",
+    "owner": "neondb_owner",
+    "marker": "Understood synthetic LOGIN 2e42b143-fa5e-4164-b257-9d8697dcd380",
+    "expectedOwner": "neondb_owner",
+    "markerMatches": true,
+    "ownerMatches": true
+  },
+  "roles": [
+    {
+      "oid": 106501,
+      "rolname": "understood_login_op_2e42b143fa5e4164b2579d8697dcd380",
+      "rolcanlogin": true,
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": 2,
+      "rolconfig": null,
+      "rolvaliduntil": "2026-10-16T06:08:34.009Z",
+      "marker": "Understood synthetic LOGIN 2e42b143-fa5e-4164-b257-9d8697dcd380",
+      "markerMatches": true,
+      "memberships": [
+        {
+          "role": "understood_login_op_2e42b143fa5e4164b2579d8697dcd380",
+          "member": "neondb_owner",
+          "admin_option": true
+        }
+      ],
+      "ownedObjects": 0
+    },
+    {
+      "oid": 106497,
+      "rolname": "understood_login_rt_2e42b143fa5e4164b2579d8697dcd380",
+      "rolcanlogin": true,
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": 2,
+      "rolconfig": null,
+      "rolvaliduntil": "2026-10-16T06:08:32.619Z",
+      "marker": "Understood synthetic LOGIN 2e42b143-fa5e-4164-b257-9d8697dcd380",
+      "markerMatches": true,
+      "memberships": [
+        {
+          "role": "understood_login_rt_2e42b143fa5e4164b2579d8697dcd380",
+          "member": "neondb_owner",
+          "admin_option": true
+        }
+      ],
+      "ownedObjects": 0
+    },
+    {
+      "oid": 106499,
+      "rolname": "understood_login_wk_2e42b143fa5e4164b2579d8697dcd380",
+      "rolcanlogin": true,
+      "rolsuper": false,
+      "rolinherit": false,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconnlimit": 2,
+      "rolconfig": null,
+      "rolvaliduntil": "2026-10-16T06:08:33.281Z",
+      "marker": "Understood synthetic LOGIN 2e42b143-fa5e-4164-b257-9d8697dcd380",
+      "markerMatches": true,
+      "memberships": [
+        {
+          "role": "understood_login_wk_2e42b143fa5e4164b2579d8697dcd380",
+          "member": "neondb_owner",
+          "admin_option": true
+        }
+      ],
+      "ownedObjects": 0
+    }
+  ],
+  "sessions": [],
+  "connectionFault": false
+}

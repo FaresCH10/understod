@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "understood-checkpoint-v1",
+  "date": "2026-10-15",
+  "goalStatus": "active",
+  "productionReady": false,
+  "overallEstimatePercent": 71,
+  "workerDispatchedVerificationEstimatePercent": 20,
+  "operatorIsolationEstimatePercent": 75,
+  "scope": "minimal revocable worker authorization foundation; not a delegated queue",
+  "catalog": {"tables": 135, "migrations": 89},
+  "profiles": {
+    "application": {"dml": 118, "readOnly": 12, "hidden": 5},
+    "worker": {"dml": 97, "readOnly": 29, "hidden": 9},
+    "operator": {"someWrite": 16, "readOnly": 20, "hidden": 99}
+  },
+  "changes": [
+    "Three-field request/expiry/revoked ledger with no worker session or credential access",
+    "Invoker-only capture, immutable-expiry and monotonic-revocation triggers",
+    "Revocation on logout, replacement login, session deletion or identity/expiry change, operator deactivation/revision/password change, and verification completion",
+    "Shared transaction advisory lock before authority read and revocation",
+    "Exact three-function/four-trigger admission for all runtime profiles",
+    "Existing inline provider journal checks the minimal authority in addition to its original session gate",
+    "Historical88-to89 migration preserves verification rows and closes unknown or mismatched approvals",
+    "Existing UUID versions1-5 remain accepted"
+  ],
+  "guardSha256": {
+    "protect_verification_authority": "a98e0cfbd07a438a71d02ccc416fd5701e15ee84fbc78057f18f4e25c308a4b7",
+    "capture_verification_authority": "e6f57a6da52d19e8f1e4eb006a67c8cc67641fa7d1e249619c4713dab8086e2a",
+    "revoke_verification_authority": "8aa5e22d93e0b2998034e5839dde82866cf426ce533492ae429da90b84b4c121"
+  },
+  "focused": {"tests": 34, "passed": 34, "failed": 0, "skipped": 0, "durationMs": 22982.2422},
+  "rootBuildAttempt": {"total": 28, "passed": 27, "failed": 1, "failure": "Preserved root dist has no operator manifest; old preview was not rebuilt or credited as passing"},
+  "supersededRuns": [
+    {"id": "bbcf3ff4-d131-4628-9136-fd900d8c8082", "state": "intentionally interrupted before historical-mismatch fix; uncredited"},
+    {"id": "ec590f05-c8fa-419b-95fa-b351605f2321", "state": "intentionally interrupted before UUID-contract fix; uncredited"}
+  ],
+  "fullRegression": {
+    "id": "a88a3875-1faf-4f71-a830-1dbaa8be9534",
+    "state": "failed",
+    "startedAt": "2026-10-15T19:23:03.330Z",
+    "finishedAt": "2026-10-15T19:27:36.600Z",
+    "offlineInstall": "passed", "optimizedBuild": "passed",
+    "tests": 1130, "passed": 1124, "failed": 2, "nativePrerequisiteSkips": 4, "durationMs": 258538.5942,
+    "failures": ["briefing-expiry-upgrade exact migration list ended88", "operational-audit-upgrade exact migration list ended88"],
+    "originalFailedReportPreserved": true,
+    "baselineSourceFiles": 821,
+    "baselineSourceSha256": "dec1b128fe5f646d1e37464a0103949b785f2ea4e9df632f7d61c75d4ca6fe29"
+  },
+  "postRegression": {
+    "changedFiles": ["tests/briefing-expiry-upgrade.test.mjs", "tests/operational-audit-upgrade.test.mjs"],
+    "change": "Append migration89 to exact expectations; retain every original history/privacy invariant",
+    "affectedUpgradeTests": {"tests": 2, "passed": 2, "failed": 0, "skipped": 0, "durationMs": 2061.869},
+    "applicationCodeChanged": false,
+    "sourceFiles": 821,
+    "sourceSha256": "a560b5b71361192cba7feca735eb847c098d99895350cf9dfe11c1a3127b8fe2",
+    "evaluations": {"report": ".clean-check/a88a3875-1faf-4f71-a830-1dbaa8be9534/post-regression-evaluations.json", "state": "passed", "finishedAt": "2026-10-15T19:30:13.562Z", "contractChecks": 43, "scriptedPipelineChecks": 10, "scriptedRequests": 24, "externalRequests": 0},
+    "unchangedFullVerifierPassClaim": false
+  },
+  "preservation": {"report": "artifacts/clean-backup-preservation-f930c49a-efbe-4e6c-96b2-faaeb67468aa.json", "originalEightTablesUnchanged": true, "integrityOk": true, "foreignKeyViolations": 0, "validBuildManifests": 20, "filesScanned": 2252, "secretMatches": 0},
+  "remaining": ["Durable operator enqueue and exact quota reservation", "Worker leases and conservative crash handling", "Fresh safe worker capability metadata", "Worker-only provider credentials", "Restricted results and truthful receipt reconciliation", "Scheduler, shutdown, browser and native89/three-role acceptance", "Current full verifier rerun after test-only corrections", "Actual authorized hosted/live synthetic acceptance and previous release gates"],
+  "hostedProviderDispatchEnabled": false,
+  "externalActions": {"cloud": false, "realWorkerData": false, "ai": false, "mail": false, "billing": false, "deployment": false, "externalDiagnostics": false}
+}

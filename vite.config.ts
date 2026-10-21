@@ -13,6 +13,7 @@ function localPort(value: string | undefined, fallback: number) {
 
 export default defineConfig({
   plugins: [reticle({ port: 4400 }), react(),publicShellPlugin()],
+  build: {manifest:true,rolldownOptions:{input:{customer:'index.html',operator:'operator.html'}}},
   server: {
     host: '127.0.0.1',
     port: localPort(process.env.UNDERSTOOD_WEB_PORT, 3020),

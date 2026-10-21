@@ -1,0 +1,15 @@
+{
+  "dateUtc":"2026-10-13 12:45 UTC",
+  "scope":"CSV import captured raw/JSON authority, exact intent projection and fingerprint-only tab recovery",
+  "focusedRegression":{"files":["briefing-session-context","worker-import","postgres-import","deletion-import-metadata","worker-import-recovery","staff-request","session-http"],"passed":36,"failed":0,"skipped":0,"exitCode":0,"durationMs":20988.8561},
+  "fullSyntheticSuite":{"testFiles":164,"tests":878,"passed":874,"failed":0,"skipped":4,"exitCode":0,"durationMs":313102.0361,"qualification":"After all final source changes","externalDatabaseTestUrlsRemoved":true,"log":"artifacts/import-request-suite-2026-10-13.log"},
+  "build":{"exitCode":0,"modules":2040,"entryKb":589.68,"shellFiles":69,"shellMismatches":0,"existingWarningsRemain":true},
+  "protectedDatabase":{"matchingFingerprints":8,"integrity":"ok","foreignKeyViolations":0,"readOnlyVerification":true},
+  "browser":{"newVerdict":false,"passed":false,"reason":"Current inventory and requested retry failed at trusted Node runtime startup","externalDiagnosticsSent":false},
+  "allOwnedCommandsTerminal":true,
+  "originalPreviewRestarted":false,
+  "originalDatabaseMigrated":false,
+  "externalRolloutPerformed":false,
+  "progressEstimates":{"csvImportBoundary":75,"wholeStaffRequestFencing":75,"staffSessionGuard":65,"overall":60,"overallRange":[55,65]},
+  "productionReady":false
+}

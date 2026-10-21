@@ -24,7 +24,7 @@ async function accepting(client,session,row,kind,caseId) {
   }
 }
 function exact(row,session,assignmentId,kind,caseId) {
-  if(!row || row.org_id!==session.org_id || row.site_id!==session.site_id || row.worker_id!==session.principal_id
+  if(!row || row.actor_type!=='worker' || row.org_id!==session.org_id || row.site_id!==session.site_id || row.worker_id!==session.principal_id
     || row.assignment_id!==assignmentId || row.kind!==kind || row.requested_case_id!==caseId)throw Error('Voice receipt unavailable');return row;
 }
 function verify(row,bytes) {
@@ -95,7 +95,7 @@ export async function getCaseVoiceAudio(pool,session,caseId,messageId,storage,{s
   const load=()=>domainTransaction(pool,schema,async client=>{
     await scopedCase(client,session,caseId);
     const row=(await client.query(`SELECT v.* FROM case_voice v LEFT JOIN retention_policies p ON p.org_id=v.org_id AND p.site_id=v.site_id
-      WHERE v.request_id=$1 AND v.case_id=$2 AND v.org_id=$3 AND v.site_id=$4 AND v.status='received' AND v.cleanup_state='active'
+      WHERE v.request_id=$1 AND v.case_id=$2 AND v.org_id=$3 AND v.site_id=$4 AND v.actor_type='worker' AND v.status='received' AND v.cleanup_state='active'
       AND NOT EXISTS(SELECT 1 FROM worker_deletion_requests WHERE worker_id=v.worker_id)
       AND NOT EXISTS(SELECT 1 FROM case_content_purges WHERE case_id=v.requested_case_id)
       AND (p.audio_days IS NULL OR v.received_at>clock_timestamp()-p.audio_days*interval '1 day')`,[messageId,caseId,session.org_id,session.site_id])).rows[0];

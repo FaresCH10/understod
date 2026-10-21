@@ -1,0 +1,10 @@
+{
+  "checkedAt":"2026-10-14T16:23:00Z","goalStatus":"active",
+  "overallEstimate":67,"taskEstimate":80,"productionVerdict":false,
+  "focused":{"tests":23,"pass":23,"fail":0,"durationMs":602.5722,"exitCode":0},
+  "browser":{"crossTabLock":true,"explicitIdentityConfirmation":true,"cookieRotationRace":true,"revocationRace":true,"guestObservation":true,"malformedAnd503Refusal":true,"expiry":true,"pendingShellHiddenAndInert":true,"sameSessionUnsentEditorContinuity":true,"heldSessionTimeoutLock":true,"languages":["en","ar","ur"],"arabicUrduViewport":320,"arabicUrduDocumentWidth":320,"temporaryTabsClosed":true,"viewportReset":true},
+  "finalFixture":{"session":25402,"port":3221,"exitCode":0,"sessionReads":17,"appPosts":0,"controls":6,"heldReads":2,"releasedReads":1,"protectedBusinessAuditInventories":9,"allUnchanged":true,"externalCalls":0},
+  "earlierFixture":{"session":88254,"port":3220,"exitCode":1,"stoppedAfterExactProcessIdentityCheck":true,"finalFingerprintVerdict":null,"reason":"Noninteractive stdin closed and old running fixture had no HTTP stop route"},
+  "productionSourceChanged":false,"fixtureOnlyChanges":true,"originalPreviewsAndDatabaseUntouched":true,
+  "remaining":["held mutation and StrictMode/account/role/policy transition matrix","full keyboard/assistive technology and reference acceptance","native database and real devices","production release gates"]
+}

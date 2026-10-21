@@ -2,6 +2,8 @@ node_modules/
 dist/
 data/
 .npm-cache/
+.clean-check/
+.tools/
 .env
 .env.*
 !.env.example

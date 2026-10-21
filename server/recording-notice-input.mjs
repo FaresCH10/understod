@@ -3,6 +3,11 @@ const inputKeys=(input,allowed)=>{
 };
 
 export const noticeLanguages=['en','ar','ur'];
+export function recordingNoticeLanguage(params,session,method){
+  const keys=[...params.keys()];if(!keys.length)return undefined;
+  if(method!=='GET' || session?.principal_type!=='worker' || keys.length!==1 || keys[0]!=='language' || !noticeLanguages.includes(params.get('language')))throw Error('Invalid recording notice request');
+  return params.get('language');
+}
 export function noticeRequestId(value){
   if(typeof value!=='string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value))throw Error('Invalid recording notice request');
   return value;
@@ -25,12 +30,14 @@ export function recordingNoticeInput(input){
   return {revision:input.revision,notices,scope:input.scope};
 }
 export const sameNoticeRequest=(left,right)=>left?.revision===right.revision && left.scope===right.scope && noticeLanguages.every(language=>left.notices?.[language]===right.notices[language]);
-export function noticeView(row,session){
+export function noticeView(row,session,language){
+  if(language!==undefined && (session.principal_type!=='worker' || !noticeLanguages.includes(language)))throw Error('Invalid recording notice language');
   const notices=row ? typeof row.notices_json==='string' ? JSON.parse(row.notices_json) : row.notices_json : {en:'',ar:'',ur:''};
   const configured=noticeLanguages.every(language=>typeof notices[language]==='string' && notices[language].length>=20);
   if(session.principal_type==='worker'){
-    if(!noticeLanguages.includes(session.language))throw Error('Recording notice language unavailable');
-    return {revision:row?.revision || 0,configured,language:session.language,notice:configured?notices[session.language]:null};
+    const selected=language??session.language;
+    if(!noticeLanguages.includes(selected))throw Error('Recording notice language unavailable');
+    return {revision:row?.revision || 0,configured,language:selected,notice:configured?notices[selected]:null};
   }
   return {revision:row?.revision || 0,configured,notices,canWrite:['owner','administrator'].includes(session.role)};
 }

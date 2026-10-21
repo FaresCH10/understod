@@ -1,0 +1,139 @@
+{
+  "checkedAt": "2026-10-21T11:47:08.636Z",
+  "scope": "worker-private-message-purpose-copy-and-failure-recovery",
+  "productionReady": false,
+  "progress": {
+    "overall": 81,
+    "range": [
+      74,
+      87
+    ],
+    "workerVoiceRecovery": 90,
+    "previousWorkerVoiceRecovery": 88,
+    "workerNavigationAndHelp": 90,
+    "method": "Engineering estimates, not test pass rates or production acceptance."
+  },
+  "clean": {
+    "id": "9db95d02-a69e-435c-a88d-8aa598b8417d",
+    "startedAt": "2026-10-21T11:33:58.737Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-21T11:34:00.225Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T11:34:17.197Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-21T11:34:17.197Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T11:34:21.346Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-21T11:34:21.347Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T11:39:25.123Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-21T11:39:25.124Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T11:39:25.810Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-21T11:39:25.811Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T11:39:29.832Z"
+      }
+    ],
+    "source": {
+      "files": 912,
+      "sha256": "ee2bbd4e90783ce3b5628278d056a3ba9fbcea2a42902edaf7e0129ec51191f2"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-21T11:39:30.545Z",
+    "parentSession": 67671,
+    "parentExitObserved": true,
+    "parentExitCode": 0,
+    "summary": {
+      "tests": 1329,
+      "pass": 1325,
+      "fail": 0,
+      "skipped": 4
+    },
+    "durationMs": 303476.5297
+  },
+  "sourceNow": {
+    "files": 912,
+    "sha256": "ee2bbd4e90783ce3b5628278d056a3ba9fbcea2a42902edaf7e0129ec51191f2",
+    "matchesClean": true
+  },
+  "browser": {
+    "path": "artifacts/worker-voice-purpose-browser-final-2026-10-21.json",
+    "assetsMatchClean": true,
+    "assetFiles": 60,
+    "rawMeasurementsRetained": true,
+    "fixture": {
+      "pid": 7864,
+      "parentSession": 13456,
+      "parentExitObserved": true,
+      "exitCode": 0,
+      "explicitOwnedStop": true
+    },
+    "initialInaccessibleFixture": {
+      "pid": 8404,
+      "parentSession": 79027,
+      "identityCheckedBeforeStop": true,
+      "exitCode": 1,
+      "accepted": false
+    },
+    "knownLimits": [
+      "Session-lock fallback still renders English; broader interface localization remains incomplete",
+      "Fixed tone simulator, not a physical microphone or speech-quality test",
+      "Failed object remains pending cleanup; this is not physical-erasure acceptance",
+      "Permission copy rendered in all three languages; format and lazy-render error copy have focused dictionary/wiring checks, not injected render crashes",
+      "Broader references, independent language/AT/phone, native95, hosted and privacy gates remain"
+    ]
+  },
+  "evaluations": {
+    "contractCases": 43,
+    "pipelineChecks": 10,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-35bc3ecd-622a-4d61-aa3b-7de376830e45.json",
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 81,
+    "filesScanned": 6229,
+    "configuredSecretMatches": 0
+  },
+  "previousCheckpoint": "artifacts/production-worker-voice-recovery-2026-10-21.json",
+  "cloudDatabaseStorageChanged": false,
+  "realWorkerDataUsed": false,
+  "actualMicrophoneUsed": false,
+  "liveProviderMailCalls": 0,
+  "billingChanged": false,
+  "deployment": false,
+  "nextTask": "Remaining reference controls and keyboard/focus continuity; wider localization/AT, physical devices, native95, hosted and privacy gates remain."
+}

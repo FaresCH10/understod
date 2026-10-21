@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { NOW, transaction } from './db.mjs';
 import { activityCsv,reportActivity } from './reports.mjs';
-import {reportScope} from './report-scope.mjs';
+import {reportScope,exportInput,exportRetryInput,exportRequestId} from './report-input.mjs';
 import {ensureDeletionSchema} from './deletions.mjs';
 
 export const deletionExportExpiry=`EXISTS(SELECT 1 FROM worker_deletion_requests d JOIN assignments a ON a.worker_id=d.worker_id
@@ -9,7 +9,6 @@ export const deletionExportExpiry=`EXISTS(SELECT 1 FROM worker_deletion_requests
     AND (e.created_at<=d.created_at OR NOT EXISTS(SELECT 1 FROM worker_deletion_pseudonyms p WHERE p.request_id=d.id)))`;
 
 const MAX_BYTES = 2_000_000;
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function ensureExportSchema(db) {
   ensureDeletionSchema(db);
@@ -43,6 +42,15 @@ export function ensureExportSchema(db) {
   if(!db.prepare('PRAGMA table_info(report_exports)').all().some(row=>row.name==='filters_json'))db.exec(`ALTER TABLE report_exports ADD COLUMN filters_json TEXT NOT NULL DEFAULT '{"crewId":"","responseFrom":"","responseThrough":""}'`);
   db.exec(`CREATE TRIGGER IF NOT EXISTS report_filters_frozen BEFORE UPDATE ON report_exports
     WHEN NEW.filters_json IS NOT OLD.filters_json BEGIN SELECT RAISE(ABORT,'Export filters are immutable'); END;`);
+  db.exec(`CREATE TABLE IF NOT EXISTS report_export_retries (
+    request_id TEXT PRIMARY KEY,org_id TEXT NOT NULL,site_id TEXT NOT NULL,export_id TEXT NOT NULL REFERENCES report_exports(id),
+    requested_by TEXT NOT NULL REFERENCES staff(id),attempts INTEGER NOT NULL CHECK(attempts BETWEEN 0 AND 2),created_at TEXT NOT NULL
+  ) STRICT;
+  CREATE TRIGGER IF NOT EXISTS export_retry_scope BEFORE INSERT ON report_export_retries
+    WHEN NOT EXISTS(SELECT 1 FROM report_exports WHERE id=NEW.export_id AND org_id=NEW.org_id AND site_id=NEW.site_id)
+      OR NOT EXISTS(SELECT 1 FROM staff WHERE id=NEW.requested_by AND org_id=NEW.org_id AND site_id=NEW.site_id)
+    BEGIN SELECT RAISE(ABORT,'Scope mismatch'); END;`);
+  for(const action of ['UPDATE','DELETE'])db.exec(`CREATE TRIGGER IF NOT EXISTS export_retry_${action.toLowerCase()} BEFORE ${action} ON report_export_retries BEGIN SELECT RAISE(ABORT,'Export retry evidence is immutable'); END;`);
 }
 
 function authority(db, session) {
@@ -78,10 +86,8 @@ export function expireExports(db) {
 }
 
 export function requestExport(db, session, body) {
+  body=exportInput(body);
   ensureExportSchema(db); authority(db, session); expireExports(db);
-  if (!body || Object.keys(body).some((key) => !['requestId', 'publicationId','filters'].includes(key))
-    || typeof body.requestId !== 'string' || !UUID.test(body.requestId)
-    || typeof body.publicationId !== 'string' || body.publicationId.length > 100) throw new Error('Invalid export request');
   const filters=reportScope(body.filters);
   return transaction(db, () => {
     const existing = db.prepare('SELECT * FROM report_exports WHERE id=?').get(body.requestId);
@@ -124,14 +130,32 @@ function scopedExport(db, session, id) {
   return row;
 }
 
-export function retryExport(db, session, id) {
+export function exportReceipt(db,session,kind,requestId) {
+  if(!['create','retry'].includes(kind))throw Error('Invalid export request');exportRequestId(requestId);
+  ensureExportSchema(db);authority(db,session);
+  if(kind==='retry') {
+    const row=db.prepare('SELECT * FROM report_export_retries WHERE request_id=? AND org_id=? AND site_id=? AND requested_by=?').get(requestId,session.org_id,session.site_id,session.principal_id);
+    return row?{found:true,request:{requestId:row.request_id,exportId:row.export_id,attempts:row.attempts},result:{requestId:row.request_id,id:row.export_id,attempts:row.attempts,acceptedAt:row.created_at}}:{found:false};
+  }
+  const row=db.prepare('SELECT * FROM report_exports WHERE id=? AND org_id=? AND site_id=? AND requested_by=?').get(requestId,session.org_id,session.site_id,session.principal_id);
+  if(!row)return {found:false};
+  const {timezone,...filters}=JSON.parse(row.filters_json);
+  return {found:true,request:{requestId:row.id,publicationId:row.publication_id,filters:reportScope(filters)},result:publicExport(row)};
+}
+
+export function retryExport(db, session, id,body) {
+  const input=exportRetryInput(id,body);
   ensureExportSchema(db); expireExports(db);
   return transaction(db, () => {
+    authority(db,session);
+    const saved=exportReceipt(db,session,'retry',input.requestId),old=db.prepare('SELECT * FROM report_export_retries WHERE request_id=?').get(input.requestId);
+    if(old){if(!saved.found || JSON.stringify(saved.request)!==JSON.stringify(input))throw Error('Export request ID conflict');return {...saved.result,duplicate:true};}
     const row = scopedExport(db, session, id);
-    if (row.status !== 'failed' || row.attempts >= 3 || !row.snapshot_json) throw new Error('Export cannot be retried');
+    if (row.status !== 'failed' || row.attempts !== input.attempts || row.attempts >= 3 || !row.snapshot_json) throw new Error('Export cannot be retried');
     db.prepare("UPDATE report_exports SET status='queued',error=NULL WHERE id=?").run(id);
+    db.prepare('INSERT INTO report_export_retries VALUES(?,?,?,?,?,?,?)').run(input.requestId,session.org_id,session.site_id,id,session.principal_id,input.attempts,NOW());
     audit(db, row, 'staff', session.principal_id, 'export.retried');
-    return publicExport(db.prepare('SELECT * FROM report_exports WHERE id=?').get(id));
+    return {...exportReceipt(db,session,'retry',input.requestId).result,duplicate:false};
   });
 }
 

@@ -1,0 +1,155 @@
+{
+  "checkedAt": "2026-10-21T13:31:05.505Z",
+  "scope": "reports-publication-history-export-recovery-localization",
+  "productionReady": false,
+  "progress": {
+    "overall": 82,
+    "previousOverall": 81,
+    "range": [
+      74,
+      87
+    ],
+    "reportsAndExportRecovery": 90,
+    "previousReports": 85,
+    "wholeApplicationLocalization": 63,
+    "previousLocalization": 60,
+    "method": "Engineering estimates, not test pass rates or release approval."
+  },
+  "clean": {
+    "id": "a16e0668-b698-4648-b5ef-b256ab398aca",
+    "startedAt": "2026-10-21T13:16:35.789Z",
+    "state": "passed",
+    "productionReady": false,
+    "scope": "local-clean-install",
+    "registryReads": false,
+    "cloudConfigurationInherited": false,
+    "originalDataCopied": false,
+    "steps": [
+      {
+        "name": "install",
+        "state": "passed",
+        "startedAt": "2026-10-21T13:16:37.228Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T13:16:44.486Z"
+      },
+      {
+        "name": "build",
+        "state": "passed",
+        "startedAt": "2026-10-21T13:16:44.487Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T13:16:48.698Z"
+      },
+      {
+        "name": "tests",
+        "state": "passed",
+        "startedAt": "2026-10-21T13:16:48.698Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T13:21:44.652Z"
+      },
+      {
+        "name": "contract",
+        "state": "passed",
+        "startedAt": "2026-10-21T13:21:44.653Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T13:21:45.282Z"
+      },
+      {
+        "name": "pipeline",
+        "state": "passed",
+        "startedAt": "2026-10-21T13:21:45.283Z",
+        "exitCode": 0,
+        "timedOut": false,
+        "finishedAt": "2026-10-21T13:21:49.351Z"
+      }
+    ],
+    "source": {
+      "files": 915,
+      "sha256": "324a09c9ab3886f60ac9465d843ccda4c160cca3a7e1ebac3dd6bdfb15f5dfa9"
+    },
+    "sourceUnchanged": true,
+    "finishedAt": "2026-10-21T13:21:49.902Z",
+    "parentSession": 71025,
+    "parentExitObserved": true,
+    "parentExitCode": 0,
+    "summary": {
+      "tests": 1342,
+      "pass": 1338,
+      "fail": 0,
+      "skipped": 4
+    }
+  },
+  "sourceNow": {
+    "files": 915,
+    "sha256": "324a09c9ab3886f60ac9465d843ccda4c160cca3a7e1ebac3dd6bdfb15f5dfa9",
+    "matchesClean": true
+  },
+  "browser": {
+    "path": "artifacts/reports-locale-browser-final-2026-10-21.json",
+    "uiAssetsMatchClean": true,
+    "measurements": 30,
+    "translationKeys": 108,
+    "fixtureTerminals": [
+      {
+        "parent": 16123,
+        "pid": 17252,
+        "exitCodeObserved": true,
+        "exitCode": 0,
+        "scope": "preliminary read-only"
+      },
+      {
+        "parent": 55452,
+        "pid": 20748,
+        "exitCodeObserved": true,
+        "exitCode": 0,
+        "scope": "read/layout/CSV accepted; rejected create is not recovery acceptance"
+      },
+      {
+        "parent": 96129,
+        "pid": 25284,
+        "exitCodeObserved": true,
+        "exitCode": 0,
+        "scope": "corrected actual create/retry recovery"
+      }
+    ]
+  },
+  "evaluations": {
+    "contractCases": 43,
+    "pipelineChecks": 10,
+    "scriptedRequests": 24,
+    "externalRequests": 0
+  },
+  "preservation": {
+    "path": "artifacts/clean-backup-preservation-6e044671-c659-496b-b984-450d451023b3.json",
+    "originalTablesMatchPrior": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "savedManifests": 92,
+    "filesScanned": 6956,
+    "configuredSecretMatches": 0
+  },
+  "limits": [
+    "Not full matched-reference acceptance: five metric cards and real controls, current dates, extra export states and UUID filenames differ from selected image.",
+    "Canonical overall totals match; language responses12/10/2 differ from selected reference10/8/6.",
+    "Activity/Audit route remains English and is intentionally outside this route-scoped localization.",
+    "No independent language/AT/phone/native/hosted/live-provider or real-worker privacy acceptance.",
+    "First uncontrolled search attribute read returned null; later property and actual search request prove continuity."
+  ],
+  "negativeEvidence": [
+    "New tests initially rejected an invalid Unicode crew ID and an overly broad key assertion; validation was not relaxed",
+    "Initial restricted HTTP tests failed local TCP EACCES; reviewed isolated run passed",
+    "Observed lost focus and red structural regression repaired",
+    "Initial request observer consumed the stream; rejected command retained as negative evidence, corrected observer commits and recovers exact commands",
+    "Generic date fill and uncontrolled value attribute were not accepted as evidence"
+  ],
+  "cloudDatabaseStorageChanged": false,
+  "realWorkerDataUsed": false,
+  "actualMicrophoneUsed": false,
+  "liveProviderMailCalls": 0,
+  "billingChanged": false,
+  "deployment": false,
+  "nextTask": "Localize Activity history (S37) and remaining staff processing destinations; retain full-reference/independent language/AT/device/current native/hosted/privacy gates."
+}

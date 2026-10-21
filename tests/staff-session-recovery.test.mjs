@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {validStaffSession,sameStaffSession,validPageSession,samePageSession,staffSessionText} from '../src/session-state.ts';
+import {validStaffSession,sameStaffSession,validPageSession,samePageSession,staffSessionText,staffIdentityText,staffIdentityLabel} from '../src/session-state.ts';
 import {recheckStaffSession,confirmStaffSession} from '../src/staff-session-recovery.ts';
 import {fetchBootstrapSession,BootstrapSessionError} from '../src/worker-offline.ts';
 
@@ -62,4 +62,15 @@ test('bounded session reads retain denied status for worker offline-lease invali
 test('staff lock recovery copy has complete EN/AR/UR messages without promising cancellation or silent request replay',()=>{
   assert.deepEqual(Object.keys(staffSessionText),['en','ar','ur']);
   for(const language of ['en','ar','ur']){assert.deepEqual(Object.keys(staffSessionText[language]),Object.keys(staffSessionText.en));for(const text of Object.values(staffSessionText[language])){assert.equal(typeof text,'string');assert.ok(text.trim());if(language!=='en')assert.match(text,/[\u0600-\u06ff]/);}}
+});
+
+test('staff recovery identity labels are bounded and localized, with no unrecognized role echoed',()=>{
+  for(const language of ['en','ar','ur']) {
+    assert.deepEqual(Object.keys(staffIdentityText[language]),Object.keys(staffIdentityText.en));
+    for(const value of [null,42,'','bad\nname','x'.repeat(255)])assert.equal(staffIdentityLabel(value,language),staffIdentityText[language].unrecorded);
+    assert.equal(staffIdentityLabel('Synthetic account',language),'Synthetic account');
+    for(const role of ['owner','administrator','supervisor','auditor'])assert.equal(staffIdentityLabel(role,language,true),staffIdentityText[language][role]);
+    assert.equal(staffIdentityLabel('Unknown private value',language,true),staffIdentityText[language].unrecorded);
+    if(language!=='en')for(const label of Object.values(staffIdentityText[language]))assert.match(label,/[\u0600-\u06ff]/);
+  }
 });

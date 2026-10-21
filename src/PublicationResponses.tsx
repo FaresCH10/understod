@@ -2,6 +2,7 @@ import { useEffect,useRef,useState } from 'react';
 import { ChevronLeft,ChevronRight,RefreshCw,Search,X } from 'lucide-react';
 import {PublicationPicker} from './PublicationHistory';
 import type {PublicationSummary} from './publication-history';
+import {useStaffRequest,type StaffRequestAuthority} from './useStaffRequest';
 
 type Publication={id:string;version:number;state:string};
 type Row={assignmentId:string;worker:string;language:string;status:string;receivedAt:string|null};
@@ -14,22 +15,19 @@ const labels:Record<string,string>={awaiting_response:'Awaiting response',assess
 const languageNames:Record<string,string>={en:'English',ar:'Arabic',ur:'Urdu'};
 const date=(value:string|null) => value ? new Date(value).toLocaleString() : 'Not received';
 
-function useResponse<T>(path:string|null,refresh:number,context?:string) {
-  const key=JSON.stringify([path,refresh,context]);
+function useResponse<T>(path:string|null,refresh:number,authority:StaffRequestAuthority) {
+  const {request,current}=useStaffRequest(authority);
+  const key=JSON.stringify([path,refresh,authority.session.clientContext]);
   const [result,setResult]=useState<{key:string;data:T|null;error:string;loading:boolean}>({key:'',data:null,error:'',loading:!!path});
   useEffect(() => {
     setResult({key,data:null,error:'',loading:Boolean(path)});
     if(!path) return;
     const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),15000);let current=true;
-    fetch(`/api${path}`,{credentials:'include',cache:'no-store',...(context?{headers:{'x-client-session-context':context}}:{}),signal:controller.signal}).then(async (response) => {
-      if(!response.ok)throw Error('Response unavailable');return await response.json() as T;
-    }).then(data=>{if(current)setResult({key,data,error:'',loading:false});})
-      .catch(()=>{if(current)setResult({key,data:null,error:'Response unavailable',loading:false});})
-      .finally(()=>clearTimeout(timeout));
-    return () => {current=false;clearTimeout(timeout);controller.abort();};
-  },[key]);
-  return path && result.key===key?result:{data:null,error:'',loading:!!path};
+    request<T>(`/api${path}`,undefined,controller.signal).then(data=>{if(!controller.signal.aborted && current())setResult({key,data,error:'',loading:false});})
+      .catch(()=>{if(!controller.signal.aborted && current())setResult({key,data:null,error:'Response unavailable',loading:false});});
+    return ()=>controller.abort();
+  },[key,request,current]);
+  return path && result.key===key && current()?result:{data:null,error:'',loading:!!path};
 }
 
 function Assessment({value}:{value:string}) {
@@ -46,12 +44,12 @@ function Paging({page,total,size,onChange,label}:{page:number;total:number;size:
   </div></div>;
 }
 
-export function PublicationResponses({briefingId,publication,onSelect,context,refresh,navigate,canPlayAudio}:{briefingId:string;publication:PublicationSummary|null;onSelect:(value:PublicationSummary|null)=>void;context:string;refresh:number;navigate:(path:string)=>void;canPlayAudio:boolean}) {
+export function PublicationResponses({briefingId,publication,onSelect,context,refresh,navigate,canPlayAudio,authority}:{briefingId:string;publication:PublicationSummary|null;onSelect:(value:PublicationSummary|null)=>void;context:string;refresh:number;navigate:(path:string)=>void;canPlayAudio:boolean;authority:StaffRequestAuthority}) {
   const publicationId=publication?.id || '';
   const [search,setSearch]=useState(''),[language,setLanguage]=useState('all'),[status,setStatus]=useState('all'),[page,setPage]=useState(1),[assignmentId,setAssignmentId]=useState<string|null>(null),[tick,setTick]=useState(0);
   const recipientButtons=useRef<Record<string,HTMLButtonElement|null>>({});
   const query=new URLSearchParams({search,language,status,page:String(page),pageSize:'20'}).toString();
-  const {data,error,loading}=useResponse<Page>(publication ? `/publications/${encodeURIComponent(publicationId)}/responses?${query}` : null,refresh+tick,context);
+  const {data,error,loading}=useResponse<Page>(publication ? `/publications/${encodeURIComponent(publicationId)}/responses?${query}` : null,refresh+tick,authority);
   return <>
     <PublicationPicker briefingId={briefingId} selected={publication} onSelect={value=>{setPage(1);setAssignmentId(null);onSelect(value);}} context={context} refresh={refresh+tick}/>
     {!publication && <p>No published version yet.</p>}
@@ -67,15 +65,15 @@ export function PublicationResponses({briefingId,publication,onSelect,context,re
         {data.items.length ? <div className="table-wrap" tabIndex={0} aria-label="Recipient response table"><table><thead><tr><th>Worker</th><th>Assigned language</th><th>Latest response</th><th>Received</th></tr></thead><tbody>{data.items.map((row) => <tr key={row.assignmentId} className={assignmentId===row.assignmentId ? 'selected-response' : ''}><td><button ref={(node) => {recipientButtons.current[row.assignmentId]=node;}} className="text-link" aria-pressed={assignmentId===row.assignmentId} onClick={() => setAssignmentId(row.assignmentId)}>{row.worker}<ChevronRight size={16} /></button></td><td>{languageNames[row.language]}</td><td><Assessment value={row.status} /></td><td>{date(row.receivedAt)}</td></tr>)}</tbody></table></div> : <p>No recipients match these filters.</p>}
         <Paging page={page} total={data.total} size={20} onChange={setPage} label="recipients" />
       </>}
-    </section>{assignmentId && <ResponseDetail key={`${publicationId}:${assignmentId}`} publicationId={publicationId} assignmentId={assignmentId} context={context} refresh={refresh+tick} onClose={() => {recipientButtons.current[assignmentId]?.focus();setAssignmentId(null);}} navigate={navigate} canPlayAudio={canPlayAudio} />}</div>
+    </section>{assignmentId && <ResponseDetail authority={authority} key={`${publicationId}:${assignmentId}`} publicationId={publicationId} assignmentId={assignmentId} refresh={refresh+tick} onClose={() => {recipientButtons.current[assignmentId]?.focus();setAssignmentId(null);}} navigate={navigate} canPlayAudio={canPlayAudio} />}</div>
     <div className="notice notice-blue">A matching answer records the requested key facts. It does not certify understanding or safe work.</div>
   </>;
 }
 
-export function WorkerAssignments({workerId,refresh,navigate}:{workerId:string;refresh:number;navigate:(path:string)=>void}) {
+export function WorkerAssignments({workerId,refresh,navigate,authority}:{workerId:string;refresh:number;navigate:(path:string)=>void;authority:StaffRequestAuthority}) {
   const [page,setPage]=useState(1),[tick,setTick]=useState(0),[selected,setSelected]=useState<WorkerAssignment|null>(null);
   const buttons=useRef<Record<string,HTMLButtonElement|null>>({});
-  const {data,error,loading}=useResponse<WorkerAssignmentPage>(`/people/workers/${encodeURIComponent(workerId)}/assignments?page=${page}&pageSize=5`,refresh+tick);
+  const {data,error,loading}=useResponse<WorkerAssignmentPage>(`/people/workers/${encodeURIComponent(workerId)}/assignments?page=${page}&pageSize=5`,refresh+tick,authority);
   return <div className={`responses-layout worker-assignment-layout ${selected ? 'has-selection' : ''}`}>
     <section className="panel worker-assignment-list" aria-label="Worker assigned briefings"><div className="people-panel-heading"><h2>{data?.worker.code || 'Worker'} · Assigned briefings</h2><button className="icon-button" aria-label="Refresh assigned briefings" title="Refresh assigned briefings" disabled={loading} onClick={() => setTick((value) => value+1)}><RefreshCw size={18} /></button></div>
       {loading ? <p role="status">Loading assigned briefings...</p> : error ? <p role="alert">{error}</p> : data && <>
@@ -83,14 +81,14 @@ export function WorkerAssignments({workerId,refresh,navigate}:{workerId:string;r
         <Paging page={page} total={data.total} size={5} onChange={setPage} label="assigned briefings" />
       </>}
     </section>
-    {selected && <ResponseDetail key={`${selected.publicationId}:${selected.assignmentId}`} publicationId={selected.publicationId} assignmentId={selected.assignmentId} refresh={refresh+tick} navigate={navigate} canPlayAudio onClose={() => {buttons.current[selected.assignmentId]?.focus();setSelected(null);}} />}
+    {selected && <ResponseDetail authority={authority} key={`${selected.publicationId}:${selected.assignmentId}`} publicationId={selected.publicationId} assignmentId={selected.assignmentId} refresh={refresh+tick} navigate={navigate} canPlayAudio onClose={() => {buttons.current[selected.assignmentId]?.focus();setSelected(null);}} />}
   </div>;
 }
 
-function ResponseDetail({publicationId,assignmentId,context,refresh,onClose,navigate,canPlayAudio}:{publicationId:string;assignmentId:string;context?:string;refresh:number;onClose:()=>void;navigate:(path:string)=>void;canPlayAudio:boolean}) {
+export function ResponseDetail({publicationId,assignmentId,refresh,onClose,navigate,canPlayAudio,authority}:{publicationId:string;assignmentId:string;refresh:number;onClose:()=>void;navigate:(path:string)=>void;canPlayAudio:boolean;authority:StaffRequestAuthority}) {
   const [page,setPage]=useState(1);
   const heading=useRef<HTMLHeadingElement>(null);
-  const {data,error,loading}=useResponse<Detail>(`/publications/${encodeURIComponent(publicationId)}/responses/${encodeURIComponent(assignmentId)}?page=${page}&pageSize=10`,refresh,context);
+  const {data,error,loading}=useResponse<Detail>(`/publications/${encodeURIComponent(publicationId)}/responses/${encodeURIComponent(assignmentId)}?page=${page}&pageSize=10`,refresh,authority);
   useEffect(() => {heading.current?.focus();},[assignmentId]);
   return <section className="panel response-detail" aria-label="Accepted submission history"><div className="response-detail-heading"><h2 ref={heading} tabIndex={-1}>{data ? data.assignment.worker : 'Submission history'}</h2><button className="icon-button" aria-label="Close response history" title="Close response history" onClick={onClose}><X size={18} /></button></div>
     {loading ? <p role="status">Loading submission history...</p> : error ? <p role="alert">{error}</p> : data && <>

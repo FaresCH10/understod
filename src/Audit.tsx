@@ -1,18 +1,13 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, Download, LockKeyhole, RefreshCw, Search, X } from 'lucide-react';
+import {useStaffRequest,type StaffRequestAuthority} from './useStaffRequest';
 
 type Event = { id: string; actor: string; actorType: string; actorId: string; action: string; objectId: string; occurredAt: string;identityExpired?:boolean };
 type History = { rows: Event[]; total: number; page: number; pageSize: number; timezone: string; asOf: string; actions: string[] };
 type Detail = Event & { timezone: string };
 
-async function request<T>(path: string): Promise<T> {
-  const response = await fetch(`/api${path}`, { credentials: 'include' });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || 'Request failed');
-  return data;
-}
-
-export function AuditPage({ refresh }: { refresh: number }) {
+export function AuditPage({ refresh,authority }: { refresh: number;authority:StaffRequestAuthority }) {
+  const {request,current:isCurrent}=useStaffRequest(authority);
   const [date, setDate] = useState(''), [search, setSearch] = useState('');
   const [actorType, setActorType] = useState('all'), [action, setAction] = useState('');
   const [page, setPage] = useState(1), [reload, setReload] = useState(0);
@@ -21,21 +16,21 @@ export function AuditPage({ refresh }: { refresh: number }) {
   const [loading, setLoading] = useState(true), [detailLoading, setDetailLoading] = useState(false);
   const query = new URLSearchParams({ date, search, actorType, action, page: String(page), pageSize: '20' }).toString();
   useEffect(() => {
-    let current = true;
+    const controller=new AbortController(),current=()=>isCurrent() && !controller.signal.aborted;
     setLoading(true); setError(''); setSelected(''); setDetail(null);
-    request<History>(`/audit?${query}`).then((data) => { if (current) setHistory(data); })
-      .catch((err: Error) => { if (current) { setHistory(null); setError(err.message); } })
-      .finally(() => { if (current) setLoading(false); });
-    return () => { current = false; };
-  }, [query, refresh, reload]);
+    request<History>(`/api/audit?${query}`,undefined,controller.signal).then((data) => { if (current()) setHistory(data); })
+      .catch((err: Error) => { if (current()) { setHistory(null); setError(err.message); } })
+      .finally(() => { if (current()) setLoading(false); });
+    return () => controller.abort();
+  }, [query, refresh, reload,request,isCurrent]);
   useEffect(() => {
-    let current = true;
+    const controller=new AbortController(),current=()=>isCurrent() && !controller.signal.aborted;
     setDetail(null); setDetailError(''); setDetailLoading(!!selected);
-    if (selected) request<Detail>(`/audit/${encodeURIComponent(selected)}`).then((data) => { if (current) setDetail(data); })
-      .catch((err: Error) => { if (current) setDetailError(err.message); })
-      .finally(() => { if (current) setDetailLoading(false); });
-    return () => { current = false; };
-  }, [selected]);
+    if (selected) request<Detail>(`/api/audit/${encodeURIComponent(selected)}`,undefined,controller.signal).then((data) => { if (current()) setDetail(data); })
+      .catch((err: Error) => { if (current()) setDetailError(err.message); })
+      .finally(() => { if (current()) setDetailLoading(false); });
+    return () => controller.abort();
+  }, [selected,request,isCurrent]);
   const change = (set: (value: string) => void, value: string) => { set(value); setPage(1); };
   const formatTime = (value: string, timezone = history?.timezone || 'UTC') => new Intl.DateTimeFormat('en-GB', {
     timeZone: timezone, dateStyle: 'medium', timeStyle: 'medium' }).format(new Date(value));

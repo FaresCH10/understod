@@ -14,6 +14,7 @@ import {provisionOperator,authenticateOperator} from '../server/postgres/operato
 import {operationsJobs,retryOperationsJob,operatorReceipt} from '../server/postgres/operations.mjs';
 import {rehearsalConfig} from '../server/postgres/runtime.mjs';
 import {resolve} from 'node:path';
+import {getProcessingProvenance} from '../server/postgres/processing-provenance.mjs';
 
 const env={UNDERSTOOD_ASSESSMENT_ADAPTER:'gemini-free',UNDERSTOOD_TIER:'local',UNDERSTOOD_AI_MODE:'synthetic',
   UNDERSTOOD_ACCESS_MODE:'credential',UNDERSTOOD_DATA_CLASS:'synthetic',GEMINI_API_KEY:'test-only'};
@@ -88,6 +89,10 @@ test('noncanonical frozen rubric is assessed through scheduled metered Gemini, w
     assert.equal(operation.provenance_json.adapter,'gemini-typed-assessment-v1');assert.equal(operation.provenance_json.model,GEMINI_MODELS.text);
     assert.equal((await f.db.query('SELECT provider_operation_id FROM assessment_jobs')).rows[0].provider_operation_id,operation.id);
     assert.equal((await f.db.query('SELECT state FROM provider_requests')).rows[0].state,'accepted');
+    await f.db.exec("INSERT INTO staff(id,org_id,site_id,name,role) VALUES('history-owner','a','a','Synthetic history owner','owner')");
+    const job=(await f.db.query('SELECT id FROM assessment_jobs')).rows[0],history=await getProcessingProvenance(f.pool,{principal_type:'staff',principal_id:'history-owner',org_id:'a',site_id:'a',role:'owner'},`answer_check:${job.id}`);
+    assert.equal(history.publicationId,'pub');assert.equal(history.publicationVersion,3);assert.equal(history.items[0].resultReference,'assessment');assert.equal(history.items[0].requests[0].state,'accepted');
+    assert.doesNotMatch(JSON.stringify(history),/12 cartons|input_hash|claim_token|answer_text|rubric|test-only/);
     assert.deepEqual(await counts(f),{attempts:1,receipts:1,cases:0,checks:1});
     assert.equal(await stage(f,adapterFor(f.input,calls)),false);assert.equal(calls.length,1);
     assert.deepEqual(await submitAnswer(f.pool,worker,'assignment',f.submissionId,answer),{id:f.receipt.id,outcome:'matched',assessmentStatus:'complete',duplicate:true});

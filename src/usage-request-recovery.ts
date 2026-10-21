@@ -23,17 +23,36 @@ export function clearUsageRequest(storage:Store,value:PendingUsageRequest) {
   const old=readUsageRequest(storage,value);if(!old || JSON.stringify(old)!==JSON.stringify(value))throw Error('Saved usage request changed.');
   storage.removeItem(key(value));if(storage.getItem(key(value))!==null)throw Error('Usage receipt could not be cleared.');
 }
-export class UsageRequestError extends Error {
-  rejected:boolean;
-  constructor(message:string,rejected=false){super(message);this.rejected=rejected;}
+export type UsageRecord={requestId:string;request:{kind:string;message:string;confirmed:true};createdAt:string;status:'recorded';delivery:'site_owner_inbox';changesApplied:false};
+export type UsageInbox={items:UsageRecord[];page:number;total:number;pageSize:number;scope:string};
+const keys=(row:unknown,list:string)=>!!row && typeof row==='object' && !Array.isArray(row) && Object.keys(row).sort().join(',')===list;
+export function checkedUsageRecord(raw:unknown):UsageRecord {
+  const row=raw as UsageRecord;
+  if(!keys(row,'changesApplied,createdAt,delivery,request,requestId,status') || row.status!=='recorded' || row.delivery!=='site_owner_inbox' || row.changesApplied!==false
+    || typeof row.createdAt!=='string' || !Number.isFinite(Date.parse(row.createdAt)) || new Date(row.createdAt).toISOString()!==row.createdAt
+    || !keys(row.request,'confirmed,kind,message'))throw Error('Usage receipt cannot be verified.');
+  const request=usageRequestInput({...row.request,requestId:row.requestId});
+  return {requestId:row.requestId,request,createdAt:row.createdAt,status:row.status,delivery:row.delivery,changesApplied:row.changesApplied};
 }
-export async function requestUsageChange(value:PendingUsageRequest,send:boolean,fetchImpl=fetch,signal?:AbortSignal):Promise<boolean> {
-  checked(value,value);signal?.throwIfAborted();
-  const response=await fetchImpl(send?'/api/usage/requests':`/api/usage/requests/${value.requestId}`,{method:send?'POST':'GET',credentials:'include',cache:'no-store',signal,
-    headers:{'x-client-session-context':value.clientContext,...(send?{'content-type':'application/json'}:{})},...(send?{body:JSON.stringify({...value.body,requestId:value.requestId})}:{})});
-  const data=await response.json();if(!response.ok)throw new UsageRequestError(data?.error || 'Usage request unavailable.',response.status>=400 && response.status<500 && response.status!==429);
-  if(!send && data?.found===false && Object.keys(data).length===1)return false;
-  if(!data || data.requestId!==value.requestId || data.status!=='recorded' || data.delivery!=='site_owner_inbox' || data.changesApplied!==false
-    || !sameUsageRequest(data.request,value.body) || !Number.isFinite(Date.parse(data.createdAt)) || (send?typeof data.duplicate!=='boolean':data.found!==true))throw Error('Usage receipt does not match the saved request.');
-  return true;
+function exactUsageRecord(raw:unknown,expected:PendingUsageRequest) {
+  checked(expected,expected);const row=checkedUsageRecord(raw);
+  if(row.requestId!==expected.requestId || !sameUsageRequest(row.request,expected.body))throw Error('Usage receipt does not match the saved request.');return row;
+}
+export function checkedUsageResult(raw:unknown,expected:PendingUsageRequest):UsageRecord {
+  const row=raw as UsageRecord & {duplicate:boolean};
+  if(!keys(row,'changesApplied,createdAt,delivery,duplicate,request,requestId,status') || typeof row.duplicate!=='boolean')throw Error('Usage acknowledgement cannot be verified.');
+  const {duplicate,...record}=row;return exactUsageRecord(record,expected);
+}
+export function checkedUsageReceipt(raw:unknown,expected:PendingUsageRequest):UsageRecord|null {
+  checked(expected,expected);const row=raw as UsageRecord & {found:boolean};
+  if(keys(row,'found') && row.found===false)return null;
+  if(!keys(row,'changesApplied,createdAt,delivery,found,request,requestId,status') || row.found!==true)throw Error('Usage receipt cannot be verified.');
+  const {found,...record}=row;return exactUsageRecord(record,expected);
+}
+export function checkedUsageInbox(raw:unknown,page:number,role:string):UsageInbox {
+  const row=raw as UsageInbox;
+  if(!['owner','administrator','supervisor'].includes(role) || !keys(row,'items,page,pageSize,scope,total') || !Number.isSafeInteger(page) || page<1 || page>9999
+    || row.page!==page || row.pageSize!==10 || !Number.isSafeInteger(row.total) || row.total<0 || row.scope!==(role==='owner'?'site_owner_inbox':'your_requests')
+    || !Array.isArray(row.items) || row.items.length>Math.max(0,Math.min(10,row.total-(page-1)*10)) || new Set(row.items.map(item=>item?.requestId)).size!==row.items.length)throw Error('Usage inbox cannot be verified.');
+  return {...row,items:row.items.map(checkedUsageRecord)};
 }

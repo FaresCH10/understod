@@ -5,6 +5,8 @@ import {scheduleAuthority} from './schedules.mjs';
 import {sourceAudioActor} from '../source-audio-worker.mjs';
 import {scheduleHash} from '../schedule-input.mjs';
 import {requireOperatorInTransaction} from './operators.mjs';
+import {currentVerificationAuthority} from './verification-authority.mjs';
+import {currentVerificationClaim} from './verification-job-claim.mjs';
 import {checkCaseFollowupClaim} from './case-followups.mjs';
 import {currentRecordingClaim} from './recording-claim.mjs';
 import {currentPreparationOperation} from './preparation-authority.mjs';
@@ -95,9 +97,14 @@ export function providerRequestJournal(pool,operation,{schema='public'}={}) {
         if(row.kind==='typed-assessment')await currentAssessment(client,row.reference_id,row.claim_token,row.org_id,row.input_hash);
         if(['connection-test','stage-test'].includes(row.kind)) {
           if(cleanup)throw Error('Provider verification cleanup is not permitted');
-          const approval=(await client.query("SELECT session_hash FROM provider_verifications WHERE operation_id=$1 AND state='pending' AND deadline_at>clock_timestamp()",[row.id])).rows[0];
-          if(!approval)throw Error('Provider verification unavailable');
-          await requireOperatorInTransaction(client,{token_hash:approval.session_hash});
+          const queued=(await client.query('SELECT request_id FROM provider_verification_jobs WHERE operation_id=$1',[row.id])).rows[0];
+          if(queued)await currentVerificationClaim(client,{id:row.reference_id,operationId:row.id,token:operation.verificationToken});
+          else {
+            const approval=(await client.query("SELECT session_hash FROM provider_verifications WHERE operation_id=$1 AND state='pending' AND deadline_at>clock_timestamp()",[row.id])).rows[0];
+            if(!approval)throw Error('Provider verification unavailable');
+            await requireOperatorInTransaction(client,{token_hash:approval.session_hash});
+            await currentVerificationAuthority(client,row.reference_id);
+          }
         }
         await client.query('SELECT id FROM provider_operations WHERE id=$1 FOR UPDATE',[row.id]);
         const count=(await client.query('SELECT COUNT(*)::int n FROM provider_requests WHERE operation_id=$1',[row.id])).rows[0].n;

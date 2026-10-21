@@ -1,7 +1,11 @@
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {ArrowLeft,Archive,Copy,FileText,Pencil,Plus,RefreshCw,Save,Search,X,ChevronLeft,ChevronRight} from 'lucide-react';
-import {readPendingTemplate,savePendingTemplate,clearPendingTemplate,pendingTemplateSignature,checkedTemplateResult,type PendingTemplate} from './template-recovery';
-import {templateSignature} from '../server/template-input.mjs';
+import {readPendingTemplate,savePendingTemplate,clearPendingTemplate,checkedTemplateResult,checkedTemplateReceipt,type PendingTemplate} from './template-recovery';
+import {checkedArtifactScope} from './artifact-request';
+import {useArtifactMutation} from './useArtifactMutation';
+import {useArtifactRead} from './useArtifactRead';
+import type {ArtifactDefinition} from './useArtifactRequest';
+import type {StaffRequestAuthority} from './useStaffRequest';
 type Content={title:string;description:string;source:string;question:string;facts:string[];askedFacts:string[]};
 type Row={id:string;revision:number;status:string;title:string;description:string};
 type Page={items:Row[];total:number;page:number;pageSize:number};
@@ -10,96 +14,55 @@ type Kind='create'|'edit'|'archive'|'restore'|'duplicate'|'use';
 const empty:Content={title:'',description:'',source:'',question:'',facts:[],askedFacts:[]};
 const lines=(value:string)=>value.split(/\r?\n/).map(line=>line.trim()).filter(Boolean);
 const labels:Record<Kind,string>={create:'Create template',edit:'Save new template version',archive:'Archive template',restore:'Restore template',duplicate:'Duplicate template',use:'Use as new draft'};
-class TemplateError extends Error {constructor(message:string,public uncertain=false){super(message);}}
-async function request<T>(path:string,body?:unknown):Promise<T> {
-  let response:Response,data;
-  try {response=await fetch(`/api/templates${path}`,{credentials:'include',...(body ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)} : {})});data=await response.json();}
-  catch {throw new TemplateError('Connection interrupted. Retry the unchanged request.',!!body);}
-  if(!response.ok) throw new TemplateError(data.error || 'Template request failed.',!!body && response.status>=500);
-  return data;
-}
-function useRead<T>(path:string,refresh:number,paused=false) {
-  const [data,setData]=useState<T|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState('');
-  useEffect(()=>{if(paused) return;let current=true;setLoading(true);setError('');request<T>(path).then(value=>{if(current) setData(value);}).catch(reason=>{if(current) {setData(null);setError(reason.message);}}).finally(()=>{if(current) setLoading(false);});return ()=>{current=false;};},[path,refresh,paused]);
-  return {data,loading,error};
-}
-export function Templates({id,newTemplate=false,canWrite,scope,navigate}:{id?:string;newTemplate?:boolean;canWrite:boolean;scope?:string|null;navigate:(path:string)=>void}) {
-  const [recovery,setRecovery]=useState(()=>{try {return {pending:scope ? readPendingTemplate(sessionStorage,scope) : null,error:''};}catch(reason) {return {pending:null,error:(reason as Error).message};}});
+const definition:ArtifactDefinition<PendingTemplate,ReturnType<typeof checkedTemplateResult>>={endpoint:'/api/templates',path:value=>value.kind==='create'?'':`/${encodeURIComponent(value.templateId!)}/${value.kind}`,result:checkedTemplateResult,receipt:checkedTemplateReceipt,clear:clearPendingTemplate};
+export function Templates({id,newTemplate=false,canWrite,scope,navigate,authority}:{id?:string;newTemplate?:boolean;canWrite:boolean;scope?:string|null;navigate:(path:string)=>void;authority:StaffRequestAuthority}) {
+  const [recovery,setRecovery]=useState(()=>{try {return {pending:scope ? readPendingTemplate(sessionStorage,checkedArtifactScope(scope,authority.session)) : null,error:''};}catch(reason) {return {pending:null,error:(reason as Error).message};}});
   const [search,setSearch]=useState(''),[status,setStatus]=useState('active'),[page,setPage]=useState(1),[refresh,setRefresh]=useState(0);
-  const {data,loading,error}=useRead<Page>(`?${new URLSearchParams({search,status,page:String(page),pageSize:'20'})}`,refresh,!!id || newTemplate || !!recovery.pending || !!recovery.error);
+  const {data,loading,error}=useArtifactRead<Page>(authority,`/api/templates?${new URLSearchParams({search,status,page:String(page),pageSize:'20'})}`,refresh,!!id || newTemplate || !!recovery.pending || !!recovery.error);
   if(recovery.error) return <div className="templates-view"><h1>Template recovery</h1><p role="alert" className="record-error">{recovery.error}</p></div>;
-  if(recovery.pending && scope) return <TemplateRecovery pending={recovery.pending} scope={scope} navigate={path=>{setRecovery({pending:null,error:''});setRefresh(value=>value+1);navigate(path);}}/>;
-  if(id || newTemplate) return <TemplateDetail key={id || 'new'} id={id} canWrite={canWrite} scope={scope} navigate={navigate}/>;
+  if(recovery.pending && scope) return <TemplateRecovery authority={authority} canWrite={canWrite} pending={recovery.pending} scope={scope} navigate={path=>{setRecovery({pending:null,error:''});setRefresh(value=>value+1);navigate(path);}}/>;
+  if(id || newTemplate) return <TemplateDetail authority={authority} key={id || 'new'} id={id} canWrite={canWrite} scope={scope} navigate={navigate}/>;
   const pages=Math.max(1,Math.ceil((data?.total || 0)/20));
   return <div className="templates-view"><div className="page-header"><div><h1>Briefing templates</h1><p>Templates at this site</p></div>{canWrite && <button className="button primary" onClick={()=>navigate('templates/new')}><Plus size={20}/>New template</button>}</div>
     <div className="filters"><label className="search-box"><Search size={19}/><input aria-label="Search templates" maxLength={80} placeholder="Search templates..." value={search} onChange={event=>{setSearch(event.target.value);setPage(1);}}/></label><label className="select-label">Status<select value={status} onChange={event=>{setStatus(event.target.value);setPage(1);}}><option value="active">Active</option><option value="archived">Archived</option><option value="all">All statuses</option></select></label><button className="icon-button" title="Refresh templates" aria-label="Refresh templates" onClick={()=>setRefresh(value=>value+1)}><RefreshCw size={18}/></button></div>
     {error && <p role="alert" className="record-error">{error}</p>}{loading ? <p>Loading templates...</p> : data && <section className="panel"><h2>Templates ({data.total})</h2><div className="row-list">{data.items.map(row=><button className="item-row" key={row.id} onClick={()=>navigate(`templates/${row.id}`)}><span className="small-avatar"><FileText size={22}/></span><span className="item-main"><strong>{row.title}</strong><small>{row.description}</small><small>v{row.revision} · {row.status}</small></span><ChevronRight size={19}/></button>)}</div>{!data.total && <p>No templates match these filters.</p>}<div className="audit-pagination"><span>Page {page} of {pages} · {data.total} templates</span><button className="icon-button" aria-label="Previous templates" title="Previous templates" aria-disabled={loading || page<=1} onClick={()=>{if(!loading && page>1) setPage(value=>value-1);}}><ChevronLeft size={18}/></button><button className="icon-button" aria-label="Next templates" title="Next templates" aria-disabled={loading || page>=pages} onClick={()=>{if(!loading && page<pages) setPage(value=>value+1);}}><ChevronRight size={18}/></button></div></section>}
   </div>;
 }
-function TemplateRecovery({pending,scope,navigate}:{pending:PendingTemplate;scope:string;navigate:(path:string)=>void}) {
-  const [busy,setBusy]=useState(false),[checked,setChecked]=useState(false),[error,setError]=useState(''),[refresh,setRefresh]=useState(0);
-  const sending=useRef(false),heading=useRef<HTMLHeadingElement>(null);
-  const destination=(result:{id:string})=>pending.kind==='use' ? `briefings/${result.id}` : `templates/${result.id}`;
+function TemplateRecovery({pending,scope,navigate,authority,canWrite}:{pending:PendingTemplate;scope:string;navigate:(path:string)=>void;authority:StaffRequestAuthority;canWrite:boolean}) {
+  const operation=useArtifactMutation(authority,scope,definition,savePendingTemplate,canWrite,(result,value)=>navigate(`${value.kind==='use'?'briefings':'templates'}/${result.id}`),pending);
+  const {busy,checked,error}=operation,heading=useRef<HTMLHeadingElement>(null);
   useEffect(()=>{heading.current?.focus();},[]);
   useEffect(()=>{
-    let current=true;setBusy(true);setChecked(false);setError('');
-    request<{found:boolean;request?:Record<string,unknown>;result?:{id:string}}>(`/receipts/${pending.requestId}`).then(value=>{
-      if(!current) return;
-      if(value.found===true) {
-        if(!value.request || !value.result || templateSignature(value.request)!==pendingTemplateSignature(pending)) throw new Error('Saved receipt does not match this pending template request.');
-        checkedTemplateResult(value.result,pending);
-        clearPendingTemplate(sessionStorage,scope,pending.requestId);navigate(destination(value.result));
-      } else if(value.found===false) setChecked(true);else throw new Error('Template receipt response cannot be verified.');
-    }).catch(reason=>{if(current) setError(reason.message);}).finally(()=>{if(current) setBusy(false);});
-    return ()=>{current=false;};
-  },[refresh,pending,scope,navigate]);
-  async function retry() {
-    if(sending.current || busy || !checked) return;sending.current=true;setBusy(true);setError('');
-    try {
-      savePendingTemplate(sessionStorage,scope,pending);
-      const result=await request<{id:string}>(pending.kind==='create' ? '' : `/${encodeURIComponent(pending.templateId!)}/${pending.kind}`,{...pending.body,requestId:pending.requestId});
-      checkedTemplateResult(result,pending);
-      clearPendingTemplate(sessionStorage,scope,pending.requestId);navigate(destination(result));
-    } catch(reason) {setError((reason as Error).message);}
-    finally {sending.current=false;setBusy(false);}
-  }
-  return <div className="templates-view"><h1 ref={heading} tabIndex={-1}>Recover template request</h1><section className="panel"><h2>{labels[pending.kind]}</h2><p>{String(pending.body.title || pending.templateId || '')}</p><p>{busy ? 'Checking saved request...' : checked ? 'No saved receipt was found. You can retry the original confirmed request.' : 'The pending request has not been resolved.'}</p>{error && <p role="alert" className="record-error">{error}</p>}<div className="actions"><button className="button outline" disabled={busy} onClick={()=>setRefresh(value=>value+1)}><RefreshCw size={18}/>Check saved request</button>{checked && <button className="button primary" disabled={busy} onClick={()=>void retry()}><Save size={18}/>Retry original request</button>}</div></section></div>;
+    const controller=new AbortController();queueMicrotask(()=>{if(!controller.signal.aborted)void operation.check(controller.signal);});
+    return()=>controller.abort();
+  },[operation.api]);
+  return <div className="templates-view"><h1 ref={heading} tabIndex={-1}>Recover template request</h1><section className="panel"><h2>{labels[pending.kind]}</h2><p>{String(pending.body.title || pending.templateId || '')}</p><p>{busy ? 'Checking saved request...' : checked ? 'No saved receipt was found. You can retry the original confirmed request.' : 'The pending request has not been resolved.'}</p>{error && <p role="alert" className="record-error">{error}</p>}<div className="actions"><button className="button outline" disabled={busy} onClick={()=>void operation.check()}><RefreshCw size={18}/>Check saved request</button>{checked && <button className="button primary" disabled={busy || !canWrite} onClick={()=>void operation.write(pending)}><Save size={18}/>Retry original request</button>}</div></section></div>;
 }
-function TemplateDetail({id,canWrite,scope,navigate}:{id?:string;canWrite:boolean;scope?:string|null;navigate:(path:string)=>void}) {
+function TemplateDetail({id,canWrite,scope,navigate,authority}:{id?:string;canWrite:boolean;scope?:string|null;navigate:(path:string)=>void;authority:StaffRequestAuthority}) {
   const [refresh,setRefresh]=useState(0),[version,setVersion]=useState(''),[historyPage,setHistoryPage]=useState(1),[kind,setKind]=useState<Kind|null>(id ? null : 'create');
-  const [content,setContent]=useState<Content>(empty),[facts,setFacts]=useState(''),[asked,setAsked]=useState(''),[confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[uncertain,setUncertain]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState('');
-  const {data,loading,error:readError}=useRead<Detail>(`/${encodeURIComponent(id || '')}?${new URLSearchParams({page:String(historyPage),...(version ? {version} : {})})}`,refresh,!id || !!kind);
-  const sending=useRef(false),pending=useRef<{key:string;requestId:string}|null>(null),heading=useRef<HTMLHeadingElement>(null),formHeading=useRef<HTMLHeadingElement>(null),backFocus=useRef(false),arrivalFocus=useRef(true);
+  const [content,setContent]=useState<Content>(empty),[facts,setFacts]=useState(''),[asked,setAsked]=useState(''),[confirmed,setConfirmed]=useState(false),[message,setMessage]=useState('');
+  const {data,loading,error:readError}=useArtifactRead<Detail>(authority,`/api/templates/${encodeURIComponent(id || '')}?${new URLSearchParams({page:String(historyPage),...(version ? {version} : {})})}`,refresh,!id || !!kind);
+  const heading=useRef<HTMLHeadingElement>(null),formHeading=useRef<HTMLHeadingElement>(null),backFocus=useRef(false),arrivalFocus=useRef(true);
+  const operation=useArtifactMutation(authority,scope,definition,savePendingTemplate,canWrite,(result,value)=>{
+    if(value.kind==='use')navigate(`briefings/${result.id}`);
+    else if(value.kind==='create' || value.kind==='duplicate')navigate(`templates/${result.id}`);
+    else {backFocus.current=true;setKind(null);setVersion('');setHistoryPage(1);setRefresh(old=>old+1);setMessage(`Saved template v${result.revision}.`);}
+  });
+  const {busy,uncertain,error,pending}=operation;
   useEffect(()=>{if(kind) formHeading.current?.focus();else if(backFocus.current) {heading.current?.focus();backFocus.current=false;}},[kind]);
   useEffect(()=>{if(data && !loading && !kind && arrivalFocus.current) {heading.current?.focus();arrivalFocus.current=false;}},[data,loading,kind]);
-  const locked=busy || uncertain,editing=!!kind,current=data && data.selected.revision===data.revision;
+  const locked=busy || uncertain,editing=!!kind && canWrite,current=data && data.selected.revision===data.revision;
   const full=kind==='create' || kind==='edit',needsTitle=full || kind==='use' || kind==='duplicate';
   const factValues=lines(facts),askedValues=lines(asked),validFacts=factValues.length<=12 && askedValues.length<=6 && [...factValues,...askedValues].every(value=>value.length<=500) && new Set(factValues).size===factValues.length && new Set(askedValues).size===askedValues.length;
   const valid=(!needsTitle || content.title.trim().length>=3) && (!full || (content.source.trim().length>=10 && validFacts));
   function open(next:Kind) {
-    const value=data?.selected.content || empty;setContent({...value,title:next==='duplicate' ? `${value.title.slice(0,113)} copy` : value.title});setFacts(value.facts.join('\n'));setAsked(value.askedFacts.join('\n'));setConfirmed(false);setError('');setMessage('');setKind(next);
+    if(!canWrite || !operation.api.current())return;
+    const value=data?.selected.content || empty;setContent({...value,title:next==='duplicate' ? `${value.title.slice(0,113)} copy` : value.title});setFacts(value.facts.join('\n'));setAsked(value.askedFacts.join('\n'));setConfirmed(false);operation.clearError();setMessage('');setKind(next);
   }
   async function submit(event:FormEvent) {
-    event.preventDefault();if(!kind || !confirmed || !valid || sending.current) return;
+    event.preventDefault();if(!kind || !confirmed || !valid || !canWrite) return;
     const body={confirmed:true,...(kind==='create' ? {} : {revision:data!.revision}),...(full ? {...content,facts:factValues,askedFacts:askedValues} : needsTitle ? {title:content.title} : {})};
-    const key=JSON.stringify({id,kind,body});if(pending.current?.key!==key) pending.current={key,requestId:crypto.randomUUID()};
-    sending.current=true;setBusy(true);setError('');let sent=false;
-    try {
-      if(!scope) throw new TemplateError('Template recovery scope is unavailable. Sign in again before saving.');
-      savePendingTemplate(sessionStorage,scope,{requestId:pending.current.requestId,kind,templateId:id || null,body});sent=true;
-      const result=await request<{id:string;revision:number}>(kind==='create' ? '' : `/${encodeURIComponent(id!)}/${kind}`,{...body,requestId:pending.current.requestId});
-      checkedTemplateResult(result,{requestId:pending.current.requestId,kind,templateId:id || null,body});
-      clearPendingTemplate(sessionStorage,scope,pending.current.requestId);
-      pending.current=null;setUncertain(false);
-      if(kind==='use') navigate(`briefings/${result.id}`);
-      else if(kind==='create' || kind==='duplicate') navigate(`templates/${result.id}`);
-      else {backFocus.current=true;setKind(null);setVersion('');setHistoryPage(1);setRefresh(value=>value+1);setMessage(`Saved template v${result.revision}.`);}
-    } catch(reason) {
-      let unknown=sent && (!(reason instanceof TemplateError) || reason.uncertain);
-      if(sent && !unknown && scope) {try {clearPendingTemplate(sessionStorage,scope,pending.current!.requestId);}catch {unknown=true;}}
-      setUncertain(unknown);setError((reason as Error).message);
-    }
-    finally {sending.current=false;setBusy(false);}
+    await operation.write(pending.current || {requestId:crypto.randomUUID(),kind,templateId:id || null,body});
   }
   function field(key:'title'|'description'|'source'|'question',value:string) {setContent(old=>({...old,[key]:value}));setConfirmed(false);}
   return <div className="templates-view"><button className="back-link" disabled={editing} onClick={()=>navigate('templates')}><ArrowLeft size={18}/>Templates</button><div className="page-header"><div><h1 ref={heading} tabIndex={-1}>{id ? data?.selected.content.title || 'Template' : 'New template'}</h1>{data && <p>v{data.selected.revision} · {data.selected.status}{!current ? ' · Historical version' : ''}</p>}</div>{id && <button className="icon-button" title="Refresh template" aria-label="Refresh template" disabled={editing} onClick={()=>setRefresh(value=>value+1)}><RefreshCw size={18}/></button>}</div>
@@ -114,7 +77,7 @@ function TemplateDetail({id,canWrite,scope,navigate}:{id?:string;canWrite:boolea
       {kind==='archive' && <div className="notice">Archived templates cannot start new briefings. Existing briefings stay unchanged.</div>}
       {kind==='edit' && <div className="notice notice-blue">This saves a new template version. Earlier versions and existing briefings stay unchanged.</div>}
       <label className="recipient-row publish-confirm"><input type="checkbox" checked={confirmed} disabled={locked} onChange={event=>setConfirmed(event.target.checked)}/><span>Confirm: {labels[kind].toLowerCase()}</span></label>
-      {error && <p role="alert" className="record-error">{error}</p>}<div className="actions"><button className="button primary" disabled={busy || !confirmed || !valid}><Save size={18}/>{busy ? 'Saving...' : uncertain ? 'Retry unchanged request' : labels[kind]}</button><button type="button" className="button outline" disabled={locked} onClick={()=>{if(!id) navigate('templates');else {backFocus.current=true;setKind(null);}}}><X size={18}/>Cancel</button></div>
+      {error && <p role="alert" className="record-error">{error}</p>}<div className="actions">{uncertain && <button type="button" className="button outline" disabled={busy} onClick={()=>void operation.check()}><RefreshCw size={18}/>Check saved request</button>}<button className="button primary" disabled={busy || uncertain && !operation.checked || !confirmed || !valid}><Save size={18}/>{busy ? 'Saving...' : uncertain ? 'Retry unchanged request' : labels[kind]}</button><button type="button" className="button outline" disabled={locked} onClick={()=>{if(!id) navigate('templates');else {backFocus.current=true;setKind(null);}}}><X size={18}/>Cancel</button></div>
     </form></section>}{!id && !canWrite && <p>Your role cannot create templates.</p>}
   </div>;
 }

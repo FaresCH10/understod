@@ -1,0 +1,18 @@
+{
+  "dateUtc": "2026-10-13 10:34 UTC",
+  "requirements": ["A06", "S09", "S10", "S11", "S12", "S13", "S18", "S42"],
+  "scope": "Core briefing captured-context JSON requests and guarded asynchronous completion; optional review/regeneration and other staff helpers remain open",
+  "initialFullSuite": {"tests":864,"passed":856,"failed":4,"skipped":4,"exitCode":1,"durationMs":296213.8941,"log":"artifacts/briefing-request-full-test-2026-10-13.log"},
+  "repairs": ["Capture deliberate login audit before preservation baseline", "Supply captured context for older fixture metadata reads without changing assertions", "Preserve PostgreSQL session-context 409 before route-specific schedule error mapping"],
+  "finalFullSuite": {"testFiles":163,"tests":866,"passed":862,"failed":0,"skipped":4,"skipReason":"Native database prerequisites","exitCode":0,"durationMs":263140.3901,"externalDatabaseTestUrlsRemoved":true,"log":"artifacts/briefing-request-full-test-final-2026-10-13.log"},
+  "finalRelatedRegression": {"files":["briefing-session-context","staff-request","session-http","draft-review","generated-audio"],"tests":49,"passed":49,"failed":0,"skipped":0,"exitCode":0,"durationMs":218576.0915},
+  "build": {"exitCode":0,"modules":2038,"entryKb":579.48,"shellFiles":68,"shellMismatches":0,"existingWarningsRemain":true},
+  "protectedDatabase": {"matchingFingerprints":8,"integrity":"ok","foreignKeyViolations":0,"readOnlyVerification":true},
+  "browser": {"passed":false,"newVerdict":false,"reason":"Prior trusted browser runtime startup failure remains unresolved","externalDiagnosticsSent":false},
+  "allOwnedSessionsTerminal":true,
+  "originalPreviewRestarted":false,
+  "originalDatabaseMigrated":false,
+  "externalRolloutPerformed":false,
+  "progressEstimates": {"coreBriefingBoundary":75,"wholeStaffRequestFencing":40,"staffSessionGuard":65,"overall":60,"overallRange":[55,65]},
+  "productionReady":false
+}

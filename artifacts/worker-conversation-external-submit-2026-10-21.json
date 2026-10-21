@@ -1,0 +1,67 @@
+{
+  "sourceSha256": "6012cb5cfebcf10f1b115248b1775fab514aa1474f4a2a0005c6292fd7b6f407",
+  "fixtureTerminal": {"parentSession":50461,"pid":9856,"exitCodeObserved":true,"exitCode":0,"explicitOwnedStop":true},
+  "measurements": [
+    {
+      "buttonFits": true,
+      "document": 305,
+      "requested": 320,
+      "width": 320
+    },
+    {
+      "buttonFits": true,
+      "document": 375,
+      "requested": 390,
+      "width": 390
+    },
+    {
+      "buttonFits": true,
+      "document": 753,
+      "requested": 768,
+      "width": 768
+    },
+    {
+      "buttonFits": true,
+      "document": 1425,
+      "requested": 1440,
+      "width": 1440
+    }
+  ],
+  "form": {
+    "counter": "0 / 1000",
+    "dialogInsideForm": false,
+    "formId": "_r_1_",
+    "formMatches": true
+  },
+  "counters": {
+    "helpPosts": 0,
+    "replyPosts": 0,
+    "receiptReads": 0,
+    "playbackReads": 0,
+    "noticeReads": 3,
+    "otherPosts": 1,
+    "simulatedMicrophoneRequests": 0,
+    "postRequestIds": [],
+    "actualMicrophoneUsed": false,
+    "externalCalls": 0,
+    "held": false,
+    "objects": 0,
+    "originalAttemptUnchanged": true,
+    "attempts": 1,
+    "submissionReceipts": 1,
+    "cases": 1,
+    "messages": 2,
+    "recordings": [],
+    "assignmentLanguages": [
+      {
+        "id": "answered",
+        "language": "en"
+      },
+      {
+        "id": "fresh",
+        "language": "en"
+      }
+    ],
+    "profileLanguage": "en"
+  }
+}

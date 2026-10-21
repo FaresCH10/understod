@@ -78,8 +78,11 @@ test('recording HTTP route accepts exact WAV and serves only scoped private audi
     assert.equal(receipt.aiStatus, 'pending');
     assert.equal((await fetch(`${base}/api/recordings/${receipt.id}`)).status, 200);
     assert.equal((await (await fetch(`${base}/api/recordings/${receipt.id}/audio`)).arrayBuffer()).byteLength, 32044);
+    const ranged=await fetch(`${base}/api/recordings/${receipt.id}/audio`,{headers:{range:'bytes=-4'}});
+    assert.equal(ranged.status,206);assert.equal(ranged.headers.get('content-range'),'bytes 32040-32043/32044');assert.deepEqual(Buffer.from(await ranged.arrayBuffer()),wav().subarray(32040));
     session = { ...worker30, principal_id: 'worker-14' };
     assert.equal((await fetch(`${base}/api/recordings/${receipt.id}/audio`)).status, 400);
+    assert.equal((await fetch(`${base}/api/recordings/${receipt.id}/audio`,{headers:{range:'bytes=0-43'}})).status,400);
   } finally {
     await new Promise((resolve) => server.close(resolve));
     db.close(); await rm(root, { recursive: true, force: true });

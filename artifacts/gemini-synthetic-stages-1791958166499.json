@@ -1,0 +1,134 @@
+{
+  "runId": "5bf11d86-3d63-4d24-8f91-f000b0ddaa5b",
+  "startedAt": "2026-10-14T06:09:26.499Z",
+  "dataClass": "synthetic",
+  "realDataAllowed": false,
+  "models": {
+    "text": "gemini-3.5-flash-lite",
+    "transcription": "gemini-3.5-transcribe",
+    "speech": "gemini-3.8-flash-lite-tts"
+  },
+  "fixtureVersion": "provider-stage-fixture-v2",
+  "mode": "stages",
+  "maxRequests": 6,
+  "requests": [
+    {
+      "id": "eb5b4c2f-f50c-47a6-910d-bfefa27f9ba6",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "323dd1f4-d2a7-4cd5-80bc-676b4faac34e",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "ada5b902-a795-4a2a-882b-3bacbcfa08f5",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "84fd96e0-4ac9-4e36-b3d9-993b41d5d3f2",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "04b2b98c-66df-45b9-9e9e-6c6da3d43415",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "8847b59f-5686-4d35-a397-990509a03483",
+      "state": "accepted",
+      "httpStatus": 200
+    }
+  ],
+  "results": [
+    {
+      "stage": "translation",
+      "state": "passed",
+      "fixtureVersion": "provider-stage-fixture-v2",
+      "language": "ar",
+      "requestCount": 2,
+      "capability": "synthetic-translation",
+      "model": "gemini-3.5-flash-lite",
+      "checks": [
+        "structured_translation",
+        "automated_comparison"
+      ],
+      "outputHash": "3969ec50ef92688bdda6a4a7452f81b13cefbbc745eb1f0365329a81cdb35d2b"
+    },
+    {
+      "stage": "translation",
+      "state": "passed",
+      "fixtureVersion": "provider-stage-fixture-v2",
+      "language": "ur",
+      "requestCount": 2,
+      "capability": "synthetic-translation",
+      "model": "gemini-3.5-flash-lite",
+      "checks": [
+        "structured_translation",
+        "automated_comparison"
+      ],
+      "outputHash": "3798d38320a8bbd28702c5f351558e919ceee3c5548e9e64a28deb74adad4434"
+    },
+    {
+      "stage": "speech",
+      "state": "passed",
+      "fixtureVersion": "provider-stage-fixture-v2",
+      "language": "en",
+      "requestCount": 1,
+      "capability": "synthetic-speech",
+      "model": "gemini-3.8-flash-lite-tts",
+      "checks": [
+        "mono_pcm16_wav",
+        "nonempty_audio"
+      ],
+      "outputHash": "a80e185c82fa067200c8bb41ccee55ec7a7c2cace3b33dad9579bd18ba8fc967",
+      "bytes": 233004,
+      "durationSeconds": 7.28
+    },
+    {
+      "stage": "speech",
+      "state": "passed",
+      "fixtureVersion": "provider-stage-fixture-v2",
+      "language": "ar",
+      "requestCount": 1,
+      "capability": "synthetic-speech",
+      "model": "gemini-3.8-flash-lite-tts",
+      "checks": [
+        "mono_pcm16_wav",
+        "nonempty_audio"
+      ],
+      "outputHash": "a40b3a3d491a12468cd39e5b99184d0d5534963e20c7ed9186525c91f027cd3e",
+      "bytes": 250924,
+      "durationSeconds": 7.84
+    }
+  ],
+  "productionReady": false,
+  "state": "passed",
+  "speechEnvelope": {
+    "completed": true,
+    "modelMatches": true,
+    "stepCount": 1,
+    "outputCount": 1,
+    "partCount": 1,
+    "audioType": true,
+    "wavMime": true,
+    "hasData": true,
+    "bytes": 382434,
+    "riff": true,
+    "sampleRate": 24000,
+    "fmtSize": 16,
+    "dataAt36": true,
+    "riffLengthMatches": true,
+    "dataLength": 376320,
+    "dataLengthMatches": false,
+    "pcmFormat": 1,
+    "channels": 1,
+    "byteRate": 48000,
+    "alignment": 2,
+    "bits": 16
+  },
+  "completedAt": "2026-10-14T06:09:37.013Z"
+}

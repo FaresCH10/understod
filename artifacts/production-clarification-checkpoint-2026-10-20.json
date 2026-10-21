@@ -1,0 +1,102 @@
+{
+  "checkpoint": "staff-clarification-read-action-recovery",
+  "acceptedLocalScope": true,
+  "productionReady": false,
+  "requirements": ["S14", "S15", "S24", "A13"],
+  "overallEstimatePercent": 76,
+  "overallUncertaintyPercent": [69, 82],
+  "taskEstimatePercent": {
+    "staffClarificationRecovery": 85,
+    "repeatReviewCapturedRecovery": 40,
+    "workerNavigationHelp": 89,
+    "voiceContractRecovery": 80,
+    "broaderServicePermissions": 82
+  },
+  "clean": {
+    "id": "99969805-3771-4838-9131-d16934390367",
+    "execSession": 72400,
+    "exitCode": 0,
+    "finishedAt": "2026-10-20T07:21:40.183Z",
+    "tests": 1254,
+    "passed": 1250,
+    "failed": 0,
+    "nativeOnlySkipped": 4,
+    "testDurationMs": 342820.8153,
+    "offlineLockedInstallAndBuild": true,
+    "sourceFiles": 869,
+    "sourceUnchanged": true,
+    "sourceSha256": "11c2518e3887ee591570047baf83e54a006a375375f847697f618acf9ee3b170",
+    "contractCases": 43,
+    "pipelineChecks": 10,
+    "scriptedProviderRequests": 24,
+    "externalProviderRequests": 0
+  },
+  "browser": {
+    "finalAsset": "customer-CFO7RqBu",
+    "cleanManifestAndShellMatch": true,
+    "language": "English staff UI",
+    "widths": [320, 390, 768, 1440],
+    "horizontalOverflow": false,
+    "clippedButtons": false,
+    "resetFocusFallbackVerified": true,
+    "closedCaseComposerSuppressed": true,
+    "newerDraftPreservedOnReceiptRecovery": true,
+    "conversationDraftPreservedOnInvalidRootRead": true,
+    "contextMismatchLocksWorkspace": true,
+    "lateSelectionObservationMs": 117491,
+    "initialFixture": {
+      "execSession": 90410,
+      "exitCode": 0,
+      "actionPosts": 4,
+      "receiptGets": 3,
+      "receipts": 3,
+      "separateFixtureOwnerChanges": 1
+    },
+    "finalFixture": {
+      "execSession": 77316,
+      "exitCode": 0,
+      "actionPosts": 1,
+      "receiptGets": 1,
+      "receipts": 1,
+      "separateFixtureOwnerChanges": 0
+    },
+    "eachFixture": {
+      "cases": 2,
+      "attempts": 0,
+      "messages": 0,
+      "reviews": 0,
+      "repeats": 0,
+      "otherPosts": 0,
+      "externalCalls": 0
+    },
+    "qaTabsClosed": true,
+    "viewportReset": true,
+    "reticleProof": false
+  },
+  "preservation": {
+    "report": "clean-backup-preservation-af456a93-a681-4b84-bc5d-ae39c82a4ed7.json",
+    "execSession": 1458,
+    "exitCode": 0,
+    "originalEightTableFingerprintsUnchanged": true,
+    "integrityOk": true,
+    "foreignKeyViolations": 0,
+    "validSavedManifests": 52,
+    "filesScanned": 4330,
+    "configuredSecretMatches": 0,
+    "rootDataAndDistPreserved": true
+  },
+  "priorRuns": {
+    "initialCountAssertionFailure": "4eb1109e-9767-430b-9ac0-fdca9c4a41e5",
+    "passedBeforeLegacyAudioFix": "d5a69f1e-982f-419c-894d-cc153c815257"
+  },
+  "limits": {
+    "nativePolicy93Accepted": false,
+    "independentLanguageOrAtReview": false,
+    "realPhoneOrMicrophoneUsed": false,
+    "realWorkerDataUsed": false,
+    "liveGeminiOrMailCalled": false,
+    "cloudOrBillingOrDeploymentChanged": false,
+    "completeErasureClaim": false
+  },
+  "next": "Repeat-answer and supervisor-review captured transport, strict receipts and deadline/reason draft continuity. Continue locally."
+}

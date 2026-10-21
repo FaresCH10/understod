@@ -1,0 +1,75 @@
+{
+  "runId": "4729580f-ddb7-435b-a24b-d0c2c4d6b085",
+  "startedAt": "2026-10-14T06:03:01.049Z",
+  "dataClass": "synthetic",
+  "realDataAllowed": false,
+  "models": {
+    "text": "gemini-3.5-flash-lite",
+    "transcription": "gemini-3.5-transcribe",
+    "speech": "gemini-3.8-flash-lite-tts"
+  },
+  "fixtureVersion": "provider-stage-fixture-v2",
+  "mode": "stages",
+  "maxRequests": 6,
+  "requests": [
+    {
+      "id": "b06c370f-45ba-4aec-8937-5834f1a3a7e3",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "c8f6cf7d-7e34-4404-8058-7556c0b44985",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "35e1472c-f6f3-4aef-b819-f274b9e7df6a",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "eb119ac5-b52a-4234-b249-a52107a680b8",
+      "state": "accepted",
+      "httpStatus": 200
+    },
+    {
+      "id": "2568dbbf-cbbc-4df1-bf08-ee2af273ebba",
+      "state": "accepted",
+      "httpStatus": 200
+    }
+  ],
+  "results": [
+    {
+      "stage": "translation",
+      "state": "passed",
+      "fixtureVersion": "provider-stage-fixture-v2",
+      "language": "ar",
+      "requestCount": 2,
+      "capability": "synthetic-translation",
+      "model": "gemini-3.5-flash-lite",
+      "checks": [
+        "structured_translation",
+        "automated_comparison"
+      ],
+      "outputHash": "3969ec50ef92688bdda6a4a7452f81b13cefbbc745eb1f0365329a81cdb35d2b"
+    },
+    {
+      "stage": "translation",
+      "state": "passed",
+      "fixtureVersion": "provider-stage-fixture-v2",
+      "language": "ur",
+      "requestCount": 2,
+      "capability": "synthetic-translation",
+      "model": "gemini-3.5-flash-lite",
+      "checks": [
+        "structured_translation",
+        "automated_comparison"
+      ],
+      "outputHash": "c07dc2c8125cae41754f9b3ff796704f770c62e84f97ce3e15a8175b2f3e7a02"
+    }
+  ],
+  "productionReady": false,
+  "state": "failed",
+  "diagnosticCode": "invalid_output",
+  "completedAt": "2026-10-14T06:03:08.253Z"
+}

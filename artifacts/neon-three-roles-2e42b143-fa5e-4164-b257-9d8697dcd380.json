@@ -1,0 +1,32 @@
+{
+  "startedAt": "2026-10-16T05:38:26.274Z",
+  "updatedAt": "2026-10-16T05:40:00.691Z",
+  "schemaVersion": "neon-login-rehearsal-v2",
+  "runId": "2e42b143-fa5e-4164-b257-9d8697dcd380",
+  "database": "understood_login_db_2e42b143fa5e4164b2579d8697dcd380",
+  "role": "understood_login_rt_2e42b143fa5e4164b2579d8697dcd380",
+  "schema": "understood_test_login_2e42b143fa5e4164b2579d8697dcd380",
+  "workerRole": "understood_login_wk_2e42b143fa5e4164b2579d8697dcd380",
+  "operatorRole": "understood_login_op_2e42b143fa5e4164b2579d8697dcd380",
+  "kind": "isolated-api-worker-operator-login-rehearsal",
+  "state": "checking",
+  "checks": [
+    "two-independent-verified-tls-application-connections",
+    "actual-application-runtime-permission-gate",
+    "two-independent-verified-tls-worker-connections",
+    "actual-worker-runtime-permission-gate",
+    "two-independent-verified-tls-operator-connections",
+    "actual-operator-runtime-permission-gate"
+  ],
+  "cleanupDatabase": "pending",
+  "cleanupRole": "pending",
+  "cleanupWorkerRole": "pending",
+  "cleanupOperatorRole": "pending",
+  "providerCalls": 0,
+  "realDataUsed": false,
+  "productionVerdict": false,
+  "phase": "restricted-runtime",
+  "targetFingerprint": "4f07c5a0a931f47badc7da6c55c70c3ace4f0511ce6a7ef8720f0bbee7b1c18c",
+  "postgresMajor": 18,
+  "migrationsApplied": 91
+}
